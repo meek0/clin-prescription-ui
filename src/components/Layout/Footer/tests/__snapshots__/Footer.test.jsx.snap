@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer should be as the snapshot 1`] = `
+<footer
+  className="ant-layout-footer"
+  id="footer"
+>
+  <div
+    className="ant-row ant-row-space-between ant-row-middle"
+    style={Object {}}
+  >
+    <div
+      className="ant-col"
+      style={Object {}}
+    />
+    <div
+      className="ant-col"
+      style={Object {}}
+    >
+      <img
+        alt="Saint-Justine"
+        className="logo"
+        src="/assets/logos/chujs-color.svg"
+      />
+    </div>
+  </div>
+</footer>
+`;

@@ -1,0 +1,21 @@
+NODE_ENV=production
+REACT_APP_TITLE=CLIN-PORTAL-UI
+REACT_APP_RELEASE_ID=$npm_package_version
+REACT_APP_RELEASE_NAME=$npm_package_versionName
+REACT_APP_NOSCRIPT_CONTENT=JavaScript is required.
+REACT_APP_NAMESPACE=prod
+REACT_APP_SHOW_TRANSLATION_BTN=true
+# AUTH
+REACT_APP_KEYCLOAK_CONFIG={"realm": "clin", "url": "https://auth.cqgc.hsj.rtss.qc.ca/auth/", "clientId": "clin-client", "authClientId": "clin-acl"}
+# API
+REACT_APP_ARRANGER_API=https://data-api.cqgc.hsj.rtss.qc.ca
+REACT_APP_ARRANGER_PROJECT_ID=clin_prod
+REACT_APP_FHIR_SERVICE_URL=https://fhir.cqgc.hsj.rtss.qc.ca/fhir
+REACT_APP_ZEPLIN_URL=https://notebook.cqgc.hsj.rtss.qc.ca
+REACT_APP_FHIR_CONSOLE_URL=https://fhir-console.cqgc.hsj.rtss.qc.ca/home
+REACT_APP_WEB_ROOT=https://portail.cqgc.hsj.rtss.qc.ca
+REACT_APP_USERS_API_URL=https://users.cqgc.hsj.rtss.qc.ca
+REACT_APP_PANELS_FILE=https://s3.cqgc.hsj.rtss.qc.ca/cqgc-prod-app-public/panels/panels.xlsx
+
+# Style
+SASS_PATH=/code/src/style/themes/clin
