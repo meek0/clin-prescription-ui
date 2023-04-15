@@ -57,6 +57,7 @@ const VariantsTab = ({
           initialColumnState={initialColumnState}
           dataSource={results.data.map((i) => ({ ...i, key: `${i[VARIANT_KEY]}` }))}
           loading={results.loading}
+          showSorterTooltip={false}
           dictionary={getProTableDictionary()}
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           onChange={({ current }, _, sorter) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { Radio } from 'antd';
 
-import { DYNAMIC_ROUTES, STATIC_ROUTES } from 'utils/routes';
+import ROUTES from 'utils/routes';
 
 import styles from './index.module.scss';
 
@@ -43,24 +43,10 @@ const VariantTypeNav = ({
           buttonStyle="solid"
           size="small"
         >
-          <Radio.Button
-            value={VariantType.SNV}
-            onClick={() => {
-              history.push(
-                getPatientUrl(DYNAMIC_ROUTES.SNV_EXPLORATION_PATIENT, patientId, prescriptionId),
-              );
-            }}
-          >
+          <Radio.Button value={VariantType.SNV} onClick={() => {}}>
             SNV
           </Radio.Button>
-          <Radio.Button
-            value={VariantType.CNV}
-            onClick={() => {
-              history.push(
-                getPatientUrl(DYNAMIC_ROUTES.CNV_EXPLORATION_PATIENT, patientId, prescriptionId),
-              );
-            }}
-          >
+          <Radio.Button value={VariantType.CNV} onClick={() => {}}>
             CNV
           </Radio.Button>
         </Radio.Group>
@@ -76,15 +62,15 @@ const VariantTypeNav = ({
           <Radio.Button
             value={VariantType.SNV}
             onClick={() => {
-              history.push(STATIC_ROUTES.SNV_EXPLORATION_RQDM);
+              history.push(ROUTES.HOME);
             }}
           >
             SNV
-          </Radio.Button>
+        </Radio.Button>
           <Radio.Button
             value={VariantType.CNV}
             onClick={() => {
-              history.push(STATIC_ROUTES.CNV_EXPLORATION_RQDM);
+              history.push(ROUTES.HOME);
             }}
           >
             CNV

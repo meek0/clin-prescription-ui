@@ -23,8 +23,8 @@ interface OwnProps {
 export const shortToLongPrediction: Record<string, string> = {
   'sift.d': 'damaging',
   'sift.t': 'tolerated',
-  'polyphen2.p': 'possibly damaging',
-  'polyphen2.d': 'probably damaging',
+  'polyphen2.p': 'possibily damaging',
+  'polyphen2.d': 'damaging',
   'polyphen2.b': 'benign',
   'fathmm.d': 'damaging',
   'fathmm.t': 'tolerated',

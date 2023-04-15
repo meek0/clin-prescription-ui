@@ -38,19 +38,19 @@ export const OtherActions = ({ patientId, record }: OwnProps) => {
   ];
   record.rsnumber
     ? items.push({
-        key: 'LitVAR',
-        icon: <ReadOutlined />,
-        label: (
-          <a
-            target="_blank"
-            href={`https://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/LitVar/#!?query=${record.rsnumber}`}
-            rel="noreferrer"
-            style={{ textDecoration: 'none' }}
-          >
-            {intl.get('view.litvar')}
-          </a>
-        ),
-      })
+      key: 'LitVAR',
+      icon: <ReadOutlined />,
+      label: (
+        <a
+          target="_blank"
+          href={`https://www.ncbi.nlm.nih.gov/research/litvar2/docsum?text=${record.rsnumber}`}
+          rel="noreferrer"
+          style={{ textDecoration: 'none' }}
+        >
+          {intl.get('view.litvar')}
+        </a>
+      ),
+    })
     : null;
 
   return (

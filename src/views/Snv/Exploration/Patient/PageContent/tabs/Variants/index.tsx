@@ -92,6 +92,7 @@ const VariantsTab = ({
             dataSource={results.data.map((i) => ({ ...i, key: `${i[VARIANT_KEY]}` }))}
             loading={results.loading}
             dictionary={getProTableDictionary()}
+            showSorterTooltip={false}
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             onChange={({ current }, _, sorter) => {
               setPageIndex(DEFAULT_PAGE_INDEX);

@@ -2,7 +2,7 @@ import intl from 'react-intl-universal';
 import { Button, Result } from 'antd';
 import { ExceptionStatusType } from 'antd/lib/result';
 
-import { STATIC_ROUTES } from 'utils/routes';
+import ROUTES from 'utils/routes';
 
 import styles from './index.module.scss';
 
@@ -44,7 +44,7 @@ const ErrorPage = ({ status }: OwnProps) => (
     className={styles.errorPage}
     {...getResultProps(status || '500')}
     extra={
-      <Button type="primary" onClick={() => (window.location.href = STATIC_ROUTES.HOME)}>
+      <Button type="primary" onClick={() => (window.location.href = ROUTES.HOME)}>
         {intl.get('global.errors.backHome')}
       </Button>
     }

@@ -68,40 +68,50 @@ export const HcComplementDescription = ({
               onClick={() =>
                 addQuery({
                   queryBuilderId: SNV_VARIANT_PATIENT_QB_ID,
-                  query: generateQuery({
-                    newFilters: [
-                      generateValueFilter({
-                        field: 'consequences.symbol',
-                        value: [e.symbol],
-                        index: INDEX_VARIANTS,
-                      }),
-                      generateValueFilter(
-                        isPotential(e)
-                          ? {
-                              field: 'donors.zygosity',
-                              value: ['HET'],
-                              index: INDEX_VARIANTS,
-                            }
-                          : {
-                              field: 'locus',
-                              value: [...getLocus(e as HcComplement)],
-                              index: INDEX_VARIANTS,
-                            },
-                      ),
-                      generateValueFilter({
-                        field: 'external_frequencies.gnomad_genomes_3_0.af',
-                        value: ['0.01'],
-                        operator: RangeOperators['<='],
-                        index: INDEX_VARIANTS,
-                      }),
-                      generateValueFilter({
-                        field: 'donors.gq',
-                        value: ['20'],
-                        operator: RangeOperators['>='],
-                        index: INDEX_VARIANTS,
-                      }),
-                    ],
-                  }),
+                  query: isPotential(e)
+                    ? generateQuery({
+                        newFilters: [
+                          generateValueFilter({
+                            field: 'consequences.symbol',
+                            value: [e.symbol],
+                            index: INDEX_VARIANTS,
+                          }),
+                          generateValueFilter({
+                            field: 'donors.zygosity',
+                            value: ['HET'],
+                            index: INDEX_VARIANTS,
+                          }),
+                          generateValueFilter({
+                            field: 'donors.ad_alt',
+                            value: ['2'],
+
+                            operator: RangeOperators['>'],
+                            index: INDEX_VARIANTS,
+                          }),
+                          generateValueFilter({
+                            field: 'external_frequencies.gnomad_genomes_3_1_1.af',
+                            value: ['0.01'],
+                            rangeFilterNoData: true,
+                            operator: RangeOperators['<='],
+                            index: INDEX_VARIANTS,
+                          }),
+                          generateValueFilter({
+                            field: 'donors.gq',
+                            value: ['20'],
+                            operator: RangeOperators['>='],
+                            index: INDEX_VARIANTS,
+                          }),
+                        ],
+                    })
+                    : generateQuery({
+                        newFilters: [
+                          generateValueFilter({
+                            field: 'locus',
+                            value: [...getLocus(e as HcComplement)],
+                            index: INDEX_VARIANTS,
+                          }),
+                        ],
+                    }),
                   setAsActive: true,
                 })
               }

@@ -11,7 +11,6 @@ import PrescriptionForm from 'components/Prescription';
 import AddParentModal from 'components/Prescription/AddParentModal';
 import AnalysisChoiceModal from 'components/Prescription/AnalysisChoiceModal';
 import { LimitTo, Roles } from 'components/Roles/Rules';
-import useFeatureToggle from 'hooks/useFeatureToggle';
 import { prescriptionFormActions } from 'store/prescription/slice';
 
 import ActionButton from './components/ActionButton';
@@ -22,7 +21,6 @@ import styles from './index.module.scss';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { isEnabled } = useFeatureToggle('prescriptionV4');
 
   return (
     <ContentWithHeader
@@ -39,7 +37,7 @@ const Home = () => {
             wrapperClassName={styles.contentCardWrapper}
             content={
               <Row gutter={[48, 48]}>
-                <LimitTo roles={[Roles.Practitioner]}>
+                {/* <LimitTo roles={[Roles.Practitioner]}>
                   <Col xxl={24} className={styles.contentCol}>
                     <PrescriptionSearchBox />
                   </Col>
@@ -48,27 +46,25 @@ const Home = () => {
                   <Col xxl={24} className={styles.contentCol}>
                     <VariantSearchBox />
                   </Col>
+                </LimitTo> */}
+                <LimitTo roles={[Roles.Prescriber, Roles.Practitioner]}>
+                  <Col lg={12} className={styles.contentCol} data-cy="CreateNewPrescription">
+                    <ActionButton
+                      icon={<MedicineBoxFilled />}
+                      title="Créer une nouvelle prescription"
+                      description="Prescription d’analyse et requêtes pour un patient ou une famille"
+                      onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
+                    />
+                  </Col>
+                  <Col lg={12} className={styles.contentCol}>
+                    <ActionButton
+                      icon={<FamilyRestroomIcon />}
+                      title="Ajouter un parent à une prescription existante"
+                      description="Trouver une analyse en cours et rajouter un membre de la famille"
+                      onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
+                    />
+                  </Col>
                 </LimitTo>
-                {isEnabled && (
-                  <LimitTo roles={[Roles.Prescriber]}>
-                    <Col lg={12} className={styles.contentCol} data-cy="CreateNewPrescription">
-                      <ActionButton
-                        icon={<MedicineBoxFilled />}
-                        title="Créer une nouvelle prescription"
-                        description="Prescription d’analyse et requêtes pour un patient ou une famille"
-                        onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
-                      />
-                    </Col>
-                    <Col lg={12} className={styles.contentCol}>
-                      <ActionButton
-                        icon={<FamilyRestroomIcon />}
-                        title="Ajouter un parent à une prescription existante"
-                        description="Trouver une analyse en cours et rajouter un membre de la famille"
-                        onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
-                      />
-                    </Col>
-                  </LimitTo>
-                )}
               </Row>
             }
           />

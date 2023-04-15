@@ -24,49 +24,35 @@ import PageLayout from 'components/Layout';
 import { Roles } from 'components/Roles/Rules';
 import Spinner from 'components/uiKit/Spinner';
 import NotificationContextHolder from 'components/utils/NotificationContextHolder';
-import useQueryParams from 'hooks/useQueryParams';
 import { useLang } from 'store/global';
 import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
-import { fetchSavedFilters, fetchSharedSavedFilter } from 'store/savedFilter/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
-import { LANG, SHARED_FILTER_ID_QUERY_PARAM_KEY } from 'utils/constants';
-import { DYNAMIC_ROUTES, STATIC_ROUTES } from 'utils/routes';
+import { LANG } from 'utils/constants';
+import ROUTES from 'utils/routes';
 
 const loadableProps = { fallback: <Spinner size="large" /> };
-const BioInfoAnalysis = loadable(() => import('views/BioInfoAnalysis'), loadableProps);
 const PrescriptionEntity = loadable(() => import('views/Prescriptions/Entity'), loadableProps);
 const PrescriptionSearch = loadable(() => import('views/Prescriptions/Search'), loadableProps);
-const VariantEntity = loadable(() => import('views/Snv/Entity'), loadableProps);
-const SnvExplorationPatient = loadable(
-  () => import('views/Snv/Exploration/Patient'),
-  loadableProps,
-);
-const CnvExplorationPatient = loadable(
-  () => import('views/Cnv/Exploration/Patient'),
-  loadableProps,
-);
-const SnvExplorationRqdm = loadable(() => import('views/Snv/Exploration/Rqdm'), loadableProps);
+
 const HomePage = loadable(() => import('views/Home'), loadableProps);
-const Archives = loadable(() => import('views/Archives'), loadableProps);
 
 const App = () => {
   const lang = useLang();
   const dispatch = useDispatch();
-  const params = useQueryParams();
+  // const params = useQueryParams();
   const { keycloak, initialized } = useKeycloak();
   const keycloakIsReady = keycloak && initialized;
 
   useEffect(() => {
     if (keycloakIsReady && keycloak.authenticated) {
-      dispatch(fetchSavedFilters());
       dispatch(fetchPractitionerRole());
       dispatch(fetchFhirServiceRequestCodes());
       dispatch(fetchConfig());
 
-      const sharedFilterId = params.get(SHARED_FILTER_ID_QUERY_PARAM_KEY);
-      if (sharedFilterId) {
-        dispatch(fetchSharedSavedFilter(sharedFilterId));
-      }
+      // const sharedFilterId = params.get(SHARED_FILTER_ID_QUERY_PARAM_KEY);
+      // if (sharedFilterId) {
+      //   dispatch(fetchSharedSavedFilter(sharedFilterId));
+      // }
     }
     // eslint-disable-next-line
   }, [keycloakIsReady, keycloak]);
@@ -80,12 +66,12 @@ const App = () => {
         {keycloakIsReady ? (
           <Router>
             <Switch>
-              <ProtectedRoute exact path={STATIC_ROUTES.HOME} layout={PageLayout}>
+              <ProtectedRoute exact path={ROUTES.HOME} layout={PageLayout}>
                 <HomePage />
               </ProtectedRoute>
               <ProtectedRoute
                 exact
-                path={STATIC_ROUTES.PRESCRIPTION_SEARCH}
+                path={ROUTES.PRESCRIPTION_SEARCH}
                 layout={PageLayout}
                 roles={[Roles.Practitioner]}
               >
@@ -93,7 +79,7 @@ const App = () => {
               </ProtectedRoute>
               <ProtectedRoute
                 exact
-                path={DYNAMIC_ROUTES.PRESCRIPTION_ENTITY}
+                path={ROUTES.PRESCRIPTION_ENTITY}
                 layout={PageLayout}
                 roles={[Roles.Practitioner]}
               >
@@ -103,65 +89,13 @@ const App = () => {
                   }>,
                 ) => <PrescriptionEntity prescriptionId={props.match?.params.id!} />}
               </ProtectedRoute>
-              <ProtectedRoute
-                exact
-                path={DYNAMIC_ROUTES.BIOINFO_ANALYSIS}
-                layout={PageLayout}
-                roles={[Roles.Download]}
-              >
-                {(
-                  props: RouteChildrenProps<{
-                    id: string;
-                  }>,
-                ) => <BioInfoAnalysis id={props.match?.params.id!} />}
-              </ProtectedRoute>
-              <ProtectedRoute
-                exact
-                path={DYNAMIC_ROUTES.SNV_EXPLORATION_PATIENT}
-                layout={PageLayout}
-                roles={[Roles.Variants]}
-              >
-                <SnvExplorationPatient />
-              </ProtectedRoute>
-              <ProtectedRoute
-                exact
-                path={DYNAMIC_ROUTES.CNV_EXPLORATION_PATIENT}
-                layout={PageLayout}
-                roles={[Roles.Variants]}
-              >
-                <CnvExplorationPatient />
-              </ProtectedRoute>
-              <ProtectedRoute
-                exact
-                path={STATIC_ROUTES.SNV_EXPLORATION_RQDM}
-                layout={PageLayout}
-                roles={[Roles.Variants]}
-              >
-                <SnvExplorationRqdm />
-              </ProtectedRoute>
-              <ProtectedRoute
-                exact
-                path={DYNAMIC_ROUTES.VARIANT_ENTITY}
-                layout={PageLayout}
-                roles={[Roles.Variants]}
-              >
-                <VariantEntity />
-              </ProtectedRoute>
-              <ProtectedRoute
-                exact
-                path={STATIC_ROUTES.ARCHIVE_EXPLORATION}
-                layout={PageLayout}
-                roles={[Roles.Download]}
-              >
-                <Archives />
-              </ProtectedRoute>
               <Route
-                path={DYNAMIC_ROUTES.ERROR}
+                path={ROUTES.ERROR_STATUS}
                 render={(props: RouteComponentProps<{ status?: any }>) => (
                   <ErrorPage status={props.match.params.status} />
                 )}
               />
-              <Redirect from="*" to={STATIC_ROUTES.HOME} />
+              <Redirect from="*" to={ROUTES.HOME} />
             </Switch>
             <NotificationContextHolder />
           </Router>

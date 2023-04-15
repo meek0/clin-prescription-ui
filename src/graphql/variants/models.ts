@@ -17,6 +17,7 @@ export type ExternalFrequenciesEntity = {
   gnomad_exomes_2_1_1: BoundType;
   gnomad_genomes_2_1_1: BoundType;
   gnomad_genomes_3_0: BoundType;
+  gnomad_genomes_3_1_1: BoundType;
 };
 
 export type FrequencyByAnalysisEntity = {
@@ -266,10 +267,10 @@ export type ClinVar = {
 };
 
 export type BoundType = {
-  ac: number;
-  af: number;
-  an: number;
-  hom: number;
+  ac?: number;
+  af?: number;
+  an?: number;
+  hom?: number;
   pn: number;
   pc: number;
   pf: number;

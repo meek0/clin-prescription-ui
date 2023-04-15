@@ -13,7 +13,7 @@ interface OwnProps {
 
 const ContentWithHeader = ({ children, headerProps, className = '' }: OwnProps) => (
   <Space className={cx(styles.contentWithHeader, className)} direction="vertical" size={0}>
-    <ContentHeader {...headerProps} />
+    {/* <ContentHeader {...headerProps} /> */}
     <div className={styles.pageWrapper}>{children}</div>
   </Space>
 );

@@ -30,7 +30,7 @@ import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
 import { createPrescription } from 'store/prescription/thunk';
 import { useUser } from 'store/user';
-import { DYNAMIC_ROUTES } from 'utils/routes';
+import ROUTES from 'utils/routes';
 
 import styles from './index.module.scss';
 
@@ -117,7 +117,7 @@ const Submission = () => {
           dispatch(createPrescription())
             .unwrap()
             .then(({ prescriptionId }) =>
-              history.push(DYNAMIC_ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId)),
+              history.push(ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId)),
             );
         }}
       >

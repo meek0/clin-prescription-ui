@@ -6,7 +6,7 @@ import { extractServiceRequestId } from 'api/fhir/helper';
 
 import LineStyleIcon from 'components/icons/LineStyleIcon';
 import { LimitTo, Roles } from 'components/Roles/Rules';
-import { STATIC_ROUTES } from 'utils/routes';
+import ROUTES from 'utils/routes';
 
 interface OwnProps {
   patientId: string;
@@ -19,9 +19,7 @@ const Links = ({ patientId, prescriptionId, withDownload = true }: OwnProps) => 
     {withDownload && (
       <LimitTo roles={[Roles.Download]}>
         <Link
-          to={`${STATIC_ROUTES.ARCHIVE_EXPLORATION}?search=${extractServiceRequestId(
-            prescriptionId,
-          )}`}
+          to={`${ROUTES.ARCHIVE_EXPLORATION}?search=${extractServiceRequestId(prescriptionId)}`}
         >
           <Space size={4}>
             <FileTextOutlined />
