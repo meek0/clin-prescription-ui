@@ -15,25 +15,6 @@ export type ResourceType =
   | 'DocumentReference'
   | 'Specimen';
 
-export enum StatusType {
-  draft = 'draft',
-  submitted = 'submitted',
-  active = 'active',
-  'on-hold' = 'on-hold',
-  revoked = 'revoked',
-  completed = 'completed',
-  incomplete = 'incomplete',
-}
-
-export enum PrescriptionStatus {
-  draft = 'draft',
-  hold = 'on-hold',
-  active = 'active',
-  completed = 'completed',
-  revoked = 'revoked',
-  incomplete = 'incomplete',
-}
-
 export type BundleMethod = 'PUT' | 'GET' | 'POST';
 
 export interface Patient {
@@ -140,17 +121,6 @@ export interface Bundle<FhirResource> {
   entry: BundleEntry<FhirResource>[];
 }
 
-export interface Task {
-  id?: string;
-  resourceType: ResourceType;
-  authoredOn: string;
-  code: CodeableConcept;
-  focus: Reference;
-  for: Reference;
-  requester: Reference;
-  owner: Reference;
-}
-
 export interface Patient {
   id?: string;
   resourceType: ResourceType;
@@ -163,16 +133,6 @@ export interface Patient {
   gender: string;
   generalPractitioner: Reference[];
   managingOrganization: Reference;
-}
-
-export interface Category {
-  text: string;
-}
-
-export interface Note {
-  text: string;
-  time?: string;
-  authorReference?: Reference;
 }
 
 export interface PractitionerRole {
@@ -195,24 +155,6 @@ export interface Investigation {
       value: CodeableConcept;
     };
   }[];
-}
-
-export interface ServiceRequest {
-  id?: string;
-  resourceType: ResourceType;
-  meta: Meta;
-  extension: Extension[];
-  status: StatusType;
-  intent: string;
-  authoredOn: string;
-  identifier: Identifier[];
-  category: Category[];
-  priority: string;
-  code?: CodeableConcept;
-  requester?: Reference;
-  performer: Reference[];
-  subject: Reference;
-  note?: Note[];
 }
 
 export interface ClinicalImpression {
@@ -336,18 +278,6 @@ export type ServiceRequestEntityExtension = Extension<{
   reference: string;
   resource: PatientServiceRequestFragment;
 }>;
-
-export type FamilyMemberHistoryType = {
-  resourceType: string;
-  note: {
-    text: string;
-  };
-  relationship: {
-    coding: {
-      code: string;
-    };
-  };
-};
 
 export interface PatientRequestSpecimen {
   reference: string;

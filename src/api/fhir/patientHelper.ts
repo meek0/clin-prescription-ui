@@ -1,6 +1,6 @@
 import { capitalize, get } from 'lodash';
 
-import { Name, Patient, ServiceRequestEntityExtension } from './models';
+import { Name, ServiceRequestEntityExtension } from './models';
 
 export const RAMQ_NUMBER_LENGTH = 12;
 
@@ -11,11 +11,6 @@ export const AFFECTED_STATUS_CODE = {
   NEG: 'not_affected',
   IND: 'unknown',
 };
-
-export const getRAMQValue = (patient?: Patient): string | undefined =>
-  patient
-    ? patient.identifier.find((id) => get(id, 'type.coding[0].code', '') === 'JHN')?.value
-    : undefined;
 
 export const formatRamq = (value: string) =>
   value
