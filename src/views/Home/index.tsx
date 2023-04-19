@@ -14,8 +14,6 @@ import { LimitTo, Roles } from 'components/Roles/Rules';
 import { prescriptionFormActions } from 'store/prescription/slice';
 
 import ActionButton from './components/ActionButton';
-import PrescriptionSearchBox from './components/PrescriptionSearchBox';
-import VariantSearchBox from './components/VariantSearchBox';
 
 import styles from './index.module.scss';
 

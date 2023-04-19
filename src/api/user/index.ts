@@ -1,5 +1,6 @@
 import { sendRequestWithRpt } from 'api';
 import { TUser, TUserCreate, TUserUpdate } from 'api/user/models';
+
 import EnvironmentVariables from 'utils/EnvVariables';
 
 const USERS_API_URL = `${EnvironmentVariables.configFor('USERS_API_URL')}/user`;
