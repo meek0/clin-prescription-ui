@@ -23,7 +23,7 @@ import ErrorBoundary from 'components/ErrorBoundary';
 import PageLayout from 'components/Layout';
 import { Roles } from 'components/Roles/Rules';
 import Spinner from 'components/uiKit/Spinner';
-import NotificationContextHolder from 'components/utils/NotificationContextHolder';
+import NotificationContextHolder from 'components/utils/GenericModal/NotificationContextHolder';
 import { useLang } from 'store/global';
 import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
