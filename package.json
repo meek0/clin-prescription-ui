@@ -1,6 +1,6 @@
 {
   "name": "clin-prescription-ui",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -74,7 +74,7 @@
   },
   "scripts": {
     "start": "ESLINT_NO_DEV_ERRORS='true' node scripts/start",
-    "build": "DISABLE_ESLINT_PLUGIN=true node ./script/build",
+    "build": "DISABLE_ESLINT_PLUGIN=true node ./scripts/build",
     "build:dev": "DISABLE_ESLINT_PLUGIN=true craco build",
     "commit:lint": "commitlint --edit $1",
     "lint": "eslint $(git diff-index --name-only --diff-filter=d HEAD | grep \"[\\.js|\\.jsx|\\.tsx|\\.ts]$\" | xargs)",
