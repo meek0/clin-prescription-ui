@@ -66,22 +66,19 @@ const App = () => {
         {keycloakIsReady ? (
           <Router>
             <Switch>
-              <ProtectedRoute exact path={ROUTES.HOME} layout={PageLayout}>
+              <ProtectedRoute
+                exact
+                path={ROUTES.HOME}
+                layout={PageLayout}
+                roles={[Roles.Prescriber]}
+              >
                 <HomePage />
               </ProtectedRoute>
-              {/* <ProtectedRoute
-                exact
-                path={ROUTES.PRESCRIPTION_SEARCH}
-                layout={PageLayout}
-                roles={[Roles.Practitioner]}
-              >
-                <PrescriptionSearch />
-              </ProtectedRoute> */}
               <ProtectedRoute
                 exact
                 path={ROUTES.PRESCRIPTION_ENTITY}
                 layout={PageLayout}
-                roles={[Roles.Practitioner]}
+                roles={[Roles.Prescriber]}
               >
                 {(
                   props: RouteChildrenProps<{
