@@ -18,7 +18,7 @@ jobs:
       with:
         username: ${{ secrets.FERLAB_DOCKER_HUB_USER }}
         password: ${{ secrets.FERLAB_DOCKER_HUB_TOKEN }}
-        image: ferlabcrsj/clin-portal-ui
+        image: ferlabcrsj/clin-prescription-ui
         tag_format: "staging-{semver}"
   build_prod:
     name: Publish Prod Image
