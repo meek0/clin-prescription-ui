@@ -8,6 +8,7 @@ import { Roles, validate } from 'components/Roles/Rules';
 import Spinner from 'components/uiKit/Spinner';
 import ConditionalWrapper from 'components/utils/ConditionalWrapper';
 import { useRpt } from 'hooks/useRpt';
+import { useUser } from 'store/user';
 
 type OwnProps = Omit<RouteProps, 'component' | 'render' | 'children'> & {
   layout?: (children: any) => React.ReactElement;
@@ -20,6 +21,7 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
   const RouteLayout = layout!;
   const keycloakIsReady = keycloak && initialized;
   const showLogin = keycloakIsReady && !keycloak.authenticated;
+  const { user } = useUser();
 
   if (!keycloakIsReady) {
     return <Spinner size={'large'} />;
@@ -32,7 +34,15 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { decodedRpt } = useRpt();
 
-  if (roles && decodedRpt && !validate(roles, decodedRpt, false)) {
+  const code = !!user.practitionerRoles?.find(
+    (role) =>
+      !!role.code?.find(
+        (code) =>
+          !!code.coding?.find((coding) => coding.code === '405277008' || coding.code === 'doctor'),
+      ),
+  );
+
+  if ((roles && decodedRpt && !validate(roles, decodedRpt, false)) || !code) {
     children = <Forbidden />;
   }
 
