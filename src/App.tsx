@@ -29,7 +29,6 @@ import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
 import { LANG } from 'utils/constants';
 import ROUTES from 'utils/routes';
-
 const loadableProps = { fallback: <Spinner size="large" /> };
 const PrescriptionEntity = loadable(() => import('views/Prescriptions/Entity'), loadableProps);
 // const PrescriptionSearch = loadable(() => import('views/Prescriptions/Search'), loadableProps);
