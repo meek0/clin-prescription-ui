@@ -23,7 +23,7 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
   const showLogin = keycloakIsReady && !keycloak.authenticated;
   const { user } = useUser();
 
-  if (!keycloakIsReady) {
+  if (!keycloakIsReady || user.practitionerRoles.length === 0) {
     return <Spinner size={'large'} />;
   }
 
@@ -38,7 +38,7 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
     (role) =>
       !!role.code?.find(
         (code) =>
-          !!code.coding?.find((coding) => coding.code === '405277008' || coding.code === 'doctor'),
+          !!code.coding?.find((coding) => coding.code === '405277009' || coding.code === 'doctor'),
       ),
   );
 

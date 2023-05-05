@@ -29,6 +29,7 @@ import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
 import { LANG } from 'utils/constants';
 import ROUTES from 'utils/routes';
+
 const loadableProps = { fallback: <Spinner size="large" /> };
 const PrescriptionEntity = loadable(() => import('views/Prescriptions/Entity'), loadableProps);
 // const PrescriptionSearch = loadable(() => import('views/Prescriptions/Search'), loadableProps);
@@ -65,19 +66,22 @@ const App = () => {
         {keycloakIsReady ? (
           <Router>
             <Switch>
-              <ProtectedRoute
-                exact
-                path={ROUTES.HOME}
-                layout={PageLayout}
-                roles={[Roles.Prescriber]}
-              >
+              <ProtectedRoute exact path={ROUTES.HOME} layout={PageLayout}>
                 <HomePage />
               </ProtectedRoute>
+              {/* <ProtectedRoute
+                exact
+                path={ROUTES.PRESCRIPTION_SEARCH}
+                layout={PageLayout}
+                roles={[Roles.Practitioner]}
+              >
+                <PrescriptionSearch />
+              </ProtectedRoute> */}
               <ProtectedRoute
                 exact
                 path={ROUTES.PRESCRIPTION_ENTITY}
                 layout={PageLayout}
-                roles={[Roles.Prescriber]}
+                roles={[Roles.Practitioner]}
               >
                 {(
                   props: RouteChildrenProps<{
