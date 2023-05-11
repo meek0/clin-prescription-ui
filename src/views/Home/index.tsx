@@ -4,7 +4,6 @@ import GridCard from '@ferlab/ui/core/view/v2/GridCard';
 import { Col, Row } from 'antd';
 import { getUserFullName } from 'auth/keycloak';
 
-import FamilyRestroomIcon from 'components/icons/FamilyRestroomIcon';
 import ContentWithHeader from 'components/Layout/ContentWithHeader';
 import ScrollContentWithFooter from 'components/Layout/ScrollContentWithFooter';
 import PrescriptionForm from 'components/Prescription';
@@ -19,6 +18,8 @@ import styles from './index.module.scss';
 
 const Home = () => {
   const dispatch = useDispatch();
+
+  const colWidth = 24;
 
   return (
     <ContentWithHeader
@@ -46,20 +47,12 @@ const Home = () => {
                   </Col>
                 </LimitTo> */}
                 <LimitTo roles={[Roles.Prescriber, Roles.Practitioner]}>
-                  <Col lg={12} className={styles.contentCol} data-cy="CreateNewPrescription">
+                  <Col lg={colWidth} className={styles.contentCol} data-cy="CreateNewPrescription">
                     <ActionButton
                       icon={<MedicineBoxFilled />}
                       title="Créer une nouvelle prescription"
                       description="Prescription d’analyse et requêtes pour un patient ou une famille"
                       onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
-                    />
-                  </Col>
-                  <Col lg={12} className={styles.contentCol}>
-                    <ActionButton
-                      icon={<FamilyRestroomIcon />}
-                      title="Ajouter un parent à une prescription existante"
-                      description="Trouver une analyse en cours et rajouter un membre de la famille"
-                      onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
                     />
                   </Col>
                 </LimitTo>
