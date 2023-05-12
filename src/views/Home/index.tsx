@@ -3,14 +3,18 @@ import { HomeOutlined, MedicineBoxFilled } from '@ant-design/icons';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
 import { Col, Row } from 'antd';
 import { getUserFullName } from 'auth/keycloak';
+import RequestTable from 'views/Prescriptions/Entity/RequestTable';
 
+import FamilyRestroomIcon from 'components/icons/FamilyRestroomIcon';
 import ContentWithHeader from 'components/Layout/ContentWithHeader';
 import ScrollContentWithFooter from 'components/Layout/ScrollContentWithFooter';
 import PrescriptionForm from 'components/Prescription';
 import AddParentModal from 'components/Prescription/AddParentModal';
 import AnalysisChoiceModal from 'components/Prescription/AnalysisChoiceModal';
 import { LimitTo, Roles } from 'components/Roles/Rules';
+import useQueryParam from 'hooks/useQueryParams';
 import { prescriptionFormActions } from 'store/prescription/slice';
+import { HAS_PRESCRIPTION } from 'utils/constants';
 
 import ActionButton from './components/ActionButton';
 
@@ -18,8 +22,8 @@ import styles from './index.module.scss';
 
 const Home = () => {
   const dispatch = useDispatch();
-
-  const colWidth = 24;
+  const hasPrescription = useQueryParam().get(HAS_PRESCRIPTION);
+  const colWidth = hasPrescription ? 12 : 24;
 
   return (
     <ContentWithHeader
@@ -36,16 +40,6 @@ const Home = () => {
             wrapperClassName={styles.contentCardWrapper}
             content={
               <Row gutter={[48, 48]}>
-                {/* <LimitTo roles={[Roles.Practitioner]}>
-                  <Col xxl={24} className={styles.contentCol}>
-                    <PrescriptionSearchBox />
-                  </Col>
-                </LimitTo>
-                <LimitTo roles={[Roles.Variants]}>
-                  <Col xxl={24} className={styles.contentCol}>
-                    <VariantSearchBox />
-                  </Col>
-                </LimitTo> */}
                 <LimitTo roles={[Roles.Prescriber, Roles.Practitioner]}>
                   <Col lg={colWidth} className={styles.contentCol} data-cy="CreateNewPrescription">
                     <ActionButton
@@ -55,10 +49,21 @@ const Home = () => {
                       onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
                     />
                   </Col>
+                  {hasPrescription && (
+                    <Col lg={colWidth} className={styles.contentCol}>
+                      <ActionButton
+                        icon={<FamilyRestroomIcon />}
+                        title="Ajouter un parent à une prescription existante"
+                        description="Trouver une analyse en cours et rajouter un membre de la famille"
+                        onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
+                      />
+                    </Col>
+                  )}
                 </LimitTo>
               </Row>
             }
           />
+          {/* <RequestTable /> */}
         </div>
       </ScrollContentWithFooter>
       <PrescriptionForm />
