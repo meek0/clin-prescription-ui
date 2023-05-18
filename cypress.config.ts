@@ -26,9 +26,10 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       return require('./cypress/plugins/index.ts')(on, config);
     },
-    baseUrl: 'https://portail.qa.cqgc.hsj.rtss.qc.ca/',
+    baseUrl: 'https://prescription.qa.cqgc.hsj.rtss.qc.ca/',
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
-    slowTestThreshold: 60000
+    slowTestThreshold: 60000,
+    experimentalSessionAndOrigin: true
   },
   retries: {
     "runMode": 2,
