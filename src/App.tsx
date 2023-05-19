@@ -23,15 +23,15 @@ import ErrorBoundary from 'components/ErrorBoundary';
 import PageLayout from 'components/Layout';
 import { Roles } from 'components/Roles/Rules';
 import Spinner from 'components/uiKit/Spinner';
-import NotificationContextHolder from 'components/utils/GenericModal/NotificationContextHolder';
+import NotificationContextHolder from 'components/utils/NotificationContextHolder';
 import { useLang } from 'store/global';
 import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
 import { LANG } from 'utils/constants';
-import ROUTES from 'utils/routes';
+import { DYNAMIC_ROUTES, STATIC_ROUTES } from 'utils/routes';
 
 const loadableProps = { fallback: <Spinner size="large" /> };
-const PrescriptionEntity = loadable(() => import('views/Prescriptions/Entity'), loadableProps);
+const PrescriptionDetailPage = loadable(() => import('views/Prescriptions/Detail'), loadableProps);
 // const PrescriptionSearch = loadable(() => import('views/Prescriptions/Search'), loadableProps);
 
 const HomePage = loadable(() => import('views/Home'), loadableProps);
@@ -66,20 +66,12 @@ const App = () => {
         {keycloakIsReady ? (
           <Router>
             <Switch>
-              <ProtectedRoute exact path={ROUTES.HOME} layout={PageLayout}>
+              <ProtectedRoute exact path={STATIC_ROUTES.HOME} layout={PageLayout}>
                 <HomePage />
               </ProtectedRoute>
-              {/* <ProtectedRoute
-                exact
-                path={ROUTES.PRESCRIPTION_SEARCH}
-                layout={PageLayout}
-                roles={[Roles.Practitioner]}
-              >
-                <PrescriptionSearch />
-              </ProtectedRoute> */}
               <ProtectedRoute
                 exact
-                path={ROUTES.PRESCRIPTION_ENTITY}
+                path={DYNAMIC_ROUTES.PRESCRIPTION_ENTITY}
                 layout={PageLayout}
                 roles={[Roles.Practitioner]}
               >
@@ -87,15 +79,15 @@ const App = () => {
                   props: RouteChildrenProps<{
                     id: string;
                   }>,
-                ) => <PrescriptionEntity prescriptionId={props.match?.params.id!} />}
+                ) => <PrescriptionDetailPage prescriptionId={props.match?.params.id!} />}
               </ProtectedRoute>
               <Route
-                path={ROUTES.ERROR_STATUS}
+                path={DYNAMIC_ROUTES.ERROR}
                 render={(props: RouteComponentProps<{ status?: any }>) => (
                   <ErrorPage status={props.match.params.status} />
                 )}
               />
-              <Redirect from="*" to={ROUTES.HOME} />
+              <Redirect from="*" to={STATIC_ROUTES.HOME} />
             </Switch>
             <NotificationContextHolder />
           </Router>

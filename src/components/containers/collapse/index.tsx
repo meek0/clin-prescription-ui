@@ -9,6 +9,7 @@ type Props = {
   children: React.ReactNode;
   bordered?: boolean;
   loading?: boolean;
+  datacy?: string;
 };
 
 const CollapsePanel = ({
@@ -16,8 +17,9 @@ const CollapsePanel = ({
   children,
   bordered = false,
   loading = false,
+  datacy = '',
 }: Props): React.ReactElement => (
-  <div className={styles.collapsePanelWrapper}>
+  <div className={styles.collapsePanelWrapper} data-cy={`${datacy}_CollapsePanel`}>
     <Spin spinning={loading}>
       <Collapse bordered={bordered} headerBorderOnly defaultActiveKey="1" arrowIcon="caretFilled">
         <FUICollapsePanel header={header} key={`1`}>

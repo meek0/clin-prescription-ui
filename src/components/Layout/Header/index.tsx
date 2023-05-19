@@ -12,7 +12,7 @@ import HeaderLink from 'components/Layout/Header/HeaderLink';
 import { globalActions, useLang } from 'store/global';
 import { LANG } from 'utils/constants';
 import EnvironmentVariables from 'utils/EnvVariables';
-import ROUTES from 'utils/routes';
+import { STATIC_ROUTES } from 'utils/routes';
 import { IncludeKeycloakTokenParsed } from 'utils/tokenTypes';
 
 import styles from './index.module.scss';
@@ -36,44 +36,22 @@ const Header = () => {
           <HeaderLink
             key="home"
             currentPathName={currentPathName}
-            to={ROUTES.HOME}
+            to={STATIC_ROUTES.HOME}
             icon={<HomeOutlined />}
             title={intl.get('layout.main.menu.home')}
           />
-          {/* <LimitTo key="prescriptions" roles={[Roles.Practitioner]}>
-            <HeaderLink
-              key="prescriptions"
-              currentPathName={currentPathName}
-              to={ROUTES.PRESCRIPTION_SEARCH}
-              icon={<MedicineBoxOutlined />}
-              title={intl.get('layout.main.menu.prescriptions')}
-              data-cy="HeaderLinkPrescriptions"
-            />
-          </LimitTo>
-          <LimitTo key="archives" roles={[Roles.Download]}>
-            <HeaderLink
-              key="archives"
-              currentPathName={currentPathName}
-              to={ROUTES.ARCHIVE_EXPLORATION}
-              icon={<FileTextOutlined />}
-              title={intl.get('layout.main.menu.archives')}
-              data-cy="HeaderLinkArchives"
-            />
-          </LimitTo>
-          <LimitTo key="variants" roles={[Roles.Variants]}>
-            <HeaderLink
-              key="variants"
-              currentPathName={currentPathName}
-              to={ROUTES.HOME}
-              icon={<LineStyleIcon height="14" width="14" />}
-              title={intl.get('layout.main.menu.variants')}
-              data-cy="HeaderLinkVariants"
-            />
-          </LimitTo> */}
         </nav>
       }
       extra={
         <Space className={styles.extras} size={12}>
+          {/* <HeaderButton
+            key="panels"
+            icon={<DownloadOutlined />}
+            title={intl.get('layout.main.menu.panels')}
+            tooltip={intl.get('layout.main.menu.panels.tooltip')}
+            onClick={() => handlePanelsFileDownload()}
+            loading={downloadPanelsFile.fetching}
+          /> */}
           <Dropdown
             key="user-menu"
             trigger={['click']}

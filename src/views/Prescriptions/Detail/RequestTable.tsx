@@ -8,7 +8,6 @@ import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/Reusa
 import { TABLE_EMPTY_PLACE_HOLDER } from 'utils/constants';
 import { formatDate } from 'utils/date';
 
-import Links from '../components/Links';
 import StatusTag from '../components/StatusTag';
 import { getPrescriptionStatusDictionnary } from '../utils/constant';
 
@@ -18,7 +17,7 @@ interface OwnProps {
   loading?: boolean;
 }
 
-const getRequestColumns = (patientId: string): TableColumnType<Record<string, any>>[] => [
+const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
   {
     key: 'id',
     dataIndex: 'id',
@@ -44,7 +43,7 @@ const getRequestColumns = (patientId: string): TableColumnType<Record<string, an
     title: intl.get('screen.prescription.entity.request.requester'),
     render: (requester) =>
       requester
-        ? `${requester.practitioner?.name.family.toLocaleUpperCase()} 
+        ? `${requester.practitioner?.name.family.toLocaleUpperCase()}
       ${requester.practitioner?.name?.given?.join(' ')}`
         : EMPTY_FIELD,
   },
@@ -60,15 +59,15 @@ const getRequestColumns = (patientId: string): TableColumnType<Record<string, an
   {
     key: 'links',
     title: intl.get('screen.prescription.entity.request.links'),
-    render: (data: PatientRequest) => <Links patientId={patientId} prescriptionId={data.id} />,
+    render: () => <></>, // (data: PatientRequest) => <Links patientId={patientId} prescriptionId={data.id} />,
   },
 ];
 
-const RequestTable = ({ patientId, loading = false, data = [] }: OwnProps) => (
+const RequestTable = ({ loading = false, data = [] }: OwnProps) => (
   <Table
     loading={loading}
     size="small"
-    columns={getRequestColumns(patientId)}
+    columns={getRequestColumns()}
     dataSource={data.map((data, index) => ({ ...data, key: index }))}
     bordered
     locale={{

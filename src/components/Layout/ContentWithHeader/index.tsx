@@ -1,7 +1,7 @@
 import { Space } from 'antd';
 import cx from 'classnames';
 
-import { ContentHeaderProps } from './Header';
+import ContentHeader, { ContentHeaderProps } from './Header';
 
 import styles from './index.module.scss';
 
@@ -11,9 +11,9 @@ interface OwnProps {
   headerProps: ContentHeaderProps;
 }
 
-const ContentWithHeader = ({ children, className = '' }: OwnProps) => (
+const ContentWithHeader = ({ children, headerProps, className = '' }: OwnProps) => (
   <Space className={cx(styles.contentWithHeader, className)} direction="vertical" size={0}>
-    {/* <ContentHeader {...headerProps} /> */}
+    <ContentHeader {...headerProps} />
     <div className={styles.pageWrapper}>{children}</div>
   </Space>
 );

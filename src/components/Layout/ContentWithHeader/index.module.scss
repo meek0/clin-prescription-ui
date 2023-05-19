@@ -4,7 +4,7 @@
   display: flex;
 
   .pageWrapper {
-    height: calc(100vh - #{$main-header-height});
+    height: calc(100vh - #{$main-header-height} - #{$page-header-height});
     display: flex;
     width: 100%;
   }

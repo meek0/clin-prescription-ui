@@ -1,17 +1,13 @@
 import intl from 'react-intl-universal';
-import { Link } from 'react-router-dom';
 import { MedicineBoxOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row } from 'antd';
-import { extractPatientId } from 'api/fhir/helper';
+import { Card, Col, Row } from 'antd';
 import { useServiceRequestEntity } from 'graphql/prescriptions/actions';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
 
-import LineStyleIcon from 'components/icons/LineStyleIcon';
 import ContentWithHeader from 'components/Layout/ContentWithHeader';
 import ScrollContentWithFooter from 'components/Layout/ScrollContentWithFooter';
 import Forbidden from 'components/Results/Forbidden';
-import { LimitTo, Roles } from 'components/Roles/Rules';
 
 import AnalysisCard from './AnalysisCard';
 import ClinicalInformationCard from './ClinicalInformationCard';
@@ -24,7 +20,7 @@ interface OwnProps {
   prescriptionId: string;
 }
 
-const PrescriptionEntity = ({ prescriptionId }: OwnProps) => {
+const PrescriptionDetail = ({ prescriptionId }: OwnProps) => {
   const { prescription, loading } = useServiceRequestEntity(prescriptionId);
 
   if (!loading && !prescription) {
@@ -36,20 +32,6 @@ const PrescriptionEntity = ({ prescriptionId }: OwnProps) => {
       headerProps={{
         icon: <MedicineBoxOutlined />,
         title: intl.get('screen.prescription.entity.title', { id: prescriptionId }),
-        actions: [
-          <LimitTo key="variants" roles={[Roles.Variants]}>
-            <Link
-              key="variants"
-              to={`/snv/exploration/patient/${extractPatientId(
-                prescription?.subject?.resource?.id!,
-              )}/${prescriptionId}`}
-            >
-              <Button type="primary" icon={<LineStyleIcon height="14" width="14" />}>
-                {intl.get('screen.prescription.entity.see.variant')}
-              </Button>
-            </Link>
-          </LimitTo>,
-        ],
       }}
     >
       <ScrollContentWithFooter className={styles.prescriptionEntityWrapper} container>
@@ -83,7 +65,7 @@ const PrescriptionEntity = ({ prescriptionId }: OwnProps) => {
 
 const PrescriptionEntityWrapper = (props: OwnProps) => (
   <ApolloProvider backend={GraphqlBackend.FHIR}>
-    <PrescriptionEntity {...props} />
+    <PrescriptionDetail {...props} />
   </ApolloProvider>
 );
 
