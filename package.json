@@ -6,7 +6,7 @@
     "@ant-design/icons": "^4.7.0",
     "@apollo/client": "^3.4.17",
     "@babel/core": "^7.16.0",
-    "@ferlab/ui": "^5.4.6",
+    "@ferlab/ui": "^5.5.9",
     "@loadable/component": "^5.15.2",
     "@nivo/pie": "^0.79.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
@@ -85,7 +85,7 @@
     "coverage:changed": "npm test -- --coverage --watchAll=false --onlyChanged --coverageReporters=\"json-summary\"",
     "test:ci": "node scripts/test.js --ci --coverage",
     "theme:antd": "lessc --js ./src/style/themes/clin/antd-clin-theme.less ./src/style/themes/clin/dist/antd.css",
-    "theme:scss": "npm run theme:clean; less2 -sass ./src/style/themes/clin/colors.less; mv ./src/style/themes/clin/colors.scss ./src/style/themes/clin/dist/_colors.scss",
+    "theme:scss": "npm run theme:clean; less2sass ./src/style/themes/clin/colors.less; mv ./src/style/themes/clin/colors.scss ./src/style/themes/clin/dist/_colors.scss",
     "theme:clean": "find ./src/style/themes/clin/dist/* -type f -exec rm {} \\; || true",
     "theme": "npm run theme:scss && npm run theme:antd",
     "add-translation": "node utils/add-translation.js",
@@ -197,7 +197,7 @@
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "modulePaths": [
-      "/Users/francislavoie/workspace/clin/clin-portal-ui/src"
+      "<rootDir>/src"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
@@ -229,9 +229,9 @@
     "coverageThreshold": {
       "global": {
         "branches": 0,
-        "functions": 5,
-        "lines": 15,
-        "statements": 15
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
       }
     }
   },

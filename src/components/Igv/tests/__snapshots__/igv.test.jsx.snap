@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IGV should be as the snapshot 1`] = `
+<div
+  className=""
+  id="igvContainer"
+/>
+`;

@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { HomeOutlined, MedicineBoxFilled } from '@ant-design/icons';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
-import { Col, Row } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { getUserFullName } from 'auth/keycloak';
-import RequestTable from 'views/Prescriptions/Entity/RequestTable';
+import PractitionerTable from 'views/Prescriptions/PractitionerTable';
 
 import FamilyRestroomIcon from 'components/icons/FamilyRestroomIcon';
 import ContentWithHeader from 'components/Layout/ContentWithHeader';
@@ -17,6 +17,7 @@ import { prescriptionFormActions } from 'store/prescription/slice';
 import { HAS_PRESCRIPTION } from 'utils/constants';
 
 import ActionButton from './components/ActionButton';
+const { Title } = Typography;
 
 import styles from './index.module.scss';
 
@@ -63,7 +64,19 @@ const Home = () => {
               </Row>
             }
           />
-          {/* <RequestTable /> */}
+          {hasPrescription && (
+            <GridCard
+              title={<Title level={3}>Mes Prescriptions</Title>}
+              bordered={false}
+              className={styles.contentCard}
+              wrapperClassName={styles.contentCardWrapper}
+              content={
+                <Row gutter={[48, 48]}>
+                  <PractitionerTable />
+                </Row>
+              }
+            />
+          )}
         </div>
       </ScrollContentWithFooter>
       <PrescriptionForm />

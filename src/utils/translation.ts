@@ -28,6 +28,9 @@ export const getFiltersDictionary = (): FiltersDict => ({
     max: intl.get('querybuilder.filters.range.max'),
     min: intl.get('querybuilder.filters.range.min'),
     noData: intl.get('querybuilder.filters.range.noData'),
+    from: intl.get('querybuilder.filters.range.from'),
+    to: intl.get('querybuilder.filters.range.to'),
+    actualInterval: intl.get('querybuilder.filters.range.actualInterval'),
   },
   operators: {
     lessThan: intl.get('querybuilder.filters.operators.lessthan'),

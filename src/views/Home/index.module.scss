@@ -8,13 +8,22 @@
     height: 100%;
 
     .contentCardWrapper {
-      height: 100%;
       max-width: 1200px;
       margin: auto;
 
       .contentCard {
-        &:global(.ant-card) {
-          padding: 48px;
+        padding: 0px;
+        margin-bottom: 24px;
+
+        & > :global(.ant-card-head) {
+          padding: 16px 24px;
+          & :global(.ant-card-head-title) {
+            padding-bottom: 0px;
+          }
+        }
+
+        & > :global(.ant-card-body) {
+          padding: 16px 24px;
         }
       }
     }
