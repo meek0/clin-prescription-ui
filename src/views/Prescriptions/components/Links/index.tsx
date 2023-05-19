@@ -22,6 +22,7 @@ const Links = ({ patientId, prescriptionId, withDownload = true }: OwnProps) => 
           to={`${STATIC_ROUTES.ARCHIVE_EXPLORATION}?search=${extractServiceRequestId(
             prescriptionId,
           )}`}
+          data-cy={`ArchiveLink_${extractServiceRequestId(prescriptionId)}`}
         >
           <Space size={4}>
             <FileTextOutlined />
@@ -31,7 +32,10 @@ const Links = ({ patientId, prescriptionId, withDownload = true }: OwnProps) => 
       </LimitTo>
     )}
     <LimitTo roles={[Roles.Variants]}>
-      <Link to={`/snv/exploration/patient/${patientId}/${extractServiceRequestId(prescriptionId)}`}>
+      <Link
+        to={`/snv/exploration/patient/${patientId}/${extractServiceRequestId(prescriptionId)}`}
+        data-cy={`VariantsLink_${patientId}_${extractServiceRequestId(prescriptionId)}`}
+      >
         <Space size={4}>
           <LineStyleIcon height="15" width="15" />
           {intl.get('links.variants')}
