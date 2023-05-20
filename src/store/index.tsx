@@ -9,7 +9,6 @@ import storage from 'redux-persist/lib/storage';
 import GlobalReducer from 'store/global';
 import PrescriptionReducer from 'store/prescription';
 import ReportReducer from 'store/reports';
-import SavedFilterReducer from 'store/savedFilter';
 import { RootState } from 'store/types';
 import UserReducer from 'store/user';
 
@@ -29,7 +28,7 @@ const rootReducer = combineReducers<RootState>({
   report: ReportReducer,
   user: UserReducer,
   prescription: PrescriptionReducer,
-  savedFilter: SavedFilterReducer,
+  // savedFilter: SavedFilterReducer,
 });
 
 const store = configureStore({
