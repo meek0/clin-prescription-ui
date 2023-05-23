@@ -27,7 +27,7 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
   const { getAnalysisNameByCode } = useGlobals();
 
   return (
-    <Card title={intl.get(`screen.prescription.entity.analyse.card.title`)}>
+    <Card title={intl.get(`screen.prescription.entity.analyse.card.title`)} data-cy="AnalysisCard">
       <ParagraphLoader loading={loading} paragraph={{ rows: 5 }}>
         {prescription && (
           <Descriptions column={1} size="small" className="label-35">

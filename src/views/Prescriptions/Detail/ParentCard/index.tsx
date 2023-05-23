@@ -28,6 +28,9 @@ const ParentCard = ({ extension, loading }: OwnProps) => (
             {intl.get(get(extension?.extension[0].valueCoding, 'coding[0].code', ''))}
           </Title>
         }
+        datacy={`ParentCard_${intl.get(
+          get(extension?.extension[0].valueCoding, 'coding[0].code', ''),
+        )}`}
       >
         <Space direction="vertical" size="large">
           <GridCard

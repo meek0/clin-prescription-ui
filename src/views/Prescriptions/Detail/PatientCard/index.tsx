@@ -12,7 +12,7 @@ interface OwnProps {
 }
 
 const PatientCard = ({ prescription, loading }: OwnProps) => (
-  <Card title={intl.get('screen.prescription.entity.patient.card.title')}>
+  <Card title={intl.get('screen.prescription.entity.patient.card.title')} data-cy="PatientCard">
     <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
       <PatientContent patient={prescription?.subject.resource!} />
     </ParagraphLoader>
