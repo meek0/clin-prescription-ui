@@ -1,7 +1,5 @@
 import { sendRequestWithRpt } from 'api';
-import { ARRANGER_API, ARRANGER_API_PROJECT_URL } from 'providers/ApolloProvider';
-
-import { ISuggestionPayload, Suggestion, SuggestionType } from './models';
+import { ARRANGER_API_PROJECT_URL } from 'providers/ApolloProvider';
 
 const graphqlRequest = <T = any>(data: { query: any; variables: any }) =>
   sendRequestWithRpt<T>({
@@ -10,13 +8,6 @@ const graphqlRequest = <T = any>(data: { query: any; variables: any }) =>
     data,
   });
 
-const searchSuggestions = (type: SuggestionType, value: string) =>
-  sendRequestWithRpt<ISuggestionPayload<Suggestion>>({
-    method: 'GET',
-    url: `${ARRANGER_API}/${type}Feature/suggestions/${value}`,
-  });
-
 export const ArrangerApi = {
   graphqlRequest,
-  searchSuggestions,
 };
