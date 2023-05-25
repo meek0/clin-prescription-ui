@@ -39,11 +39,6 @@ export enum SUBMISSION_REVIEW_FI_KEY {
   GENERAL_COMMENT = 'general_comment',
 }
 
-export interface ISubmissionDataType {
-  [SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT]: string;
-  [SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR]: string;
-}
-
 const Submission = () => {
   const FORM_NAME = STEPS_ID.SUBMISSION;
   const { user } = useUser();

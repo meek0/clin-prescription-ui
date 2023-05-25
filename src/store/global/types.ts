@@ -3,10 +3,6 @@ import { ArgsProps as NotificationArgsProps } from 'antd/lib/notification';
 
 import { LANG } from 'utils/constants';
 
-export enum GlobalActionsEnum {
-  CHANGE_LANG = 'state/global/action/lang',
-}
-
 export type MessageArgsPropsCustom = MessageArgsProps & { type: NoticeType };
 
 export type initialState = {
