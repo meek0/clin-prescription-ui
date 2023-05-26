@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import { ISearchAfter } from '@ferlab/ui/core/graphql/types';
 
 export interface ArrangerNodeData {
@@ -54,21 +53,3 @@ export type ExtendedMappingResults = {
   loading: boolean;
   data: ExtendedMapping[];
 };
-
-export const hydrateResults = <resultType extends ArrangerNodeData>(
-  results: ArrangerEdge<resultType>[],
-): resultType[] =>
-  results.map(
-    (edge: ArrangerEdge<resultType>, index): resultType => ({
-      ...edge.node,
-      key: edge.node?.id || index,
-    }),
-  );
-
-export interface IQueryResults<T> {
-  error?: ApolloError;
-  data: T;
-  loading: boolean;
-  total: number;
-  searchAfter?: ISearchAfter;
-}

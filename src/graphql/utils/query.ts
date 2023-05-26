@@ -8,12 +8,6 @@ import {
   useQuery,
 } from '@apollo/client';
 
-export type Hits<T> = {
-  edges: {
-    node: T;
-  }[];
-};
-
 export interface IBaseQueryResults<TData> {
   error: ApolloError | undefined;
   result: TData | undefined;
@@ -64,6 +58,3 @@ export const useLazyResultQueryOnLoadOnly = <TData = any, TVariables = Operation
     error,
   };
 };
-
-export const extractHits = <T>(hits: Hits<T> | null | undefined): T[] | null =>
-  hits?.edges?.map((edge) => edge.node) ?? null;

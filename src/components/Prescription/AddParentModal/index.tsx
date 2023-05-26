@@ -5,7 +5,7 @@ import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
 import { AutoComplete, Form, Modal, Select, Typography } from 'antd';
 
-import SelectItem from 'components/uiKit/select/SelectItem';
+import SelectItem from 'components/Form/SelectItem';
 import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
 

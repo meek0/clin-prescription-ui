@@ -2,7 +2,7 @@ import intl from 'react-intl-universal';
 import { Form, FormItemProps, Space } from 'antd';
 import { isValid } from 'date-fns';
 
-import MaskedDateInput from 'components/uiKit/input/MaskedDateInput';
+import MaskedDateInput from 'components/Form/MaskedDateInput';
 
 import styles from './index.module.scss';
 

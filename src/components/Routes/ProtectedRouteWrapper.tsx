@@ -2,9 +2,9 @@ import React from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import { PractitionerRole } from 'api/fhir/models';
 
+import ConditionalWrapper from 'components/containers/ConditionalWrapper';
 import Forbidden from 'components/Results/Forbidden';
 import { Roles, validate } from 'components/Roles/Rules';
-import ConditionalWrapper from 'components/utils/ConditionalWrapper';
 import { useRpt } from 'hooks/useRpt';
 
 type OwnProps = Omit<RouteProps, 'component' | 'render' | 'children'> & {

@@ -7,6 +7,10 @@ import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
 import { FieldData } from 'rc-field-form/lib/interface';
 
+import InputDateFormItem from 'components/Form/InputDateFormItem';
+import { INPUT_DATE_OUTPUT_FORMAT } from 'components/Form/MaskedDateInput';
+import RadioGroupSex from 'components/Form/RadioGroupSex';
+import SearchOrNoneFormItem from 'components/Form/SearchOrNoneFormItem';
 import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
   getNamePath,
@@ -21,10 +25,6 @@ import {
   isRamqValid,
 } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
-import InputDateFormItem from 'components/uiKit/form/InputDateFormItem';
-import RadioGroupSex from 'components/uiKit/form/RadioGroupSex';
-import SearchOrNoneFormItem from 'components/uiKit/form/SearchOrNoneFormItem';
-import { INPUT_DATE_OUTPUT_FORMAT } from 'components/uiKit/input/MaskedDateInput';
 import { usePrescriptionFormConfig } from 'store/prescription';
 import { SexValue } from 'utils/commonTypes';
 

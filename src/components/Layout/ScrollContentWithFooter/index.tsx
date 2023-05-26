@@ -1,7 +1,7 @@
 import ScrollContent from '@ferlab/ui/core/layout/ScrollContent';
 import cx from 'classnames';
 
-import ConditionalWrapper from 'components/utils/ConditionalWrapper';
+import ConditionalWrapper from 'components/containers/ConditionalWrapper';
 
 import Container from '../Container';
 import Footer from '../Footer';
