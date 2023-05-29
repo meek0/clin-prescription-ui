@@ -3,6 +3,8 @@ import intl from 'react-intl-universal';
 import { Checkbox, Form, Input, Radio, Space } from 'antd';
 import { isEmpty } from 'lodash';
 
+import RadioDateFormItem from 'components/Form/RadioDateFormItem';
+import RadioGroupSex from 'components/Form/RadioGroupSex';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -11,8 +13,6 @@ import {
 } from 'components/Prescription/utils/form';
 import { formatRamq, RAMQ_PATTERN } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
-import RadioDateFormItem from 'components/uiKit/form/RadioDateFormItem';
-import RadioGroupSex from 'components/uiKit/form/RadioGroupSex';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
 import { SexValue } from 'utils/commonTypes';
 

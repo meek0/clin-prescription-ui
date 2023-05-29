@@ -1,48 +1,10 @@
 import intl from 'react-intl-universal';
-import { IDictionary as FiltersDict } from '@ferlab/ui/core/components/filters/types';
 import { IProTableDictionary } from '@ferlab/ui/core/components/ProTable/types';
 import { IDictionary as QueryBuilderDict } from '@ferlab/ui/core/components/QueryBuilder/types';
 
 import { GetAnalysisNameByCode } from 'store/global/types';
 
 import { formatNumber } from './formatNumber';
-
-export const getFiltersDictionary = (): FiltersDict => ({
-  actions: {
-    all: intl.get('querybuilder.filters.actions.all'),
-    apply: intl.get('querybuilder.filters.actions.apply'),
-    clear: intl.get('querybuilder.filters.actions.clear'),
-    less: intl.get('querybuilder.filters.actions.less'),
-    more: intl.get('querybuilder.filters.actions.more'),
-    none: intl.get('querybuilder.filters.actions.none'),
-    dictionary: intl.get('querybuilder.filters.actions.dictionary'),
-  },
-  // @ts-ignore
-  checkBox: {
-    searchPlaceholder: intl.get('querybuilder.filters.checkbox.placeholder'),
-  },
-  messages: {
-    errorNoData: intl.get('querybuilder.filters.messages.empty'),
-  },
-  range: {
-    max: intl.get('querybuilder.filters.range.max'),
-    min: intl.get('querybuilder.filters.range.min'),
-    noData: intl.get('querybuilder.filters.range.noData'),
-    from: intl.get('querybuilder.filters.range.from'),
-    to: intl.get('querybuilder.filters.range.to'),
-    actualInterval: intl.get('querybuilder.filters.range.actualInterval'),
-  },
-  operators: {
-    lessThan: intl.get('querybuilder.filters.operators.lessthan'),
-    lessThanOfEqual: intl.get('querybuilder.filters.operators.lessthanorequal'),
-    greaterThan: intl.get('querybuilder.filters.operators.greaterthan'),
-    greaterThanOrEqual: intl.get('querybuilder.filters.operators.greaterthanorequal'),
-    between: intl.get('querybuilder.filters.operators.between'),
-    anyOf: intl.get('querybuilder.filters.operators.anyOf'),
-    allOf: intl.get('querybuilder.filters.operators.allOf'),
-    noneOf: intl.get('querybuilder.filters.operators.noneOf'),
-  },
-});
 
 export const getProTableDictionary = (): IProTableDictionary => ({
   tooltips: {

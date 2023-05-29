@@ -64,33 +64,3 @@ export interface FhirDoc {
   content: FhirDocContent[];
   patientReference: string;
 }
-
-export interface FhirTask {
-  id: string;
-  docs: FhirDoc[];
-  focus: {
-    request: {
-      id: string;
-      basedOn: {
-        reference: string;
-      };
-    };
-  };
-  owner: FhirOwner;
-  runDate: string;
-  authoredOn: string;
-  runAlias: string;
-}
-
-export interface FhirOwner {
-  alias: string;
-  email: string;
-  id: string;
-}
-
-export interface PatientFileResults {
-  id: string;
-  docs: FhirDoc[];
-}
-
-export type PatientTaskResults = FhirTask[];

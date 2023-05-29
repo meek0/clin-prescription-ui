@@ -5,8 +5,8 @@ import configureStore from 'redux-mock-store';
 
 import PrescriptionTable from '../index';
 
-describe.skip('PrescriptionTable', () => {
-  test.skip('should be as the snapshot', () => {
+describe('PrescriptionTable', () => {
+  test('should be as the snapshot', () => {
     const initialState = { user: { user: { config: {} } } };
     const store = configureStore()(initialState);
     const component = renderer.create(

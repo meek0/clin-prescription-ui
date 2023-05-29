@@ -15,15 +15,15 @@ import { useKeycloak } from '@react-keycloak/web';
 import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import frFR from 'antd/lib/locale/fr_FR';
-import ProtectedRoute from 'ProtectedRoute';
 import ContextProvider from 'providers/ContextProvider';
 import ErrorPage from 'views/Error';
 
 import ErrorBoundary from 'components/ErrorBoundary';
 import PageLayout from 'components/Layout';
+import NotificationContextHolder from 'components/NotificationContextHolder';
 import { Roles } from 'components/Roles/Rules';
+import ProtectedRoute from 'components/Routes/ProtectedRoute';
 import Spinner from 'components/uiKit/Spinner';
-import NotificationContextHolder from 'components/utils/NotificationContextHolder';
 import { useLang } from 'store/global';
 import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
