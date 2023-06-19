@@ -40,15 +40,6 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     tooltip: intl.get('screen.patientsearch.table.createdOn.tooltip'),
     sorter: { multiple: 1 },
   },
-  // {
-  //   key: 'timestamp',
-  //   dataIndex: 'timestamp',
-  //   render: (date: string) => formatDate(date),
-  //   title: intl.get('screen.patientsearch.table.updatedOn'),
-  //   tooltip: intl.get('screen.patientsearch.table.updatedOn.tooltip'),
-  //   sorter: { multiple: 1 },
-  //   defaultHidden: true,
-  // },
   {
     key: 'analysis_code',
     dataIndex: ['analysis_code'],
@@ -56,14 +47,6 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     tooltip: intl.get('screen.patientsearch.table.test.tooltip'),
     sorter: { multiple: 1 },
   },
-  // {
-  //   key: 'ldm',
-  //   dataIndex: ['ldm'],
-  //   render: (labo: string) => extractOrganizationId(labo),
-  //   title: intl.get('screen.patientsearch.table.ldm'),
-  //   tooltip: intl.get('screen.patientsearch.table.ldm.tooltip'),
-  //   sorter: { multiple: 1 },
-  // },
   {
     key: 'ep',
     dataIndex: ['ep'],
@@ -71,41 +54,4 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     tooltip: intl.get('screen.patientsearch.table.ep.tooltip'),
     sorter: { multiple: 1 },
   },
-  // {
-  //   key: 'requester',
-  //   dataIndex: ['requester'],
-  //   title: intl.get('screen.patientsearch.table.requester'),
-  //   tooltip: intl.get('screen.patientsearch.table.requester.tooltip'),
-  //   render: (requester: string) => requester ?? TABLE_EMPTY_PLACE_HOLDER,
-  //   sorter: { multiple: 1 },
-  //   defaultHidden: true,
-  // },
-  // {
-  //   key: 'prenatal',
-  //   dataIndex: ['prenatal'],
-  //   title: intl.get('screen.patientsearch.table.prenatal'),
-  //   tooltip: intl.get('screen.patientsearch.table.prenatal.tooltip'),
-  //   sorter: { multiple: 1 },
-  //   render: (prenatal: boolean) => intl.get(prenatal ? 'yes' : 'no'),
-  //   defaultHidden: true,
-  // },
-  // {
-  //   key: 'patient_mrn',
-  //   dataIndex: 'patient_mrn',
-  //   title: intl.get('screen.patientsearch.table.mrn'),
-  //   tooltip: intl.get('screen.patientsearch.table.mrn.tooltip'),
-  //   sorter: { multiple: 1 },
-  //   defaultHidden: true,
-  // },
-  // {
-  //   key: 'links',
-  //   title: intl.get('screen.patientsearch.table.links'),
-  //   render: (results: AnalysisResult) => (
-  //     <Links
-  //       patientId={results.patient_id}
-  //       prescriptionId={results.prescription_id}
-  //       withDownload={false}
-  //     />
-  //   ),
-  // },
 ];
