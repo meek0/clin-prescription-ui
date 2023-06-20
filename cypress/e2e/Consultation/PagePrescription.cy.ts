@@ -36,7 +36,7 @@ describe('[PRESC] Page d\'une prescription - Vérifier les informations affiché
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('Variants').should('not.exist');
   });
   
-  it('Panneau Mère', () => {
+  it('Panneau Mère [CLIN-2027]', () => {
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.patientMthId).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.mrnMth, {matchCase: false}).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.ramqMth).should('exist');
@@ -53,7 +53,7 @@ describe('[PRESC] Page d\'une prescription - Vérifier les informations affiché
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Variants').should('not.exist');
   });
   
-  it('Panneau Père', () => {
+  it('Panneau Père [CLIN-2027]', () => {
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.patientFthId).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.mrnFth).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.ramqFth).should('exist');
