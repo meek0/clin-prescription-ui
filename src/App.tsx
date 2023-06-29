@@ -17,6 +17,7 @@ import enUS from 'antd/lib/locale/en_US';
 import frFR from 'antd/lib/locale/fr_FR';
 import ContextProvider from 'providers/ContextProvider';
 import ErrorPage from 'views/Error';
+import Landing from 'views/Landing';
 
 import ErrorBoundary from 'components/ErrorBoundary';
 import PageLayout from 'components/Layout';
@@ -66,6 +67,9 @@ const App = () => {
         {keycloakIsReady ? (
           <Router>
             <Switch>
+              <Route exact path={STATIC_ROUTES.LANDING}>
+                <Landing />
+              </Route>
               <ProtectedRoute exact path={STATIC_ROUTES.HOME} layout={PageLayout}>
                 <HomePage />
               </ProtectedRoute>

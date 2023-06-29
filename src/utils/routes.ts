@@ -1,6 +1,7 @@
 export enum STATIC_ROUTES {
   HOME = '/',
   ERROR = '/error',
+  LANDING = '/landing',
 }
 
 export enum DYNAMIC_ROUTES {

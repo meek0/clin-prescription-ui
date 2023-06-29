@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route, RouteProps } from 'react-router-dom';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 
-import LoginWrapper from 'components/LoginWrapper';
 import { Roles } from 'components/Roles/Rules';
 import Spinner from 'components/uiKit/Spinner';
 import { useUser } from 'store/user';
+import { REDIRECT_URI_KEY } from 'utils/constants';
+import { STATIC_ROUTES } from 'utils/routes';
 
 import ProtectedRouteWrapper from './ProtectedRouteWrapper';
 
@@ -22,7 +23,14 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
   const { user } = useUser();
 
   if (showLogin) {
-    return <LoginWrapper Component={<Spinner size={'large'} />} />;
+    return (
+      <Redirect
+        to={{
+          pathname: STATIC_ROUTES.LANDING,
+          search: `${REDIRECT_URI_KEY}=${routeProps.location?.pathname}${routeProps.location?.search}`,
+        }}
+      />
+    );
   }
 
   if (!keycloakIsReady || user.practitionerRoles.length === 0) {
