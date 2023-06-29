@@ -47,18 +47,15 @@
 
   .pageContent {
     display: flex;
-
-    // &.dark {
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      background: linear-gradient(
-          0deg,
-          transparentize($gray-2, 0.1),
-          transparentize($gray-2, 0.1)
-        ),
-        url(../../../components/assets/side-img-svg.svg) bottom;
-      background-size: cover;
-    }
-  // }
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background: linear-gradient(
+      0deg,
+      transparentize($gray-2, 0.1),
+      transparentize($gray-2, 0.1)
+    ),
+    url(../../../components/assets/side-img-svg.svg) bottom;
+    background-size: cover;
+  }
 }

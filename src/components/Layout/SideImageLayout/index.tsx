@@ -6,12 +6,11 @@ import styles from './index.module.scss';
 
 interface OwnProps {
   sideImgSrc?: string;
-  theme?: 'light' | 'dark';
   children: ReactElement;
   className?: string;
 }
 
-const SideImageLayout = ({ sideImgSrc, theme = 'dark', children, className = ' ' }: OwnProps) => (
+const SideImageLayout = ({ sideImgSrc, children, className = ' ' }: OwnProps) => (
   <div className={cx(styles.sideImagePageContainer, className)}>
     <Row className={styles.contentWrapper}>
       <div
@@ -22,7 +21,7 @@ const SideImageLayout = ({ sideImgSrc, theme = 'dark', children, className = ' '
           backgroundSize: 'cover',
         }}
       />
-      <Row className={cx(styles.pageContent, theme === 'light' ? 'light' : 'dark')}>{children}</Row>
+      <Row className={styles.pageContent}>{children}</Row>
     </Row>
   </div>
 );
