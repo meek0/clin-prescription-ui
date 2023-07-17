@@ -254,7 +254,7 @@
   "screen.bioinfo.analysis.samples.tissue" : "Tissue",
   "screen.bioinfo.analysis.samples.title" : "Échantillons",
   "screen.bioinfo.analysis.samples.type" : "Type d’échantillon",
-  "screen.landing.title" : "Prescriptions et analyses",
+  "screen.landing.title" : "Prescriptions et requêtes",
   "screen.landing.description" : "Le Centre québécois de génomique clinique (CQGC) met à disposition un portail web de prescription d’analyses cliniques de séquençage à haut débit (NGS) pour le diagnostic moléculaire aux médecins prescripteurs de la province.",
   "screen.patient.tab.prescriptions" : "Prescriptions",
   "screen.patient.tab.requests" : "Requêtes",

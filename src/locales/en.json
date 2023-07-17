@@ -254,7 +254,7 @@
   "screen.bioinfo.analysis.samples.tissue" : "Tissue",
   "screen.bioinfo.analysis.samples.title" : "Samples",
   "screen.bioinfo.analysis.samples.type" : "Sample Type",
-  "screen.landing.title" : "Prescriptions and analysis",
+  "screen.landing.title" : "Prescriptions and requisitions",
   "screen.landing.description" : "The Quebec Center for Clinical Genomics (CQGC) provides a clinical analysis prescription web portal of high-throughput sequencing (NGS) for molecular diagnosis to prescribing physicians in the province.",
   "screen.patient.tab.prescriptions" : "Prescriptions",
   "screen.patient.tab.requests" : "Requests",
