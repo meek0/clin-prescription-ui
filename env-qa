@@ -6,7 +6,7 @@ REACT_APP_NOSCRIPT_CONTENT=JavaScript is required.
 REACT_APP_NAMESPACE=qa
 REACT_APP_SHOW_TRANSLATION_BTN=true
 # AUTH
-REACT_APP_KEYCLOAK_CONFIG={"realm": "clin", "url": "https://auth.qa.cqgc.hsj.rtss.qc.ca/", "clientId": "clin-client", "authClientId": "clin-acl"}
+REACT_APP_KEYCLOAK_CONFIG={"realm": "clin", "url": "https://auth.qa.cqgc.hsj.rtss.qc.ca/", "clientId": "clin-prescription-client", "authClientId": "clin-acl"}
 # API
 REACT_APP_ARRANGER_API=https://data-api.qa.cqgc.hsj.rtss.qc.ca
 REACT_APP_ARRANGER_PROJECT_ID=clin_qa
