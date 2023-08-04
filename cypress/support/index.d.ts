@@ -5,6 +5,7 @@ declare namespace Cypress {
     clickAndIntercept(selector: string, methodHTTP: string, routeMatcher: string, nbCalls: number): cy & CyEventEmitter;
     login(user: string, password: string): cy & CyEventEmitter;
     logout(): cy & CyEventEmitter;
+    removeFilesFromFolder(folder: string): cy & CyEventEmitter;
     resetColumns(eq: number): cy & CyEventEmitter;
     typeAndIntercept(selector: string, text: string, methodHTTP: string, routeMatcher: string, nbCalls: number): cy & CyEventEmitter;
     visitAndIntercept(url: string, methodHTTP: string, routeMatcher: string, nbCalls: number): cy & CyEventEmitter;

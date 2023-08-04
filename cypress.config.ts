@@ -1,16 +1,16 @@
 import { defineConfig } from 'cypress';
+import { getDateTime } from './cypress/support/utils';
 
-let date = new Date();
-const joinWithPadding = (l: number[]) => l.reduce((xs, x) => xs + `${x}`.padStart(2, '0'), '');
-const strDate = joinWithPadding([
-  date.getFullYear(),
-  date.getMonth() + 1,
-  date.getDate()
-]);
-const strTime = joinWithPadding([
-  date.getHours(),
-  date.getMinutes()
-]);
+const { strDate, strTime } = getDateTime();
+
+const getName = (url: string|undefined) => {
+  const strUrl = url !== undefined ? url : "";
+  if (strUrl.includes('clin-')) {
+    return strUrl.replace('https://', '').split('.')[0].split('-').splice(2, 4).join('-');
+  } else {
+    return 'QA';
+  }
+};
 
 export default defineConfig({
   projectId: 'e6jd58',
@@ -29,15 +29,24 @@ export default defineConfig({
     baseUrl: 'https://prescription.qa.cqgc.hsj.rtss.qc.ca/',
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     slowTestThreshold: 60000,
-    experimentalSessionAndOrigin: true
+    experimentalSessionAndOrigin: true,
+    downloadsFolder: `cypress/downloads/${getName(process.env.CYPRESS_BASE_URL)}`,
+    screenshotsFolder: `cypress/screenshots/${getName(process.env.CYPRESS_BASE_URL)}`,
+    videosFolder: `cypress/videos/${getName(process.env.CYPRESS_BASE_URL)}/`,
   },
   retries: {
-    "runMode": 2,
-    "openMode": 0
+    runMode: 2,
+    openMode: 0,
   },
   reporter: 'junit',
   reporterOptions: {
-     "mochaFile": 'cypress/results/'+strDate+'_'+strTime+'-[hash].xml',
-     rootSuiteTitle: 'Tests Cypress'
-  }
+    mochaFile:
+      'cypress/results/' +
+      `${getName(process.env.CYPRESS_BASE_URL)}/` +
+      strDate +
+      '_' +
+      strTime +
+      '-[hash].xml',
+    rootSuiteTitle: 'Tests Cypress',
+  },
 });

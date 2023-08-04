@@ -39,6 +39,10 @@ Cypress.Commands.add('logout', () => {
   cy.wait(1000);
 });
 
+Cypress.Commands.add('removeFilesFromFolder', (folder: string) => {
+  cy.exec(`rm ${folder}/*`, {failOnNonZeroExit: false});
+});
+
 Cypress.Commands.add('resetColumns', (eq: number) => {
   cy.get('svg[data-icon="setting"]').eq(eq).click({force: true});
   cy.get('button[class*="ProTablePopoverColumnResetBtn"]').eq(eq).click({force: true});
