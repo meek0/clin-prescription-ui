@@ -16,10 +16,13 @@ Cypress.Commands.add('clickAndIntercept', (selector: string, methodHTTP: string,
 Cypress.Commands.add('login', (user: string, password: string) => {
   cy.session([user], () => {
     cy.visit('/');
-    cy.get('input[type="email"]').should('exist', {timeout: 60*1000});
+    cy.get('button[class*="ant-btn-primary ant-btn-lg"]').should('exist', {timeout: 60*1000});
+    cy.get('button[class*="ant-btn-primary ant-btn-lg"]').click();
 
-    cy.get('input[type="email"]').type(user);
-    cy.get('input[type="password"]').type(password, {log: false});
+    cy.get('input[id="username"]').should('exist', {timeout: 60*1000});
+
+    cy.get('input[id="username"]').type(user);
+    cy.get('input[id="password"]').type(password, {log: false});
     cy.get('button[type="submit"]').click();
   });
 });
@@ -37,6 +40,10 @@ Cypress.Commands.add('logout', () => {
 
   cy.exec('npm cache clear --force');
   cy.wait(1000);
+});
+
+Cypress.Commands.add('removeFilesFromFolder', (folder: string) => {
+  cy.exec(`rm ${folder}/*`, {failOnNonZeroExit: false});
 });
 
 Cypress.Commands.add('resetColumns', (eq: number) => {
