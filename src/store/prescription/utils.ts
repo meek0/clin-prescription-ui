@@ -3,7 +3,7 @@ import {
   CLINICAL_SIGNS_FI_KEY,
   CLINICAL_SIGNS_ITEM_KEY,
   IClinicalSignsDataType,
-} from 'components/Prescription/components/ClinicalSignsSelect';
+} from 'components/Prescription/components/ClinicalSignsSelect/types';
 import {
   IParaclinicalExamsDataType,
   PARACLINICAL_EXAM_ITEM_KEY,

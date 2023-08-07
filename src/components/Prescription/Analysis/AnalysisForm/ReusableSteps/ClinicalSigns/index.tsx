@@ -2,11 +2,10 @@
 import { Form } from 'antd';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
-import ClinicalSignsSelect, {
-  IClinicalSignsDataType,
-} from 'components/Prescription/components/ClinicalSignsSelect';
+import ClinicalSignsSelect from 'components/Prescription/components/ClinicalSignsSelect';
 import { IAnalysisStepForm } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
+import { IClinicalSignsDataType } from 'components/Prescription/components/ClinicalSignsSelect/types';
 
 import { STEPS_ID } from '../constant';
 

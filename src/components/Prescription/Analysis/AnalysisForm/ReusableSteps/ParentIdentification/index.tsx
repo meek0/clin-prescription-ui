@@ -6,9 +6,8 @@ import cx from 'classnames';
 import { isEmpty } from 'lodash';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
-import ClinicalSignsSelect, {
-  IClinicalSignsDataType,
-} from 'components/Prescription/components/ClinicalSignsSelect';
+import ClinicalSignsSelect from 'components/Prescription/components/ClinicalSignsSelect';
+import { IClinicalSignsDataType } from 'components/Prescription/components/ClinicalSignsSelect/types';
 import PatientDataSearch, {
   IPatientDataType,
   PATIENT_DATA_FI_KEY,

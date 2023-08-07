@@ -11,7 +11,7 @@ import {
   CLINICAL_SIGNS_FI_KEY,
   CLINICAL_SIGNS_ITEM_KEY,
   IClinicalSignItem,
-} from 'components/Prescription/components/ClinicalSignsSelect';
+} from 'components/Prescription/components/ClinicalSignsSelect/types';
 import { usePrescriptionForm, usePrescriptionFormConfig } from 'store/prescription';
 
 interface OwnProps {
