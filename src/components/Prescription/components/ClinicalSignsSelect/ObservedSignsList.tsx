@@ -70,7 +70,10 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                           name={[name, CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]}
                           valuePropName="checked"
                         >
-                          <Checkbox value={true}>
+                          <Checkbox
+                            value={true}
+                            data-cy={`Observed${hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]}`}
+                          >
                             <Text>
                               {capitalize(hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME])}{' '}
                               <Text type="secondary">
