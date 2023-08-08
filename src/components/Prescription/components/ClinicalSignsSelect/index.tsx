@@ -7,6 +7,7 @@ import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescri
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 
+import NotObservedSignsList from './NotObservedSignsList';
 import ObservedSignsList from './ObservedSignsList';
 import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignsDataType } from './types';
 
@@ -56,8 +57,9 @@ const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
 
   return (
     <div className={styles.clinicalSignsSelect}>
-      <ObservedSignsList form={form} getName={getName} />
       <Space direction="vertical" style={{ width: '100%' }}>
+        <ObservedSignsList form={form} getName={getName} />
+        <NotObservedSignsList form={form} getName={getName} />
         <ProLabel title="Commentaire clinique général" colon />
         <Form.Item name={getName(CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK)} className="noMarginBtm">
           <Input.TextArea rows={3} />

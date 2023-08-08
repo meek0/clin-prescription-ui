@@ -1,6 +1,7 @@
 {
   "FTH" : "Father",
   "MTH" : "Mother",
+  "optional" : "optional",
   "acmg.criteria" : "ACMG Criteria",
   "annotationUpdate" : "Annotation date",
   "api.savedFilter.error.messageDelete" : "Unable to delete filter",

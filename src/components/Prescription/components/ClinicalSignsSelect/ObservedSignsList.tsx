@@ -60,13 +60,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                   );
 
                   return (
-                    <div
-                      key={key}
-                      className={cx(
-                        styles.hpoFormItem,
-                        !isDefaultHpoTerm && styles.customHpoFormItem,
-                      )}
-                    >
+                    <div key={key} className={styles.hpoFormItem}>
                       <Space className={styles.hpoFormItemContent}>
                         <Form.Item
                           {...restField}
@@ -82,12 +76,6 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                             </Text>
                           </Checkbox>
                         </Form.Item>
-                        {!isDefaultHpoTerm && (
-                          <CloseOutlined
-                            className={styles.removeIcon}
-                            onClick={() => remove(name)}
-                          />
-                        )}
                         <Form.Item
                           noStyle
                           shouldUpdate={(prev, next) =>
@@ -134,6 +122,12 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                             ) : null
                           }
                         </Form.Item>
+                        {!isDefaultHpoTerm && (
+                          <CloseOutlined
+                            className={styles.removeIcon}
+                            onClick={() => remove(name)}
+                          />
+                        )}
                       </Space>
                     </div>
                   );

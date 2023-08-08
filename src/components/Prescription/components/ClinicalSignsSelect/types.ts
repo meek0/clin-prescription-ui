@@ -2,6 +2,7 @@ export const CLINICAL_SIGN_NA = 'NA';
 
 export enum CLINICAL_SIGNS_FI_KEY {
   SIGNS = 'signs',
+  NOT_OBSERVED_SIGNS = 'not_observed_signs',
   CLINIC_REMARK = 'comment',
 }
 
@@ -21,5 +22,6 @@ export interface IClinicalSignItem {
 
 export interface IClinicalSignsDataType {
   [CLINICAL_SIGNS_FI_KEY.SIGNS]: IClinicalSignItem[];
+  [CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS]?: IClinicalSignItem[];
   [CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK]?: string;
 }
