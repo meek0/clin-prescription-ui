@@ -458,5 +458,10 @@
   "upload.gene.ids.modal.uploadBtnText" : "Upload a gene list",
   "view.litvar" : "View LitVAR",
   "view.ucsc" : "View UCSC",
-  "yes" : "Yes"
+  "yes" : "Yes",
+  "prescription.form.signs.not.observed.label": "Add the UNOBSERVED clinical signs that you consider relevant to the analysis",
+  "prescription.form.signs.not.observed.add": "Add another observed clinical sign",
+  "prescription.form.signs.observed.label": "Select at least one OBSERVED clinical sign",
+  "prescription.form.signs.observed.error": "Select at least one (1) clinical sign",
+  "prescription.form.signs.observed.add": "Add another observed clinical sign"
 }

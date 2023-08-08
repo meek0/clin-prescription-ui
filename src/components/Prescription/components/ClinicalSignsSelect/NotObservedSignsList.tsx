@@ -31,10 +31,7 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
   return (
     <Space direction="vertical">
       <Space size={2}>
-        <ProLabel
-          requiredMark
-          title="Ajouter les signes cliniques NON OBSERVÉS que vous jugez pertinents à l’analyse"
-        />
+        <ProLabel requiredMark title={intl.get('prescription.form.signs.not.observed.label')} />
         <Text type="secondary">({intl.get('optional')}) :</Text>
       </Space>
       <Form.Item wrapperCol={{ xxl: 14 }} className="noMarginBtm">
@@ -77,7 +74,7 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                   onClick={() => setIsPhenotypeModalVisible(true)}
                   icon={<PlusOutlined />}
                 >
-                  Ajouter un autre signe clinique observé
+                  {intl.get('prescription.form.signs.not.observed.add')}
                 </Button>
               </Form.Item>
               <PhenotypeModal

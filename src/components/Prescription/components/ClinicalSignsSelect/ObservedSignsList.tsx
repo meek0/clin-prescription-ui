@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import intl from 'react-intl-universal';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Button, Checkbox, Form, FormInstance, Select, Space, Typography } from 'antd';
@@ -36,7 +37,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
 
   return (
     <Space direction="vertical">
-      <ProLabel requiredMark title="Sélectionner au moins un signe clinique OBSERVÉ" colon />
+      <ProLabel requiredMark title={intl.get('prescription.form.signs.observed.label')} colon />
       <Form.Item wrapperCol={{ xxl: 14 }} className="noMarginBtm">
         <Form.List
           name={getName(CLINICAL_SIGNS_FI_KEY.SIGNS)}
@@ -44,7 +45,9 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
             {
               validator: async (_, signs: IClinicalSignItem[]) => {
                 if (!signs.some((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true)) {
-                  return Promise.reject(new Error('Sélectionner au moins un (1) signe clinique'));
+                  return Promise.reject(
+                    new Error(intl.get('prescription.form.signs.observed.error')),
+                  );
                 }
               },
             },
@@ -95,7 +98,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                                 name,
                                 CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED,
                               ),
-                            ) === true ? (
+                            ) && (
                               <Form.Item
                                 colon={false}
                                 name={[name, CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]}
@@ -119,7 +122,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                                   ))}
                                 </Select>
                               </Form.Item>
-                            ) : null
+                            )
                           }
                         </Form.Item>
                         {!isDefaultHpoTerm && (
@@ -143,7 +146,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                   onClick={() => setIsPhenotypeModalVisible(true)}
                   icon={<PlusOutlined />}
                 >
-                  Ajouter un autre signe clinique observé
+                  {intl.get('prescription.form.signs.observed.add')}
                 </Button>
               </Form.Item>
               <PhenotypeModal
