@@ -17,14 +17,15 @@ $label-width: 350px;
   }
 
   .hpoFormItem {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     :global(.ant-form-item) {
       margin-bottom: 0;
     }
   }
 
   .ageSelectInput {
-    max-width: 255px;
+    max-width: 250px;
+    min-width: 250px;
   }
 
   .listErrorWrapper {
@@ -32,30 +33,6 @@ $label-width: 350px;
     padding: 12px 0;
     border-radius: 2px;
     background-color: $red-0;
-  }
-
-  .customHpoFormItem {
-    display: flex;
-    margin-bottom: 8px;
-
-    .hpoFormItemContent {
-      background-color: $gray-3;
-      border: 1px solid $gray-4;
-      border-radius: 2px;
-      padding: 8px;
-      padding-left: 0;
-
-      .hpoFormItemTopWrapper {
-        display: flex;
-        align-items: center;
-      }
-
-      .removeIcon {
-        color: $blue-8;
-        margin-left: 25px;
-        margin-right: 10px;
-      }
-    }
   }
 
   .addClinicalSignBtn {

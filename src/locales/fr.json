@@ -1,6 +1,7 @@
 {
   "FTH" : "Père",
   "MTH" : "Mère",
+  "optional" : "facultatif",
   "acmg.criteria" : "Critères ACMG",
   "annotationUpdate" : "Date d’annotation",
   "api.savedFilter.error.messageDelete" : "Impossible de supprimer le filtre",
@@ -457,5 +458,10 @@
   "upload.gene.ids.modal.uploadBtnText" : "Téléverser une liste de gènes",
   "view.litvar" : "Consulter LitVAR",
   "view.ucsc" : "Consulter UCSC",
-  "yes" : "Oui"
+  "yes" : "Oui",
+  "prescription.form.signs.not.observed.label": "Ajouter les signes cliniques NON OBSERVÉS que vous jugez pertinents à l’analyse",
+  "prescription.form.signs.not.observed.add": "Ajouter un autre signe clinique observé",
+  "prescription.form.signs.observed.label": "Sélectionner au moins un signe clinique OBSERVÉ",
+  "prescription.form.signs.observed.error": "Sélectionner au moins un (1) signe clinique",
+  "prescription.form.signs.observed.add": "Ajouter un autre signe clinique observé"
 }

@@ -11,7 +11,7 @@ import {
   CLINICAL_SIGNS_FI_KEY,
   CLINICAL_SIGNS_ITEM_KEY,
   IClinicalSignItem,
-} from 'components/Prescription/components/ClinicalSignsSelect';
+} from 'components/Prescription/components/ClinicalSignsSelect/types';
 import { usePrescriptionForm, usePrescriptionFormConfig } from 'store/prescription';
 
 interface OwnProps {
@@ -28,9 +28,11 @@ const ClinicalSignsReview = ({ stepId = STEPS_ID.CLINICAL_SIGNS }: OwnProps) => 
   const getData = (key: CLINICAL_SIGNS_FI_KEY) => analysisData[stepId]?.[key];
 
   const getSignsByStatus = (isObserved: Boolean) =>
-    ((getData(CLINICAL_SIGNS_FI_KEY.SIGNS) ?? []) as IClinicalSignItem[]).filter(
-      (sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === isObserved,
-    );
+    isObserved
+      ? ((getData(CLINICAL_SIGNS_FI_KEY.SIGNS) ?? []) as IClinicalSignItem[]).filter(
+          (sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === isObserved,
+        )
+      : ((getData(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS) ?? []) as IClinicalSignItem[]);
 
   const formatSignsWithAge = (sign: IClinicalSignItem, index: number) => (
     <span key={index}>{`${sign[CLINICAL_SIGNS_ITEM_KEY.NAME]} (${
@@ -43,8 +45,8 @@ const ClinicalSignsReview = ({ stepId = STEPS_ID.CLINICAL_SIGNS }: OwnProps) => 
     }`}</span>
   );
 
-  const getSignsList = (isObserved: Boolean) => {
-    const observedSigns = getSignsByStatus(isObserved);
+  const getObservedSignsList = () => {
+    const observedSigns = getSignsByStatus(true);
     return isEmpty(observedSigns)
       ? EMPTY_FIELD
       : observedSigns
@@ -52,16 +54,21 @@ const ClinicalSignsReview = ({ stepId = STEPS_ID.CLINICAL_SIGNS }: OwnProps) => 
           .map(formatSignsWithAge);
   };
 
+  const getNotObservedSignsList = () => {
+    const notObservedSigns = getSignsByStatus(false);
+    return isEmpty(notObservedSigns) ? EMPTY_FIELD : notObservedSigns.map(formatSignsWithAge);
+  };
+
   return (
     <Descriptions className="label-20" column={1} size="small">
       <Descriptions.Item label={intl.get('prescription.clinical.signs.review.label.observed')}>
         <Space direction="vertical" size={0}>
-          {getSignsList(true)}
+          {getObservedSignsList()}
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.clinical.signs.review.label.not.observed')}>
         <Space direction="vertical" size={0}>
-          {getSignsList(false)}
+          {getNotObservedSignsList()}
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.clinical.signs.review.label.note')}>
