@@ -36,6 +36,10 @@ export const extractBirthDateAndSexFromRamq = (ramq: string, dateFormat: string)
 
   try {
     const date = parse(year + month.toString().padStart(2, '0') + day, 'yyMMdd', new Date());
+    if (date > new Date()) {
+      const newYears = '19' + year;
+      date.setFullYear(Number(newYears));
+    }
     birthDate = format(date, dateFormat);
   } catch {
     birthDate = undefined;
