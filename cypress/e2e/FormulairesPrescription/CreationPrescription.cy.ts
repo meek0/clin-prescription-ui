@@ -8,7 +8,7 @@ beforeEach(() => {
   cy.get('[data-cy="CreateNewPrescription"]').should('exist', {timeout: 20*1000});
 });
 
-describe('[PRESC] Formulaires de prescription - Création', () => {
+describe('Formulaires de prescription - Création', () => {
   it('MMG - Solo', () => {
     cy.get('[data-cy="CreateNewPrescription"]').find('[data-cy="ActionButton"]').click({force: true});
 
