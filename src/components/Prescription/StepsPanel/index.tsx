@@ -1,16 +1,13 @@
 import { Space, Steps, Typography } from 'antd';
 
-import { useAppDispatch } from 'store';
 import { useGlobals } from 'store/global';
 import { usePrescriptionForm } from 'store/prescription';
-import { prescriptionFormActions } from 'store/prescription/slice';
 
 import styles from './index.module.scss';
 
 const { Title } = Typography;
 
 const StepsPanel = () => {
-  const dispatch = useAppDispatch();
   const { getAnalysisNameByCode } = useGlobals();
   const { config, currentStep } = usePrescriptionForm();
 
@@ -26,13 +23,13 @@ const StepsPanel = () => {
             className={styles.stepsItem}
             key={step.index}
             title={step.title}
-            onStepClick={(index) => {
-              dispatch(
-                prescriptionFormActions.goTo({
-                  index,
-                }),
-              );
-            }}
+            //onStepClick={(index) => {
+            //  dispatch(
+            //    prescriptionFormActions.goTo({
+            //      index,
+            //    }),
+            //  );
+            //}}
           />
         ))}
       </Steps>
