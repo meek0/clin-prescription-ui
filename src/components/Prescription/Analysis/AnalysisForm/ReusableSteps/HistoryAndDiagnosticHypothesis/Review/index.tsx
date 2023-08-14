@@ -10,11 +10,11 @@ import {
   HISTORY_AND_DIAG_FI_KEY,
   IHealthConditionItem,
 } from 'components/Prescription/components/HistoryAndDiagnosisData';
-import { usePrescriptionForm } from 'store/prescription';
+import { usePrescriptionForm, usePrescriptionFormConfig } from 'store/prescription';
 
 const HistoryAndDiagnosisReview = () => {
   const { analysisData } = usePrescriptionForm();
-
+  const formConfig = usePrescriptionFormConfig();
   const getData = (key: HISTORY_AND_DIAG_FI_KEY) =>
     analysisData[STEPS_ID.HISTORY_AND_DIAGNOSIS]?.[key];
 
@@ -23,7 +23,14 @@ const HistoryAndDiagnosisReview = () => {
     return isEmpty(conditions)
       ? EMPTY_FIELD
       : (conditions as IHealthConditionItem[])
-          .map((item) => `${item.condition} (${item.parental_link})`)
+          .map(
+            (item) =>
+              `${item.condition} (${
+                formConfig?.history_and_diagnosis.parental_links.find(
+                  (link) => link.value === item.parental_link,
+                )?.name
+              })`,
+          )
           .join(', ');
   };
 
@@ -40,7 +47,11 @@ const HistoryAndDiagnosisReview = () => {
           : intl.get((getData(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING) ? 'yes' : 'no') ?? 'no')}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.ethnicity')}>
-        {getData(HISTORY_AND_DIAG_FI_KEY.ETHNICITY) ?? EMPTY_FIELD}
+        {
+          formConfig?.history_and_diagnosis.ethnicities.find(
+            (eth) => eth.value === getData(HISTORY_AND_DIAG_FI_KEY.ETHNICITY),
+          )?.name
+        }
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.hypothesis')}>
         {getData(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS)}
