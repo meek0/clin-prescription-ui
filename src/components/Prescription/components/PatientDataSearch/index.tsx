@@ -108,7 +108,7 @@ const PatientDataSearch = ({
       fields.push(
         {
           name: getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
-          value: format(new Date(patient.birth_date), INPUT_DATE_OUTPUT_FORMAT),
+          value: format(new Date(patient.birth_date + ' 00:00:00'), INPUT_DATE_OUTPUT_FORMAT),
         },
         {
           name: getName(PATIENT_DATA_FI_KEY.SEX),
