@@ -31,7 +31,7 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
   return (
     <Space direction="vertical">
       <Space size={2}>
-        <ProLabel requiredMark title={intl.get('prescription.form.signs.not.observed.label')} />
+        <ProLabel title={intl.get('prescription.form.signs.not.observed.label')} />
         <Text type="secondary">({intl.get('optional')}) :</Text>
       </Space>
       <Form.Item wrapperCol={{ xxl: 14 }} className="noMarginBtm">
@@ -58,7 +58,7 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                             </Text>
                           </Text>
                         </Form.Item>
-                        <CloseOutlined onClick={() => remove(name)} />
+                        <CloseOutlined className={styles.removeIcon} onClick={() => remove(name)} />
                       </Space>
                     </div>
                   );
