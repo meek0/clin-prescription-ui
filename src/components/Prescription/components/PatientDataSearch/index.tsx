@@ -63,6 +63,8 @@ export interface IPatientDataType {
   [PATIENT_DATA_FI_KEY.SEX]: SexValue;
 }
 
+const TIME = ' 00:00:00';
+
 const PatientDataSearch = ({
   form,
   parentKey,
@@ -77,7 +79,6 @@ const PatientDataSearch = ({
   const [isNewFileNumber, setIsNewFileNumber] = useState(false);
   const [fileSearchDone, setFileSearchDone] = useState(initialFileSearchDone);
   const [ramqSearchDone, setRamqSearchDone] = useState(initialRamqSearchDone);
-
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
   const updateFormFromPatient = (form: FormInstance, patient?: IFormPatient) => {
@@ -108,7 +109,7 @@ const PatientDataSearch = ({
       fields.push(
         {
           name: getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
-          value: format(new Date(patient.birth_date), INPUT_DATE_OUTPUT_FORMAT),
+          value: format(new Date(patient.birth_date + TIME), INPUT_DATE_OUTPUT_FORMAT),
         },
         {
           name: getName(PATIENT_DATA_FI_KEY.SEX),
