@@ -460,8 +460,8 @@
   "view.ucsc" : "Consulter UCSC",
   "yes" : "Oui",
   "prescription.form.signs.not.observed.label": "Ajouter les signes cliniques NON OBSERVÉS que vous jugez pertinents à l’analyse",
-  "prescription.form.signs.not.observed.add": "Ajouter un autre signe clinique non observé",
+  "prescription.form.signs.not.observed.add": "Ajouter un signe clinique non observé",
   "prescription.form.signs.observed.label": "Sélectionner au moins un signe clinique OBSERVÉ",
   "prescription.form.signs.observed.error": "Sélectionner au moins un (1) signe clinique",
-  "prescription.form.signs.observed.add": "Ajouter un autre signe clinique observé"
+  "prescription.form.signs.observed.add": "Ajouter un signe clinique observé"
 }
