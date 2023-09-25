@@ -1,6 +1,9 @@
 {
   "FTH" : "Father",
   "MTH" : "Mother",
+  "affected": "Affected",
+  "not_affected": "Not affected",
+  "unknown": "Unknown",
   "optional" : "optional",
   "acmg.criteria" : "ACMG Criteria",
   "annotationUpdate" : "Annotation date",
