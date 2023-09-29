@@ -11,7 +11,10 @@ import InputDateFormItem from 'components/Form/InputDateFormItem';
 import { INPUT_DATE_OUTPUT_FORMAT } from 'components/Form/MaskedDateInput';
 import RadioGroupSex from 'components/Form/RadioGroupSex';
 import SearchOrNoneFormItem from 'components/Form/SearchOrNoneFormItem';
-import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import {
+  defaultFormItemsRules,
+  noSpecialCharactersRule,
+} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
   getNamePath,
   resetFieldError,
@@ -27,6 +30,7 @@ import {
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 import { SexValue } from 'utils/commonTypes';
+import { hasSpecialCharacters } from 'utils/helper';
 
 import styles from './index.module.scss';
 
@@ -207,8 +211,20 @@ const PatientDataSearch = ({
               }}
               inputProps={{
                 placeholder: '000000',
-                onSearch: (value, search) => (search as Function)(value.replace(/\s/g, '')),
                 'data-cy': 'InputMRN',
+                onSearch: (value, search) => {
+                  const fixedFileNumber = value.replace(/\s/g, '');
+
+                  if (hasSpecialCharacters(fixedFileNumber)) {
+                    setFieldError(
+                      form,
+                      getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                      intl.get('must.not.contain.special.characters'),
+                    );
+                  } else {
+                    (search as Function)(fixedFileNumber);
+                  }
+                },
               }}
               checkboxFormItemProps={{
                 name: getName(PATIENT_DATA_FI_KEY.NO_FILE),
@@ -378,7 +394,7 @@ const PatientDataSearch = ({
               <Form.Item
                 name={getName(PATIENT_DATA_FI_KEY.LAST_NAME)}
                 label={intl.get('last.name')}
-                rules={defaultFormItemsRules}
+                rules={[...defaultFormItemsRules, noSpecialCharactersRule]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
                 <Input />
@@ -386,7 +402,7 @@ const PatientDataSearch = ({
               <Form.Item
                 name={getName(PATIENT_DATA_FI_KEY.FIRST_NAME)}
                 label={intl.get('first.name')}
-                rules={defaultFormItemsRules}
+                rules={[...defaultFormItemsRules, noSpecialCharactersRule]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
                 <Input />

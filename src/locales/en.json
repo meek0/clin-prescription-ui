@@ -447,6 +447,7 @@
   "signup" : "Sign up",
   "status" : "Status",
   "this.field.is.required" : "This field is required",
+  "must.not.contain.special.characters" : "Must not contain special characters",
   "total.depth" : "Total Depth",
   "undetermined" : "Undetermined",
   "unnatural" : "Unnatural",

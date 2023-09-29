@@ -447,6 +447,7 @@
   "signup" : "Créer un compte",
   "status" : "Statut",
   "this.field.is.required" : "Ce champ est requis",
+  "must.not.contain.special.characters" : "Ne doit pas contenir de caractères spéciaux",
   "total.depth" : "Profondeur totale",
   "undetermined" : "Indéterminé",
   "unnatural" : "Anormal",
