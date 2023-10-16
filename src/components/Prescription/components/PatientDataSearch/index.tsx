@@ -394,7 +394,11 @@ const PatientDataSearch = ({
               <Form.Item
                 name={getName(PATIENT_DATA_FI_KEY.LAST_NAME)}
                 label={intl.get('last.name')}
-                rules={[...defaultFormItemsRules, noSpecialCharactersRule]}
+                rules={[
+                  ...defaultFormItemsRules,
+                  noSpecialCharactersRule,
+                  { type: 'string', min: 3 },
+                ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
                 <Input />
@@ -402,7 +406,11 @@ const PatientDataSearch = ({
               <Form.Item
                 name={getName(PATIENT_DATA_FI_KEY.FIRST_NAME)}
                 label={intl.get('first.name')}
-                rules={[...defaultFormItemsRules, noSpecialCharactersRule]}
+                rules={[
+                  ...defaultFormItemsRules,
+                  noSpecialCharactersRule,
+                  { type: 'string', min: 3 },
+                ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
                 <Input />
