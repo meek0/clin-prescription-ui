@@ -451,6 +451,7 @@
   "total.depth" : "Total Depth",
   "undetermined" : "Undetermined",
   "unnatural" : "Unnatural",
+  "not_done": "Not done",
   "upload.gene.ids.modal.cancel.btn" : "Cancel",
   "upload.gene.ids.modal.clear.btn" : "Clear",
   "upload.gene.ids.modal.empty.table" : "No data",

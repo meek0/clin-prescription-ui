@@ -38,7 +38,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
   return (
     <Space direction="vertical">
       <ProLabel requiredMark title={intl.get('prescription.form.signs.observed.label')} colon />
-      <Form.Item wrapperCol={{ xxl: 14 }} className="noMarginBtm">
+      <Form.Item className="noMarginBtm">
         <Form.List
           name={getName(CLINICAL_SIGNS_FI_KEY.SIGNS)}
           rules={[

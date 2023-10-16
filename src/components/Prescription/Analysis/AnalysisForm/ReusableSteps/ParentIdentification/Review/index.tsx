@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import intl from 'react-intl-universal';
-import { Descriptions, Divider } from 'antd';
+import { Descriptions, Divider, Typography } from 'antd';
 
 import ClinicalSignsReview from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ClinicalSigns/Review/';
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
@@ -45,18 +45,26 @@ const ParentIdentificationReview = ({ parent }: OwnProps) => {
     );
   }
 
+  if (getData(PARENT_DATA_FI_KEY.NO_INFO_REASON)) {
+    return (
+      <Descriptions className="label-20">
+        <Descriptions.Item
+          label={
+            getData(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT) === EnterInfoMomentValue.NEVER
+              ? intl.get('prescription.parent.identification.review.permanent.absence')
+              : intl.get('prescription.parent.identification.review.temporary.absence')
+          }
+        >
+          {getData(PARENT_DATA_FI_KEY.NO_INFO_REASON)}
+        </Descriptions.Item>
+      </Descriptions>
+    );
+  }
+
   return (
-    <Descriptions className="label-20">
-      <Descriptions.Item
-        label={
-          getData(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT) === EnterInfoMomentValue.NEVER
-            ? intl.get('prescription.parent.identification.review.permanent.absence')
-            : intl.get('prescription.parent.identification.review.temporary.absence')
-        }
-      >
-        {getData(PARENT_DATA_FI_KEY.NO_INFO_REASON)}
-      </Descriptions.Item>
-    </Descriptions>
+    <Typography.Text italic>
+      {intl.get('prescription.patient.review.no.data.for.this.section')}
+    </Typography.Text>
   );
 };
 
