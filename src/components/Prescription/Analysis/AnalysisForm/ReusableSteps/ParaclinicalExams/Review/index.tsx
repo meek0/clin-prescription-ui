@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import intl from 'react-intl-universal';
-import Empty from '@ferlab/ui/core/components/Empty';
 import { Descriptions, Typography } from 'antd';
 
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
@@ -76,12 +75,9 @@ const ParaclinicalExamsReview = () => {
           ))}
         </Descriptions>
       ) : (
-        <Empty
-          showImage={false}
-          align="left"
-          description={intl.get('prescription.patient.review.no.data.for.this.section')}
-          noPadding
-        />
+        <Typography.Text italic>
+          {intl.get('prescription.patient.review.no.data.for.this.section')}
+        </Typography.Text>
       )}
     </Fragment>
   );
