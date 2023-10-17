@@ -3,6 +3,7 @@ import intl from 'react-intl-universal';
 import { Descriptions, Typography } from 'antd';
 
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import EmptySection from 'components/Prescription/components/EmptySection';
 import {
   IParaclinicalExamItem,
   PARACLINICAL_EXAM_ITEM_KEY,
@@ -75,9 +76,7 @@ const ParaclinicalExamsReview = () => {
           ))}
         </Descriptions>
       ) : (
-        <Typography.Text italic>
-          {intl.get('prescription.patient.review.no.data.for.this.section')}
-        </Typography.Text>
+        <EmptySection />
       )}
     </Fragment>
   );
