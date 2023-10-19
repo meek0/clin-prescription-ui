@@ -397,7 +397,14 @@ const PatientDataSearch = ({
                 rules={[
                   ...defaultFormItemsRules,
                   noSpecialCharactersRule,
-                  { type: 'string', min: 3 },
+                  {
+                    type: 'string',
+                    min: 2,
+                    validateTrigger: 'onSumbit',
+                    message: intl.get('enter.at.least.character', {
+                      count: 2,
+                    }),
+                  },
                 ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
@@ -409,7 +416,14 @@ const PatientDataSearch = ({
                 rules={[
                   ...defaultFormItemsRules,
                   noSpecialCharactersRule,
-                  { type: 'string', min: 3 },
+                  {
+                    type: 'string',
+                    min: 2,
+                    validateTrigger: 'onSumbit',
+                    message: intl.get('enter.at.least.character', {
+                      count: 2,
+                    }),
+                  },
                 ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
