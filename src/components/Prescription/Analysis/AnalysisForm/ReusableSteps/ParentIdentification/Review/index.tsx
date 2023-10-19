@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import intl from 'react-intl-universal';
-import { Descriptions, Divider, Typography } from 'antd';
+import { Descriptions, Divider } from 'antd';
 
 import ClinicalSignsReview from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ClinicalSigns/Review/';
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
@@ -10,6 +10,7 @@ import {
   PARENT_DATA_FI_KEY,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification';
 import PatientIdentificationReview from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/Review';
+import EmptySection from 'components/Prescription/components/EmptySection';
 import { usePrescriptionForm } from 'store/prescription';
 
 interface OwnProps {
@@ -61,11 +62,7 @@ const ParentIdentificationReview = ({ parent }: OwnProps) => {
     );
   }
 
-  return (
-    <Typography.Text italic>
-      {intl.get('prescription.patient.review.no.data.for.this.section')}
-    </Typography.Text>
-  );
+  return <EmptySection />;
 };
 
 export default ParentIdentificationReview;
