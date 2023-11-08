@@ -8,7 +8,7 @@ beforeEach(() => {
   cy.visitPrescriptionEntityPage(epCHUSJ_ldmCHUSJ.prescriptionId);
 });
 
-describe('[PRESC] Page d\'une prescription - Vérifier les informations affichées', () => {
+describe('Page d\'une prescription - Vérifier les informations affichées', () => {
   it('Panneau Analyse', () => {
     cy.get('[data-cy="AnalysisCard"]').contains(epCHUSJ_ldmCHUSJ.prescriptionId).should('exist');
     cy.get('[data-cy="AnalysisCard"]').contains('Approuvée').should('exist');
@@ -36,7 +36,7 @@ describe('[PRESC] Page d\'une prescription - Vérifier les informations affiché
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('Variants').should('not.exist');
   });
   
-  it('Panneau Mère [CLIN-2027]', () => {
+  it('Panneau Mère', () => {
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.patientMthId).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.mrnMth, {matchCase: false}).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.ramqMth).should('exist');
@@ -53,7 +53,7 @@ describe('[PRESC] Page d\'une prescription - Vérifier les informations affiché
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Variants').should('not.exist');
   });
   
-  it('Panneau Père [CLIN-2027]', () => {
+  it('Panneau Père', () => {
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.patientFthId).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.mrnFth).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.ramqFth).should('exist');
@@ -71,7 +71,7 @@ describe('[PRESC] Page d\'une prescription - Vérifier les informations affiché
   });
 });
 
-describe('[PRESC] Page d\'une prescription - Valider les liens indisponibles', () => {
+describe('Page d\'une prescription - Valider les liens indisponibles', () => {
   it('Bouton Voir les variants', () => {
     cy.contains('Voir les variants').should('not.exist', {timeout: 20*1000});
   });
@@ -101,7 +101,7 @@ describe('[PRESC] Page d\'une prescription - Valider les liens indisponibles', (
   });
 });
 
-describe('[PRESC] Page d\'une prescription - Valider les panneaux masquables', () => {
+describe('Page d\'une prescription - Valider les panneaux masquables', () => {
   it('Panneau Information clinique', () => {
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
