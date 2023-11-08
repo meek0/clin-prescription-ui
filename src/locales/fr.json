@@ -479,5 +479,6 @@
   "prescription.analysis.choici.modal.consult.algo.1": "Il est recommandé de consulter",
   "prescription.analysis.choici.modal.consult.algo.2": "l'algorithme clinique du RQDM",
   "prescription.analysis.choici.modal.consult.algo.3": "sur l'analyse sélectionnée avant de procéder au formulaire de prescription.",
-  "enter.at.least.character": "Entrer au moins {count} caractères"
+  "enter.at.least.character": "Entrer au moins {count} caractères",
+  "how.it.works": "Comment ça marche"
 }

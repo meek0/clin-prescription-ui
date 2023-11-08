@@ -12,25 +12,28 @@ import PrescriptionForm from 'components/Prescription';
 import AddParentModal from 'components/Prescription/AddParentModal';
 import AnalysisChoiceModal from 'components/Prescription/AnalysisChoiceModal';
 import { LimitTo, Roles } from 'components/Roles/Rules';
-import useQueryParam from 'hooks/useQueryParams';
 import { prescriptionFormActions } from 'store/prescription/slice';
-import { HAS_PRESCRIPTION } from 'utils/constants';
 
 import ActionButton from './components/ActionButton';
+
 const { Title } = Typography;
 
 import styles from './index.module.scss';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const hasPrescription = useQueryParam().get(HAS_PRESCRIPTION);
-  const colWidth = hasPrescription ? 12 : 24;
 
   return (
     <ContentWithHeader
       headerProps={{
         icon: <HomeOutlined />,
         title: getUserFullName(),
+        //actions: [
+        //  <Space direction="horizontal" align="center">
+        //    <QuestionCircleOutlined className={styles.questionIcon} />
+        //    <a>{intl.get('how.it.works')}</a>
+        //  </Space>,
+        //],
       }}
     >
       <ScrollContentWithFooter className={styles.homePageWrapper} container>
@@ -40,9 +43,9 @@ const Home = () => {
             className={styles.contentCard}
             wrapperClassName={styles.contentCardWrapper}
             content={
-              <Row gutter={[48, 48]}>
+              <Row gutter={[24, 24]}>
                 <LimitTo roles={[Roles.Prescriber, Roles.Practitioner]}>
-                  <Col lg={colWidth} className={styles.contentCol} data-cy="CreateNewPrescription">
+                  <Col lg={12} className={styles.contentCol} data-cy="CreateNewPrescription">
                     <ActionButton
                       icon={<MedicineBoxFilled />}
                       title="Créer une nouvelle prescription"
@@ -50,33 +53,29 @@ const Home = () => {
                       onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
                     />
                   </Col>
-                  {hasPrescription && (
-                    <Col lg={colWidth} className={styles.contentCol}>
-                      <ActionButton
-                        icon={<FamilyRestroomIcon />}
-                        title="Ajouter un parent à une prescription existante"
-                        description="Trouver une analyse en cours et rajouter un membre de la famille"
-                        onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
-                      />
-                    </Col>
-                  )}
+                  <Col lg={12} className={styles.contentCol}>
+                    <ActionButton
+                      icon={<FamilyRestroomIcon />}
+                      title="Ajouter un parent à une prescription existante"
+                      description="Trouver une analyse en cours et rajouter un membre de la famille"
+                      onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
+                    />
+                  </Col>
                 </LimitTo>
               </Row>
             }
           />
-          {hasPrescription && (
-            <GridCard
-              title={<Title level={3}>Mes Prescriptions</Title>}
-              bordered={false}
-              className={styles.contentCard}
-              wrapperClassName={styles.contentCardWrapper}
-              content={
-                <Row gutter={[48, 48]}>
-                  <PractitionerTable />
-                </Row>
-              }
-            />
-          )}
+          <GridCard
+            title={<Title level={3}>Mes Prescriptions</Title>}
+            bordered={false}
+            className={styles.contentCard}
+            wrapperClassName={styles.contentCardWrapper}
+            content={
+              <Row gutter={[48, 48]}>
+                <PractitionerTable />
+              </Row>
+            }
+          />
         </div>
       </ScrollContentWithFooter>
       <PrescriptionForm />
