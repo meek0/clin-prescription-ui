@@ -1,6 +1,6 @@
 import intl from 'react-intl-universal';
-import { MedicineBoxOutlined } from '@ant-design/icons';
-import { Card, Col, Row } from 'antd';
+import { DownloadOutlined, MedicineBoxOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row } from 'antd';
 import { useServiceRequestEntity } from 'graphql/prescriptions/actions';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
@@ -32,6 +32,11 @@ const PrescriptionDetail = ({ prescriptionId }: OwnProps) => {
       headerProps={{
         icon: <MedicineBoxOutlined />,
         title: intl.get('screen.prescription.entity.title', { id: prescriptionId }),
+        actions: [
+          <Button key="download-docs" type="primary" icon={<DownloadOutlined />}>
+            {intl.get('download.documents')}
+          </Button>,
+        ],
       }}
     >
       <ScrollContentWithFooter className={styles.prescriptionEntityWrapper} container>
