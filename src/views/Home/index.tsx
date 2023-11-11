@@ -28,12 +28,6 @@ const Home = () => {
       headerProps={{
         icon: <HomeOutlined />,
         title: getUserFullName(),
-        //actions: [
-        //  <Space direction="horizontal" align="center">
-        //    <QuestionCircleOutlined className={styles.questionIcon} />
-        //    <a>{intl.get('how.it.works')}</a>
-        //  </Space>,
-        //],
       }}
     >
       <ScrollContentWithFooter className={styles.homePageWrapper} container>
