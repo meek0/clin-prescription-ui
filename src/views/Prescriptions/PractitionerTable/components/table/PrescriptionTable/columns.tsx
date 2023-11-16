@@ -1,6 +1,8 @@
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
+import { DownloadOutlined } from '@ant-design/icons';
 import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
+import { Button, Tooltip } from 'antd';
 import { ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
 import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
@@ -53,5 +55,15 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     title: intl.get('screen.patientsearch.table.ep'),
     tooltip: intl.get('screen.patientsearch.table.ep.tooltip'),
     sorter: { multiple: 1 },
+  },
+  {
+    key: 'download',
+    title: '',
+    align: 'center',
+    render: () => (
+      <Tooltip title={intl.get('download.documents')}>
+        <Button type="link" icon={<DownloadOutlined />} size="small" />
+      </Tooltip>
+    ),
   },
 ];
