@@ -146,12 +146,6 @@ const PatientDataSearch = ({
       setFileSearchDone(!!(initialData.no_mrn || initialData.mrn));
       setRamqSearchDone(!!(initialData.no_ramq || initialData.ramq));
       setInitialValues(form, getName, initialData, PATIENT_DATA_FI_KEY);
-    } else {
-      setFieldValue(
-        form,
-        getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
-        formConfig?.prescribing_institutions[0].value,
-      );
     }
     // eslint-disable-next-line
   }, []);
