@@ -1,3 +1,4 @@
+import intl from 'react-intl-universal';
 import { useDispatch } from 'react-redux';
 import { HomeOutlined, MedicineBoxFilled } from '@ant-design/icons';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
@@ -42,16 +43,16 @@ const Home = () => {
                   <Col lg={12} className={styles.contentCol} data-cy="CreateNewPrescription">
                     <ActionButton
                       icon={<MedicineBoxFilled />}
-                      title="Créer une nouvelle prescription"
-                      description="Prescription d’analyse et requêtes pour un patient ou une famille"
+                      title={intl.get('create.new.prescription')}
+                      description={intl.get('analysis.prescription.and.request.for.patient')}
                       onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
                     />
                   </Col>
                   <Col lg={12} className={styles.contentCol}>
                     <ActionButton
                       icon={<FamilyRestroomIcon />}
-                      title="Ajouter un parent à une prescription existante"
-                      description="Trouver une analyse en cours et rajouter un membre de la famille"
+                      title={intl.get('add.parent.to.existing.prescription')}
+                      description={intl.get('find.analysis.and.add.family.member')}
                       onClick={() => dispatch(prescriptionFormActions.startAddParentChoice())}
                     />
                   </Col>
@@ -60,7 +61,7 @@ const Home = () => {
             }
           />
           <GridCard
-            title={<Title level={3}>Mes Prescriptions</Title>}
+            title={<Title level={3}>{intl.get('my.prescriptions')}</Title>}
             bordered={false}
             className={styles.contentCard}
             wrapperClassName={styles.contentCardWrapper}
