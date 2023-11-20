@@ -492,6 +492,6 @@
   "mother.ramq": "Mother's RAMQ",
   "ramq": "RAMQ",
   "save": "Save",
-  "prescription.parent.identification.review.permanent.absence": "Absence définitive",
-  "prescription.parent.identification.review.temporary.absence": "Absence temporaire"
+  "prescription.parent.identification.review.permanent.absence": "Permanent absence",
+  "prescription.parent.identification.review.temporary.absence": "Temporary absence"
 }
