@@ -486,5 +486,12 @@
   "analysis.prescription.and.request.for.patient": "Analysis prescription and requests for a patient or family",
   "add.parent.to.existing.prescription": "Add a parent to an existing prescription",
   "find.analysis.and.add.family.member": "Find an analysis in progress and add a family member",
-  "my.prescriptions": "My Prescriptions"
+  "my.prescriptions": "My Prescriptions",
+  "prescription.parent.info.title.father": "Identification of the father",
+  "prescription.parent.info.title.mother": "Identification of the mother",
+  "mother.ramq": "Mother's RAMQ",
+  "ramq": "RAMQ",
+  "save": "Save",
+  "prescription.parent.identification.review.permanent.absence": "Permanent absence",
+  "prescription.parent.identification.review.temporary.absence": "Temporary absence"
 }
