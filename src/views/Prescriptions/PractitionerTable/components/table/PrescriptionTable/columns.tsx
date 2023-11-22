@@ -60,6 +60,7 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     key: 'download',
     title: '',
     align: 'center',
+    width: 40,
     render: () => (
       <Tooltip title={intl.get('download.documents')}>
         <Button type="link" icon={<DownloadOutlined />} size="small" />
