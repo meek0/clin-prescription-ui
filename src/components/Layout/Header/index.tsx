@@ -5,10 +5,11 @@ import { HomeOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import Gravatar from '@ferlab/ui/core/components/Gravatar';
 import { useKeycloak } from '@react-keycloak/web';
-import { Button, Dropdown, Menu, PageHeader, Space } from 'antd';
+import { Button, Dropdown, Menu, PageHeader, Space, Tag } from 'antd';
 import { getUserFirstName } from 'auth/keycloak';
 
 import HeaderLink from 'components/Layout/Header/HeaderLink';
+import useFeatureToggle from 'hooks/useFeatureToggle';
 import { globalActions, useLang } from 'store/global';
 import { LANG } from 'utils/constants';
 import EnvironmentVariables from 'utils/EnvVariables';
@@ -19,6 +20,7 @@ import styles from './index.module.scss';
 
 const Header = () => {
   const { keycloak } = useKeycloak();
+  const { isEnabled } = useFeatureToggle('beta');
   const lang = useLang();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -29,7 +31,14 @@ const Header = () => {
   return (
     <PageHeader
       title={
-        <img className={styles.logo} alt={'Clin Portal UI'} src="/assets/logos/cqgc-white.svg" />
+        <Space size={10} direction="horizontal">
+          <img className={styles.logo} alt={'Clin Portal UI'} src="/assets/logos/cqgc-white.svg" />
+          {isEnabled && (
+            <Tag className={styles.betaTag} color="blue">
+              Beta
+            </Tag>
+          )}
+        </Space>
       }
       subTitle={
         <nav className={styles.headerList}>
