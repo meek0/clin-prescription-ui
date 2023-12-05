@@ -1,61 +1,96 @@
 @import 'src/style/themes/clin/colors';
 
-.homeActionCardWrapper {
-  height: 175px;
-  position: relative;
-}
-
 .homeActionContent {
   display: flex;
   align-items: center;
 }
 
-.homeActionCard {
-  width: 100%;
-  align-items: center;
+.homeActionCardWrapper {
+  height: 175px;
+  position: relative;
 
-  .description {
-    display: block;
-    transition: transform 0.1s ease;
-  }
-
-  .plusIcon {
-    display: none;
-  }
-
-  &:hover {
-    cursor: pointer;
-
-    .plusIcon {
-      display: initial;
-    }
+  .homeActionCard {
+    width: 100%;
+    align-items: center;
 
     .description {
-      transform: translateY(50px);
+      display: block;
+      transition: transform 0.1s ease;
     }
 
     .homeActionButton {
-      transform: translateY(10px);
+      width: 100%;
+      text-align: center;
+      transition: transform 0.1s ease;
+
+      .homeActionIcon {
+        font-size: 48px;
+
+        svg {
+          height: 48px;
+          width: 48px;
+        }
+      }
     }
   }
 
-  .homeActionButton {
-    width: 100%;
-    text-align: center;
-    transition: transform 0.1s ease;
+  &.disabled {
+    .homeActionCard {
+      .homeActionIcon {
+        color: $gray-6;
+      }
 
-    .homeActionIcon {
-      font-size: 48px;
-      color: $blue-8;
+      .text {
+        color: $gray-6;
+      }
 
-      svg {
-        height: 48px;
-        width: 48px;
+      .plusIcon {
+        display: none;
+      }
+
+      &:hover {
+        cursor: not-allowed;
+
+        .description {
+          transform: translateY(0px);
+        }
+
+        .homeActionButton {
+          transform: translateY(0px);
+        }
       }
     }
+  }
 
-    .text {
-      color: $blue-8;
+  &:not(.disabled) {
+    .homeActionCard {
+      .homeActionIcon {
+        color: $blue-8;
+      }
+
+      .text {
+        color: $blue-8;
+      }
+
+      .plusIcon {
+        display: none;
+      }
+
+      &:hover {
+        cursor: pointer;
+
+        .plusIcon {
+          display: initial;
+        }
+
+        .description {
+          transform: translateY(50px);
+        }
+
+        .homeActionButton {
+          transform: translateY(10px);
+        }
+      }
     }
   }
 }

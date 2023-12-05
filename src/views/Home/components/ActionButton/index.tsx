@@ -10,16 +10,18 @@ interface OwnProps {
   title: string;
   description: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const ActionButton = ({ icon, title, description, onClick }: OwnProps) => (
+const ActionButton = ({ icon, title, description, disabled = false, onClick }: OwnProps) => (
   <GridCard
     theme="shade"
-    wrapperClassName={styles.homeActionCardWrapper}
+    wrapperClassName={cx(styles.homeActionCardWrapper, disabled && styles.disabled)}
     className={styles.homeActionCard}
     contentClassName={styles.homeActionContent}
-    onClick={onClick}
+    onClick={disabled ? undefined : onClick}
     data-cy="ActionButton"
+    bordered={!disabled}
     content={
       <Space className={styles.homeActionButton} size={0} direction="vertical">
         <span className={styles.homeActionIcon}>{icon}</span>

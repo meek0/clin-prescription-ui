@@ -50,6 +50,7 @@ const Home = () => {
                   </Col>
                   <Col lg={12} className={styles.contentCol}>
                     <ActionButton
+                      disabled
                       icon={<FamilyRestroomIcon />}
                       title={intl.get('add.parent.to.existing.prescription')}
                       description={intl.get('find.analysis.and.add.family.member')}
