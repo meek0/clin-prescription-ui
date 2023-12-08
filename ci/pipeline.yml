@@ -162,8 +162,8 @@ jobs:
           cat > ./output/attachments.json <<EOL
           [
             {
-              "title": "New Portal UI Release : Ticket: $pullRequestTitleWithoutPrefix",
-              "text": " You can find the new release for portal UI at https://prescription-ui-$releaseName.qa.cqgc.hsj.rtss.qc.ca",
+              "title": "New Prescription UI Release : Ticket: $pullRequestTitleWithoutPrefix",
+              "text": " You can find the new release for prescription UI at https://prescription-ui-$releaseName.qa.cqgc.hsj.rtss.qc.ca",
               "color": "good"
             }
           ]
