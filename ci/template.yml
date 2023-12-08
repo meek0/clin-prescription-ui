@@ -1,0 +1,75 @@
+resource_types:
+- name: git
+  type: docker-image
+  source:
+    repository: concourse/git-resource
+    username: ((docker.username))
+    password: ((docker.password))
+resources:
+- name: git-prescription-ui
+  type: git
+  icon: github
+  check_every: 30s
+  webhook_token: ((webhook-token))
+  source:
+    uri: git@github.com:Ferlab-Ste-Justine/clin-prescription-ui.git
+    branch: ((branch))
+    private_key: ((git.ssh-key))
+    ignore_paths: [ci/]
+
+- name: img-prescription-ui
+  type: docker-image
+  icon: docker
+  source:
+    username: ((docker.username))
+    password: ((docker.password))
+    repository: ferlabcrsj/clin-prescription-ui
+
+jobs:
+- name: build-and-publish
+  # serial_groups: [version]
+  plan:
+  - get: git-prescription-ui
+    trigger: true
+    params: { submodule_recursive: true }
+  - task: prepare-image
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: concourse/git-resource
+      inputs:
+        - name: git-prescription-ui
+      outputs:
+        - name: output
+        - name: git-prescription-ui
+      params:
+        FEATURE_NAME: ((feature-name))
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          ROOT_FOLDER=$(pwd)
+
+          cp -R ${ROOT_FOLDER}/git-prescription-ui/* ${ROOT_FOLDER}/output
+          rm -fr ${ROOT_FOLDER}/output/ci && rm -fr ${ROOT_FOLDER}/output/.git
+
+          pushd git-prescription-ui
+              VERSION=`echo "feature-$FEATURE_NAME-$(git rev-parse --short HEAD)-$(date +'%s')"`
+              echo $VERSION
+              sed -i 's/portail.qa.cqgc.hsj.rtss.qc.ca/portail-'$FEATURE_NAME'.qa.cqgc.hsj.rtss.qc.ca/g' env-qa
+              cat env-qa 
+              cp -p env-qa .env
+              echo "env copied"
+          popd
+
+          echo "${VERSION}" > ${ROOT_FOLDER}/output/version
+  - put: img-prescription-ui
+    inputs: 
+      - git-prescription-ui
+      - output
+    params:
+      build: git-prescription-ui
+      additional_tags: output/version
