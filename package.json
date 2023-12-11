@@ -81,7 +81,7 @@
     "lint:fix": "npm run lint -- --fix",
     "test": "node scripts/test.js --coverage --coverageReporters=\"json-summary\"",
     "test:github": "node scripts/test.js --coverage --watchAll=false --no-watchman --coverageReporters=\"text-summary\"",
-    "coverage": "npm test -- --watchAll=false --coverage --coverageReporters=\"json-summary\"",
+    "coverage": "npm test -- --watchAll=false --coverage --coverageReporters=\"html\"",
     "coverage:changed": "npm test -- --coverage --watchAll=false --onlyChanged --coverageReporters=\"json-summary\"",
     "test:ci": "node scripts/test.js --ci --coverage",
     "theme:antd": "lessc --js ./src/style/themes/clin/antd-clin-theme.less ./src/style/themes/clin/dist/antd.css",
@@ -99,7 +99,8 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "npm run lint:fix"
-    ]
+    ],
+    "!src/cypress/**/*.{ts,tsx}": "echo Ignoring Cypress files"
   },
   "browserslist": {
     "production": [
