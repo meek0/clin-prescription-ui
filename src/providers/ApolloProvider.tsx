@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { RptManager } from 'auth/rpt';
 import { GraphqlBackend, GraphqlProvider } from 'providers';
 
 import { useRpt } from 'hooks/useRpt';
@@ -12,7 +13,7 @@ export const PROJECT_ID = EnvironmentVariables.configFor('ARRANGER_PROJECT_ID');
 export const FHIR_API = EnvironmentVariables.configFor('FHIR_API');
 
 export const ARRANGER_API_PROJECT_URL = `${ARRANGER_API}/${PROJECT_ID}/graphql`;
-export const FHIR_GRAPHQL_URL = `${FHIR_API}/$graphql`;
+export const FHIR_GRAPHQL_URL = `${FHIR_API}/$graphql?_count=1000`;
 
 const fhirLink = createHttpLink({
   uri: FHIR_GRAPHQL_URL,
@@ -22,13 +23,15 @@ const arrangerLink = createHttpLink({
   uri: ARRANGER_API_PROJECT_URL,
 });
 
-const getAuthLink = (token: string) =>
-  setContext((_, { headers }) => ({
+const authLink = setContext(async (_, { headers }) => {
+  const rpt = await RptManager.readRpt();
+  return {
     headers: {
       ...headers,
-      authorization: appendBearerIfToken(token),
+      authorization: appendBearerIfToken(rpt.access_token),
     },
-  }));
+  };
+});
 
 const backendUrl = (backend: GraphqlBackend) =>
   backend === GraphqlBackend.FHIR ? fhirLink : arrangerLink;
@@ -36,19 +39,17 @@ const backendUrl = (backend: GraphqlBackend) =>
 const mClients = new Map();
 
 const Provider = ({ children, backend = GraphqlBackend.FHIR }: GraphqlProvider): ReactElement => {
-  const { loading, rpt } = useRpt();
+  const { loading } = useRpt();
   if (loading) {
     return <></>;
   }
-
-  const header = getAuthLink(rpt);
 
   const hasClientAlready = mClients.has(backend);
   const client = hasClientAlready
     ? mClients.get(backend)
     : new ApolloClient({
         cache: new InMemoryCache({ addTypename: backend !== GraphqlBackend.FHIR }),
-        link: header.concat(backendUrl(backend)),
+        link: authLink.concat(backendUrl(backend)),
       });
 
   if (!hasClientAlready) {
