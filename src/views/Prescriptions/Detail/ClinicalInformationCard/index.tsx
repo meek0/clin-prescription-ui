@@ -1,16 +1,14 @@
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Space, Typography } from 'antd';
+import { FhirApi } from 'api/fhir';
 import { extractPatientId } from 'api/fhir/helper';
-
-import CollapsePanel from 'components/containers/collapse';
-
-import RequestTable from '../RequestTable';
-
-const { Title } = Typography;
-
 import { ServiceRequestEntity } from 'api/fhir/models';
 
+import CollapsePanel from 'components/containers/collapse';
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+
+import RequestTable from '../RequestTable';
 
 import { ClinicalSign } from './components/ClinicalSign';
 import { Consanguinity } from './components/Consanguinity';
@@ -21,12 +19,30 @@ import { Paraclinique } from './components/Paraclinique';
 
 import styles from './index.module.scss';
 
+const { Title } = Typography;
 type OwnProps = {
   prescription?: ServiceRequestEntity;
   loading: boolean;
 };
 
 const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
+  const [resquestList, setRequestList] = useState<ServiceRequestEntity[]>([]);
+  const [requestLoading, setRequestLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const subjectRequest = prescription?.subject?.resource?.requests;
+
+    if (subjectRequest) {
+      subjectRequest.forEach((request) => {
+        const { id } = request;
+        FhirApi.fetchServiceRequestEntity(id).then(({ data }) => {
+          const value = data?.data.ServiceRequest;
+          const exist = resquestList.find((r) => r.id === value?.id);
+          value && !exist ? setRequestList([...resquestList, value]) : null;
+          setRequestLoading(false);
+        });
+      });
+    }
+  }, [prescription?.subject?.resource?.requests, resquestList]);
   let ethnValue = undefined;
   const phenotype: string[] = [];
   let generalObservation = undefined;
@@ -76,7 +92,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
   return (
     <CollapsePanel
       header={<Title level={4}>{intl.get('screen.prescription.entity.clinicalInformation')}</Title>}
-      loading={loading}
+      loading={loading && requestLoading}
       datacy="ClinicalInformation"
     >
       {prescription ? (
@@ -116,10 +132,12 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
               </Descriptions>
             </Card.Grid>
           </div>
-          <RequestTable
-            patientId={extractPatientId(prescription?.subject.reference)}
-            data={prescription?.subject?.resource?.requests}
-          />
+          {resquestList && (
+            <RequestTable
+              patientId={extractPatientId(prescription?.subject.reference)}
+              data={resquestList}
+            />
+          )}
         </Space>
       ) : (
         <></>

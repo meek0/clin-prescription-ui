@@ -147,10 +147,9 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
         text
       }
       code @flatten {
-        coding(system: "http://fhir.cqgc.ferlab.bio/CodeSystem/analysis-request-code")
-          @flatten
-          @first {
+        coding{
           code
+          system
         }
       }
       performer @first {

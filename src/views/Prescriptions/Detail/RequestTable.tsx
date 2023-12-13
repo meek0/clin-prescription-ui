@@ -2,7 +2,7 @@ import intl from 'react-intl-universal';
 import Empty from '@ferlab/ui/core/components/Empty';
 import { Table, TableColumnType } from 'antd';
 import { extractServiceRequestId } from 'api/fhir/helper';
-import { PatientRequest } from 'api/fhir/models';
+import { PatientRequest, ServiceRequestEntity } from 'api/fhir/models';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { TABLE_EMPTY_PLACE_HOLDER } from 'utils/constants';
@@ -13,7 +13,7 @@ import { getPrescriptionStatusDictionnary } from '../utils/constant';
 
 interface OwnProps {
   patientId: string;
-  data: PatientRequest[];
+  data: ServiceRequestEntity[];
   loading?: boolean;
 }
 
@@ -23,6 +23,15 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
     dataIndex: 'id',
     title: intl.get('screen.prescription.entity.request.id'),
     render: (id) => extractServiceRequestId(id),
+  },
+  {
+    key: 'coding',
+    dataIndex: 'coding',
+    title: intl.get('screen.prescription.entity.request.code'),
+    render: (coding: { code: string; system: string }[]) => {
+      const sequencingCode = coding?.find((c) => c.system?.includes('sequencing'));
+      return sequencingCode?.code;
+    },
   },
   {
     key: 'status',
