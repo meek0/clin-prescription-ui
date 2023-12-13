@@ -74,7 +74,7 @@ Cypress.Commands.add('visitAndIntercept', (url: string, methodHTTP: string, rout
 });
 
 Cypress.Commands.add('visitPrescriptionEntityPage', (prescriptionId: string) => {
-  cy.visitAndIntercept('/prescription/entity/' + prescriptionId,
+  cy.visitAndIntercept(`/prescription/entity/${prescriptionId}`,
                        'POST',
                        '**/$graphql*',
                        1);
