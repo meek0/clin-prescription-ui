@@ -51,6 +51,16 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     rowSpan={null}
                     style={Object {}}
                   >
+                    Code ministère
+                  </th>
+                  <th
+                    className="ant-table-cell"
+                    colSpan={null}
+                    onMouseEnter={[Function]}
+                    onMouseLeave={[Function]}
+                    rowSpan={null}
+                    style={Object {}}
+                  >
                     Statut
                   </th>
                   <th
@@ -108,7 +118,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                 >
                   <td
                     className="ant-table-cell"
-                    colSpan={6}
+                    colSpan={7}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
