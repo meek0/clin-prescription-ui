@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        submodules: true
     - name: Set the Staging configuration file
       run: mv env-staging .env
     - name: Push the image on the docker registry
