@@ -2,7 +2,7 @@ import intl from 'react-intl-universal';
 import Empty from '@ferlab/ui/core/components/Empty';
 import { Table, TableColumnType } from 'antd';
 import { extractServiceRequestId } from 'api/fhir/helper';
-import { PatientRequest, ServiceRequestEntity } from 'api/fhir/models';
+import { PatientRequest } from 'api/fhir/models';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { TABLE_EMPTY_PLACE_HOLDER } from 'utils/constants';
@@ -13,7 +13,7 @@ import { getPrescriptionStatusDictionnary } from '../utils/constant';
 
 interface OwnProps {
   patientId: string;
-  data: ServiceRequestEntity[];
+  data: PatientRequest[];
   loading?: boolean;
 }
 

@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Space, Typography } from 'antd';
-import { FhirApi } from 'api/fhir';
 import { extractPatientId } from 'api/fhir/helper';
 import { ServiceRequestEntity } from 'api/fhir/models';
 
@@ -26,23 +24,6 @@ type OwnProps = {
 };
 
 const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
-  const [resquestList, setRequestList] = useState<ServiceRequestEntity[]>([]);
-  const [requestLoading, setRequestLoading] = useState<boolean>(true);
-  useEffect(() => {
-    const subjectRequest = prescription?.subject?.resource?.requests;
-
-    if (subjectRequest) {
-      subjectRequest.forEach((request) => {
-        const { id } = request;
-        FhirApi.fetchServiceRequestEntity(id).then(({ data }) => {
-          const value = data?.data.ServiceRequest;
-          const exist = resquestList.find((r) => r.id === value?.id);
-          value && !exist ? setRequestList([...resquestList, value]) : null;
-          setRequestLoading(false);
-        });
-      });
-    }
-  }, [prescription?.subject?.resource?.requests, resquestList]);
   let ethnValue = undefined;
   const phenotype: string[] = [];
   let generalObservation = undefined;
@@ -92,7 +73,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
   return (
     <CollapsePanel
       header={<Title level={4}>{intl.get('screen.prescription.entity.clinicalInformation')}</Title>}
-      loading={loading && requestLoading}
+      loading={loading}
       datacy="ClinicalInformation"
     >
       {prescription ? (
@@ -132,12 +113,10 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
               </Descriptions>
             </Card.Grid>
           </div>
-          {resquestList && (
-            <RequestTable
-              patientId={extractPatientId(prescription?.subject.reference)}
-              data={resquestList}
-            />
-          )}
+          <RequestTable
+            patientId={extractPatientId(prescription?.subject.reference)}
+            data={prescription.subject?.resource?.requests}
+          />
         </Space>
       ) : (
         <></>
