@@ -115,7 +115,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
           </div>
           <RequestTable
             patientId={extractPatientId(prescription?.subject.reference)}
-            data={prescription.subject?.resource?.requests}
+            data={prescription?.subject?.resource?.requests}
           />
         </Space>
       ) : (

@@ -30,7 +30,7 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
     title: intl.get('screen.prescription.entity.request.code'),
     render: (coding: { code: string; system: string }[]) => {
       const sequencingCode = coding?.find((c) => c.system?.includes('sequencing'));
-      return sequencingCode?.code;
+      return sequencingCode?.code ? sequencingCode.code : TABLE_EMPTY_PLACE_HOLDER;
     },
   },
   {

@@ -82,7 +82,12 @@ const ANALYSIS_PATIENT_FRAGMENT = (requestId: string) => gql`
     requests: ServiceRequestList(_reference: patient, based_on: "${requestId}") {
       id
       authoredOn
-      code @flatten { coding{ code system } }
+      code @flatten { 
+        coding { 
+          code 
+          system 
+        } 
+      }
       specimen {
         reference
         resource {
