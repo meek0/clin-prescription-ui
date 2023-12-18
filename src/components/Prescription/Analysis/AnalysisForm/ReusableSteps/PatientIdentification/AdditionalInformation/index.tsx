@@ -130,9 +130,11 @@ const AdditionalInformation = ({
                   onChange={(value) => {
                     if (value.target.name === GestationalAgeValues.DDM) {
                       setGestationalAgeDDM(undefined);
+                      setGestationalAgeDPA(undefined);
                       setFieldValue(getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DDM), undefined);
                     } else {
                       setGestationalAgeDPA(undefined);
+                      setGestationalAgeDDM(undefined);
                       setFieldValue(getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA), undefined);
                     }
                   }}
