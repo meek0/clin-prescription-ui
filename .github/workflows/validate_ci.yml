@@ -1,0 +1,33 @@
+name: Validate CI
+
+on:
+  push:
+    paths:
+      - 'ci/**'
+
+jobs:
+  validate-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v3
+
+      - name: Install Fly CLI
+        run: |
+          FLY_VERSION="7.11.0"
+          FLY_FILE="fly-$FLY_VERSION-linux-amd64.tgz"
+          FLY_SHA256="c49a654eadbdf190799393fa03fe264ccb41302153e3b6208f32de5092334f57  $FLY_FILE"
+
+          wget https://github.com/concourse/concourse/releases/download/v$FLY_VERSION/$FLY_FILE
+
+          if [ "$(sha256sum $FLY_FILE)" = "$FLY_SHA256" ]; then
+            echo "Hash value for archive '$FLY_FILE' is good."
+          else
+            echo "Hash value for archive '$FLY_FILE' is wrong. Exiting..."
+            exit 1
+          fi
+
+          tar -xf $FLY_FILE
+
+      - name: Validate Pipeline
+        run: ./fly vp -c ci/pipeline.yml --enable-across-step
