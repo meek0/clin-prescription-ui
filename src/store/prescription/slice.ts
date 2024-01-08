@@ -106,6 +106,9 @@ const prescriptionFormSlice = createSlice({
     cancel: () => ({
       ...PrescriptionState,
     }),
+    clearForm: () => ({
+      ...PrescriptionState,
+    }),
     startAddParentChoice: (state) => {
       state.addParentModalVisible = true;
       state.isAddingParent = true;

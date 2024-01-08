@@ -111,9 +111,10 @@ const Submission = () => {
         onFinish={() => {
           dispatch(createPrescription())
             .unwrap()
-            .then(({ prescriptionId }) =>
-              history.push(DYNAMIC_ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId)),
-            );
+            .then(({ prescriptionId }) => {
+              dispatch(prescriptionFormActions.clearForm());
+              history.push(DYNAMIC_ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId));
+            });
         }}
       >
         <div className={styles.supervisorCommentWrapper}>
