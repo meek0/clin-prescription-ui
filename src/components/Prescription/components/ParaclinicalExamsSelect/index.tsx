@@ -160,7 +160,7 @@ const MultiSelectExtra = ({ name, label, options }: IParaclinicalExamMultiSelect
         )}
       >
         {options.map((option) => (
-          <Select.Option key={option.value} value={option.value}>
+          <Select.Option key={option.value} value={option.value} title={null}>
             {option.name}
           </Select.Option>
         ))}
