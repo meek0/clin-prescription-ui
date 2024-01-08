@@ -26,7 +26,7 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
   const [isPhenotypeModalVisible, setIsPhenotypeModalVisible] = useState(false);
 
   const getNode = (index: number): IClinicalSignItem =>
-    form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS))[index];
+    form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS))[index];
 
   return (
     <Space direction="vertical">
