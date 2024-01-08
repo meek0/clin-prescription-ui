@@ -11,7 +11,7 @@ import {
   setFieldValue,
   setInitialValues,
 } from 'components/Prescription/utils/form';
-import { formatRamq, RAMQ_PATTERN } from 'components/Prescription/utils/ramq';
+import { formatRamq, isRamqValid } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
 import { SexValue } from 'utils/commonTypes';
@@ -214,7 +214,20 @@ const AdditionalInformation = ({
                 <Form.Item
                   label={intl.get('prescription.patient.identification.mother.ramq')}
                   name={getName(ADD_INFO_FI_KEY.MOTHER_RAMQ_NUMBER)}
-                  rules={[{ type: 'regexp', pattern: RAMQ_PATTERN, required: true }]}
+                  rules={[
+                    {
+                      required: true,
+                      validateTrigger: 'onSumbit',
+                      validator: (_, value) => {
+                        if (!value) {
+                          return Promise.reject(new Error(intl.get('this.field.is.required')));
+                        } else if (!isRamqValid(value)) {
+                          return Promise.reject(new Error(intl.get('ramq.number.invalid')));
+                        }
+                        return Promise.resolve();
+                      },
+                    },
+                  ]}
                   wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
                 >
                   <Input
