@@ -493,5 +493,12 @@
   "ramq": "RAMQ",
   "save": "Enregistrer",
   "prescription.parent.identification.review.permanent.absence": "Absence définitive",
-  "prescription.parent.identification.review.temporary.absence": "Absence temporaire"
+  "prescription.parent.identification.review.temporary.absence": "Absence temporaire",
+  "prescription": {
+    "clinical_exam": {
+      "status": {
+        "not_done": "Non effectué"
+      }
+    }
+  }
 }

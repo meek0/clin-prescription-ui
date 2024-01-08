@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import intl from 'react-intl-universal';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Form, Input, Radio, Select, Space, Tag } from 'antd';
 import { IListNameValueItem, IParaclinicalExamItemExtra } from 'api/form/models';
@@ -91,9 +92,8 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
         {(fields) =>
           fields.map(({ key, name, ...restField }) => {
             const exam = formConfig?.paraclinical_exams.default_list[name]!;
-            const title = exam.name;
+            const { name: title, tooltip } = exam;
             const extra = buildExtra(exam.extra);
-
             return (
               <div key={key} className={cx(styles.paraExamFormItem)}>
                 <Space direction="vertical" className={styles.paraExamFormItemContent} size={5}>
@@ -101,9 +101,12 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
                     {...restField}
                     name={[name, PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]}
                     label={title}
+                    tooltip={tooltip ? { title: tooltip, icon: <InfoCircleOutlined /> } : null}
                   >
                     <Radio.Group>
-                      <Radio value={ParaclinicalExamStatus.NOT_DONE}>{intl.get('not_done')}</Radio>
+                      <Radio value={ParaclinicalExamStatus.NOT_DONE}>
+                        {intl.get('prescription.clinical_exam.status.not_done')}
+                      </Radio>
                       <Radio value={ParaclinicalExamStatus.ABNORMAL}>{intl.get('unnatural')}</Radio>
                       <Radio value={ParaclinicalExamStatus.NORMAL}>{intl.get('normal')}</Radio>
                     </Radio.Group>
