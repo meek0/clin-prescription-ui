@@ -369,7 +369,6 @@
   "screen.prescription.entity.request.createdOn": "Created on",
   "screen.prescription.entity.request.id": "Request ID",
   "screen.prescription.entity.request.code": "Ministry Code",
-  "screen.prescription.entity.request.links": "Links",
   "screen.prescription.entity.request.requester": "Requesting Doctor",
   "screen.prescription.entity.request.sampleid": "Sample ID",
   "screen.prescription.entity.request.status": "Status",

@@ -65,11 +65,6 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
       return specimen ? specimen?.resource.accessionIdentifier.value : TABLE_EMPTY_PLACE_HOLDER;
     },
   },
-  {
-    key: 'links',
-    title: intl.get('screen.prescription.entity.request.links'),
-    render: () => <></>, // (data: PatientRequest) => <Links patientId={patientId} prescriptionId={data.id} />,
-  },
 ];
 
 const RequestTable = ({ loading = false, data = [] }: OwnProps) => (

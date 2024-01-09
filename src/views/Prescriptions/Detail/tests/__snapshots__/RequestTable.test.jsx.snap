@@ -93,16 +93,6 @@ exports[`RequestTable should be as the snapshot 1`] = `
                   >
                     ID échantillon
                   </th>
-                  <th
-                    className="ant-table-cell"
-                    colSpan={null}
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    rowSpan={null}
-                    style={Object {}}
-                  >
-                    Liens
-                  </th>
                 </tr>
               </thead>
               <tbody
@@ -118,7 +108,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                 >
                   <td
                     className="ant-table-cell"
-                    colSpan={7}
+                    colSpan={6}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}

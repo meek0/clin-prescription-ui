@@ -369,7 +369,6 @@
   "screen.prescription.entity.request.createdOn" : "Créée le",
   "screen.prescription.entity.request.id" : "ID requête",
   "screen.prescription.entity.request.code" : "Code ministère",
-  "screen.prescription.entity.request.links" : "Liens",
   "screen.prescription.entity.request.requester" : "Requérant",
   "screen.prescription.entity.request.sampleid" : "ID échantillon",
   "screen.prescription.entity.request.status" : "Statut",
