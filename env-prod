@@ -4,7 +4,7 @@ REACT_APP_RELEASE_ID=$npm_package_version
 REACT_APP_RELEASE_NAME=$npm_package_versionName
 REACT_APP_NOSCRIPT_CONTENT=JavaScript is required.
 REACT_APP_NAMESPACE=prod
-REACT_APP_SHOW_TRANSLATION_BTN=true
+REACT_APP_SHOW_TRANSLATION_BTN=false
 # AUTH
 REACT_APP_KEYCLOAK_CONFIG={"realm": "clin", "url": "https://auth.cqgc.hsj.rtss.qc.ca/", "clientId": "clin-prescription-client", "authClientId": "clin-acl"}
 # API
