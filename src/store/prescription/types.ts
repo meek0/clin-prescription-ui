@@ -20,6 +20,7 @@ export type initialState = {
     config?: TFormConfig;
     isLoadingConfig: boolean;
   };
+  prescriptionId?: string;
 };
 
 export type TCompleteAnalysis = IAnalysisDataType & {

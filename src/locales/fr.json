@@ -499,6 +499,16 @@
       "status": {
         "not_done": "Non effectué"
       }
+    },
+    "submitted": {
+      "success": {
+        "title": "Prescription soumise",
+        "message": "La prescription <strong>{id}</strong> a été créée avec succès.",
+        "link": "Consulter la prescription"
+      },
+      "actions": {
+        "download": "Télécharger les documents"
+      }
     }
   }
 }

@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
-import { useHistory } from 'react-router';
 import { FormOutlined } from '@ant-design/icons';
 import Collapse, { CollapsePanel } from '@ferlab/ui/core/components/Collapse';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
@@ -30,7 +29,6 @@ import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
 import { createPrescription } from 'store/prescription/thunk';
 import { useUser } from 'store/user';
-import { DYNAMIC_ROUTES } from 'utils/routes';
 
 import styles from './index.module.scss';
 
@@ -42,7 +40,6 @@ export enum SUBMISSION_REVIEW_FI_KEY {
 const Submission = () => {
   const FORM_NAME = STEPS_ID.SUBMISSION;
   const { user } = useUser();
-  const history = useHistory();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
   const { getAnalysisNameByCode } = useGlobals();
@@ -113,7 +110,7 @@ const Submission = () => {
             .unwrap()
             .then(({ prescriptionId }) => {
               dispatch(prescriptionFormActions.clearForm());
-              history.push(DYNAMIC_ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId));
+              dispatch(prescriptionFormActions.saveCreatedPrescription(prescriptionId));
             });
         }}
       >

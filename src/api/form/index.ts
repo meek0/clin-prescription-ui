@@ -1,6 +1,7 @@
 import { sendRequestWithRpt } from 'api';
 
 import { TCompleteAnalysis } from 'store/prescription/types';
+import { LANG } from 'utils/constants';
 import EnvironmentVariables from 'utils/EnvVariables';
 
 import { IFormPatient, ISupervisor, TFormConfig } from './models';
@@ -44,9 +45,17 @@ const createPrescription = (data: TCompleteAnalysis) =>
     data,
   });
 
+const downloadDocuments = (analysis_id: string, lang = LANG.FR) =>
+  sendRequestWithRpt({
+    method: 'GET',
+    url: `${FORM_API_URL}/render/${analysis_id}?format=pdf&lang=${lang}`,
+    responseType: 'blob',
+  });
+
 export const PrescriptionFormApi = {
   fetchConfig,
   searchPatient,
   searchSupervisor,
   createPrescription,
+  downloadDocuments,
 };

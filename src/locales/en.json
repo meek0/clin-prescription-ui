@@ -499,6 +499,16 @@
       "status": {
         "not_done": "Not done"
       }
+    },
+    "submitted": {
+      "success": {
+        "title": "Prescription submitted",
+        "message": "The prescription <strong>{id}</strong> was created successfully.",
+        "link": "View prescription"
+      },
+      "actions": {
+        "download": "Download documents"
+      }
     }
   }
 }
