@@ -15,6 +15,7 @@ export type TFormConfig = {
 
 type IParaclinicalExamItem = IListNameValueItem & {
   extra?: IParaclinicalExamItemExtra;
+  tooltip?: string;
 };
 
 export interface IParaclinicalExamItemExtra {

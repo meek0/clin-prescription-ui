@@ -451,7 +451,6 @@
   "total.depth": "Total Depth",
   "undetermined": "Undetermined",
   "unnatural": "Unnatural",
-  "not_done": "Not done",
   "upload.gene.ids.modal.cancel.btn": "Cancel",
   "upload.gene.ids.modal.clear.btn": "Clear",
   "upload.gene.ids.modal.empty.table": "No data",
@@ -493,5 +492,12 @@
   "ramq": "RAMQ",
   "save": "Save",
   "prescription.parent.identification.review.permanent.absence": "Permanent absence",
-  "prescription.parent.identification.review.temporary.absence": "Temporary absence"
+  "prescription.parent.identification.review.temporary.absence": "Temporary absence",
+  "prescription": {
+    "clinical_exam": {
+      "status": {
+        "not_done": "Not done"
+      }
+    }
+  }
 }
