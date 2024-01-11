@@ -120,6 +120,7 @@
   "prescription.patient.identification.gestational.age": "Âge gestationnel",
   "prescription.patient.identification.last.ddm.date": "Date des dernières menstruations (DDM)",
   "prescription.patient.identification.last.dpa.date": "Date prévue d'accouchement (DPA)",
+  "prescription.patient.identification.calculated.gestational.age": "Calculated gestational age: {value} weeks",
   "prescription.patient.identification.mother.ramq": "RAMQ de la mère",
   "prescription.patient.identification.new.born": "Nouveau-né",
   "prescription.patient.identification.prenatal.diagnosis": "Diagnostic prénatal",
