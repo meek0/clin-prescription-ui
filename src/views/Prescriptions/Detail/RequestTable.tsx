@@ -25,6 +25,15 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
     render: (id) => extractServiceRequestId(id),
   },
   {
+    key: 'coding',
+    dataIndex: 'coding',
+    title: intl.get('screen.prescription.entity.request.code'),
+    render: (coding: { code: string; system: string }[]) => {
+      const sequencingCode = coding?.find((c) => c.system?.includes('sequencing'));
+      return sequencingCode?.code ? sequencingCode.code : TABLE_EMPTY_PLACE_HOLDER;
+    },
+  },
+  {
     key: 'status',
     dataIndex: 'status',
     title: intl.get('screen.prescription.entity.request.status'),
@@ -55,11 +64,6 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
       const specimen = data.specimen?.find((specimen) => 'parent' in specimen.resource);
       return specimen ? specimen?.resource.accessionIdentifier.value : TABLE_EMPTY_PLACE_HOLDER;
     },
-  },
-  {
-    key: 'links',
-    title: intl.get('screen.prescription.entity.request.links'),
-    render: () => <></>, // (data: PatientRequest) => <Links patientId={patientId} prescriptionId={data.id} />,
   },
 ];
 

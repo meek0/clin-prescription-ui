@@ -82,6 +82,12 @@ const ANALYSIS_PATIENT_FRAGMENT = (requestId: string) => gql`
     requests: ServiceRequestList(_reference: patient, based_on: "${requestId}") {
       id
       authoredOn
+      code @flatten { 
+        coding { 
+          code 
+          system 
+        } 
+      }
       specimen {
         reference
         resource {
@@ -151,6 +157,7 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
           @flatten
           @first {
           code
+          system
         }
       }
       performer @first {

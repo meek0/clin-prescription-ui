@@ -1,16 +1,12 @@
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Space, Typography } from 'antd';
 import { extractPatientId } from 'api/fhir/helper';
-
-import CollapsePanel from 'components/containers/collapse';
-
-import RequestTable from '../RequestTable';
-
-const { Title } = Typography;
-
 import { ServiceRequestEntity } from 'api/fhir/models';
 
+import CollapsePanel from 'components/containers/collapse';
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+
+import RequestTable from '../RequestTable';
 
 import { ClinicalSign } from './components/ClinicalSign';
 import { Consanguinity } from './components/Consanguinity';
@@ -21,6 +17,7 @@ import { Paraclinique } from './components/Paraclinique';
 
 import styles from './index.module.scss';
 
+const { Title } = Typography;
 type OwnProps = {
   prescription?: ServiceRequestEntity;
   loading: boolean;
