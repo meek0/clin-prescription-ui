@@ -29,11 +29,13 @@ describe('Page d\'une prescription - Vérifier les informations affichées', () 
   
   it('Panneau Information clinique', () => {
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.requestProbId).should('exist');
+    cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('75020').should('exist');
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('Complétée').should('exist');
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.stampDate).should('exist');
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.sampleProbId).should('exist');
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('Fichiers').should('not.exist');
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('Variants').should('not.exist');
+    cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').contains('Liens').should('not.exist');
   });
   
   it('Panneau Mère', () => {
@@ -46,11 +48,13 @@ describe('Page d\'une prescription - Vérifier les informations affichées', () 
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Féminin').should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.statusMth).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.requestMthId).should('exist');
+    cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('75020').should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Complétée').should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.stampDate).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.sampleMthId, {matchCase: false}).should('exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Fichiers').should('not.exist');
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Variants').should('not.exist');
+    cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').contains('Liens').should('not.exist');
   });
   
   it('Panneau Père', () => {
@@ -63,17 +67,23 @@ describe('Page d\'une prescription - Vérifier les informations affichées', () 
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains('Masculin').should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.statusFth).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.requestFthId).should('exist');
+    cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains('75020').should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains('Complétée').should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.stampDate).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains(epCHUSJ_ldmCHUSJ.sampleFthId).should('exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains('Fichiers').should('not.exist');
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains('Variants').should('not.exist');
+    cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').contains('Liens').should('not.exist');
   });
 });
 
 describe('Page d\'une prescription - Valider les liens indisponibles', () => {
   it('Bouton Voir les variants', () => {
     cy.contains('Voir les variants').should('not.exist', {timeout: 20*1000});
+  });
+
+  it('Bouton Télécharger', () => {
+    cy.get('button[type="button"]').contains('Télécharger').should('exist', {timeout: 20*1000});
   });
 
   it('Lien Fichiers (Cas-index)', () => {
