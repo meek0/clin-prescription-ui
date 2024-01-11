@@ -51,13 +51,18 @@ describe('Formulaires de prescription - Création', () => {
     cy.get('[data-cy="NextButton"]').click({force: true});
 
     // Soumission
-    cy.intercept('POST', '**/$graphql*').as('getPOSTgraphql');
+    cy.intercept('POST', '**/form').as('getPOSTform');
     cy.get('[data-cy="NextButton"]').click({force: true});
-    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
-    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
-    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
-    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
+    cy.wait('@getPOSTform', {timeout: 10 * 1000});
     
+    // Confirmation de la soumission
+    cy.intercept('POST', '**/$graphql*').as('getPOSTgraphql');
+    cy.get('[class*="successModal"]').find('[href*="/prescription/entity/"]').click({force: true});
+    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
+    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
+    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
+    cy.wait('@getPOSTgraphql', {timeout: 10 * 1000});
+
     // Page de la prescription
     cy.get('body').contains(strMRN).should('exist');
   });
