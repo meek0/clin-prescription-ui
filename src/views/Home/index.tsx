@@ -125,7 +125,7 @@ const Home = () => {
         <div className={styles.successModal}>
           <CheckCircleFilled />
           <Space direction={'vertical'} align={'center'}>
-            <h3>{intl.get('prescription.submitted.success.title')}</h3>
+            <h2>{intl.get('prescription.submitted.success.title')}</h2>
             <p>
               {intl.getHTML('prescription.submitted.success.message', { id: prescriptionId })}&nbsp;
               <a href={DYNAMIC_ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId!)}>

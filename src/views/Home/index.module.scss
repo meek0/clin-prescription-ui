@@ -48,8 +48,12 @@
   flex-direction: column;
   flex: 1;
 
-  h3, p {
+  h3, h2, p {
     margin: unset;
+  }
+
+  h3, h2 {
+    line-height: 28px;
   }
 
   > span > svg {

@@ -15,7 +15,7 @@
   "submit": "Submit",
   "cant.have.two.file.number.same.patient": "Cannot have two different file numbers for the same patient",
   "ch.tooltip": "Compound Heterozygous",
-  "close": "",
+  "close": "Close",
   "component.phenotypeTree.modal.cancelText": "Cancel",
   "component.phenotypeTree.modal.okText": "Add",
   "component.phenotypeTree.modal.title": "Observed Phenotype (HPO) Browser",
@@ -503,8 +503,8 @@
     "submitted": {
       "success": {
         "title": "Prescription submitted",
-        "message": "The prescription <strong>{id}</strong> was created successfully.",
-        "link": "View prescription"
+        "message": "The prescription <span style='font-weight: 500;'>{id}</span> was created successfully.",
+        "link": "View the prescription"
       },
       "actions": {
         "download": "Download documents"

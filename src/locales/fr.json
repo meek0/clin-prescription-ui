@@ -503,7 +503,7 @@
     "submitted": {
       "success": {
         "title": "Prescription soumise",
-        "message": "La prescription <strong>{id}</strong> a été créée avec succès.",
+        "message": "La prescription <span style='font-weight: 500;'>{id}</span> a été créée avec succès.",
         "link": "Consulter la prescription"
       },
       "actions": {
