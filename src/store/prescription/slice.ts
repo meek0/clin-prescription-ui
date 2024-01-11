@@ -35,6 +35,7 @@ export const PrescriptionState: initialState = {
     config: undefined,
     isLoadingConfig: false,
   },
+  prescriptionId: undefined,
 };
 
 export const getAnalysisConfigMapping = (type: AnalysisType) => {
@@ -157,6 +158,9 @@ const prescriptionFormSlice = createSlice({
       if (action.payload.resident_supervisor) {
         state.analysisData.analysis.resident_supervisor = action.payload.resident_supervisor;
       }
+    },
+    saveCreatedPrescription: (state, action: PayloadAction<any>) => {
+      state.prescriptionId = action.payload;
     },
   },
   extraReducers: (builder) => {
