@@ -52,10 +52,12 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                           style={{ marginLeft: 10 }}
                         >
                           <Text>
-                            {capitalize(hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME])}{' '}
-                            <Text type="secondary">
-                              ({hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]})
-                            </Text>
+                            <Space size={4} className={styles.notObservedHpotext}>
+                              {capitalize(hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME])}
+                              <Text type="secondary">
+                                ({hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]})
+                              </Text>
+                            </Space>
                           </Text>
                         </Form.Item>
                         <CloseOutlined className={styles.removeIcon} onClick={() => remove(name)} />
