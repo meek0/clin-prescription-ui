@@ -489,6 +489,20 @@
   "my.prescriptions": "Mes Prescriptions",
   "prescription.parent.info.title.father": "Identification du père",
   "prescription.parent.info.title.mother": "Identification de la mère",
+  "prescription": {
+    "parent": {
+      "info": {
+        "moment": {
+          "justify": {
+            "never": "Ex : Décès, adoption...",
+            "later": "Ex : En voyage..."
+          },
+          "mother": "Saisir les informations sur la mère",
+          "father": "Saisir les informations sur le père"
+        }
+      }
+    }
+  },
   "mother.ramq": "RAMQ de la mère",
   "ramq": "RAMQ",
   "save": "Enregistrer",
@@ -508,6 +522,18 @@
       },
       "actions": {
         "download": "Télécharger les documents"
+      }
+    },
+    "parent": {
+      "info": {
+        "moment": {
+          "justify": {
+            "never": "Ex : Décès, adoption...",
+            "later": "Ex : En voyage..."
+          },
+          "mother": "Saisir les informations sur la mère",
+          "father": "Saisir les informations sur le père"
+        }
       }
     }
   }

@@ -115,7 +115,7 @@
   "prescription.parent.info.moment.options.later": "Later",
   "prescription.parent.info.moment.options.never": "Never",
   "prescription.parent.info.moment.options.now": "Now",
-  "prescription.parent.info.notice": "The requested analysis requires the exomes of the parents, with some exceptions.",
+  "prescription.parent.info.notice": "The requested analysis requires the exomes of the parents, except in special cases.",
   "prescription.patient.identification.foetus.dead": "Fœtus dead",
   "prescription.patient.identification.gestational.age": "Âge gestationnel",
   "prescription.patient.identification.last.ddm.date": "Date des dernières menstruations (DDM)",
@@ -508,6 +508,18 @@
       },
       "actions": {
         "download": "Download documents"
+      }
+    },
+    "parent": {
+      "info": {
+        "moment": {
+          "justify": {
+            "never": "Ex: Death, adoption...",
+            "later": "Ex: Travel..."
+          },
+          "mother": "Enter information about the mother",
+          "father": "Enter information about the father"
+        }
       }
     }
   }

@@ -113,9 +113,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
               >
                 <Input.TextArea
                   rows={2}
-                  placeholder={intl.get(
-                    `prescription.parent.info.moment.justify.${value}.placeholder`,
-                  )}
+                  placeholder={intl.get(`prescription.parent.info.moment.justify.${value}`)} // later / never
                 />
               </Form.Item>
             ) : null;
