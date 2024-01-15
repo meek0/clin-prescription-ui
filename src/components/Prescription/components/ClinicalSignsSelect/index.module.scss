@@ -52,3 +52,13 @@ $label-width: 350px;
   fill: $blue-8;
   color: $blue-8;
 }
+
+.notObservedHpotext{
+  :first-child {
+    width: max-content;
+  }
+}
+
+:global(.ant-form-item-control-input-content){
+  max-width: none;
+}
