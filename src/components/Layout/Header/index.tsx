@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { HomeOutlined } from '@ant-design/icons';
+import { MedicineBoxOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import Gravatar from '@ferlab/ui/core/components/Gravatar';
 import { useKeycloak } from '@react-keycloak/web';
@@ -46,7 +46,7 @@ const Header = () => {
             key="home"
             currentPathName={currentPathName}
             to={STATIC_ROUTES.HOME}
-            icon={<HomeOutlined />}
+            icon={<MedicineBoxOutlined />}
             title={intl.get('layout.main.menu.home')}
           />
         </nav>
