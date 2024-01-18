@@ -9,7 +9,7 @@ import {
   useObservationComplexParacliniqueEntity,
   useObservationParacliniqueEntity,
 } from 'graphql/prescriptions/actions';
-import { find, map, some } from 'lodash';
+import { concat, find, map, some } from 'lodash';
 
 import { useLang } from 'store/global';
 
@@ -18,23 +18,9 @@ type OwnProps = {
   complexIds: string[] | null;
 };
 
-export const combineValue = (
-  paracliniqueValue: ParaclinicEntity,
-  complexParacliniqueValue: ParaclinicEntity,
-) => {
-  const combine = [];
-  Array.isArray(paracliniqueValue)
-    ? combine.push(...paracliniqueValue)
-    : combine.push(paracliniqueValue);
-  Array.isArray(complexParacliniqueValue)
-    ? combine.push(...complexParacliniqueValue)
-    : combine.push(complexParacliniqueValue);
-  return moveOtherParaclinique(combine);
-};
-
 export const moveOtherParaclinique = (paracliniqueList: ParaclinicEntity[]) => {
-  const newList = paracliniqueList;
-  const otherParaclinique = find(paracliniqueList, (p) => p.category === 'exam');
+  const newList = [...paracliniqueList];
+  const otherParaclinique = find(newList, (p) => p?.category === 'exam');
   otherParaclinique ? newList.push(newList.splice(newList.indexOf(otherParaclinique), 1)[0]) : null;
   return newList;
 };
@@ -94,6 +80,9 @@ const displayParaclinique = (value: ParaclinicEntity, codeInfo: CodeListEntity, 
   );
 };
 
+const hasHPO = (element: ParaclinicEntity) =>
+  ['BMUS', 'EMG'].includes(element?.code) && element?.interpretation?.coding?.code === 'A';
+
 export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
   const { paracliniqueValue } = useObservationParacliniqueEntity(ids);
   const { complexParacliniqueValue } = useObservationComplexParacliniqueEntity(complexIds);
@@ -114,25 +103,16 @@ export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
 
   useEffect(() => {
     if (paracliniqueValue || complexParacliniqueValue) {
-      if (complexParacliniqueValue) {
-        paracliniqueValue
-          ? setAllParacliniqueValue(combineValue(paracliniqueValue, complexParacliniqueValue))
-          : setAllParacliniqueValue([complexParacliniqueValue]);
-      } else {
-        Array.isArray(paracliniqueValue)
-          ? setAllParacliniqueValue(moveOtherParaclinique(paracliniqueValue))
-          : setAllParacliniqueValue([paracliniqueValue]);
-      }
+      setAllParacliniqueValue(
+        moveOtherParaclinique(concat(paracliniqueValue, complexParacliniqueValue)),
+      );
     }
   }, [paracliniqueValue, complexParacliniqueValue]);
 
   useEffect(() => {
     if (allParacliniqueValue) {
       allParacliniqueValue.forEach((element: any) => {
-        if (
-          (element?.code === 'BMUS' || element?.code === 'EMG') &&
-          element.interpretation.coding.code === 'A'
-        ) {
+        if (hasHPO(element)) {
           element.valueCodeableConcept.coding.forEach((c: any) => {
             handleHpoSearchTermChanged(c.code);
           });
@@ -152,11 +132,11 @@ export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
   }, [currentHPOOptions, hpoList]);
   return (
     <Descriptions column={1} size="small" className="label-20">
-      {allParacliniqueValue?.map((p: ParaclinicEntity) => {
-        if ((p?.code === 'BMUS' || p?.code === 'EMG') && p.interpretation.coding.code === 'A') {
-          return displayComplexParaclinique(p, codeInfo, lang, hpoList);
+      {allParacliniqueValue?.map((element: ParaclinicEntity) => {
+        if (hasHPO(element)) {
+          return displayComplexParaclinique(element, codeInfo, lang, hpoList);
         }
-        return displayParaclinique(p, codeInfo, lang);
+        return displayParaclinique(element, codeInfo, lang);
       })}
     </Descriptions>
   );
