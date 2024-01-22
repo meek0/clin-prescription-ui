@@ -75,20 +75,19 @@
   "occurrence.patient" : "Occurrence chez ce patient",
   "open.in.igv" : "Ouvrir IGV",
   "other.action" : "Autres actions",
-  "paraclinical.examination.other": "Autres examens paracliniques",
   "parent" : "Parent",
   "parental.origin" : "Origine parentale",
   "pch.tooltip" : "Hétérozygote composé potentiel",
   "po" : "OP",
   "prediction" : "Prédiction",
   "prescribing.institution" : "Établissement prescripteur",
-  "prescriptino.add.parent.submission.analysis.info.title" : "Informations sur l'analyse",
-  "prescriptino.add.parent.submission.verify.info.title" : "Veuillez vérifier les informations ci-dessous avant de soumettre le formulaire.",
-  "prescriptino.add.parent.summary.asked.analysis" : "Analyse demandée",
-  "prescriptino.add.parent.summary.cas.index" : "Cas-index",
-  "prescriptino.add.parent.summary.createdOn" : "Créée le",
-  "prescriptino.add.parent.summary.prescriber" : "Médecin prescripteur",
-  "prescriptino.add.parent.summary.prescription.id" : "ID Prescription",
+  "prescription.add.parent.submission.analysis.info.title" : "Informations sur l'analyse",
+  "prescription.add.parent.submission.verify.info.title" : "Veuillez vérifier les informations ci-dessous avant de soumettre le formulaire.",
+  "prescription.add.parent.summary.asked.analysis" : "Analyse demandée",
+  "prescription.add.parent.summary.cas.index" : "Cas-index",
+  "prescription.add.parent.summary.createdOn" : "Créée le",
+  "prescription.add.parent.summary.prescriber" : "Médecin prescripteur",
+  "prescription.add.parent.summary.prescription.id" : "ID Prescription",
   "prescription.add.parent.modal.parent.relation" : "Relation du parent avec le cas-index",
   "prescription.add.parent.modal.search.placeholder" : "Rechercher par identifiant de prescription ou RAMQ du cas-index",
   "prescription.add.parent.modal.select" : "Sélectionner",
@@ -513,7 +512,8 @@
     "clinical_exam": {
       "status": {
         "not_done": "Non effectué"
-      }
+      },
+      "other_examination": "Autres examens paracliniques"
     },
     "submitted": {
       "success": {

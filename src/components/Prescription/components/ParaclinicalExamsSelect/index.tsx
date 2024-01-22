@@ -133,7 +133,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
         }
       </Form.List>
       <Form.Item
-        label={intl.get('otherParaclinicalExamination')}
+        label={intl.get('prescription.clinical_exam.other_examination')}
         name={getName(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS)}
         className={cx(styles.otherExamsTextarea, 'noMarginBtm')}
       >

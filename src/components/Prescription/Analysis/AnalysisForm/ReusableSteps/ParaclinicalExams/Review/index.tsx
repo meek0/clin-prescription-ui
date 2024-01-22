@@ -74,7 +74,10 @@ const ParaclinicalExamsReview = () => {
             </Descriptions.Item>
           ))}
           {getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS).length && (
-            <Descriptions.Item key="otherExams" label={intl.get('otherParaclinicalExamination')}>
+            <Descriptions.Item
+              key="otherExams"
+              label={intl.get('prescription.clinical_exam.other_examination')}
+            >
               <Typography.Text>{getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS)}</Typography.Text>
             </Descriptions.Item>
           )}
