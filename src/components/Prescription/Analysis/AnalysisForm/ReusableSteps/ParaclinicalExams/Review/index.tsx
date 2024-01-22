@@ -55,7 +55,7 @@ const ParaclinicalExamsReview = () => {
 
   return (
     <Fragment>
-      {selectedExams.length ? (
+      {selectedExams.length || getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS).length ? (
         <Descriptions className="label-20" column={1} size="small">
           {selectedExams.map((exam, index) => (
             <Descriptions.Item
@@ -63,17 +63,21 @@ const ParaclinicalExamsReview = () => {
               label={getExamNameByCode(exam[PARACLINICAL_EXAM_ITEM_KEY.CODE])}
             >
               <Typography.Text>
-                {intl.get(exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION])}
                 {exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] ===
                   ParaclinicalExamStatus.ABNORMAL && (
                   <Fragment>
-                    {' '}
+                    {intl.get('unnatural')}
                     <Typography.Text>:</Typography.Text> {getFormattedValue(exam)}
                   </Fragment>
                 )}
               </Typography.Text>
             </Descriptions.Item>
           ))}
+          {getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS).length && (
+            <Descriptions.Item key="otherExams" label={intl.get('otherParaclinicalExamination')}>
+              <Typography.Text>{getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS)}</Typography.Text>
+            </Descriptions.Item>
+          )}
         </Descriptions>
       ) : (
         <EmptySection />
