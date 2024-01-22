@@ -75,7 +75,7 @@
   "occurrence.patient": "Patient occurrence",
   "open.in.igv": "Open IGV",
   "other.action": "Other actions",
-  "otherParaclinicalExamination": "Other paraclinical examinations",
+  "paraclinical.examination.other": "Other paraclinical examinations",
   "parent": "Parent",
   "parental.origin": "Parental Origin",
   "pch.tooltip": "Potential Compound Heterozygous",

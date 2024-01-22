@@ -75,7 +75,7 @@
   "occurrence.patient" : "Occurrence chez ce patient",
   "open.in.igv" : "Ouvrir IGV",
   "other.action" : "Autres actions",
-  "otherParaclinicalExamination": "Autres examens paracliniques",
+  "paraclinical.examination.other": "Autres examens paracliniques",
   "parent" : "Parent",
   "parental.origin" : "Origine parentale",
   "pch.tooltip" : "Hétérozygote composé potentiel",
