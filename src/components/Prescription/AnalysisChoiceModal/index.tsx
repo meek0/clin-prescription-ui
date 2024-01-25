@@ -147,7 +147,7 @@ const AnalysisChoiceModal = () => {
           {({ getFieldValue }) =>
             getFieldValue(ANALYSIS_CHOICE_FI_KEY.ANALYSIS_TYPE) ? (
               <Form.Item className="marginTop noMarginBtm">
-                <Text>
+                <Text className={styles.recommandationColor}>
                   {intl.get('prescription.analysis.choici.modal.consult.algo.1')}{' '}
                   <Link>{intl.get('prescription.analysis.choici.modal.consult.algo.2')}</Link>{' '}
                   {intl.get('prescription.analysis.choici.modal.consult.algo.3')}
