@@ -1,4 +1,10 @@
+@import 'colors';
+
 .analysisPopoverContent {
     max-width: 275px;
     display: block;
+}
+
+.recommandationColor {
+    color: $gray-7;
 }
