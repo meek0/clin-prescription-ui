@@ -15,3 +15,7 @@ export interface IHpoPayload {
   hits: IHpoChild[];
   total: number;
 }
+
+export interface IHpoCount {
+  count: number;
+}

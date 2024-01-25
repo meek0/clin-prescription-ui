@@ -521,6 +521,11 @@
           "father": "Enter information about the father"
         }
       }
+    },
+    "phenotypes": {
+      "header": {
+        "elements": "elements"
+      }
     }
   }
 }
