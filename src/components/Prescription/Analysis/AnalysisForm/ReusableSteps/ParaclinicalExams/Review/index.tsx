@@ -63,10 +63,10 @@ const ParaclinicalExamsReview = () => {
               label={getExamNameByCode(exam[PARACLINICAL_EXAM_ITEM_KEY.CODE])}
             >
               <Typography.Text>
+                {intl.get(exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION])}
                 {exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] ===
                   ParaclinicalExamStatus.ABNORMAL && (
                   <Fragment>
-                    {intl.get('unnatural')}
                     <Typography.Text>:</Typography.Text> {getFormattedValue(exam)}
                   </Fragment>
                 )}

@@ -451,7 +451,7 @@
   "must.not.contain.special.characters": "Must not contain special characters",
   "total.depth": "Total Depth",
   "undetermined": "Undetermined",
-  "unnatural": "Unnatural",
+  "abnormal": "Unnatural",
   "upload.gene.ids.modal.cancel.btn": "Cancel",
   "upload.gene.ids.modal.clear.btn": "Clear",
   "upload.gene.ids.modal.empty.table": "No data",
