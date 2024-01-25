@@ -206,7 +206,7 @@
   "querybuilder.header.tooltips.save": "Enregistrer le filtre",
   "querybuilder.header.tooltips.saveChanges": "Sauvegarder les modifications",
   "querybuilder.header.tooltips.setAsDefaultFilter": "Définir comme filtre par défaut",
-  "querybuilder.header.tooltips.share": "Partager (Copier l'URL)",
+  "querybuilder.header.tooltips.share": "Partager (copier l'URL)",
   "querybuilder.header.tooltips.undoChanges": "Ignorer les modifications non enregistrées",
   "querybuilder.header.tooltips.unsetDefaultFilter": "Supprimer le filtre par défaut",
   "querybuilder.query.combine.and": "Et",
