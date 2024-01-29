@@ -42,14 +42,14 @@ const AddParentSubmission = () => {
         <Collapse {...defaultCollapseProps} defaultActiveKey={['prescription_summary']}>
           <CollapsePanel
             key={'prescription_summary'}
-            header={intl.get('prescriptino.add.parent.submission.analysis.info.title')}
+            header={intl.get('prescription.add.parent.submission.analysis.info.title')}
           >
             <PrescriptionSummary />
           </CollapsePanel>
         </Collapse>
       </Form.Item>
       <Form.Item
-        label={intl.get('prescriptino.add.parent.submission.verify.info.title')}
+        label={intl.get('prescription.add.parent.submission.verify.info.title')}
         className="noMarginBtm"
       >
         <Collapse

@@ -81,13 +81,13 @@
   "po": "PO",
   "prediction": "Prediction",
   "prescribing.institution": "Prescribing Institution",
-  "prescriptino.add.parent.submission.analysis.info.title": "Informations sur l'analyse",
-  "prescriptino.add.parent.submission.verify.info.title": "Veuillez vérifier les informations ci-dessous avant de soumettre le formulaire.",
-  "prescriptino.add.parent.summary.asked.analysis": "Analyse demandée",
-  "prescriptino.add.parent.summary.cas.index": "Cas-index",
-  "prescriptino.add.parent.summary.createdOn": "Created on",
-  "prescriptino.add.parent.summary.prescriber": "Médecin prescripteur",
-  "prescriptino.add.parent.summary.prescription.id": "ID Prescription",
+  "prescription.add.parent.submission.analysis.info.title": "Informations sur l'analyse",
+  "prescription.add.parent.submission.verify.info.title": "Veuillez vérifier les informations ci-dessous avant de soumettre le formulaire.",
+  "prescription.add.parent.summary.asked.analysis": "Analyse demandée",
+  "prescription.add.parent.summary.cas.index": "Cas-index",
+  "prescription.add.parent.summary.createdOn": "Created on",
+  "prescription.add.parent.summary.prescriber": "Médecin prescripteur",
+  "prescription.add.parent.summary.prescription.id": "ID Prescription",
   "prescription.add.parent.modal.parent.relation": "Relation du parent avec le cas-index",
   "prescription.add.parent.modal.search.placeholder": "Rechercher par identifiant de prescription ou RAMQ du cas-index",
   "prescription.add.parent.modal.select": "Sélectionner",
@@ -451,7 +451,7 @@
   "must.not.contain.special.characters": "Must not contain special characters",
   "total.depth": "Total Depth",
   "undetermined": "Undetermined",
-  "unnatural": "Unnatural",
+  "abnormal": "Unnatural",
   "upload.gene.ids.modal.cancel.btn": "Cancel",
   "upload.gene.ids.modal.clear.btn": "Clear",
   "upload.gene.ids.modal.empty.table": "No data",
@@ -498,7 +498,8 @@
     "clinical_exam": {
       "status": {
         "not_done": "Not done"
-      }
+      },
+      "other_examination": "Other paraclinical examinations"
     },
     "submitted": {
       "success": {

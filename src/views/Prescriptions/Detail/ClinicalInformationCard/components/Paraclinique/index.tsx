@@ -56,7 +56,7 @@ const displayParaclinique = (value: ParaclinicEntity, codeInfo: CodeListEntity, 
   const codeSystemInfo = find(codeInfo?.concept, (c) => c.code === value?.code);
   const label =
     value?.category === 'exam'
-      ? 'Autres examens paracliniques'
+      ? intl.get('prescription.clinical_exam.other_examination')
       : find(codeSystemInfo?.designation, (o) => o.language === lang)?.value;
 
   let displayValue = null;

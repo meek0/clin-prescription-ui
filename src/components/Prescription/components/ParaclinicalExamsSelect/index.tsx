@@ -107,7 +107,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
                       <Radio value={ParaclinicalExamStatus.NOT_DONE}>
                         {intl.get('prescription.clinical_exam.status.not_done')}
                       </Radio>
-                      <Radio value={ParaclinicalExamStatus.ABNORMAL}>{intl.get('unnatural')}</Radio>
+                      <Radio value={ParaclinicalExamStatus.ABNORMAL}>{intl.get('abnormal')}</Radio>
                       <Radio value={ParaclinicalExamStatus.NORMAL}>{intl.get('normal')}</Radio>
                     </Radio.Group>
                   </Form.Item>
@@ -133,7 +133,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
         }
       </Form.List>
       <Form.Item
-        label="Autres examens paracliniques"
+        label={intl.get('prescription.clinical_exam.other_examination')}
         name={getName(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS)}
         className={cx(styles.otherExamsTextarea, 'noMarginBtm')}
       >
