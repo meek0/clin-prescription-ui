@@ -86,7 +86,13 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                   const currentValues = form.getFieldValue(
                     getName(CLINICAL_SIGNS_FI_KEY.SIGNS),
                   ) as IClinicalSignItem[];
-                  const valuesList = currentValues.map(({ value }) => value);
+                  const valuesList: string[] = [];
+
+                  currentValues.forEach((i) => {
+                    if (i[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]) {
+                      valuesList.push(i.value);
+                    }
+                  });
 
                   nodes
                     .filter(({ key }) => !valuesList.includes(key))
