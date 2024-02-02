@@ -362,6 +362,8 @@
   "screen.prescription.entity.inbreeding": "Presence of Inbreeding",
   "screen.prescription.entity.not.observed": "Clinical Signs not Observed",
   "screen.prescription.entity.observed": "Clinical Signs Observed",
+  "screen.prescription.entity.paraclinique.A": "Abnormal",
+  "screen.prescription.entity.paraclinique.N": "Normal",
   "screen.prescription.entity.parent.affectedStatus": "Clinical Status",
   "screen.prescription.entity.patient.card.requester": "Requesting Doctor",
   "screen.prescription.entity.patient.card.title": "Patient",
