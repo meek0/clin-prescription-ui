@@ -25,6 +25,11 @@ describe('cleanAnalysisData', () => {
             is_observed: false,
           },
         ],
+        not_observed_signs: [
+          {
+            is_observed: false,
+          },
+        ],
       },
       patient: {
         ramq: 'XXXX 0000 1111',
@@ -38,6 +43,11 @@ describe('cleanAnalysisData', () => {
           {
             is_observed: 'NA',
           },
+          {
+            is_observed: false,
+          },
+        ],
+        not_observed_signs: [
           {
             is_observed: false,
           },
