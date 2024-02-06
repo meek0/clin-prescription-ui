@@ -7,15 +7,15 @@ exports[`Footer should be as the snapshot 1`] = `
 >
   <div
     className="ant-row ant-row-space-between ant-row-middle"
-    style={Object {}}
+    style={{}}
   >
     <div
       className="ant-col"
-      style={Object {}}
+      style={{}}
     />
     <div
       className="ant-col"
-      style={Object {}}
+      style={{}}
     >
       <img
         alt="Saint-Justine"

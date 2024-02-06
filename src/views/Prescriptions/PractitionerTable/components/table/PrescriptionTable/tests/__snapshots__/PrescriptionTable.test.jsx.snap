@@ -3,13 +3,15 @@
 exports[`PrescriptionTable should be as the snapshot 1`] = `
 <div
   className="ant-space ant-space-vertical"
-  style={Object {}}
+  style={{}}
 >
   <div
     className="ant-space-item"
-    style={Object {}}
+    style={{}}
   >
-    <div />
+    <div>
+      <div />
+    </div>
   </div>
 </div>
 `;

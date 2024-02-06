@@ -10,7 +10,11 @@ import { prescriptionFormActions } from 'store/prescription/slice';
 import { AnalysisFormContextProvider } from './context';
 
 const AnalysisForm = (
-  props: Omit<FormProps, 'labelWrap'> & { form: FormInstance; name: string },
+  props: Omit<FormProps, 'labelWrap' | 'children'> & {
+    form: FormInstance;
+    name: string;
+    children?: React.ReactNode;
+  },
 ) => {
   const { currentStep } = usePrescriptionForm();
   const dispatch = useDispatch();

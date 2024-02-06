@@ -1,4 +1,5 @@
 import intl from 'react-intl-universal';
+import { useParams } from 'react-router-dom';
 import { DownloadOutlined, MedicineBoxOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Row } from 'antd';
 import { useServiceRequestEntity } from 'graphql/prescriptions/actions';
@@ -16,11 +17,8 @@ import PatientCard from './PatientCard';
 
 import styles from './index.module.scss';
 
-interface OwnProps {
-  prescriptionId: string;
-}
-
-const PrescriptionDetail = ({ prescriptionId }: OwnProps) => {
+const PrescriptionDetail = () => {
+  const { id: prescriptionId } = useParams<{ id: string }>();
   const { prescription, loading } = useServiceRequestEntity(prescriptionId);
 
   if (!loading && !prescription) {
@@ -68,9 +66,9 @@ const PrescriptionDetail = ({ prescriptionId }: OwnProps) => {
   );
 };
 
-const PrescriptionEntityWrapper = (props: OwnProps) => (
+const PrescriptionEntityWrapper = () => (
   <ApolloProvider backend={GraphqlBackend.FHIR}>
-    <PrescriptionDetail {...props} />
+    <PrescriptionDetail />
   </ApolloProvider>
 );
 

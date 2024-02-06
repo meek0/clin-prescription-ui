@@ -79,11 +79,7 @@ const App = () => {
                 layout={PageLayout}
                 roles={[Roles.Practitioner]}
               >
-                {(
-                  props: RouteChildrenProps<{
-                    id: string;
-                  }>,
-                ) => <PrescriptionDetailPage prescriptionId={props.match?.params.id!} />}
+                <PrescriptionDetailPage />
               </ProtectedRoute>
               <Route
                 path={DYNAMIC_ROUTES.ERROR}

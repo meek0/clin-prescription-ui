@@ -72,7 +72,7 @@ const ClinicalSignsReview = ({ stepId = STEPS_ID.CLINICAL_SIGNS }: OwnProps) => 
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.clinical.signs.review.label.note')}>
-        {getData(CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK) ?? EMPTY_FIELD}
+        <>{getData(CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK) ?? EMPTY_FIELD}</>
       </Descriptions.Item>
     </Descriptions>
   );

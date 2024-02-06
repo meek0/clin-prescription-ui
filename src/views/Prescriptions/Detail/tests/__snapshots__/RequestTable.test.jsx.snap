@@ -19,11 +19,11 @@ exports[`RequestTable should be as the snapshot 1`] = `
           <div
             className="ant-table-content"
             onScroll={[Function]}
-            style={Object {}}
+            style={{}}
           >
             <table
               style={
-                Object {
+                {
                   "tableLayout": "auto",
                 }
               }
@@ -39,7 +39,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     ID requête
                   </th>
@@ -49,7 +49,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     Code ministère
                   </th>
@@ -59,7 +59,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     Statut
                   </th>
@@ -69,7 +69,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     Créée le
                   </th>
@@ -79,7 +79,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     Requérant
                   </th>
@@ -89,7 +89,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     ID échantillon
                   </th>
@@ -101,7 +101,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                 <tr
                   className="ant-table-placeholder"
                   style={
-                    Object {
+                    {
                       "display": null,
                     }
                   }
@@ -112,7 +112,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
-                    style={Object {}}
+                    style={{}}
                   >
                     <div
                       className=""
@@ -141,17 +141,16 @@ exports[`RequestTable should be as the snapshot 1`] = `
                         </svg>
                         <div
                           className="ant-space ant-space-vertical"
-                          style={Object {}}
+                          style={{}}
                         >
                           <div
                             className="ant-space-item"
-                            style={Object {}}
+                            style={{}}
                           >
                             <span
                               className="ant-typography"
-                              onClick={null}
                               style={
-                                Object {
+                                {
                                   "WebkitLineClamp": undefined,
                                 }
                               }

@@ -54,7 +54,7 @@ const HistoryAndDiagnosisReview = () => {
         }
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.hypothesis')}>
-        {getData(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS)}
+        <>{getData(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS)}</>
       </Descriptions.Item>
     </Descriptions>
   );

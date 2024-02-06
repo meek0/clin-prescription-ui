@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Submission should be as the snapshot 1`] = `
-Array [
+[
   <form
     className="ant-form ant-form-vertical"
     id="submission"
@@ -14,11 +14,11 @@ Array [
       >
         <div
           className="ant-row ant-form-item-row"
-          style={Object {}}
+          style={{}}
         >
           <div
             className="ant-col ant-form-item-label ant-form-item-label-wrap"
-            style={Object {}}
+            style={{}}
           >
             <label
               className=""
@@ -27,9 +27,8 @@ Array [
             >
               <span
                 className="ant-typography"
-                onClick={null}
                 style={
-                  Object {
+                  {
                     "WebkitLineClamp": undefined,
                   }
                 }
@@ -49,7 +48,7 @@ Array [
           </div>
           <div
             className="ant-col ant-form-item-control"
-            style={Object {}}
+            style={{}}
           >
             <div
               className="ant-form-item-control-input"
@@ -61,12 +60,14 @@ Array [
                   className="ant-input"
                   disabled={false}
                   id="submission_submission_general_comment"
+                  onBlur={[Function]}
                   onChange={[Function]}
                   onCompositionEnd={[Function]}
                   onCompositionStart={[Function]}
+                  onFocus={[Function]}
                   onKeyDown={[Function]}
                   rows={3}
-                  style={Object {}}
+                  style={{}}
                   value=""
                 />
               </div>
@@ -78,9 +79,8 @@ Array [
   </form>,
   <span
     className="ant-typography"
-    onClick={null}
     style={
-      Object {
+      {
         "WebkitLineClamp": undefined,
       }
     }
@@ -167,18 +167,18 @@ Array [
                       >
                         <span
                           className="ant-descriptions-item-label"
-                          style={Object {}}
+                          style={{}}
                         >
                           Analyse demandée
                         </span>
                         <span
                           className="ant-descriptions-item-content"
-                          style={Object {}}
+                          style={{}}
                         >
                           <span
                             className="ant-tag ant-tag-geekblue"
                             style={
-                              Object {
+                              {
                                 "backgroundColor": undefined,
                               }
                             }
@@ -199,7 +199,7 @@ Array [
                       >
                         <span
                           className="ant-descriptions-item-label"
-                          style={Object {}}
+                          style={{}}
                         >
                           Établissement prescripteur
                         </span>
