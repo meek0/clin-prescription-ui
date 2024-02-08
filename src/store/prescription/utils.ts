@@ -1,5 +1,4 @@
 import {
-  CLINICAL_SIGN_NA,
   CLINICAL_SIGNS_ITEM_KEY,
   IClinicalSignsDataType,
 } from 'components/Prescription/components/ClinicalSignsSelect/types';
@@ -64,7 +63,7 @@ const cleanParaclinicalExams = (
 const cleanClinicalSigns = (clinicalSigns: IClinicalSignsDataType): IClinicalSignsDataType => {
   const { not_observed_signs, signs, ...rest } = clinicalSigns;
   const cleanedObservedSigns = signs.filter(
-    (sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] !== CLINICAL_SIGN_NA,
+    (sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true,
   );
   const cleanedNotObservedSigns: IClinicalSignItem[] = (not_observed_signs || []).map((sign) => ({
     ...sign,
