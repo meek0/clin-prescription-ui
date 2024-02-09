@@ -21,6 +21,9 @@ REACT_APP_PANELS_FILE=https://s3.cqgc.hsj.rtss.qc.ca/cqgc-qa-app-public/panels/p
 # Style
 SASS_PATH=/code/src/style/themes/clin
 
+# FEATURES
+REACT_APP_FT_beta=true
+
 # Cypress
 CYPRESS_USERNAME_DG_CHUSJ_CUSM_CHUS=
 CYPRESS_PASSWORD=
