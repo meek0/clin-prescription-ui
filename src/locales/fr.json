@@ -64,7 +64,7 @@
   "no" : "Non",
   "no.data.available" : "Aucune donnée disponible",
   "no.folder.number" : "Aucun numéro de dossier",
-  "no.ramq.or.new.born" : "Aucun numéro de RAMQ ou nouveau-né",
+  "no.ramq" : "Aucun numéro de RAMQ",
   "normal" : "Normal",
   "notification.error" : "Erreur",
   "notification.error.file.download" : "Une erreur s'est produite lors du téléchargement de votre fichier",
@@ -115,7 +115,7 @@
   "prescription.parent.info.moment.options.later" : "Plus tard",
   "prescription.parent.info.moment.options.never" : "Jamais",
   "prescription.parent.info.moment.options.now" : "Maintenant",
-  "prescription.parent.info.notice" : "L’analyse demandée requiert l'exomes des parents sauf exception.",
+  "prescription.parent.info.notice" : "L’analyse demandée requiert l'exome des parents sauf exception.",
   "prescription.patient.identification.foetus.dead" : "Fœtus décédé",
   "prescription.patient.identification.gestational.age" : "Âge gestationnel",
   "prescription.patient.identification.last.ddm.date" : "Date des dernières menstruations (DDM)",
@@ -521,7 +521,11 @@
             "later": "Ex : En voyage..."
           },
           "mother": "Saisir les informations sur la mère",
-          "father": "Saisir les informations sur le père"
+          "father": "Saisir les informations sur le père",
+          "clinical": {
+            "mother": "Informations cliniques de la mère",
+            "father": "Informations cliniques du père"
+          }
         }
       }
     },
