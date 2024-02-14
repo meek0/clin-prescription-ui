@@ -40,7 +40,7 @@ export const formatQuerySortList = (sorter: SorterResult<any> | SorterResult<any
 export const getPositionAt = (value: string, subString: string, index: number) =>
   value.split(subString, index).join(subString).length;
 
-export const specialCharactersRegex = /[!@#$%^&*()_+{}[\]:;<>?~\\|]/;
+export const specialCharactersRegex = /[!@#$%^&*()_+{}[\]:;<>?~\\/|]/;
 
 export const hasSpecialCharacters = (inputString: string) =>
   specialCharactersRegex.test(inputString);
