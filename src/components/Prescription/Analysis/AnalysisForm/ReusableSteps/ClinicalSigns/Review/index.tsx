@@ -59,6 +59,11 @@ const ClinicalSignsReview = ({ stepId = STEPS_ID.CLINICAL_SIGNS }: OwnProps) => 
     return isEmpty(notObservedSigns) ? EMPTY_FIELD : notObservedSigns.map(formatSignsWithAge);
   };
 
+  const getClinicalSignsRemark = () => {
+    const remark = getData(CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK) ?? EMPTY_FIELD;
+    return isEmpty(remark.toString().trim()) ? EMPTY_FIELD : remark;
+  };
+
   return (
     <Descriptions className="label-20" column={1} size="small">
       <Descriptions.Item label={intl.get('prescription.clinical.signs.review.label.observed')}>
@@ -72,7 +77,7 @@ const ClinicalSignsReview = ({ stepId = STEPS_ID.CLINICAL_SIGNS }: OwnProps) => 
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.clinical.signs.review.label.note')}>
-        <>{getData(CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK) ?? EMPTY_FIELD}</>
+        <>{getClinicalSignsRemark()}</>
       </Descriptions.Item>
     </Descriptions>
   );
