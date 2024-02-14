@@ -329,7 +329,8 @@ const PatientDataSearch = ({
                 }}
                 checkboxFormItemProps={{
                   name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                  title: intl.get('no.ramq'),
+                  title:
+                    parentKey === 'patient' ? intl.get('no.ramq.or.new.born') : intl.get('no.ramq'),
                 }}
                 onReset={() => {
                   onResetRamq && onResetRamq();

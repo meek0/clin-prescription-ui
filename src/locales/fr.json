@@ -65,6 +65,7 @@
   "no.data.available" : "Aucune donnée disponible",
   "no.folder.number" : "Aucun numéro de dossier",
   "no.ramq" : "Aucun numéro de RAMQ",
+  "no.ramq.or.new.born" : "Aucun numéro de RAMQ ou nouveau-né",
   "normal" : "Normal",
   "notification.error" : "Erreur",
   "notification.error.file.download" : "Une erreur s'est produite lors du téléchargement de votre fichier",
@@ -521,8 +522,10 @@
             "later": "Ex : En voyage..."
           },
           "mother": "Saisir les informations sur la mère",
-          "father": "Saisir les informations sur le père",
-          "clinical": {
+          "father": "Saisir les informations sur le père"
+        },
+        "clinical": {
+          "title": {
             "mother": "Informations cliniques de la mère",
             "father": "Informations cliniques du père"
           }

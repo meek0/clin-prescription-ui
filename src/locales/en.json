@@ -65,6 +65,7 @@
   "no.data.available": "No data available",
   "no.folder.number": "No file number",
   "no.ramq": "No RAMQ",
+  "no.ramq.or.new.born": "No RAMQ or newborn number",
   "normal": "Normal",
   "notification.error": "Error",
   "notification.error.file.download": "An error occured while downloading your file",
@@ -521,11 +522,11 @@
             "later": "Ex: Travel..."
           },
           "mother": "Enter information about the mother",
-          "father": "Enter information about the father",
-          "clinical": {
-            "mother": "Mother's clinical information",
-            "father": "Father's clinical information"
-          }
+          "father": "Enter information about the father"
+        },
+        "clinical": {
+          "mother": "Mother's clinical information",
+          "father": "Father's clinical information"
         }
       }
     },
