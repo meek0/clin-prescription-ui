@@ -473,6 +473,7 @@
   "view.litvar": "View LitVAR",
   "view.ucsc": "View UCSC",
   "yes": "Yes",
+  "x.weeks": "{weeks, plural, =0 {0 week} =1 {1 week} other {# weeks}}",
   "prescription.form.signs.not.observed.label": "Add the UNOBSERVED clinical signs that you consider relevant to the analysis",
   "prescription.form.signs.not.observed.add": "Add another not observed clinical sign",
   "prescription.form.signs.observed.label": "Select at least one OBSERVED clinical sign",

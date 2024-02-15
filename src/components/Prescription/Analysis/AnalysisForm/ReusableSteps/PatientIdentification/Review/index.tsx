@@ -50,6 +50,8 @@ const PatientIdentificationReview = ({ stepId = STEPS_ID.PATIENT_IDENTIFICATION 
       date = calculateGestationalAgeFromDDM(new Date(addInfo?.gestational_date!));
     } else if (addInfo?.[ADD_INFO_FI_KEY.GESTATIONAL_AGE] === GestationalAgeValues.DPA) {
       date = calculateGestationalAgeFromDPA(new Date(addInfo?.gestational_date!));
+    } else if (addInfo?.[ADD_INFO_FI_KEY.GESTATIONAL_AGE] === GestationalAgeValues.DEAD_FOETUS) {
+      return intl.get('prescription.patient.identification.foetus.dead');
     }
 
     return date

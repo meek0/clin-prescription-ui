@@ -34,6 +34,11 @@ const HistoryAndDiagnosisReview = () => {
           .join(', ');
   };
 
+  const getHypothesisDiagnosis = () => {
+    const hypothesis = getData(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS) ?? EMPTY_FIELD;
+    return isEmpty(hypothesis.toString().trim()) ? EMPTY_FIELD : hypothesis;
+  };
+
   return (
     <Descriptions className="label-20" column={1} size="small">
       <Descriptions.Item
@@ -43,18 +48,16 @@ const HistoryAndDiagnosisReview = () => {
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.inbreeding')}>
         {getData(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING) === undefined
-          ? '--'
+          ? EMPTY_FIELD
           : intl.get((getData(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING) ? 'yes' : 'no') ?? 'no')}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.ethnicity')}>
-        {
-          formConfig?.history_and_diagnosis.ethnicities.find(
-            (eth) => eth.value === getData(HISTORY_AND_DIAG_FI_KEY.ETHNICITY),
-          )?.name
-        }
+        {formConfig?.history_and_diagnosis.ethnicities.find(
+          (eth) => eth.value === getData(HISTORY_AND_DIAG_FI_KEY.ETHNICITY),
+        )?.name ?? EMPTY_FIELD}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.hypothesis')}>
-        <>{getData(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS)}</>
+        <>{getHypothesisDiagnosis()}</>
       </Descriptions.Item>
     </Descriptions>
   );
