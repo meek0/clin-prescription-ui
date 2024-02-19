@@ -66,6 +66,11 @@ const PrescriptionsTable = ({
       }}
       enableRowSelection={false}
       headerConfig={{
+        itemCount: {
+          pageIndex: pageIndex,
+          pageSize: queryConfig.size,
+          total: results?.total || 0,
+        },
         hideItemsCount: true,
         enableColumnSort: false,
         enableTableExport: false,
