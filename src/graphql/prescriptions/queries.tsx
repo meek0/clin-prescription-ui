@@ -41,6 +41,7 @@ export const PRESCRIPTIONS_SEARCH_QUERY = gql`
     Analyses {
       hits(filters: $sqon, first: $first, offset: $offset, sort: $sort, searchAfter: $searchAfter) {
         edges {
+          searchAfter
           node {
             id
             patient_id
