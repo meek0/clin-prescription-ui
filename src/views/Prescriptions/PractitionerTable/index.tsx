@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import intl from 'react-intl-universal';
 import { tieBreaker } from '@ferlab/ui/core/components/ProTable/utils';
 import { ISyntheticSqon } from '@ferlab/ui/core/data/sqon/types';
 import { SortDirection } from '@ferlab/ui/core/graphql/constants';
-import { Space } from 'antd';
+import GridCard from '@ferlab/ui/core/view/v2/GridCard';
+import { Row, Space, Typography } from 'antd';
 import { usePractitionnerPrescriptions } from 'graphql/prescriptions/actions';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
@@ -18,7 +20,9 @@ import {
 import { useUser } from 'store/user';
 
 import styles from './index.module.scss';
+import homeStyles from 'views/Home/index.module.scss';
 
+const { Title } = Typography;
 const PractitionerTable = (): React.ReactElement => {
   const [prescriptionPageIndex, setPrescriptionPageIndex] = useState(DEFAULT_PAGE_INDEX);
   const [prescriptionQueryConfig, setPrescriptionQueryConfig] = useState({
@@ -67,17 +71,31 @@ const PractitionerTable = (): React.ReactElement => {
     });
   }, [prescriptionQueryConfig]);
 
+  if (prescriptions?.total === 0) {
+    return <></>;
+  }
+
   return (
-    <Space direction="vertical" size="middle" className={styles.patientContentContainer}>
-      <PrescriptionsTable
-        results={prescriptions}
-        queryConfig={prescriptionQueryConfig}
-        setQueryConfig={setPrescriptionQueryConfig}
-        loading={prescriptions.loading}
-        pageIndex={prescriptionPageIndex}
-        setPageIndex={setPrescriptionPageIndex}
-      />
-    </Space>
+    <GridCard
+      title={<Title level={3}>{intl.get('my.prescriptions')}</Title>}
+      bordered={false}
+      className={homeStyles.contentCard}
+      wrapperClassName={homeStyles.contentCardWrapper}
+      content={
+        <Row gutter={[48, 48]}>
+          <Space direction="vertical" size="middle" className={styles.patientContentContainer}>
+            <PrescriptionsTable
+              results={prescriptions}
+              queryConfig={prescriptionQueryConfig}
+              setQueryConfig={setPrescriptionQueryConfig}
+              loading={prescriptions.loading}
+              pageIndex={prescriptionPageIndex}
+              setPageIndex={setPrescriptionPageIndex}
+            />
+          </Space>
+        </Row>
+      }
+    />
   );
 };
 
