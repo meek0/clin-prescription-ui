@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { useDispatch } from 'react-redux';
 import { CheckCircleFilled, HomeOutlined, MedicineBoxFilled } from '@ant-design/icons';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
-import { Button, Col, Row, Space, Typography } from 'antd';
+import { Button, Col, Row, Space } from 'antd';
+import Modal from 'antd/lib/modal/Modal';
+import { PrescriptionFormApi } from 'api/form';
 import { getUserFullName } from 'auth/keycloak';
 import PractitionerTable from 'views/Prescriptions/PractitionerTable';
 
@@ -13,20 +16,13 @@ import PrescriptionForm from 'components/Prescription';
 import AddParentModal from 'components/Prescription/AddParentModal';
 import AnalysisChoiceModal from 'components/Prescription/AnalysisChoiceModal';
 import { LimitTo, Roles } from 'components/Roles/Rules';
-import { prescriptionFormActions } from 'store/prescription/slice';
-
-import ActionButton from './components/ActionButton';
-
-const { Title } = Typography;
-
-import { useEffect, useState } from 'react';
-import Modal from 'antd/lib/modal/Modal';
-import { PrescriptionFormApi } from 'api/form';
-
 import { usePrescriptionForm } from 'store/prescription';
+import { prescriptionFormActions } from 'store/prescription/slice';
 import { HTTP_HEADERS, MIME_TYPES } from 'utils/constants';
 import { downloadFile, extractFilename } from 'utils/helper';
 import { DYNAMIC_ROUTES } from 'utils/routes';
+
+import ActionButton from './components/ActionButton';
 
 import styles from './index.module.scss';
 
@@ -105,17 +101,7 @@ const Home = () => {
               </Row>
             }
           />
-          <GridCard
-            title={<Title level={3}>{intl.get('my.prescriptions')}</Title>}
-            bordered={false}
-            className={styles.contentCard}
-            wrapperClassName={styles.contentCardWrapper}
-            content={
-              <Row gutter={[48, 48]}>
-                <PractitionerTable />
-              </Row>
-            }
-          />
+          <PractitionerTable />
         </div>
       </ScrollContentWithFooter>
       <PrescriptionForm />
