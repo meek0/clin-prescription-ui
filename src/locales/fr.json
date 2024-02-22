@@ -105,6 +105,8 @@
   "prescription.form.cancel.modal.close.btn" : "Fermer",
   "prescription.form.cancel.modal.content" : "Si vous annulez la prescription en cours, toutes les données seront perdues.",
   "prescription.form.cancel.modal.title" : "Annuler cette prescription ?",
+  "prescription.history.diagnosis.add.health.conditions": "Ajouter",
+  "prescription.history.diagnosis.report.health.conditions": "Rapporter des conditions de santé pertinentes",
   "prescription.history.diagnosis.review.label.ethnicity" : "Ethnicité",
   "prescription.history.diagnosis.review.label.family.history" : "Histoire familiale",
   "prescription.history.diagnosis.review.label.hypothesis" : "Hypothèse diagnostique",

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
 import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
   checkShouldUpdate,
+  getFieldValue,
   getNamePath,
   resetFieldError,
   setFieldValue,
@@ -54,12 +55,22 @@ const hiddenLabelConfig = { colon: false, label: <></> };
 const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
+  const [canAddHealthCondition, setCanAddHealthCondition] = useState(false);
 
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
       setInitialValues(form, getName, initialData, HISTORY_AND_DIAG_FI_KEY);
       if (!initialData[HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS]) {
         setDefaultCondition();
+      } else {
+        const initialHealthConditions = initialData[HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS];
+        const lastInitialHealthConditionsItem =
+          initialHealthConditions[initialHealthConditions.length - 1];
+
+        setCanAddHealthCondition(
+          !!lastInitialHealthConditionsItem[HEALTH_CONDITION_ITEM_KEY.CONDITION] &&
+            !!lastInitialHealthConditionsItem[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK],
+        );
       }
     } else {
       setDefaultCondition();
@@ -76,8 +87,24 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
       },
     ]);
 
-  const resetListError = () =>
+  const resetListError = () => {
     resetFieldError(form, getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS));
+
+    const formFieldValueItems = getFieldValue(
+      form,
+      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+    );
+
+    if (Array.isArray(formFieldValueItems) && formFieldValueItems.length > 0) {
+      const lastItem = formFieldValueItems[formFieldValueItems.length - 1];
+      setCanAddHealthCondition(
+        !!lastItem[HEALTH_CONDITION_ITEM_KEY.CONDITION] &&
+          !!lastItem[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK],
+      );
+    } else {
+      setCanAddHealthCondition(false);
+    }
+  };
 
   return (
     <div className={styles.historyAndDiagnosisHypSelect}>
@@ -88,7 +115,7 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
           valuePropName="checked"
           className="noMarginBtm"
         >
-          <Checkbox>Rapporter des conditions de santé pertinentes</Checkbox>
+          <Checkbox>{intl.get('prescription.history.diagnosis.report.health.conditions')}</Checkbox>
         </Form.Item>
         <Form.Item
           noStyle
@@ -159,7 +186,10 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                               </Form.Item>
                               <CloseOutlined
                                 className={cx(!name ? styles.hidden : '', styles.removeIcon)}
-                                onClick={() => remove(name)}
+                                onClick={() => {
+                                  setCanAddHealthCondition(true);
+                                  remove(name);
+                                }}
                               />
                             </Space>
                           </Form.Item>
@@ -168,31 +198,22 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                       <Form.Item noStyle>
                         <Form.ErrorList errors={errors} />
                       </Form.Item>
-                      {getFieldValue(
-                        getName(
-                          HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS,
-                          0,
-                          HEALTH_CONDITION_ITEM_KEY.CONDITION,
-                        ),
-                      ) &&
-                        getFieldValue(
-                          getName(
-                            HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS,
-                            0,
-                            HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK,
-                          ),
-                        ) && (
-                          <Form.Item {...hiddenLabelConfig} className="noMarginBtm">
-                            <Button
-                              type="link"
-                              className={styles.addHealthCondition}
-                              onClick={() => add({ condition: '', parental_link: undefined })}
-                              icon={<PlusOutlined />}
-                            >
-                              Ajouter
-                            </Button>
-                          </Form.Item>
-                        )}
+                      {
+                        <Form.Item {...hiddenLabelConfig} className="noMarginBtm">
+                          <Button
+                            type="link"
+                            disabled={!canAddHealthCondition}
+                            className={styles.addHealthCondition}
+                            onClick={() => {
+                              setCanAddHealthCondition(false);
+                              add({ condition: '', parental_link: undefined });
+                            }}
+                            icon={<PlusOutlined />}
+                          >
+                            {intl.get('prescription.history.diagnosis.add.health.conditions')}
+                          </Button>
+                        </Form.Item>
+                      }
                     </>
                   )}
                 </Form.List>
