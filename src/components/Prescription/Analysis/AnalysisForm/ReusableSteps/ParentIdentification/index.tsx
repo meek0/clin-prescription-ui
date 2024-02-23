@@ -109,6 +109,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
               <Form.Item
                 label={intl.get('prescription.parent.info.moment.justify')}
                 name={getName(PARENT_DATA_FI_KEY.NO_INFO_REASON)}
+                rules={defaultFormItemsRules}
                 className="noMarginBtm"
               >
                 <Input.TextArea
