@@ -14,7 +14,7 @@ interface OwnProps {
 const PatientContent = ({ patient, labelClass = 'label-35' }: OwnProps) =>
   patient ? (
     <Descriptions column={1} size="small" className={labelClass}>
-      <Descriptions.Item label={intl.get('screen.prescription.entity.patientContent.patientId')}>
+      <Descriptions.Item label={intl.get('screen.prescription.entity.identifier')}>
         {extractPatientId(patient.id)}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('screen.prescription.entity.patientContent.folder')}>
