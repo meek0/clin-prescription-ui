@@ -7,7 +7,6 @@ import { IListNameValueItem, IParaclinicalExamItemExtra } from 'api/form/models'
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 
-import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescription/utils/form';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
@@ -149,10 +148,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
 const MultiSelectExtra = ({ name, label, options }: IParaclinicalExamMultiSelectExtra) => (
   <Form.Item colon={false} label={<></>}>
     <ProLabel title={label || "Spécifier tout ce qui s'applique"} colon size="small" />
-    <Form.Item
-      name={[name, 'values']}
-      rules={[{ ...defaultFormItemsRules[0], type: 'array', min: 1 }]}
-    >
+    <Form.Item name={[name, 'values']}>
       <Select
         mode="multiple"
         placeholder="Sélectionner"
@@ -175,7 +171,7 @@ const MultiSelectExtra = ({ name, label, options }: IParaclinicalExamMultiSelect
 const SimpleInputExtra = ({ name, label }: IParaclinicalExamSimpleInputExtra) => (
   <Form.Item wrapperCol={{ md: 12, lg: 12, xxl: 7 }} colon={false} label={<></>}>
     <ProLabel title={label || 'Sélectionner une valeur'} colon size="small" />
-    <Form.Item name={[name, 'value']} rules={defaultFormItemsRules}>
+    <Form.Item name={[name, 'value']}>
       <Input />
     </Form.Item>
   </Form.Item>
