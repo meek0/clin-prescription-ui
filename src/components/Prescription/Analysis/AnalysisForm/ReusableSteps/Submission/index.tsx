@@ -46,6 +46,7 @@ const Submission = () => {
   const { analysisData, config, currentStep, analysisType } = usePrescriptionForm();
   const [supervisors, setSupervisors] = useState<DefaultOptionType[]>([]);
   const [generalComment, setGeneralComment] = useState('');
+  const [autoCompleteDropdownIsOpen, setAutoCompleteDropdownIsOpen] = useState(false);
   const debouncedComment = useDebounce(generalComment, 300);
 
   const getName = (...key: IGetNamePathParams) => getNamePath(FORM_NAME, key);
@@ -87,14 +88,23 @@ const Submission = () => {
       PrescriptionFormApi.searchSupervisor({
         ep: getPrescribingOrg()!,
         prefix: searchText,
-      }).then((resp) =>
+      }).then((resp) => {
         setSupervisors(
           resp.data?.map((supervisor) => ({
-            label: supervisor.name,
+            label: supervisor.license ? (
+              <>
+                {supervisor.name} &mdash; {supervisor.license}
+              </>
+            ) : (
+              supervisor.name
+            ),
             value: supervisor.id,
           })) ?? [],
-        ),
-      );
+        );
+        setAutoCompleteDropdownIsOpen(true);
+      });
+    } else {
+      setAutoCompleteDropdownIsOpen(false);
     }
   };
 
@@ -138,6 +148,8 @@ const Submission = () => {
                     }),
                   );
                 }}
+                open={autoCompleteDropdownIsOpen}
+                onBlur={() => setAutoCompleteDropdownIsOpen(false)}
                 defaultActiveFirstOption={false}
                 showArrow={false}
                 filterOption={false}
