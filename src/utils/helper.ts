@@ -1,6 +1,9 @@
 import { SortDirection } from '@ferlab/ui/core/graphql/constants';
 import { SorterResult } from 'antd/lib/table/interface';
+import { FORM_API_URL } from 'api/form';
 import isArray from 'lodash/isArray';
+
+import { LANG, MIME_TYPES } from './constants';
 
 // STRING
 export const appendBearerIfToken = (token?: string) => (token ? `Bearer ${token}` : '');
@@ -60,3 +63,10 @@ export const extractFilename = (contentDisposition: string, defaultFileName: str
     ?.split(';')
     .find((e) => e?.startsWith(' filename='))
     ?.split('=')?.[1] || defaultFileName;
+
+export const getDownloadPdfConfig = (id: string, lang: LANG, rptToken?: string) => ({
+  token: rptToken,
+  url: `${FORM_API_URL}/render/${id}?format=pdf&lang=${lang}`,
+  type: MIME_TYPES.APPLICATION_PDF,
+  format: 'pdf',
+});
