@@ -1,7 +1,6 @@
 import intl from 'react-intl-universal';
-
-import { PriorityOptions } from '../components/PriorityTag';
-import { StatusOptions } from '../components/StatusTag';
+import { PriorityOptions } from 'views/Prescriptions/components/PriorityTag';
+import { StatusOptions } from 'views/Prescriptions/components/StatusTag';
 
 export const getPrescriptionStatusDictionnary = () => ({
   [StatusOptions.Active]: intl.get('filters.options.status.active'),
