@@ -21,6 +21,7 @@ export const PRESCRIPTIONS_QUERY = gql`
             ldm
             analysis_code
             status
+            priority
           }
         }
         total
@@ -54,6 +55,7 @@ export const PRESCRIPTIONS_SEARCH_QUERY = gql`
             ldm
             analysis_code
             status
+            priority
           }
         }
         total
@@ -83,11 +85,11 @@ const ANALYSIS_PATIENT_FRAGMENT = (requestId: string) => gql`
     requests: ServiceRequestList(_reference: patient, based_on: "${requestId}") {
       id
       authoredOn
-      code @flatten { 
-        coding { 
-          code 
-          system 
-        } 
+      code @flatten {
+        coding {
+          code
+          system
+        }
       }
       specimen {
         reference
@@ -149,6 +151,7 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
     ServiceRequest(id: $requestId) {
       id
       authoredOn
+      priority
       status
       note @first{
         text

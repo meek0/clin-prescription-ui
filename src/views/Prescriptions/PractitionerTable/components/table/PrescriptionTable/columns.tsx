@@ -4,8 +4,13 @@ import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
 import { Tooltip } from 'antd';
 import { ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
+import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
-import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
+import {
+  getPrescriptionPriorityDictionnary,
+  getPrescriptionPriorityTooltipDictionnary,
+  getPrescriptionStatusDictionnary,
+} from 'views/Prescriptions/utils/constant';
 
 import { formatDate } from 'utils/date';
 
@@ -27,6 +32,27 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     sorter: { multiple: 1 },
   },
   {
+    key: 'priority',
+    dataIndex: ['priority'],
+    render: (value: string) =>
+      value ? (
+        <PriorityTag
+          dictionary={getPrescriptionPriorityDictionnary()}
+          tooltipDictionary={getPrescriptionPriorityTooltipDictionnary()}
+          priority={value}
+        />
+      ) : null,
+    title: intl.get('screen.patientsearch.table.priority'),
+    sorter: { multiple: 1 },
+  },
+  {
+    key: 'analysis_code',
+    dataIndex: ['analysis_code'],
+    title: intl.get('screen.patientsearch.table.test'),
+    tooltip: intl.get('screen.patientsearch.table.test.tooltip'),
+    sorter: { multiple: 1 },
+  },
+  {
     key: 'status',
     dataIndex: 'status',
     render: (value: string) =>
@@ -40,13 +66,6 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     render: (date: string) => formatDate(date),
     title: intl.get('screen.patientsearch.table.createdOn'),
     tooltip: intl.get('screen.patientsearch.table.createdOn.tooltip'),
-    sorter: { multiple: 1 },
-  },
-  {
-    key: 'analysis_code',
-    dataIndex: ['analysis_code'],
-    title: intl.get('screen.patientsearch.table.test'),
-    tooltip: intl.get('screen.patientsearch.table.test.tooltip'),
     sorter: { multiple: 1 },
   },
   {
