@@ -8,7 +8,7 @@ import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
 import {
   getPrescriptionStatusDictionnary,
-  PrescriptionPriorityDictionnary,
+  prescriptionPriorityDictionnary,
 } from 'views/Prescriptions/utils/constant';
 
 import { formatDate } from 'utils/date';
@@ -36,8 +36,8 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     render: (value: string) =>
       value ? (
         <PriorityTag
-          dictionary={PrescriptionPriorityDictionnary.text}
-          tooltipDictionary={PrescriptionPriorityDictionnary.tooltip}
+          dictionary={prescriptionPriorityDictionnary.text}
+          tooltipDictionary={prescriptionPriorityDictionnary.tooltip}
           priority={value}
         />
       ) : null,

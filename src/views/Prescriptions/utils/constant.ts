@@ -9,7 +9,7 @@ export const getPrescriptionStatusDictionnary = () => ({
   [StatusOptions.Completed]: intl.get('filters.options.status.completed'),
 });
 
-export const PrescriptionPriorityDictionnary = {
+export const prescriptionPriorityDictionnary = {
   text: {
     [PriorityOptions.Asap]: intl.get('filters.options.priority.asap'),
     [PriorityOptions.Routine]: intl.get('filters.options.priority.routine'),
