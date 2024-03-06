@@ -5,9 +5,8 @@ import { RequesterType, ServiceRequestEntity } from 'api/fhir/models';
 import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
 import {
-  getPrescriptionPriorityDictionnary,
-  getPrescriptionPriorityTooltipDictionnary,
   getPrescriptionStatusDictionnary,
+  PrescriptionPriorityDictionnary,
 } from 'views/Prescriptions/utils/constant';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
@@ -42,8 +41,8 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
             <Descriptions.Item label={intl.get('screen.prescription.entity.request.priority')}>
               {prescription?.priority ? (
                 <PriorityTag
-                  dictionary={getPrescriptionPriorityDictionnary()}
-                  tooltipDictionary={getPrescriptionPriorityTooltipDictionnary()}
+                  dictionary={PrescriptionPriorityDictionnary.text}
+                  tooltipDictionary={PrescriptionPriorityDictionnary.tooltip}
                   priority={prescription?.priority}
                 />
               ) : (
