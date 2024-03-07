@@ -314,7 +314,7 @@
   "screen.patientsearch.table.priority": "Priority",
   "screen.patientsearch.table.requester": "Requester",
   "screen.patientsearch.table.requester.tooltip": "Requesting Doctor",
-  "screen.patientsearch.table.status": "Status",
+  "screen.patientsearch.table.status": "Presciptions Status",
   "screen.patientsearch.table.test": "Analysis",
   "screen.patientsearch.table.test.tooltip": "Requested analysis code",
   "screen.patientsearch.table.updatedOn": "Updated on",
