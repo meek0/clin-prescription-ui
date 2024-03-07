@@ -6,7 +6,7 @@ import EnvironmentVariables from 'utils/EnvVariables';
 
 import { IFormPatient, ISupervisor, TFormConfig } from './models';
 
-const FORM_API_URL = `${EnvironmentVariables.configFor('FORM_API_URL')}`;
+export const FORM_API_URL = `${EnvironmentVariables.configFor('FORM_API_URL')}`;
 
 const headers = {
   'Content-Type': 'application/json',

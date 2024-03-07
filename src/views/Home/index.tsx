@@ -5,8 +5,8 @@ import { CheckCircleFilled, HomeOutlined, MedicineBoxFilled } from '@ant-design/
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
 import { Button, Col, Row, Space } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
-import { PrescriptionFormApi } from 'api/form';
 import { getUserFullName } from 'auth/keycloak';
+import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
 import PractitionerTable from 'views/Prescriptions/PractitionerTable';
 
 import FamilyRestroomIcon from 'components/icons/FamilyRestroomIcon';
@@ -18,8 +18,6 @@ import AnalysisChoiceModal from 'components/Prescription/AnalysisChoiceModal';
 import { LimitTo, Roles } from 'components/Roles/Rules';
 import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
-import { HTTP_HEADERS, MIME_TYPES } from 'utils/constants';
-import { downloadFile, extractFilename } from 'utils/helper';
 import { DYNAMIC_ROUTES } from 'utils/routes';
 
 import ActionButton from './components/ActionButton';
@@ -40,19 +38,6 @@ const Home = () => {
   useEffect(() => {
     setIsVisible(!!prescriptionId);
   }, [prescriptionId]);
-
-  const handleDownload = () => {
-    PrescriptionFormApi.downloadDocuments(prescriptionId!).then(({ data, response }) => {
-      const fileName = extractFilename(
-        response.headers[HTTP_HEADERS.CONTENT_DISPOSITION],
-        `${prescriptionId!}.pdf`,
-      );
-      const blob = new Blob([data as BlobPart], {
-        type: MIME_TYPES.APPLICATION_PDF,
-      });
-      downloadFile(blob, fileName);
-    });
-  };
 
   const clearPrescriptionId = () =>
     dispatch(prescriptionFormActions.saveCreatedPrescription(undefined));
@@ -120,9 +105,10 @@ const Home = () => {
             </p>
           </Space>
           <Space>
-            <Button key="download" type="primary" onClick={handleDownload}>
-              {intl.get('prescription.submitted.actions.download')}
-            </Button>
+            <DownloadButton
+              prescriptionId={prescriptionId!}
+              text={intl.get('prescription.submitted.actions.download')}
+            />
             <Button key="close" onClick={handleClose}>
               {intl.get('close')}
             </Button>
