@@ -8,7 +8,7 @@ export const getPrescriptionStatusDictionnary = () => ({
   [StatusOptions.Completed]: intl.get('filters.options.status.completed'),
 });
 
-export const prescriptionPriorityDictionnary = {
+export const prescriptionPriorityDictionnary = () => ({
   text: {
     [PriorityOptions.Asap]: intl.get('filters.options.priority.asap'),
     [PriorityOptions.Routine]: intl.get('filters.options.priority.routine'),
@@ -17,7 +17,7 @@ export const prescriptionPriorityDictionnary = {
     [PriorityOptions.Asap]: intl.get('filters.options.priority.asap.tooltip'),
     [PriorityOptions.Routine]: intl.get('filters.options.priority.routine.tooltip'),
   },
-};
+});
 
 export const commonPrescriptionFilterFields = [
   'prescription_id',

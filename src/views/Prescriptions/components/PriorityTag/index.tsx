@@ -8,28 +8,27 @@ export enum PriorityOptions {
 export type TranslationDictionary = Record<PriorityOptions, string>;
 
 export type PriorityLabelProps = {
-  dictionary: TranslationDictionary;
-  tooltipDictionary: TranslationDictionary;
+  dictionaries: { text: TranslationDictionary; tooltip: TranslationDictionary };
   priority: string;
 };
 
 export const PriorityLabelElement: Record<
   PriorityOptions,
-  (d: TranslationDictionary, t: TranslationDictionary) => React.ReactElement
+  (d: { text: TranslationDictionary; tooltip: TranslationDictionary }) => React.ReactElement
 > = {
-  [PriorityOptions.Asap]: (d, t) => (
-    <Tooltip title={t[PriorityOptions.Asap]}>
-      <Tag color="red">{d[PriorityOptions.Asap]}</Tag>
+  [PriorityOptions.Asap]: (d) => (
+    <Tooltip title={d.tooltip[PriorityOptions.Asap]}>
+      <Tag color="red">{d.text[PriorityOptions.Asap]}</Tag>
     </Tooltip>
   ),
-  [PriorityOptions.Routine]: (d, t) => (
-    <Tooltip title={t[PriorityOptions.Routine]}>
-      <Tag color="default">{d[PriorityOptions.Routine]}</Tag>
+  [PriorityOptions.Routine]: (d) => (
+    <Tooltip title={d.tooltip[PriorityOptions.Routine]}>
+      <Tag color="default">{d.text[PriorityOptions.Routine]}</Tag>
     </Tooltip>
   ),
 };
 
-const PriorityTag = ({ dictionary, tooltipDictionary, priority }: PriorityLabelProps) =>
-  PriorityLabelElement[priority as PriorityOptions](dictionary, tooltipDictionary);
+const PriorityTag = ({ dictionaries, priority }: PriorityLabelProps) =>
+  PriorityLabelElement[priority as PriorityOptions](dictionaries);
 
 export default PriorityTag;

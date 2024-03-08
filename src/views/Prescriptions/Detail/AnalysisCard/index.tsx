@@ -41,8 +41,7 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
             <Descriptions.Item label={intl.get('screen.prescription.entity.request.priority')}>
               {prescription?.priority ? (
                 <PriorityTag
-                  dictionary={prescriptionPriorityDictionnary.text}
-                  tooltipDictionary={prescriptionPriorityDictionnary.tooltip}
+                  dictionaries={prescriptionPriorityDictionnary()}
                   priority={prescription?.priority}
                 />
               ) : (

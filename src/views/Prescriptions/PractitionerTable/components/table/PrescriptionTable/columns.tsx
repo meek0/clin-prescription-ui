@@ -35,11 +35,7 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     dataIndex: ['priority'],
     render: (value: string) =>
       value ? (
-        <PriorityTag
-          dictionary={prescriptionPriorityDictionnary.text}
-          tooltipDictionary={prescriptionPriorityDictionnary.tooltip}
-          priority={value}
-        />
+        <PriorityTag dictionaries={prescriptionPriorityDictionnary()} priority={value} />
       ) : null,
     title: intl.get('screen.patientsearch.table.priority'),
     sorter: { multiple: 1 },
