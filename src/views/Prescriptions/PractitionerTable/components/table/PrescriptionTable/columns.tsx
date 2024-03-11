@@ -41,13 +41,6 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     sorter: { multiple: 1 },
   },
   {
-    key: 'analysis_code',
-    dataIndex: ['analysis_code'],
-    title: intl.get('screen.patientsearch.table.test'),
-    tooltip: intl.get('screen.patientsearch.table.test.tooltip'),
-    sorter: { multiple: 1 },
-  },
-  {
     key: 'status',
     dataIndex: 'status',
     render: (value: string) =>
@@ -61,6 +54,13 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     render: (date: string) => formatDate(date),
     title: intl.get('screen.patientsearch.table.createdOn'),
     tooltip: intl.get('screen.patientsearch.table.createdOn.tooltip'),
+    sorter: { multiple: 1 },
+  },
+  {
+    key: 'analysis_code',
+    dataIndex: ['analysis_code'],
+    title: intl.get('screen.patientsearch.table.test'),
+    tooltip: intl.get('screen.patientsearch.table.test.tooltip'),
     sorter: { multiple: 1 },
   },
   {
