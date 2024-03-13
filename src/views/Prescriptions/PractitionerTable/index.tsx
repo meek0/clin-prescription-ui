@@ -71,7 +71,7 @@ const PractitionerTable = (): React.ReactElement => {
     });
   }, [prescriptionQueryConfig]);
 
-  if (!prescriptions || prescriptions.loading || prescriptions.total === 0) {
+  if (!prescriptions || prescriptions.total === 0) {
     return <></>;
   }
 

@@ -29,14 +29,24 @@ const Home = () => {
 
   const { prescriptionId } = usePrescriptionForm();
   const [isVisible, setIsVisible] = useState(!!prescriptionId);
-
+  const [visibleTable, setVisibleTable] = useState(true);
+  const { prescriptionVisible } = usePrescriptionForm();
   const handleClose = () => {
     setIsVisible(false);
     clearPrescriptionId();
   };
 
   useEffect(() => {
+    if (prescriptionVisible) {
+      setVisibleTable(false);
+    }
+  }, [prescriptionVisible]);
+
+  useEffect(() => {
     setIsVisible(!!prescriptionId);
+    if (prescriptionId) {
+      setVisibleTable(true);
+    }
   }, [prescriptionId]);
 
   const clearPrescriptionId = () =>
@@ -86,7 +96,7 @@ const Home = () => {
               </Row>
             }
           />
-          <PractitionerTable />
+          {visibleTable && <PractitionerTable />}
         </div>
       </ScrollContentWithFooter>
       <PrescriptionForm />
