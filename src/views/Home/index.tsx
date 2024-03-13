@@ -37,16 +37,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (prescriptionVisible) {
-      setVisibleTable(false);
-    }
+    setVisibleTable(!prescriptionVisible);
   }, [prescriptionVisible]);
 
   useEffect(() => {
     setIsVisible(!!prescriptionId);
-    if (prescriptionId) {
-      setVisibleTable(true);
-    }
   }, [prescriptionId]);
 
   const clearPrescriptionId = () =>
