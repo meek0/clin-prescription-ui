@@ -27,18 +27,28 @@ import styles from './index.module.scss';
 const Home = () => {
   const dispatch = useDispatch();
 
-  const { prescriptionId } = usePrescriptionForm();
+  const { prescriptionId, prescriptionVisible, isCreatingPrescription } = usePrescriptionForm();
   const [isVisible, setIsVisible] = useState(!!prescriptionId);
   const [visibleTable, setVisibleTable] = useState(true);
-  const { prescriptionVisible } = usePrescriptionForm();
+  const [newPrescriptionCreated, setNewPrescriptionCreated] = useState(false);
   const handleClose = () => {
     setIsVisible(false);
     clearPrescriptionId();
+    setNewPrescriptionCreated(false);
+    setVisibleTable(true);
   };
 
   useEffect(() => {
-    setVisibleTable(!prescriptionVisible);
-  }, [prescriptionVisible]);
+    if (prescriptionVisible) {
+      setVisibleTable(false);
+    }
+    if (isCreatingPrescription) {
+      setNewPrescriptionCreated(true);
+    }
+    if (!prescriptionVisible && !newPrescriptionCreated) {
+      setVisibleTable(true);
+    }
+  }, [prescriptionVisible, newPrescriptionCreated, isCreatingPrescription]);
 
   useEffect(() => {
     setIsVisible(!!prescriptionId);
