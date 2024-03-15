@@ -25,15 +25,15 @@ const ParaclinicalExamsReview = () => {
     formConfig?.paraclinical_exams.default_list.find((exam) => exam.value === code)?.name;
 
   const getFormattedValue = (exam: IParaclinicalExamItem) => {
-    if (exam.value) {
-      // TODO Hard coded right now.
-      // Should come from the config
-      return `${exam.value} UI/L`;
-    }
-
     const examDefaultValues = formConfig?.paraclinical_exams.default_list.find(
       (d) => d.value === exam.code,
     );
+
+    if (exam.value) {
+      // TODO Hard coded right now.
+      // Should come from the config
+      return `${exam.value} ${examDefaultValues?.extra?.unit || ''}`;
+    }
 
     return (
       <Fragment>

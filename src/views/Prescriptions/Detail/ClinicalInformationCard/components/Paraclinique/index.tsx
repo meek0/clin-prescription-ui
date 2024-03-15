@@ -12,6 +12,7 @@ import {
 import { concat, find, map, some } from 'lodash';
 
 import { useLang } from 'store/global';
+import { usePrescriptionFormConfig } from 'store/prescription';
 
 type OwnProps = {
   ids: string[] | null;
@@ -52,7 +53,12 @@ const displayComplexParaclinique = (
   );
 };
 
-const displayParaclinique = (value: ParaclinicEntity, codeInfo: CodeListEntity, lang: string) => {
+const displayParaclinique = (
+  value: ParaclinicEntity,
+  codeInfo: CodeListEntity,
+  lang: string,
+  unit: string,
+) => {
   const codeSystemInfo = find(codeInfo?.concept, (c) => c.code === value?.code);
   const label =
     value?.category === 'exam'
@@ -64,7 +70,7 @@ const displayParaclinique = (value: ParaclinicEntity, codeInfo: CodeListEntity, 
   if (value?.interpretation?.coding?.code === 'A') {
     displayValue = `${intl.get(`screen.prescription.entity.paraclinique.A`)} : ${
       value?.valueString
-    }  UI/L`;
+    }  ${unit}`;
   } else if (value?.interpretation?.coding?.code === 'N') {
     displayValue = intl.get(`screen.prescription.entity.paraclinique.N`);
   } else {
@@ -84,6 +90,8 @@ const hasHPO = (element: ParaclinicEntity) =>
   ['BMUS', 'EMG'].includes(element?.code) && element?.interpretation?.coding?.code === 'A';
 
 export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
+  const formConfig = usePrescriptionFormConfig();
+
   const { paracliniqueValue } = useObservationParacliniqueEntity(ids);
   const { complexParacliniqueValue } = useObservationComplexParacliniqueEntity(complexIds);
   const { codeInfo } = useCodeSystem('observation-code');
@@ -100,6 +108,10 @@ export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
       }
     });
   };
+
+  const examDefaultValues = formConfig?.paraclinical_exams.default_list.find(
+    (d) => d.value === paracliniqueValue?.code,
+  );
 
   useEffect(() => {
     if (paracliniqueValue || complexParacliniqueValue) {
@@ -136,7 +148,7 @@ export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
         if (hasHPO(element)) {
           return displayComplexParaclinique(element, codeInfo, lang, hpoList);
         }
-        return displayParaclinique(element, codeInfo, lang);
+        return displayParaclinique(element, codeInfo, lang, examDefaultValues?.extra?.unit || '');
       })}
     </Descriptions>
   );

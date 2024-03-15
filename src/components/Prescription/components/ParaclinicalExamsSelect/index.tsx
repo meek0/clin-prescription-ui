@@ -7,6 +7,7 @@ import { IListNameValueItem, IParaclinicalExamItemExtra } from 'api/form/models'
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 
+import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescription/utils/form';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
@@ -24,6 +25,7 @@ interface IParaclinicalExamSimpleInputExtra {
 
 interface IParaclinicalExamMultiSelectExtra extends IParaclinicalExamSimpleInputExtra {
   options: IListNameValueItem[];
+  required: boolean;
 }
 
 export enum PARACLINICAL_EXAMS_FI_KEY {
@@ -75,13 +77,15 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
 
   const buildExtra = (extra: IParaclinicalExamItemExtra | undefined) => {
     if (extra) {
-      // eslint-disable-next-line
-      return (name: number) =>
-        extra.type === 'multi_select' ? (
-          <MultiSelectExtra name={name} label={extra.label} options={extra.options ?? []} />
-        ) : (
-          <SimpleInputExtra name={name} label={extra.label} />
-        );
+      if (extra.type === 'string' && extra.required) {
+        // eslint-disable-next-line
+        return (name: number) => (<SimpleInputExtra name={name} label={extra.label} />);
+      }
+
+      if (extra.type === 'multi_select') {
+        // eslint-disable-next-line
+        return (name: number) => (<MultiSelectExtra name={name} label={extra.label} options={extra.options ?? []} required={extra.required} />);
+      }
     }
   };
 
@@ -145,10 +149,18 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
   );
 };
 
-const MultiSelectExtra = ({ name, label, options }: IParaclinicalExamMultiSelectExtra) => (
+const MultiSelectExtra = ({
+  name,
+  label,
+  options,
+  required,
+}: IParaclinicalExamMultiSelectExtra) => (
   <Form.Item colon={false} label={<></>}>
     <ProLabel title={label || "Spécifier tout ce qui s'applique"} colon size="small" />
-    <Form.Item name={[name, 'values']}>
+    <Form.Item
+      name={[name, 'values']}
+      rules={[required ? { ...defaultFormItemsRules[0], type: 'array', min: 1 } : {}]}
+    >
       <Select
         mode="multiple"
         placeholder="Sélectionner"
@@ -171,7 +183,7 @@ const MultiSelectExtra = ({ name, label, options }: IParaclinicalExamMultiSelect
 const SimpleInputExtra = ({ name, label }: IParaclinicalExamSimpleInputExtra) => (
   <Form.Item wrapperCol={{ md: 12, lg: 12, xxl: 7 }} colon={false} label={<></>}>
     <ProLabel title={label || 'Sélectionner une valeur'} colon size="small" />
-    <Form.Item name={[name, 'value']}>
+    <Form.Item name={[name, 'value']} rules={defaultFormItemsRules}>
       <Input />
     </Form.Item>
   </Form.Item>
