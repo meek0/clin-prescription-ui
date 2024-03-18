@@ -11,6 +11,7 @@ import {
   prescriptionPriorityDictionnary,
 } from 'views/Prescriptions/utils/constant';
 
+import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { formatDate } from 'utils/date';
 
 export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] => [
@@ -36,7 +37,9 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     render: (value: string) =>
       value ? (
         <PriorityTag dictionaries={prescriptionPriorityDictionnary()} priority={value} />
-      ) : null,
+      ) : (
+        EMPTY_FIELD
+      ),
     title: intl.get('screen.patientsearch.table.priority'),
     sorter: { multiple: 1 },
   },
