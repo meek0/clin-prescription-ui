@@ -46,6 +46,7 @@ export const usePractitionnerPrescriptions = (
 ): GqlResults<AnalysisResult> => {
   const { loading, result } = useLazyResultQuery<any>(PRESCRIPTIONS_SEARCH_QUERY, {
     variables: variables,
+    fetchPolicy: 'no-cache',
   });
   const prescriptions = result?.Analyses;
   return {
