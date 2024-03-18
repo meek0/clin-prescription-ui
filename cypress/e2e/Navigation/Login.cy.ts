@@ -7,7 +7,7 @@ beforeEach(() => {
   cy.get('button[class*="ant-btn-primary ant-btn-lg"]').click();
 });
 
-describe('Affichage de la page Login [PRESC-160]', () => {
+describe('Affichage de la page Login', () => {
   it('Vérifier le texte affiché', () => {
     cy.contains('Courriel (.med@ssss.gouv.qc.ca)').should('exist', {timeout: 20*1000});
     cy.contains('Mot de passe').should('exist', {timeout: 20*1000});
