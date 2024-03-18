@@ -26,7 +26,7 @@
   "ensemblID": "Ensembl ID",
   "filters.group.donors.filters": "Filtre (Dragen)",
   "filters.group.donors.gender": "Sexe",
-  "filters.options.priority.asap": "DQP",
+  "filters.options.priority.asap": "ASAP",
   "filters.options.priority.asap.tooltip": "Dès que possible",
   "filters.options.priority.routine": "Routine",
   "filters.options.priority.routine.tooltip": "Service de routine",
