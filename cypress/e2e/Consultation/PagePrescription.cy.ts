@@ -11,13 +11,14 @@ beforeEach(() => {
 describe('Page d\'une prescription - Vérifier les informations affichées', () => {
   it('Panneau Analyse', () => {
     cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(0).contains(epCHUSJ_ldmCHUSJ.prescriptionId).should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(1).contains('Approuvée').should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(2).contains('Retard global de développement / Déficience intellectuelle (Trio) (RGDI)').should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(3).contains('--').should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(4).contains(epCHUSJ_ldmCHUSJ.stampDate).should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(5).contains('--').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(1).contains('--').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(2).contains('Approuvée').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(3).contains('Retard global de développement / Déficience intellectuelle (Trio) (RGDI)').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(4).contains('--').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(5).contains(epCHUSJ_ldmCHUSJ.stampDate).should('exist');
     cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(6).contains('--').should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(7).contains('LDM-CHUSJ').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(7).contains('--').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(8).contains('LDM-CHUSJ').should('exist');
   });
   
   it('Panneau Patient', () => {
