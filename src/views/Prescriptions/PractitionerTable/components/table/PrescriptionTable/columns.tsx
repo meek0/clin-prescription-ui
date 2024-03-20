@@ -4,9 +4,14 @@ import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
 import { Tooltip } from 'antd';
 import { ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
+import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
-import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
+import {
+  getPrescriptionStatusDictionnary,
+  prescriptionPriorityDictionnary,
+} from 'views/Prescriptions/utils/constant';
 
+import { TABLE_EMPTY_PLACE_HOLDER } from 'utils/constants';
 import { formatDate } from 'utils/date';
 
 export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] => [
@@ -24,6 +29,18 @@ export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] =>
     dataIndex: ['patient_id'],
     render: (patient_id: string) => patient_id,
     title: intl.get('screen.patientsearch.table.patient'),
+    sorter: { multiple: 1 },
+  },
+  {
+    key: 'priority',
+    dataIndex: ['priority'],
+    render: (value: string) =>
+      value ? (
+        <PriorityTag dictionaries={prescriptionPriorityDictionnary()} priority={value} />
+      ) : (
+        TABLE_EMPTY_PLACE_HOLDER
+      ),
+    title: intl.get('screen.patientsearch.table.priority'),
     sorter: { multiple: 1 },
   },
   {

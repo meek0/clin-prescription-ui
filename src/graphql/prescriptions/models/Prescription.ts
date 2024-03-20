@@ -49,6 +49,7 @@ export const analysisFields = [
   'ldm',
   'ep',
   'prenatal',
+  'priority',
 ];
 
 // Model V1

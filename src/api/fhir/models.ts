@@ -227,6 +227,7 @@ export interface ServiceRequestEntity {
   id: string;
   authoredOn: string;
   status: string;
+  priority: string;
   code: string;
   note: {
     text: string;

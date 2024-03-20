@@ -24,6 +24,7 @@ describe('Affichage de toutes les pages et modals', () => {
 
     cy.get('[class*="Header"]').contains(epCHUSJ_ldmCHUSJ.prescriptionId).should('exist', {timeout: 20*1000});
     cy.contains('Identifiant').should('exist', {timeout: 20*1000});
+    cy.contains('Priorité').should('exist', {timeout: 20*1000});
     cy.contains('Statut').should('exist', {timeout: 20*1000});
     cy.contains('Approuvée').should('exist', {timeout: 20*1000});
     cy.contains('Analyse demandée').should('exist', {timeout: 20*1000});

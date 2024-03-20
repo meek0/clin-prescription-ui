@@ -2,8 +2,12 @@ import intl from 'react-intl-universal';
 import { Card, Descriptions, Tag } from 'antd';
 import { extractOrganizationId, extractServiceRequestId } from 'api/fhir/helper';
 import { RequesterType, ServiceRequestEntity } from 'api/fhir/models';
+import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
-import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
+import {
+  getPrescriptionStatusDictionnary,
+  prescriptionPriorityDictionnary,
+} from 'views/Prescriptions/utils/constant';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import ParagraphLoader from 'components/uiKit/ParagraphLoader';
@@ -16,7 +20,7 @@ interface OwnProps {
 }
 
 const getPractionnerName = (requester: RequesterType) => {
-  const practitionerName = `${requester.practitioner?.name.family.toLocaleUpperCase()} 
+  const practitionerName = `${requester.practitioner?.name.family.toLocaleUpperCase()}
   ${requester.practitioner?.name?.given?.join(' ')}`;
 
   const practitionerIdentifier = requester.practitioner?.identifier?.value;
@@ -33,6 +37,16 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
           <Descriptions column={1} size="small" className="label-35">
             <Descriptions.Item label={intl.get('screen.prescription.entity.identifier')}>
               {extractServiceRequestId(prescription?.id)}
+            </Descriptions.Item>
+            <Descriptions.Item label={intl.get('screen.prescription.entity.request.priority')}>
+              {prescription?.priority ? (
+                <PriorityTag
+                  dictionaries={prescriptionPriorityDictionnary()}
+                  priority={prescription?.priority}
+                />
+              ) : (
+                EMPTY_FIELD
+              )}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('status')}>
               <StatusTag
