@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import intl from 'react-intl-universal';
 import { Descriptions, Typography } from 'antd';
+import { IListNameValueItem, IParaclinicalExamItemExtra } from 'api/form/models';
 
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import EmptySection from 'components/Prescription/components/EmptySection';
@@ -21,17 +22,19 @@ const ParaclinicalExamsReview = () => {
   const getData = (key: PARACLINICAL_EXAMS_FI_KEY) =>
     analysisData[STEPS_ID.PARACLINICAL_EXAMS]?.[key] || [];
 
-  const getExamNameByCode = (code: string) =>
-    formConfig?.paraclinical_exams.default_list.find((exam) => exam.value === code)?.name;
+  const getDefaultExam = (exam: IParaclinicalExamItem) =>
+    formConfig?.paraclinical_exams.default_list.find((d) => d.value === exam.code);
 
-  const getFormattedValue = (exam: IParaclinicalExamItem) => {
-    const examDefaultValues = formConfig?.paraclinical_exams.default_list.find(
-      (d) => d.value === exam.code,
-    );
-
+  const getFormattedValue = (
+    exam: IParaclinicalExamItem,
+    examDefaultValues:
+      | (IListNameValueItem & {
+          extra?: IParaclinicalExamItemExtra | undefined;
+          tooltip?: string | undefined;
+        })
+      | undefined,
+  ) => {
     if (exam.value) {
-      // TODO Hard coded right now.
-      // Should come from the config
       return `${exam.value} ${examDefaultValues?.extra?.unit || ''}`;
     }
 
