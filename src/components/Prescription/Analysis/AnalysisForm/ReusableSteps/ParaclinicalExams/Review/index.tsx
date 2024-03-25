@@ -38,7 +38,7 @@ const ParaclinicalExamsReview = () => {
     return (
       <Fragment>
         {exam.values
-          .map(
+          ?.map(
             (value) =>
               examDefaultValues?.extra?.options?.find((option) => option.value === value)?.name,
           )
