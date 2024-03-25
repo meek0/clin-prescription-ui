@@ -25,6 +25,9 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
   const [isVisible, setIsVisible] = useState(visible);
   const [hpoCount, setHpoCount] = useState<number | null>(null);
 
+  // Temporary solution until search and hpo tree are fixed
+  const showSearchAndCount = false;
+
   useEffect(() => {
     if (visible !== isVisible) {
       setIsVisible(visible);
@@ -97,7 +100,7 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
         onSelectChange={(s, t) => {
           targetKeys.filter((el) => !t.includes(el));
         }}
-        selectAllLabels={[() => renderHeader()]}
+        selectAllLabels={[() => (showSearchAndCount ? renderHeader() : null)]}
         dataSource={getFlattenTree(treeData)}
         operationStyle={{ visibility: 'hidden', width: '5px' }}
         render={(item) => item.title}
@@ -111,7 +114,7 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
                 checkedKeys={targetKeys}
                 addTargetKey={(key) => setTargetKeys([...targetKeys, key])}
                 setTreeData={setTreeData}
-                showSearch
+                showSearch={showSearchAndCount}
               />
             );
           } else {
