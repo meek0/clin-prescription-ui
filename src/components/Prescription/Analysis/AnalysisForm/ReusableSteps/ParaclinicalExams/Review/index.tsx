@@ -38,7 +38,7 @@ const ParaclinicalExamsReview = () => {
     return (
       <Fragment>
         {exam.values
-          .map(
+          ?.map(
             (value) =>
               examDefaultValues?.extra?.options?.find((option) => option.value === value)?.name,
           )
@@ -65,11 +65,12 @@ const ParaclinicalExamsReview = () => {
               <Typography.Text>
                 {intl.get(exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION])}
                 {exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] ===
-                  ParaclinicalExamStatus.ABNORMAL && (
-                  <Fragment>
-                    <Typography.Text>:</Typography.Text> {getFormattedValue(exam)}
-                  </Fragment>
-                )}
+                  ParaclinicalExamStatus.ABNORMAL &&
+                  (exam?.value || Array.isArray(exam?.values)) && (
+                    <Fragment>
+                      <Typography.Text>:</Typography.Text> {getFormattedValue(exam)}
+                    </Fragment>
+                  )}
               </Typography.Text>
             </Descriptions.Item>
           ))}
