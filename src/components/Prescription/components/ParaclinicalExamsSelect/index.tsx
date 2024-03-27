@@ -156,10 +156,10 @@ const MultiSelectExtra = ({
   required,
 }: IParaclinicalExamMultiSelectExtra) => (
   <Form.Item colon={false} label={<></>}>
-    <ProLabel title={label || "Spécifier tout ce qui s'applique"} colon size="small" />
+    <ProLabel title={label || "Sélectionner tout ce qui s'applique"} colon size="small" />
     <Form.Item
       name={[name, 'values']}
-      rules={[required ? { ...defaultFormItemsRules[0], type: 'array', min: 1 } : {}]}
+      rules={required ? [{ ...defaultFormItemsRules[0], type: 'array', min: 1 }] : undefined}
     >
       <Select
         mode="multiple"

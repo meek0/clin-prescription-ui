@@ -63,7 +63,7 @@ const ParaclinicalExamsReview = () => {
           {selectedExams.map((exam, index) => {
             const examDefaultValues = getDefaultExam(exam);
             return (
-              <Descriptions.Item key={index} label={getFormattedValue(exam, examDefaultValues)}>
+              <Descriptions.Item key={index} label={examDefaultValues?.name}>
                 <Typography.Text>
                   {intl.get(exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION])}
                   {exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] ===
