@@ -20,6 +20,8 @@ type IParaclinicalExamItem = IListNameValueItem & {
 
 export interface IParaclinicalExamItemExtra {
   type: 'string' | 'multi_select';
+  unit?: string;
+  required: boolean;
   label?: string;
   options?: IListNameValueItem[];
 }

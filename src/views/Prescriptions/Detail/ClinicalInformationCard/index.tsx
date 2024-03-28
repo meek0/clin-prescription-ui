@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Space, Typography } from 'antd';
 import { extractPatientId } from 'api/fhir/helper';
@@ -5,6 +6,8 @@ import { ServiceRequestEntity } from 'api/fhir/models';
 
 import CollapsePanel from 'components/containers/collapse';
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import { useAppDispatch } from 'store';
+import { fetchFormConfig } from 'store/prescription/thunk';
 
 import RequestTable from '../RequestTable';
 
@@ -24,6 +27,14 @@ type OwnProps = {
 };
 
 const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (prescription) {
+      dispatch(fetchFormConfig(prescription));
+    }
+  }, [prescription]);
+
   let ethnValue = undefined;
   const phenotype: string[] = [];
   let generalObservation = undefined;

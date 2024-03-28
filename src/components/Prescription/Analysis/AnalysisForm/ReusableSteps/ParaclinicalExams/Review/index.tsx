@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import intl from 'react-intl-universal';
 import { Descriptions, Typography } from 'antd';
+import { IListNameValueItem, IParaclinicalExamItemExtra } from 'api/form/models';
 
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import EmptySection from 'components/Prescription/components/EmptySection';
@@ -21,19 +22,21 @@ const ParaclinicalExamsReview = () => {
   const getData = (key: PARACLINICAL_EXAMS_FI_KEY) =>
     analysisData[STEPS_ID.PARACLINICAL_EXAMS]?.[key] || [];
 
-  const getExamNameByCode = (code: string) =>
-    formConfig?.paraclinical_exams.default_list.find((exam) => exam.value === code)?.name;
+  const getDefaultExam = (exam: IParaclinicalExamItem) =>
+    formConfig?.paraclinical_exams.default_list.find((d) => d.value === exam.code);
 
-  const getFormattedValue = (exam: IParaclinicalExamItem) => {
+  const getFormattedValue = (
+    exam: IParaclinicalExamItem,
+    examDefaultValues:
+      | (IListNameValueItem & {
+          extra?: IParaclinicalExamItemExtra | undefined;
+          tooltip?: string | undefined;
+        })
+      | undefined,
+  ) => {
     if (exam.value) {
-      // TODO Hard coded right now.
-      // Should come from the config
-      return `${exam.value} UI/L`;
+      return `${exam.value} ${examDefaultValues?.extra?.unit || ''}`;
     }
-
-    const examDefaultValues = formConfig?.paraclinical_exams.default_list.find(
-      (d) => d.value === exam.code,
-    );
 
     return (
       <Fragment>
@@ -57,23 +60,24 @@ const ParaclinicalExamsReview = () => {
     <Fragment>
       {selectedExams.length || getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS).length ? (
         <Descriptions className="label-20" column={1} size="small">
-          {selectedExams.map((exam, index) => (
-            <Descriptions.Item
-              key={index}
-              label={getExamNameByCode(exam[PARACLINICAL_EXAM_ITEM_KEY.CODE])}
-            >
-              <Typography.Text>
-                {intl.get(exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION])}
-                {exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] ===
-                  ParaclinicalExamStatus.ABNORMAL &&
-                  (exam?.value || Array.isArray(exam?.values)) && (
-                    <Fragment>
-                      <Typography.Text>:</Typography.Text> {getFormattedValue(exam)}
-                    </Fragment>
-                  )}
-              </Typography.Text>
-            </Descriptions.Item>
-          ))}
+          {selectedExams.map((exam, index) => {
+            const examDefaultValues = getDefaultExam(exam);
+            return (
+              <Descriptions.Item key={index} label={examDefaultValues?.name}>
+                <Typography.Text>
+                  {intl.get(exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION])}
+                  {exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] ===
+                    ParaclinicalExamStatus.ABNORMAL &&
+                    (exam?.value || Array.isArray(exam?.values)) && (
+                      <Fragment>
+                        <Typography.Text>:</Typography.Text>{' '}
+                        {getFormattedValue(exam, examDefaultValues)}
+                      </Fragment>
+                    )}
+                </Typography.Text>
+              </Descriptions.Item>
+            );
+          })}
           {getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS).length && (
             <Descriptions.Item
               key="otherExams"
