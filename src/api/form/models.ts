@@ -44,4 +44,5 @@ export interface IFormPatient {
 export interface ISupervisor {
   id: string;
   name: string;
+  license?: string;
 }
