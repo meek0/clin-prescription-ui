@@ -1,24 +1,35 @@
 import intl from 'react-intl-universal';
 import { Descriptions } from 'antd';
-import { extractPatientId } from 'api/fhir/helper';
+import { extractOrganizationId, extractPatientId } from 'api/fhir/helper';
 import { PatientServiceRequestFragment } from 'api/fhir/models';
 import { formatName, formatRamq } from 'api/fhir/patientHelper';
 
+import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { formatDate } from 'utils/date';
 
 interface OwnProps {
   patient: PatientServiceRequestFragment;
+  reference?: string;
   labelClass?: 'label-20' | 'label-25' | 'label-35';
 }
 
-const PatientContent = ({ patient, labelClass = 'label-35' }: OwnProps) =>
-  patient ? (
+const PatientContent = ({ patient, reference, labelClass = 'label-35' }: OwnProps) => {
+  let folder = <>{patient.mrn ?? EMPTY_FIELD}</>;
+  if (reference) {
+    folder = (
+      <>
+        {folder} &mdash; {extractOrganizationId(reference)}
+      </>
+    );
+  }
+
+  return patient ? (
     <Descriptions column={1} size="small" className={labelClass}>
       <Descriptions.Item label={intl.get('screen.prescription.entity.identifier')}>
         {extractPatientId(patient.id)}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('screen.prescription.entity.patientContent.folder')}>
-        {patient.mrn ?? '--'}
+        {folder}
       </Descriptions.Item>
       <Descriptions.Item label="RAMQ">{formatRamq(patient.person[0].ramq)}</Descriptions.Item>
       <Descriptions.Item label={intl.get('name')}>
@@ -32,5 +43,6 @@ const PatientContent = ({ patient, labelClass = 'label-35' }: OwnProps) =>
       </Descriptions.Item>
     </Descriptions>
   ) : null;
+};
 
 export default PatientContent;
