@@ -2,7 +2,7 @@ import intl from 'react-intl-universal';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
 import { Descriptions, Divider, Space, Typography } from 'antd';
 import { extractPatientId } from 'api/fhir/helper';
-import { ServiceRequestEntityExtension } from 'api/fhir/models';
+import { ServiceRequestEntity, ServiceRequestEntityExtension } from 'api/fhir/models';
 import { getPatientAffectedStatus } from 'api/fhir/patientHelper';
 import { get } from 'lodash';
 
@@ -16,10 +16,11 @@ const { Title } = Typography;
 
 interface OwnProps {
   extension?: ServiceRequestEntityExtension;
+  prescription?: ServiceRequestEntity;
   loading: boolean;
 }
 
-const ParentCard = ({ extension, loading }: OwnProps) => (
+const ParentCard = ({ extension, loading, prescription }: OwnProps) => (
   <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
     {extension?.extension?.length && (
       <CollapsePanel
@@ -38,6 +39,7 @@ const ParentCard = ({ extension, loading }: OwnProps) => (
               <>
                 <PatientContent
                   patient={extension?.extension[1].valueReference?.resource!}
+                  reference={prescription?.requester?.organization?.reference}
                   labelClass="label-20"
                 />
                 <Divider />
