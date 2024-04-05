@@ -30,7 +30,7 @@ export const getProTableDictionary = (): IProTableDictionary => ({
     first: intl.get('global.proTable.pagination.first'),
     previous: intl.get('previous'),
     next: intl.get('next'),
-    view: '',
+    view: intl.get('view'),
   },
 });
 

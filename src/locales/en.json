@@ -478,6 +478,7 @@
   "upload.gene.ids.modal.upload.btn": "Upload",
   "upload.gene.ids.modal.upload.file.btn": "Upload a file",
   "upload.gene.ids.modal.uploadBtnText": "Upload a gene list",
+  "view": "{value} / view",
   "view.litvar": "View LitVAR",
   "view.ucsc": "View UCSC",
   "yes": "Yes",

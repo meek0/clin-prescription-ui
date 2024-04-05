@@ -478,6 +478,7 @@
   "upload.gene.ids.modal.upload.btn" : "Téléverser",
   "upload.gene.ids.modal.upload.file.btn" : "Téléverser un fichier",
   "upload.gene.ids.modal.uploadBtnText" : "Téléverser une liste de gènes",
+  "view": "{value} / écran",
   "view.litvar" : "Consulter LitVAR",
   "view.ucsc" : "Consulter UCSC",
   "yes" : "Oui",
@@ -545,5 +546,6 @@
         "elements": "éléments"
       }
     }
-  }
+  },
+  "view": "{value} / écran"
 }
