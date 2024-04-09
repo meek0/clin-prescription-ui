@@ -36,3 +36,33 @@ export const defaultCollapseProps: TCollapseProps = {
   bordered: false,
   theme: 'shade',
 };
+
+export const dateNotLaterThanTodayRule: Rule = {
+  validateTrigger: 'onSubmit',
+  validator: (_, value) => {
+    if (value) {
+      const today = Date.now();
+      const currentDate = Date.parse(value);
+
+      if (currentDate > today) {
+        return Promise.reject(intl.get('must.not.be.later.today'));
+      }
+    }
+    return Promise.resolve();
+  },
+};
+
+export const dateNotEarlierThanTodayRule: Rule = {
+  validateTrigger: 'onSubmit',
+  validator: (_, value) => {
+    if (value) {
+      const today = Date.now();
+      const currentDate = Date.parse(value);
+
+      if (today > currentDate) {
+        return Promise.reject(intl.get('must.not.be.earlier.today'));
+      }
+    }
+    return Promise.resolve();
+  },
+};

@@ -12,6 +12,7 @@ import { INPUT_DATE_OUTPUT_FORMAT } from 'components/Form/MaskedDateInput';
 import RadioGroupSex from 'components/Form/RadioGroupSex';
 import SearchOrNoneFormItem from 'components/Form/SearchOrNoneFormItem';
 import {
+  dateNotLaterThanTodayRule,
   defaultFormItemsRules,
   noSpecialCharactersRule,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
@@ -430,6 +431,7 @@ const PatientDataSearch = ({
                   name: getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
                   required: true,
                 }}
+                moreRules={[dateNotLaterThanTodayRule]}
               />
               <Form.Item
                 name={getName(PATIENT_DATA_FI_KEY.SEX)}

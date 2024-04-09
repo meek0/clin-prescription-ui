@@ -459,6 +459,8 @@
   "status": "Status",
   "this.field.is.required": "This field is required",
   "must.not.contain.special.characters": "Must not contain special characters",
+  "must.not.be.earlier.today": "Cannot be earlier than the current date",
+  "must.not.be.later.today": "Cannot be later than the current date",
   "total.depth": "Total Depth",
   "undetermined": "Undetermined",
   "abnormal": "Unnatural",
