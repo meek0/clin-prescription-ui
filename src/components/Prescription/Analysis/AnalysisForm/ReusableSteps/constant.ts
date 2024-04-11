@@ -41,10 +41,24 @@ export const dateNotLaterThanTodayRule: Rule = {
   validateTrigger: 'onSubmit',
   validator: (_, value) => {
     if (value) {
-      const today = Date.now();
-      const currentDate = Date.parse(value);
+      const today = new Date();
+      const currentDate = new Date(value);
 
-      if (currentDate > today) {
+      const [todayYear, todayMonth, todayDay] = [
+        today.getUTCFullYear(),
+        today.getUTCMonth(),
+        today.getUTCDate(),
+      ];
+      const [currentDateYear, currentDateMonth, currentDateDay] = [
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate(),
+      ];
+
+      if (
+        new Date(currentDateYear, currentDateMonth, currentDateDay) >
+        new Date(todayYear, todayMonth, todayDay)
+      ) {
         return Promise.reject(intl.get('must.not.be.later.today'));
       }
     }
@@ -56,10 +70,24 @@ export const dateNotEarlierThanTodayRule: Rule = {
   validateTrigger: 'onSubmit',
   validator: (_, value) => {
     if (value) {
-      const today = Date.now();
-      const currentDate = Date.parse(value);
+      const today = new Date();
+      const currentDate = new Date(value);
 
-      if (today > currentDate) {
+      const [todayYear, todayMonth, todayDay] = [
+        today.getUTCFullYear(),
+        today.getUTCMonth(),
+        today.getUTCDate(),
+      ];
+      const [currentDateYear, currentDateMonth, currentDateDay] = [
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate(),
+      ];
+
+      if (
+        new Date(todayYear, todayMonth, todayDay) >
+        new Date(currentDateYear, currentDateMonth, currentDateDay)
+      ) {
         return Promise.reject(intl.get('must.not.be.earlier.today'));
       }
     }
