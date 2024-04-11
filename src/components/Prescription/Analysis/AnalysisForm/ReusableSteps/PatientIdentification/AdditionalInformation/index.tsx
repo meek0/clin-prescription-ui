@@ -5,6 +5,8 @@ import { isEmpty } from 'lodash';
 
 import RadioDateFormItem from 'components/Form/RadioDateFormItem';
 import RadioGroupSex from 'components/Form/RadioGroupSex';
+import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -67,6 +69,11 @@ const AdditionalInformation = ({
   const [gestationalAgeDPA, setGestationalAgeDPA] = useState<number | undefined>(undefined);
   const [gestationalAgeDDM, setGestationalAgeDDM] = useState<number | undefined>(undefined);
 
+  const patientSexField = Form.useWatch(
+    [STEPS_ID.PATIENT_IDENTIFICATION, PATIENT_DATA_FI_KEY.SEX],
+    form,
+  );
+
   const getName = (...key: IGetNamePathParams) =>
     getNamePath([parentKey as string, additionalInfoKey], key);
 
@@ -96,6 +103,12 @@ const AdditionalInformation = ({
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    if (patientSexField == 'male') {
+      form.setFieldValue(getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS), false);
+    }
+  }, [patientSexField]);
+
   return (
     <div className={styles.patientAddInfoWrapper}>
       <Form.Item
@@ -103,7 +116,13 @@ const AdditionalInformation = ({
         name={getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS)}
         valuePropName="checked"
       >
-        <Checkbox disabled={form.getFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN))}>Oui</Checkbox>
+        <Checkbox
+          disabled={
+            form.getFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN)) || patientSexField == 'male'
+          }
+        >
+          Oui
+        </Checkbox>
       </Form.Item>
       <Form.Item
         noStyle
