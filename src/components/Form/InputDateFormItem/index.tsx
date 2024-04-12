@@ -39,7 +39,7 @@ const InputDateFormItem = ({
 
   return (
     <Form.Item noStyle>
-      <Space>
+      <Space style={{ position: 'relative' }}>
         <Form.Item {...formItemProps} getValueFromEvent={(e) => e.unmaskedValue} rules={rules}>
           <MaskedDateInput
             className={styles.maskedInputDate}
@@ -51,7 +51,9 @@ const InputDateFormItem = ({
             }}
           />
         </Form.Item>
-        <div>{extra}</div>
+        <div style={{ position: 'absolute', top: '5px', left: '11.5em', width: '20em' }}>
+          {extra}
+        </div>
       </Space>
     </Form.Item>
   );
