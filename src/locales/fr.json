@@ -459,6 +459,8 @@
   "status" : "Statut",
   "this.field.is.required" : "Ce champ est requis",
   "must.not.contain.special.characters" : "Ne doit pas contenir de caractères spéciaux",
+  "must.not.be.earlier.today": "Choisir une date après aujourd'hui",
+  "must.not.be.later.today": "Choisir une date avant aujourd'hui",
   "total.depth" : "Profondeur totale",
   "undetermined" : "Indéterminé",
   "abnormal" : "Anormal",
@@ -546,6 +548,5 @@
         "elements": "éléments"
       }
     }
-  },
-  "view": "{value} / écran"
+  }
 }

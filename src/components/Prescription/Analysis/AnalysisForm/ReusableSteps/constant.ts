@@ -36,3 +36,61 @@ export const defaultCollapseProps: TCollapseProps = {
   bordered: false,
   theme: 'shade',
 };
+
+export const dateNotLaterThanTodayRule: Rule = {
+  validateTrigger: 'onSubmit',
+  validator: (_, value) => {
+    if (value) {
+      const today = new Date();
+      const currentDate = new Date(value);
+
+      const [todayYear, todayMonth, todayDay] = [
+        today.getUTCFullYear(),
+        today.getUTCMonth(),
+        today.getUTCDate(),
+      ];
+      const [currentDateYear, currentDateMonth, currentDateDay] = [
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate(),
+      ];
+
+      if (
+        new Date(currentDateYear, currentDateMonth, currentDateDay) >
+        new Date(todayYear, todayMonth, todayDay)
+      ) {
+        return Promise.reject(intl.get('must.not.be.later.today'));
+      }
+    }
+    return Promise.resolve();
+  },
+};
+
+export const dateNotEarlierThanTodayRule: Rule = {
+  validateTrigger: 'onSubmit',
+  validator: (_, value) => {
+    if (value) {
+      const today = new Date();
+      const currentDate = new Date(value);
+
+      const [todayYear, todayMonth, todayDay] = [
+        today.getUTCFullYear(),
+        today.getUTCMonth(),
+        today.getUTCDate(),
+      ];
+      const [currentDateYear, currentDateMonth, currentDateDay] = [
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate(),
+      ];
+
+      if (
+        new Date(todayYear, todayMonth, todayDay) >
+        new Date(currentDateYear, currentDateMonth, currentDateDay)
+      ) {
+        return Promise.reject(intl.get('must.not.be.earlier.today'));
+      }
+    }
+    return Promise.resolve();
+  },
+};

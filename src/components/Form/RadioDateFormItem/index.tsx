@@ -1,4 +1,5 @@
 import { Form, Radio, RadioProps } from 'antd';
+import { Rule } from 'antd/lib/form';
 import { NamePath } from 'antd/lib/form/interface';
 import cx from 'classnames';
 
@@ -11,6 +12,7 @@ export interface IRadioDateFormItemProps {
   radioProps?: RadioProps;
   dateInputProps: InputDateFormItemProps;
   parentFormItemName: NamePath;
+  moreDateRules?: Rule[];
 }
 
 const RadioDateFormItem = ({
@@ -18,6 +20,7 @@ const RadioDateFormItem = ({
   radioProps,
   dateInputProps,
   parentFormItemName,
+  moreDateRules,
 }: IRadioDateFormItemProps) => (
   <Form.Item noStyle shouldUpdate>
     {({ getFieldValue }) => {
@@ -33,6 +36,7 @@ const RadioDateFormItem = ({
                   ...dateInputProps.formItemProps,
                   className: cx(styles.noMargin, dateInputProps.formItemProps?.className),
                 }}
+                moreRules={moreDateRules}
               />
             ) : null}
           </Form.Item>

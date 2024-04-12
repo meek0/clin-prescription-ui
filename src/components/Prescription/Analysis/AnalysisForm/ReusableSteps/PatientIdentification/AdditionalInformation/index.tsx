@@ -8,6 +8,10 @@ import RadioGroupSex from 'components/Form/RadioGroupSex';
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
 import {
+  dateNotEarlierThanTodayRule,
+  dateNotLaterThanTodayRule,
+} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import {
   checkShouldUpdate,
   getNamePath,
   setFieldValue,
@@ -179,6 +183,7 @@ const AdditionalInformation = ({
                           }
                         },
                       }}
+                      moreDateRules={[dateNotLaterThanTodayRule]}
                       parentFormItemName={getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE)}
                     />
                     <RadioDateFormItem
@@ -201,6 +206,7 @@ const AdditionalInformation = ({
                           }
                         },
                       }}
+                      moreDateRules={[dateNotEarlierThanTodayRule]}
                       parentFormItemName={getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE)}
                     />
                     <Radio value={GestationalAgeValues.DEAD_FOETUS}>
