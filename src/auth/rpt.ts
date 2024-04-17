@@ -57,6 +57,12 @@ export class RptManager {
     return this.storedRpt;
   }
 
+  public static isStoredRptExpired() {
+    if (this.storedRpt) {
+      return isTokenExpired(this.storedRpt.decoded.iat, this.storedRpt.expires_in);
+    }
+  }
+
   public static async readRpt(): Promise<IRptPayload> {
     const rpt = await this.readRptFromStorageOrFetchNew().finally(
       () => (this.currentRequestNewRpt = undefined),

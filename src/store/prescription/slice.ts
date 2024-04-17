@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { logout } from 'auth/keycloak';
+import { RptManager } from 'auth/rpt';
 import { isUndefined } from 'lodash';
 
 import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
@@ -85,14 +87,19 @@ const prescriptionFormSlice = createSlice({
       state.lastStepIsNext = false;
     },
     nextStep: (state) => {
+      if (RptManager.isStoredRptExpired()) {
+        logout();
+      }
       const nextStepIndex = state.currentStep?.nextStepIndex;
       if (!isUndefined(nextStepIndex)) {
         state.currentStep = state.config?.steps[nextStepIndex];
       }
     },
     previousStep: (state) => {
+      if (RptManager.isStoredRptExpired()) {
+        logout();
+      }
       const previousStepIndex = state.currentStep?.previousStepIndex;
-
       if (state.currentFormRefs?.getFieldsValue) {
         state.analysisData = {
           ...state.analysisData,
