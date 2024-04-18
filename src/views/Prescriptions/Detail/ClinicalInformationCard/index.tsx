@@ -46,7 +46,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
   prescription?.observation?.investigation.item.forEach((e) => {
     if (e.resourceType === 'Observation') {
       if (e.category?.[0]?.coding?.[0]?.code === 'procedure') {
-        if (e.coding.code === 'BMUS' || e.coding.code === 'EMG') {
+        if (e.coding.code === 'BMUS' || e.coding.code === 'EMG' || e.coding.code === 'CGH') {
           complexParaclinique.push(e.id[0]);
         } else {
           paraclinique.push(e.id[0]);
