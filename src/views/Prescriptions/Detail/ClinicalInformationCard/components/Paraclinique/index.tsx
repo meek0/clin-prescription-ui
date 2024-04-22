@@ -8,6 +8,7 @@ import {
   useCodeSystem,
   useObservationComplexParacliniqueEntity,
   useObservationParacliniqueEntity,
+  useValueSet,
 } from 'graphql/prescriptions/actions';
 import { concat, find, map, some } from 'lodash';
 
@@ -49,6 +50,47 @@ const displayComplexParaclinique = (
           ? intl.get(`screen.prescription.entity.paraclinique.${value.interpretation.coding?.code}`)
           : ''
       }  ${valueList.length > 0 ? `: ${valueList.join(', ')}` : ''}`}
+    </Descriptions.Item>
+  );
+};
+
+const displayCgh = (
+  value: ParaclinicEntity,
+  codeInfo: CodeListEntity,
+  cghValueSet: CodeListEntity,
+  lang: string,
+) => {
+  const codeSystemInfo = find(codeInfo?.concept, (c) => c.code === value?.code);
+  const label =
+    value?.category === 'exam'
+      ? intl.get('prescription.clinical_exam.other_examination')
+      : find(codeSystemInfo?.designation, (o) => o.language === lang)?.value;
+
+  let displayValue = null;
+
+  if (value?.interpretation?.coding?.code === 'A') {
+    displayValue = `${intl.get(
+      `screen.prescription.entity.paraclinique.A`,
+    )} : ${value?.valueCodeableConcept?.coding
+      .map(
+        (v) =>
+          cghValueSet.concept
+            .find((concept) => concept.code === v.code)
+            ?.designation.find((d) => d.language === lang)?.value,
+      )
+      .join(', ')}`;
+  } else if (value?.interpretation?.coding?.code === 'N') {
+    displayValue = intl.get(`screen.prescription.entity.paraclinique.N`);
+  } else {
+    displayValue = value?.valueString ? value?.valueString : '';
+  }
+
+  return (
+    <Descriptions.Item
+      key={value?.id?.split('/')[1]}
+      label={label ? label : codeSystemInfo?.display}
+    >
+      {displayValue}
     </Descriptions.Item>
   );
 };
@@ -102,6 +144,7 @@ export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
   const [allParacliniqueValue, setAllParacliniqueValue] = useState<any>();
   const [currentHPOOptions, setCurrentHPOOptions] = useState<IHpoNode>();
   const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
+  const cghAnomaliesValueSet = useValueSet('cgh-abnormalities');
 
   const lang = useLang();
   const handleHpoSearchTermChanged = (term: string) => {
@@ -148,6 +191,8 @@ export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
       {allParacliniqueValue?.map((element: ParaclinicEntity) => {
         if (hasHPO(element)) {
           return displayComplexParaclinique(element, codeInfo, lang, hpoList);
+        } else if (element?.code === 'CGH') {
+          return displayCgh(element, codeInfo, cghAnomaliesValueSet.valueSet, lang);
         }
 
         const associatedConfig = formConfig?.paraclinical_exams.default_list.find(
