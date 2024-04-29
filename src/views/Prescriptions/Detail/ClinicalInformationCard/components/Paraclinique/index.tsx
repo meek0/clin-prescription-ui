@@ -74,7 +74,7 @@ const displayCgh = (
     )} : ${value?.valueCodeableConcept?.coding
       .map(
         (v) =>
-          cghValueSet.concept
+          cghValueSet?.concept
             .find((concept) => concept.code === v.code)
             ?.designation.find((d) => d.language === lang)?.value,
       )

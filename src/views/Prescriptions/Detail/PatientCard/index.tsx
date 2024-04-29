@@ -19,7 +19,7 @@ const PatientCard = ({ prescription, loading }: OwnProps) => {
       <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
         <PatientContent
           patient={patient}
-          isPrenatal={prescription?.category[0]?.text === 'Prenatal'}
+          isPrenatal={prescription?.category?.[0]?.text === 'Prenatal'}
           reference={prescription?.requester?.organization?.reference}
         />
       </ParagraphLoader>
