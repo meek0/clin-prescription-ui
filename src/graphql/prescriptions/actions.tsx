@@ -13,6 +13,7 @@ import {
   ANALYSE_CON_OBSERVATION,
   ANALYSE_ETH_OBSERVATION,
   ANALYSE_FMH,
+  ANALYSE_GENERALOBS_GESTATIONAL_OBSERVATION,
   ANALYSE_GENERALOBS_INDICATION_OBSERVATION,
   ANALYSE_PARACLINIQUE_OBSERVATION,
   ANALYSE_PHENOTYPE_OBSERVATION,
@@ -134,6 +135,20 @@ export const useGeneralObservationEntity = (id: string) => {
   );
   return {
     generalObervationValue: data?.Observation,
+  };
+};
+
+export const useGestationalDateObservationEntity = (id: string) => {
+  const { data } = useLazyResultQueryOnLoadOnly<any>(
+    ANALYSE_GENERALOBS_GESTATIONAL_OBSERVATION(id),
+    {
+      variables: {
+        id: id,
+      },
+    },
+  );
+  return {
+    gestationalDateObervationValue: data?.Observation,
   };
 };
 

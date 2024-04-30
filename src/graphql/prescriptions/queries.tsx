@@ -153,6 +153,12 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
       authoredOn
       priority
       status
+      category{
+        text
+        coding{
+          code
+        }
+      }
       note @first{
         text
       }
@@ -466,6 +472,22 @@ export const ANALYSE_GENERALOBS_INDICATION_OBSERVATION = (id: string) => gql`
     Observation(id: $id) {
       id
       valueString
+    }
+  }
+`;
+
+export const ANALYSE_GENERALOBS_GESTATIONAL_OBSERVATION = (id: string) => gql`
+  query GetGeneralObservationObservation($id: String = "${id}") {
+    Observation(id: $id) {
+      id
+      valueDateTime
+      focus @first {
+        reference
+        resource {
+          id
+          gender
+        }
+      }
     }
   }
 `;
