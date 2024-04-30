@@ -62,7 +62,11 @@ const PrescriptionDetail = () => {
             </Col>
           ))}
           {prescription?.observation.investigation.item
-            .filter((item) => ['MMTH', 'MFTH'].indexOf(item.coding.code) > -1)
+            .filter(
+              (item) =>
+                item.resourceType === 'Observation' &&
+                ['MMTH', 'MFTH'].indexOf(item.coding.code) > -1,
+            )
             .map((item, index) => (
               <Col key={index} span={24}>
                 <AbsentParentCard
