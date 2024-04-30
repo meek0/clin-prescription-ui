@@ -1,6 +1,8 @@
 {
   "FTH": "Father",
   "MTH": "Mother",
+  "MFTH": "Father",
+  "MMTH": "Mother",
   "affected": "Affected",
   "not_affected": "Not affected",
   "unknown": "Unknown",

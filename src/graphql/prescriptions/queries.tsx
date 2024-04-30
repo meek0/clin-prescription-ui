@@ -443,6 +443,23 @@ export const ANALYSE_CON_OBSERVATION = (id: string) => gql`
   }
 `;
 
+export const ANALYSE_SOCIAL_HISTORY_OBSERVATION = (id: string) => gql`
+  query GetConsanguinityObservation($id: String = "${id}") {
+    Observation(id: $id) {
+      id
+      note @first{
+        text
+      }
+      valueCodeableConcept{
+        coding @first{
+          code
+          system
+        }
+      }
+    }
+  }
+`;
+
 export const ANALYSE_PHENOTYPE_OBSERVATION = (ids: string[]) => gql`
     query getPhenotypeObservation {
         ${ids.map(
