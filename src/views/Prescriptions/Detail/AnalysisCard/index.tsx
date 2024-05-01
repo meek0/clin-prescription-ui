@@ -73,9 +73,11 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
               {prescription?.requester ? getPractionnerName(prescription.requester) : EMPTY_FIELD}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('prescribing.institution')}>
-              {prescription?.requester
-                ? extractOrganizationId(prescription.requester.organization?.reference)
-                : EMPTY_FIELD}
+              {extractOrganizationId(
+                prescription?.subject.resource?.managingOrganization?.reference
+                  ? prescription.subject.resource.managingOrganization.reference
+                  : EMPTY_FIELD,
+              )}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.patientsearch.table.ldm')}>
               {extractOrganizationId(prescription?.performer.resource.alias)}
