@@ -5,6 +5,7 @@ import { extractPatientId } from 'api/fhir/helper';
 import { ServiceRequestEntity, ServiceRequestEntityExtension } from 'api/fhir/models';
 import { getPatientAffectedStatus } from 'api/fhir/patientHelper';
 import { get } from 'lodash';
+import { ClinicalSign } from 'views/Prescriptions/Detail/ClinicalInformationCard/components/ClinicalSign';
 
 import CollapsePanel from 'components/containers/collapse';
 import ParagraphLoader from 'components/uiKit/ParagraphLoader';
@@ -20,47 +21,65 @@ interface OwnProps {
   loading: boolean;
 }
 
-const ParentCard = ({ extension, loading, prescription }: OwnProps) => (
-  <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
-    {extension?.extension?.length && (
-      <CollapsePanel
-        header={
-          <Title level={4}>
-            {intl.get(get(extension?.extension[0].valueCoding, 'coding[0].code', ''))}
-          </Title>
-        }
-        datacy={`ParentCard_${intl.get(
-          get(extension?.extension[0].valueCoding, 'coding[0].code', ''),
-        )}`}
-      >
-        <Space direction="vertical" size="large">
-          <GridCard
-            content={
-              <>
-                <PatientContent
-                  patient={extension?.extension[1].valueReference?.resource!}
-                  reference={prescription?.subject?.resource?.managingOrganization?.reference}
-                  labelClass="label-20"
-                />
-                <Divider />
-                <Descriptions column={1} size="small" className="label-20">
-                  <Descriptions.Item
-                    label={intl.get('screen.prescription.entity.parent.affectedStatus')}
-                  >
-                    {intl.get(getPatientAffectedStatus(extension))}
-                  </Descriptions.Item>
-                </Descriptions>
-              </>
-            }
-          />
-          <RequestTable
-            patientId={extractPatientId(extension?.extension[1].valueReference?.resource.id!)}
-            data={extension?.extension[1].valueReference?.resource?.requests ?? []}
-          />
-        </Space>
-      </CollapsePanel>
-    )}
-  </ParagraphLoader>
-);
+const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
+  const phenotype: string[] = [];
+  const generalObservation = undefined;
+
+  extension?.extension?.[1].valueReference?.resource.clinicalImpressions[0].investigation[0].item
+    ?.filter((item) => get(item, 'item.code.coding.code') === 'PHEN')
+    .forEach((item) => phenotype.push(item.reference));
+
+  return (
+    <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
+      {extension?.extension?.length && (
+        <CollapsePanel
+          header={
+            <Title level={4}>
+              {intl.get(get(extension?.extension[0].valueCoding, 'coding[0].code', ''))}
+            </Title>
+          }
+          datacy={`ParentCard_${intl.get(
+            get(extension?.extension[0].valueCoding, 'coding[0].code', ''),
+          )}`}
+        >
+          <Space direction="vertical" size="large">
+            <GridCard
+              content={
+                <>
+                  <PatientContent
+                    patient={extension?.extension[1].valueReference?.resource!}
+                    reference={prescription?.subject?.resource?.managingOrganization?.reference}
+                    labelClass="label-20"
+                  />
+                  <Divider />
+                  <Descriptions column={1} size="small" className="label-20">
+                    <Descriptions.Item
+                      label={intl.get('screen.prescription.entity.parent.affectedStatus')}
+                    >
+                      {intl.get(getPatientAffectedStatus(extension))}
+                    </Descriptions.Item>
+                  </Descriptions>
+                  {(phenotype.length > 0 || generalObservation) && (
+                    <>
+                      <p style={{ marginBottom: '.5em' }} />
+                      <ClinicalSign
+                        phenotypeIds={phenotype}
+                        generalObervationId={generalObservation}
+                      />
+                    </>
+                  )}
+                </>
+              }
+            />
+            <RequestTable
+              patientId={extractPatientId(extension?.extension[1].valueReference?.resource.id!)}
+              data={extension?.extension[1].valueReference?.resource?.requests ?? []}
+            />
+          </Space>
+        </CollapsePanel>
+      )}
+    </ParagraphLoader>
+  );
+};
 
 export default ParentCard;
