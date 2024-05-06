@@ -20,7 +20,7 @@ const PatientCard = ({ prescription, loading }: OwnProps) => {
         <PatientContent
           patient={patient}
           isPrenatal={prescription?.category?.[0]?.text === 'Prenatal'}
-          reference={prescription?.requester?.organization?.reference}
+          reference={prescription?.subject?.resource?.managingOrganization?.reference}
         />
       </ParagraphLoader>
     </Card>
