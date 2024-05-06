@@ -39,7 +39,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => (
               <>
                 <PatientContent
                   patient={extension?.extension[1].valueReference?.resource!}
-                  reference={prescription?.requester?.organization?.reference}
+                  reference={prescription?.subject?.resource?.managingOrganization?.reference}
                   labelClass="label-20"
                 />
                 <Divider />
