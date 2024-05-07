@@ -82,6 +82,9 @@ const ANALYSIS_PATIENT_FRAGMENT = (requestId: string) => gql`
         ramq: value
       }
     }
+    managingOrganization {
+      reference
+    }
     requests: ServiceRequestList(_reference: patient, based_on: "${requestId}") {
       id
       authoredOn

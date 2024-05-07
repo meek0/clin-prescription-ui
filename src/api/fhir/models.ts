@@ -313,6 +313,7 @@ export interface PatientServiceRequestFragment {
   id: string;
   gender: string;
   mrn: string;
+  managingOrganization: Reference;
   clinicalImpressions: ClinicalImpression[];
   person: Person[];
   requests: PatientRequest[];
