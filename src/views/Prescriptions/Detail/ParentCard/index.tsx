@@ -23,14 +23,19 @@ interface OwnProps {
 
 const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
   const phenotype: string[] = [];
-  const generalObservation =
-    extension?.extension?.[1].valueReference?.resource.clinicalImpressions[0].investigation[0].item?.find(
-      (item) => get(item, 'item.code.coding.code') === 'OBSG',
-    );
+  let generalObservation = undefined;
 
-  extension?.extension?.[1].valueReference?.resource.clinicalImpressions[0].investigation[0].item
-    ?.filter((item) => get(item, 'item.code.coding.code') === 'PHEN')
-    .forEach((item) => phenotype.push(item.reference));
+  extension?.extension?.[1].valueReference?.resource.clinicalImpressions.forEach((imp) => {
+    imp.investigation.forEach((inv) => {
+      inv.item.forEach((item) => {
+        if (get(item, 'item.code.coding.code') === 'OBSG') {
+          generalObservation = item.reference;
+        } else if (get(item, 'item.code.coding.code') === 'PHEN') {
+          phenotype.push(item.reference);
+        }
+      });
+    });
+  });
 
   return (
     <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
@@ -67,7 +72,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
                       <p style={{ marginBottom: '.5em' }} />
                       <ClinicalSign
                         phenotypeIds={phenotype}
-                        generalObervationId={generalObservation?.reference}
+                        generalObervationId={generalObservation}
                       />
                     </>
                   )}
