@@ -22,11 +22,13 @@ interface OwnProps {
 }
 
 const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
+  const clinicalImpressions =
+    extension?.extension?.[1].valueReference?.resource.clinicalImpressions;
   const phenotype: string[] = [];
   let generalObservation = undefined;
 
-  extension?.extension?.[1].valueReference?.resource.clinicalImpressions.forEach((imp) => {
-    imp.investigation.forEach((inv) => {
+  if (clinicalImpressions && clinicalImpressions.length > 0) {
+    clinicalImpressions[clinicalImpressions.length - 1].investigation.forEach((inv) => {
       inv.item.forEach((item) => {
         if (get(item, 'item.code.coding.code') === 'OBSG') {
           generalObservation = item.reference;
@@ -35,7 +37,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
         }
       });
     });
-  });
+  }
 
   return (
     <ParagraphLoader loading={loading} paragraph={{ rows: 6 }}>
