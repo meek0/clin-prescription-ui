@@ -200,6 +200,9 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
           }
         }
       }
+      supportingInfo {
+        reference
+      }
       supportingInfo @first @flatten {
         observation: resource {
           id

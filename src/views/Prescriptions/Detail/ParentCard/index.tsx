@@ -22,21 +22,29 @@ interface OwnProps {
 }
 
 const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
+  const validClinicalImpressions: string[] = get(prescription, 'supportingInfo', []).map((info) =>
+    get(info, 'reference'),
+  );
   const clinicalImpressions =
     extension?.extension?.[1].valueReference?.resource.clinicalImpressions;
   const phenotype: string[] = [];
   let generalObservation = undefined;
 
   if (clinicalImpressions && clinicalImpressions.length > 0) {
-    clinicalImpressions[clinicalImpressions.length - 1].investigation.forEach((inv) => {
-      inv.item.forEach((item) => {
-        if (get(item, 'item.code.coding.code') === 'OBSG') {
-          generalObservation = item.reference;
-        } else if (get(item, 'item.code.coding.code') === 'PHEN') {
-          phenotype.push(item.reference);
-        }
+    clinicalImpressions
+      .find(
+        (impression) =>
+          impression.id && validClinicalImpressions.some((i) => impression.id?.startsWith(i)),
+      )
+      ?.investigation.forEach((inv) => {
+        inv.item.forEach((item) => {
+          if (get(item, 'item.code.coding.code') === 'OBSG') {
+            generalObservation = item.reference;
+          } else if (get(item, 'item.code.coding.code') === 'PHEN') {
+            phenotype.push(item.reference);
+          }
+        });
       });
-    });
   }
 
   return (
