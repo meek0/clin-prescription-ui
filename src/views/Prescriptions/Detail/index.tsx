@@ -12,6 +12,7 @@ import Forbidden from 'components/Results/Forbidden';
 
 import DownloadButton from '../components/DownloadDocument';
 
+import AbsentParentCard from './AbsentParentCard';
 import AnalysisCard from './AnalysisCard';
 import ClinicalInformationCard from './ClinicalInformationCard';
 import ParentCard from './ParentCard';
@@ -60,6 +61,21 @@ const PrescriptionDetail = () => {
               <ParentCard prescription={prescription} loading={loading} extension={extension} />
             </Col>
           ))}
+          {prescription?.observation.investigation.item
+            .filter(
+              (item) =>
+                item.resourceType === 'Observation' &&
+                ['MMTH', 'MFTH'].indexOf(item.coding.code) > -1,
+            )
+            .map((item, index) => (
+              <Col key={index} span={24}>
+                <AbsentParentCard
+                  observationId={item.id[0]}
+                  loading={loading}
+                  code={item.coding.code}
+                />
+              </Col>
+            ))}
         </Row>
       </ScrollContentWithFooter>
     </ContentWithHeader>

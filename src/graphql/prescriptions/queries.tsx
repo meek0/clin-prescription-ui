@@ -200,6 +200,9 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
           }
         }
       }
+      supportingInfo {
+        reference
+      }
       supportingInfo @first @flatten {
         observation: resource {
           id
@@ -439,6 +442,23 @@ export const ANALYSE_CON_OBSERVATION = (id: string) => gql`
     Observation(id: $id) {
       id
       valueBoolean
+    }
+  }
+`;
+
+export const ANALYSE_SOCIAL_HISTORY_OBSERVATION = (id: string) => gql`
+  query GetSocialHistoryObservation($id: String = "${id}") {
+    Observation(id: $id) {
+      id
+      note @first{
+        text
+      }
+      valueCodeableConcept{
+        coding @first{
+          code
+          system
+        }
+      }
     }
   }
 `;

@@ -17,6 +17,7 @@ import {
   ANALYSE_GENERALOBS_INDICATION_OBSERVATION,
   ANALYSE_PARACLINIQUE_OBSERVATION,
   ANALYSE_PHENOTYPE_OBSERVATION,
+  ANALYSE_SOCIAL_HISTORY_OBSERVATION,
   ANALYSE_VALUESET,
   ANALYSIS_ENTITY_QUERY,
   ANALYSIS_TASK_QUERY,
@@ -88,6 +89,17 @@ export const useObservationEthnicityEntity = (id: string) => {
   });
   return {
     ethValue: data?.Observation,
+  };
+};
+
+export const useObservationSocialHistoryEntity = (id: string) => {
+  const { data } = useLazyResultQueryOnLoadOnly<any>(ANALYSE_SOCIAL_HISTORY_OBSERVATION(id), {
+    variables: {
+      id: id,
+    },
+  });
+  return {
+    socialHistoryValue: data?.Observation,
   };
 };
 
