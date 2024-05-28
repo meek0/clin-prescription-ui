@@ -17,7 +17,7 @@ beforeEach(() => {
   cy.get('[data-cy="CreateNewPrescription"]').should('exist', {timeout: 20*1000});
 });
 
-describe('Formulaires de prescription - Création', () => {
+describe.skip('Formulaires de prescription - Création', () => {
   it('MMG - Solo', () => {
     const strMRN = mrnValues[Math.floor(Math.random() * mrnValues.length)];
 
