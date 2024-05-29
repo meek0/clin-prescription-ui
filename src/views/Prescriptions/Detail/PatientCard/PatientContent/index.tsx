@@ -110,7 +110,9 @@ const PatientContent = ({ patient, reference, isPrenatal, labelClass = 'label-35
         <Descriptions.Item label={intl.get('screen.prescription.entity.patientContent.folder')}>
           {folder}
         </Descriptions.Item>
-        <Descriptions.Item label="RAMQ">{formatRamq(patient.person[0].ramq)}</Descriptions.Item>
+        <Descriptions.Item label="RAMQ">
+          {formatRamq(patient.person[0].ramq) ?? EMPTY_FIELD}
+        </Descriptions.Item>
         <Descriptions.Item label={intl.get('name')}>
           {formatName(patient.person[0].name[0])}
         </Descriptions.Item>
