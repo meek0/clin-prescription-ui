@@ -161,10 +161,9 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         }
       >
         {({ getFieldValue }) =>
-          (getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
+          getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
             EnterInfoMomentValue.NOW &&
-            getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ||
-          ramqSearchDone ? (
+          (ramqSearchDone || getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ? (
             <Collapse {...defaultCollapseProps} defaultActiveKey={['clinical_information']}>
               <CollapsePanel
                 key="clinical_information"
