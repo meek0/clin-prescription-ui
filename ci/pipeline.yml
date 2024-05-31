@@ -10,9 +10,16 @@ groups:
   - name: update-pipeline
     jobs:
       - update-pipeline
-      
+  - name: prescription-ui-cypress
+    jobs:
+      - run-cypress-tests-prescription-ui    
 
 resource_types:
+- name: time
+  type: registry-image
+  source:
+    repository: concourse/time-resource
+
 - name: git
   type: registry-image
   source:
@@ -42,6 +49,44 @@ resource_types:
     tag: latest
 
 resources:
+# Cypress
+- name: daily-schedule
+  type: time
+  check_every: 30s
+  source:
+    interval: 24h
+    start: "03:00 AM"
+    stop: "04:30 AM"
+    location: "America/Toronto"
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+- name: slack-alert-cypress
+  type: slack-notification
+  source:
+    url: ((slack.webhook-url-cypress))
+
+- name: git-prescription-ui-cypress
+  type: git
+  icon: github
+  check_every: 30s
+  webhook_token: ((webhook-token))
+  source:
+    uri: git@github.com:Ferlab-Ste-Justine/clin-prescription-ui.git
+    branch: main
+    private_key: ((git.ssh-key))
+    # ignore_paths: [ci/]
+
+- name: minio-storage
+  type: s3
+  source:
+    endpoint: https://s3.cqgc.hsj.rtss.qc.ca
+    bucket: cqgc-qa-cypress-tests
+    access_key_id: "((minio.access_key))"
+    secret_access_key: ((minio.secret_key))
+    use_ssl: false  # Set to true if MinIO is configured with SSL
+    regexp: test-results/merged-results-.*\.xml
+
+# Ferlease
 - name: slack-alert
   type: slack-notification
   source:
@@ -106,12 +151,131 @@ resources:
   type: docker-image
   icon: docker
   source:
-    username: ((docker.username))
+    username: "((docker.username))"
     password: ((docker.password))
     repository: ferlabcrsj/ferlease
     tag: 0.2.2
 
 jobs:
+- name: run-cypress-tests-prescription-ui  
+  plan:
+    - get: daily-schedule
+      trigger: true
+    - get: git-prescription-ui-cypress
+      trigger: true
+      params: { submodule_recursive: true }
+    - task: prepare-and-run-cypress
+      params:
+        CYPRESS_PASSWORD: ((cypress.password))
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source:
+            repository: ferlabcrsj/cypress-included-custom 
+            tag: latest
+        inputs:
+          - name: git-prescription-ui-cypress
+        outputs:
+          - name: test-results
+          - name: timestamp
+        run:
+          path: bash
+          args:
+            - -c
+            - |
+              set -e # Exit on error
+
+              # Navigate to the project directory
+              pushd git-prescription-ui-cypress
+
+              # Install dependencies
+              npm install
+              # npm install --save-dev junit-merge
+
+              # Copy env-qa to .env
+              cp env-qa .env
+
+              # Update the .env file with the Cypress password
+              sed -i 's/CYPRESS_PASSWORD=""/CYPRESS_PASSWORD="'$CYPRESS_PASSWORD'"/' .env
+
+              # Run Cypress tests
+              npx cypress run --config-file cypress.config.ts --config retries=2 --browser chrome --reporter junit --reporter-options "mochaFile=test-results/results-[hash].xml" --spec "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}"
+              
+              # Run only the first Cypress test
+              # FIRST_TEST=$(ls cypress/e2e/**/*.cy.{js,jsx,ts,tsx} | head -n 1)
+              # npx cypress run --config-file cypress.config.ts --config retries=2 --browser chrome --reporter junit --reporter-options "mochaFile=test-results/results-[hash].xml" --spec "$FIRST_TEST"
+             
+              # Generate a timestamp
+              TIMESTAMP=$(date +%Y%m%d%H%M%S)
+              echo $TIMESTAMP > ../timestamp/timestamp.txt
+
+              # Merge the XML files using junit-merge
+              npx junit-merge test-results/results-*.xml -o ../test-results/merged-results-${TIMESTAMP}.xml
+
+              popd
+
+    - put: minio-storage
+      params:
+        file: test-results/merged-results-*.xml
+      no_get: true
+
+    - task: generate-presigned-url
+      params:
+        MINIO_ACCESS_KEY: ((minio.access_key))
+        MINIO_SECRET_KEY: ((minio.secret_key))
+      config:
+        platform: linux
+        image_resource:
+          type: registry-image
+          source:
+            repository: ferlabcrsj/cypress-included-custom 
+            tag: latest
+        inputs:
+          - name: timestamp
+        outputs:
+          - name: slack-data
+        run:
+          path: sh
+          args:
+            - -c
+            - |
+              set -e  # Exit on error
+
+              # Read the timestamp
+              TIMESTAMP=$(cat timestamp/timestamp.txt)
+
+              # Generate a pre-signed URL
+              mc alias set myminio https://s3.cqgc.hsj.rtss.qc.ca $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+              PRESIGNED_URL=$(mc share download myminio/cqgc-qa-cypress-tests/test-results/merged-results-${TIMESTAMP}.xml --expire=48h | grep -oP '(?<=Share: ).*')
+
+              # Prepare Slack message
+              echo '[
+                {
+                  "color": "good",
+                  "title": "Prescription UI Cypress Test Results",
+                  "text": "Cypress test results are available for Prescription UI . <'$PRESIGNED_URL'|View Results>"
+                }
+              ]' > slack-data/attachments.json
+
+  on_success:
+    do:
+      - put: slack-alert-cypress
+        params:
+          attachments_file: slack-data/attachments.json
+
+  on_failure:
+    do:
+      - put: slack-alert-cypress
+        params:
+          attachments: |
+            [
+              {
+                "color": "danger",
+                "title": "Prescription UI Cypress test execution failed!",
+                "text": "View build: <${ATC_EXTERNAL_URL}/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}|View build>"
+              }
+            ]
 - name: update-pipeline
   plan:
     - get: ci-folder
