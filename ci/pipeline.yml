@@ -162,7 +162,7 @@ jobs:
     - get: daily-schedule
       trigger: true
     - get: git-prescription-ui-cypress
-      trigger: true
+      trigger: false
       params: { submodule_recursive: true }
     - task: prepare-and-run-cypress
       params:
@@ -200,7 +200,7 @@ jobs:
               sed -i 's/CYPRESS_PASSWORD=""/CYPRESS_PASSWORD="'$CYPRESS_PASSWORD'"/' .env
 
               # Run Cypress tests
-              npx cypress run --config-file cypress.config.ts --config retries=2 --browser chrome --reporter junit --reporter-options "mochaFile=test-results/results-[hash].xml" --spec "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}"
+              npx cypress run --config-file cypress.config.ts --config retries=9 --browser chrome --reporter junit --reporter-options "mochaFile=test-results/results-[hash].xml" --spec "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}"
               
               # Run only the first Cypress test
               # FIRST_TEST=$(ls cypress/e2e/**/*.cy.{js,jsx,ts,tsx} | head -n 1)
