@@ -254,7 +254,7 @@ jobs:
                 {
                   "color": "good",
                   "title": "Prescription UI Cypress Test Results",
-                  "text": "Cypress test results are available for Prescription UI . <'$PRESIGNED_URL'|View Results>"
+                  "text": "Cypress test results are available for Prescription UI. <'$PRESIGNED_URL'|View Results>"
                 }
               ]' > slack-data/attachments.json
 
