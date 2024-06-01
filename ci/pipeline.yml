@@ -58,7 +58,7 @@ resources:
     start: "03:00 AM"
     stop: "04:30 AM"
     location: "America/Toronto"
-    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sunday"]
 
 - name: slack-alert-cypress
   type: slack-notification
@@ -180,7 +180,6 @@ jobs:
 
               # Install dependencies
               npm install
-              # npm install --save-dev junit-merge
 
               # Copy env-qa to .env
               cp env-qa .env
@@ -190,17 +189,17 @@ jobs:
 
               # Run Cypress tests
               npx cypress run --config-file cypress.config.ts --config retries=9 --browser chrome --reporter junit --reporter-options "mochaFile=test-results/results-[hash].xml" --spec "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}"
-              
-              # Run only the first Cypress test
-              # FIRST_TEST=$(ls cypress/e2e/**/*.cy.{js,jsx,ts,tsx} | head -n 1)
-              # npx cypress run --config-file cypress.config.ts --config retries=2 --browser chrome --reporter junit --reporter-options "mochaFile=test-results/results-[hash].xml" --spec "$FIRST_TEST"
-             
+
               # Generate a timestamp
               TIMESTAMP=$(date +%Y%m%d%H%M%S)
               echo $TIMESTAMP > ../timestamp/timestamp.txt
 
-              # Merge the XML files using junit-merge
-              npx junit-merge test-results/results-*.xml -o ../test-results/merged-results-${TIMESTAMP}.xml
+              # Merge the XML files using junit-merge if results exist
+              if compgen -G "test-results/results-*.xml" > /dev/null; then
+                npx junit-merge test-results/results-*.xml -o ../test-results/merged-results-${TIMESTAMP}.xml
+              else
+                echo "No results to merge." > ../test-results/merged-results-${TIMESTAMP}.xml
+              fi
 
               popd
 
@@ -222,6 +221,7 @@ jobs:
             tag: latest
         inputs:
           - name: timestamp
+          - name: test-results
         outputs:
           - name: slack-data
         run:
@@ -234,37 +234,35 @@ jobs:
               # Read the timestamp
               TIMESTAMP=$(cat timestamp/timestamp.txt)
 
-              # Generate a pre-signed URL
-              mc alias set myminio https://s3.cqgc.hsj.rtss.qc.ca $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
-              PRESIGNED_URL=$(mc share download myminio/cqgc-qa-cypress-tests/test-results/merged-results-${TIMESTAMP}.xml --expire=48h | grep -oP '(?<=Share: ).*')
+              # Check if the merged results file is not empty
+              if [ -s test-results/merged-results-${TIMESTAMP}.xml ]; then
+                # Generate a pre-signed URL
+                mc alias set myminio https://s3.cqgc.hsj.rtss.qc.ca $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+                PRESIGNED_URL=$(mc share download myminio/cqgc-qa-cypress-tests/test-results/merged-results-${TIMESTAMP}.xml --expire=48h | grep -oP '(?<=Share: ).*')
 
-              # Prepare Slack message
-              echo '[
-                {
-                  "color": "good",
-                  "title": "Prescription UI Cypress Test Results",
-                  "text": "Cypress test results are available for Prescription UI. <'$PRESIGNED_URL'|View Results>"
-                }
-              ]' > slack-data/attachments.json
+                # Prepare Slack message for success
+                echo '[
+                  {
+                    "color": "good",
+                    "title": "Prescription UI Cypress Test Results",
+                    "text": "Cypress test results are available for Prescription UI. <'$PRESIGNED_URL'|View Results>"
+                  }
+                ]' > slack-data/attachments.json
+              else
+                # Prepare Slack message for absence of results
+                echo '[
+                  {
+                    "color": "warning",
+                    "title": "Prescription UI Cypress Test Results",
+                    "text": "No test results are available for Prescription UI due to an error or no tests were executed."
+                  }
+                ]' > slack-data/attachments.json
+              fi
 
-  on_success:
-    do:
-      - put: slack-alert-cypress
-        params:
-          attachments_file: slack-data/attachments.json
+    - put: slack-alert-cypress
+      params:
+        attachments_file: slack-data/attachments.json
 
-  on_failure:
-    do:
-      - put: slack-alert-cypress
-        params:
-          attachments: |
-            [
-              {
-                "color": "danger",
-                "title": "Prescription UI Cypress test execution failed!",
-                "text": "View build: <${ATC_EXTERNAL_URL}/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}/jobs/${BUILD_JOB_NAME}/builds/${BUILD_NAME}|View build>"
-              }
-            ]
 - name: update-pipeline
   plan:
     - get: ci-folder
