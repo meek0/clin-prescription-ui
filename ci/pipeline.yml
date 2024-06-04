@@ -154,6 +154,7 @@ jobs:
       trigger: false
       params: { submodule_recursive: true }
     - task: prepare-and-run-cypress
+      attempts: 6
       params:
         CYPRESS_PASSWORD: ((cypress.password))
       config:
@@ -204,11 +205,13 @@ jobs:
               popd
 
     - put: minio-storage
+      attempts: 3
       params:
         file: test-results/merged-results-*.xml
       no_get: true
 
     - task: generate-presigned-url
+      attempts: 3
       params:
         MINIO_ACCESS_KEY: ((minio.access_key))
         MINIO_SECRET_KEY: ((minio.secret_key))
