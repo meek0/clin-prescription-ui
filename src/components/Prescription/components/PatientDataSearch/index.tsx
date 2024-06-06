@@ -248,6 +248,8 @@ const PatientDataSearch = ({
 
                 if (value && value.ramq) {
                   setRamqSearchDone(true);
+                } else if (value && Object.keys(value).length > 0 && !value.ramq) {
+                  setFieldValue(form, getName(PATIENT_DATA_FI_KEY.NO_RAMQ), 'true');
                 }
               }}
               apiPromise={(value) =>
