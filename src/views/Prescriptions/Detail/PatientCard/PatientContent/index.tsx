@@ -64,7 +64,7 @@ const GestationalInfo = (gestationalAgeObsReference: string, labelClass: string,
 
 const PatientContent = ({ patient, reference, isPrenatal, labelClass = 'label-35' }: OwnProps) => {
   let folder = <>{patient.mrn ?? EMPTY_FIELD}</>;
-  if (reference) {
+  if (patient.mrn && reference) {
     folder = (
       <>
         {folder} &mdash; {extractOrganizationId(reference)}
