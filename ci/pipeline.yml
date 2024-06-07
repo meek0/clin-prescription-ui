@@ -111,7 +111,7 @@ jobs:
           args:
             - -c
             - |
-              set -e # Exit on error
+              set +e 
 
               # Navigate to the project directory
               pushd git-prescription-ui
@@ -140,6 +140,7 @@ jobs:
               fi
 
               popd
+              exit 0
 
     - put: minio-storage
       attempts: 3
@@ -169,7 +170,7 @@ jobs:
           args:
             - -c
             - |
-              set +e 
+              set -e  # Exit on error
 
               # Read the timestamp
               TIMESTAMP=$(cat timestamp/timestamp.txt)
@@ -198,7 +199,7 @@ jobs:
                   }
                 ]' > slack-data/attachments.json
               fi
-              exit 0
+              
 
     - put: slack-alert-cypress
       params:
