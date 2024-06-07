@@ -169,7 +169,7 @@ jobs:
           args:
             - -c
             - |
-              set -e  # Exit on error
+              set +e 
 
               # Read the timestamp
               TIMESTAMP=$(cat timestamp/timestamp.txt)
@@ -198,6 +198,7 @@ jobs:
                   }
                 ]' > slack-data/attachments.json
               fi
+              exit 0
 
     - put: slack-alert-cypress
       params:
