@@ -70,6 +70,8 @@ const PatientContent = ({ patient, reference, isPrenatal, labelClass = 'label-35
         {folder} &mdash; {extractOrganizationId(reference)}
       </>
     );
+  } else if (reference) {
+    folder = <>{extractOrganizationId(reference)}</>;
   }
 
   let foetusInfo = <></>;
