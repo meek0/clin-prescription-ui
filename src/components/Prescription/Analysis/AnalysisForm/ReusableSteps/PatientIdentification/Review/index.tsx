@@ -33,7 +33,7 @@ const PatientIdentificationReview = ({ stepId = STEPS_ID.PATIENT_IDENTIFICATION 
   const getFileNumber = () => {
     const fileNumber = getData(PATIENT_DATA_FI_KEY.FILE_NUMBER);
     const institution = getData(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION);
-    return fileNumber ? `${fileNumber} - ${institution}` : EMPTY_FIELD;
+    return fileNumber ? `${fileNumber} - ${institution}` : institution;
   };
 
   const getName = () => {
