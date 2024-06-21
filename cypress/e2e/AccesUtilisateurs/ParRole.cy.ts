@@ -1,10 +1,18 @@
 /// <reference types="Cypress" />
 import '../../support/commands';
 
-const epCHUSJ_ldmCHUSJ = JSON.parse(Cypress.env('presc_EP_CHUSJ_LDM_CHUSJ'));
-const epCUSM_ldmCHUSJ = JSON.parse(Cypress.env('presc_EP_CUSM_LDM_CHUSJ'));
-const epCUSM_ldmCUSM = JSON.parse(Cypress.env('presc_EP_CUSM_LDM_CUSM'));
-const epCHUS_ldmCHUS = JSON.parse(Cypress.env('presc_EP_CHUS_LDM_CHUS'));
+let epCHUSJ_ldmCHUSJ: any;
+let epCUSM_ldmCHUSJ: any;
+let epCUSM_ldmCUSM: any;
+let epCHUS_ldmCHUS: any;
+
+beforeEach(() => {
+  epCHUSJ_ldmCHUSJ = Cypress.env('globalData').presc_EP_CHUSJ_LDM_CHUSJ;
+  epCUSM_ldmCHUSJ = Cypress.env('globalData').presc_EP_CUSM_LDM_CHUSJ;
+  epCUSM_ldmCUSM = Cypress.env('globalData').presc_EP_CUSM_LDM_CUSM;
+  epCHUS_ldmCHUS = Cypress.env('globalData').presc_EP_CHUS_LDM_CHUS;
+  cy.login(Cypress.env('username_DG_CHUSJ_CUSM_CHUS'), Cypress.env('password'));
+});
 
 describe('Accès des utilisateurs', () => {
   it('Docteur et généticien (CHUSJ, CUSM, CHUS)', () => {
