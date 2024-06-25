@@ -45,7 +45,7 @@ resources:
     start: "03:00 AM"
     stop: "04:30 AM"
     location: "America/Toronto"
-    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sunday"]
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
 
 - name: slack-alert-cypress
   type: slack-notification
