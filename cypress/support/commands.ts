@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress"/>
 import '@testing-library/cypress/add-commands';
 
 // Add Custom commands here and their types in `./index.d.ts`
