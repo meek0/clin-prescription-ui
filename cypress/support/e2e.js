@@ -1,5 +1,5 @@
 /* eslint-disable */
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 import './commands';
 import {getGlobalData} from './globalData';
 

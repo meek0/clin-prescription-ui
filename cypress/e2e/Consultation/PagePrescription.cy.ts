@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress"/>
 import '../../support/commands';
 
 let epCHUSJ_ldmCHUSJ: any;
