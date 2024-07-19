@@ -1,7 +1,10 @@
 /// <reference types="cypress"/>
 import '@testing-library/cypress/add-commands';
 
-// Add Custom commands here and their types in `./index.d.ts`
+export interface Replacement {
+  placeholder: string;
+  value: string;
+}
 
 Cypress.Commands.add('clickAndIntercept', (selector: string, methodHTTP: string, routeMatcher: string, nbCalls: number) => {
   cy.intercept(methodHTTP, routeMatcher).as('getRouteMatcher');
@@ -79,6 +82,35 @@ Cypress.Commands.add('typeAndIntercept', (selector: string, text: string, method
   };
 
   cy.wait(1000);
+});
+
+Cypress.Commands.add('validateFileName', (namePattern: string) => {
+  cy.exec(`/bin/ls ${Cypress.config('downloadsFolder')}/`+namePattern).then((result) => {
+    const filename = result.stdout.trim();
+    cy.readFile(`${filename}`).should('exist');
+  });
+});
+
+Cypress.Commands.add('validatePdfFileContent', (fixture: string, replacements?: Replacement[]) => {
+  const arrReplacements = replacements !== undefined ? replacements : [];
+  cy.fixture(fixture).then((expectedData) => {
+    cy.exec(`/bin/ls ${Cypress.config('downloadsFolder')}/*`).then((result) => {
+      const filename = result.stdout.trim();
+      cy.task('extractTextFromPDF', filename).then((file) => {
+        let fileWithData = typeof file === 'string' ? file : '';
+        arrReplacements.forEach((replacement) => {
+          fileWithData = fileWithData.replace(replacement.placeholder, replacement.value);
+        });
+        expectedData.content.forEach((value: any) => {
+          let valueWithData = value
+          arrReplacements.forEach((replacement) => {
+            valueWithData = valueWithData.replace(replacement.placeholder, replacement.value);
+          });
+          expect(fileWithData).to.include(valueWithData);
+        });
+      });
+    });
+  });
 });
 
 Cypress.Commands.add('validateTableFirstRow', (expectedValue: string|RegExp, eq: number, selector: string = '') => {

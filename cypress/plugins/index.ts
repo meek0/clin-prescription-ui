@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /// <reference types="cypress"/>
+import fs, { rmdir } from 'fs';
+import pdfParse from 'pdf-parse';
 
 require('dotenv').config();
-
-const { rmdir } = require('fs');
 
 module.exports = (on: Cypress.PluginEvents, config: Cypress.ConfigOptions) => {
   on('task', {
@@ -23,6 +23,11 @@ module.exports = (on: Cypress.PluginEvents, config: Cypress.ConfigOptions) => {
     log (message: any) {
       console.log(message);
       return null
+    },
+    async extractTextFromPDF(filePath) {
+      const dataBuffer = fs.readFileSync(filePath);
+      const data = await pdfParse(dataBuffer);
+      return data.text;
     },
   });
 
