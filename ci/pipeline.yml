@@ -70,7 +70,7 @@ resources:
   source:
     uri: git@github.com:Ferlab-Ste-Justine/clin-prescription-ui.git
     branch: main
-    private_key: ((git.ssh-key))
+    private_key: ((git.prescription-ssh-key))
     # ignore_paths: [ci/]
 
 - name: ci-folder
@@ -80,7 +80,7 @@ resources:
     uri: git@github.com:Ferlab-Ste-Justine/clin-prescription-ui.git
     branch: main
     paths: [ci]
-    private_key: ((git.ssh-key))
+    private_key: ((git.prescription-ssh-key))
 
 jobs:
 - name: run-cypress-tests-prescription-ui  
