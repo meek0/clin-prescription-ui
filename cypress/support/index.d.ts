@@ -3,6 +3,7 @@
 declare namespace Cypress {
   interface Chainable {
     clickAndIntercept(selector: string, methodHTTP: string, routeMatcher: string, nbCalls: number): cy & CyEventEmitter;
+    clickAndWait(options?: Partial<ClickOptions>): Chainable<Element>;
     login(user: string, password: string, restoreSession: boolean = true): cy & CyEventEmitter;
     logout(): cy & CyEventEmitter;
     removeFilesFromFolder(folder: string): cy & CyEventEmitter;
@@ -15,6 +16,7 @@ declare namespace Cypress {
     visitAndIntercept(url: string, methodHTTP: string, routeMatcher: string, nbCalls: number): cy & CyEventEmitter;
     visitHomePage(): cy & CyEventEmitter;
     visitPrescriptionEntityPage(prescriptionId: string): cy & CyEventEmitter;
+    waitUntilFile(ms: number): cy & CyEventEmitter;
     waitWhileSpin(ms: number): cy & CyEventEmitter;
   }
 }

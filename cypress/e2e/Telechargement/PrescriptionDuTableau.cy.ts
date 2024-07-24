@@ -1,5 +1,5 @@
 /// <reference types="cypress"/>
-import { getDateTime } from '../../support/utils';
+import { getDateTime, oneMinute } from '../../support/utils';
 
 const { strDate } = getDateTime();
 
@@ -9,7 +9,8 @@ beforeEach(() => {
   cy.login(Cypress.env('username_DG_CHUSJ_CUSM_CHUS'), Cypress.env('password'));
   cy.visitHomePage();
 
-  cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(7).find('button').click({force: true});
+  cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(7).find('button').clickAndWait({force: true});
+  cy.waitUntilFile(oneMinute);
 });
 
 describe('Télécharger la prescription du tableau', () => {

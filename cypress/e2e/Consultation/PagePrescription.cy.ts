@@ -97,60 +97,60 @@ describe('Page d\'une prescription - Vérifier les informations affichées', () 
 
 describe('Page d\'une prescription - Valider les liens indisponibles', () => {
   it('Bouton Voir les variants', () => {
-    cy.contains('Voir les variants').should('not.exist', {timeout: 20*1000});
+    cy.contains('Voir les variants').should('not.exist');
   });
 
   it('Bouton Télécharger', () => {
-    cy.get('button[type="button"]').contains('Télécharger').should('exist', {timeout: 20*1000});
+    cy.get('button[type="button"]').contains('Télécharger').should('exist');
   });
 
   it('Lien Fichiers (Cas-index)', () => {
-    cy.contains('[data-cy="ArchiveLink_'+epCHUSJ_ldmCHUSJ.requestProbId+'"]').should('not.exist', {timeout: 20*1000});
+    cy.contains('[data-cy="ArchiveLink_'+epCHUSJ_ldmCHUSJ.requestProbId+'"]').should('not.exist');
   });
 
   it('Lien Fichiers (Mère)', () => {
-    cy.contains('[data-cy="ArchiveLink_'+epCHUSJ_ldmCHUSJ.requestMthId+'"]').should('not.exist', {timeout: 20*1000});
+    cy.contains('[data-cy="ArchiveLink_'+epCHUSJ_ldmCHUSJ.requestMthId+'"]').should('not.exist');
   });
 
   it('Lien Fichiers (Père)', () => {
-    cy.contains('[data-cy="ArchiveLink_'+epCHUSJ_ldmCHUSJ.requestFthId+'"]').should('not.exist', {timeout: 20*1000});
+    cy.contains('[data-cy="ArchiveLink_'+epCHUSJ_ldmCHUSJ.requestFthId+'"]').should('not.exist');
   });
 
   it('Lien Variants (Cas-index)', () => {
-    cy.contains('[data-cy="VariantsLink_'+epCHUSJ_ldmCHUSJ.patientProbId+'_'+epCHUSJ_ldmCHUSJ.requestProbId+'"]').should('not.exist', {timeout: 20*1000});
+    cy.contains('[data-cy="VariantsLink_'+epCHUSJ_ldmCHUSJ.patientProbId+'_'+epCHUSJ_ldmCHUSJ.requestProbId+'"]').should('not.exist');
   });
 
   it('Lien Variants (Mère)', () => {
-    cy.contains('[data-cy="VariantsLink_'+epCHUSJ_ldmCHUSJ.patientMthId+'_'+epCHUSJ_ldmCHUSJ.requestMthId+'"]').should('not.exist', {timeout: 20*1000});
+    cy.contains('[data-cy="VariantsLink_'+epCHUSJ_ldmCHUSJ.patientMthId+'_'+epCHUSJ_ldmCHUSJ.requestMthId+'"]').should('not.exist');
   });
 
   it('Lien Variants (Père)', () => {
-    cy.contains('[data-cy="VariantsLink_'+epCHUSJ_ldmCHUSJ.patientFthId+'_'+epCHUSJ_ldmCHUSJ.requestFthId+'"]').should('not.exist', {timeout: 20*1000});
+    cy.contains('[data-cy="VariantsLink_'+epCHUSJ_ldmCHUSJ.patientFthId+'_'+epCHUSJ_ldmCHUSJ.requestFthId+'"]').should('not.exist');
   });
 });
 
 describe('Page d\'une prescription - Valider les panneaux masquables', () => {
   it('Panneau Information clinique', () => {
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
-    cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
+    cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').clickAndWait({force: true});
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('div[class*="ant-collapse-content-inactive ant-collapse-content-hidden"]').should('exist');
-    cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
+    cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').clickAndWait({force: true});
     cy.get('[data-cy="ClinicalInformation_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
   });
 
   it('Panneau Mère', () => {
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
-    cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
+    cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').clickAndWait({force: true});
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('div[class*="ant-collapse-content-inactive ant-collapse-content-hidden"]').should('exist');
-    cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
+    cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').clickAndWait({force: true});
     cy.get('[data-cy="ParentCard_Mère_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
   });
 
   it('Panneau Père', () => {
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
-    cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
+    cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').clickAndWait({force: true});
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('div[class*="ant-collapse-content-inactive ant-collapse-content-hidden"]').should('exist');
-    cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').click({force: true});
+    cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('span[class*="ant-collapse-arrow"]').clickAndWait({force: true});
     cy.get('[data-cy="ParentCard_Père_CollapsePanel"]').find('div[class*="ant-collapse-content-active"]').should('exist');
   });
 });
