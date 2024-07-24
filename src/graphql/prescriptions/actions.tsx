@@ -2,6 +2,7 @@ import { ApolloError } from '@apollo/client';
 import { IQueryOperationsConfig, IQueryVariable } from '@ferlab/ui/core/graphql/types';
 import { computeSearchAfter, hydrateResults } from '@ferlab/ui/core/graphql/utils';
 import { AnalysisTaskEntity, ServiceRequestEntity } from 'api/fhir/models';
+import { GraphQLError } from 'graphql';
 import { ExtendedMappingResults, GqlResults } from 'graphql/models';
 import { AnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import { INDEX_EXTENDED_MAPPING } from 'graphql/queries';
@@ -24,6 +25,9 @@ import {
   PRESCRIPTIONS_QUERY,
   PRESCRIPTIONS_SEARCH_QUERY,
 } from './queries';
+
+const ANALYSIS_SERVICE_REQUEST_PROFILE =
+  'http://fhir.cqgc.ferlab.bio/StructureDefinition/cqgc-analysis-request';
 
 export const usePrescription = (
   variables?: IQueryVariable,
@@ -202,6 +206,20 @@ export const useServiceRequestEntity = (
       requestId: id,
     },
   });
+
+  if (!data?.ServiceRequest.meta?.profile?.includes(ANALYSIS_SERVICE_REQUEST_PROFILE) && !error) {
+    const newError = new GraphQLError('Forbidden request', {
+      extensions: {
+        code: 'FORBIDDEN',
+      },
+    });
+
+    return {
+      prescription: undefined,
+      loading,
+      error: new ApolloError({ graphQLErrors: [newError] }),
+    };
+  }
 
   return {
     prescription: data?.ServiceRequest,
