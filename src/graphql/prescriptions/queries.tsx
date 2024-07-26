@@ -154,6 +154,9 @@ export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
     ServiceRequest(id: $requestId) {
       id
       authoredOn
+      meta {
+        profile
+      }
       priority
       status
       category{

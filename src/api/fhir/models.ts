@@ -232,6 +232,7 @@ export interface ServiceRequestEntity {
   id: string;
   authoredOn: string;
   status: string;
+  meta: Meta;
   priority: string;
   code: string;
   category: {
