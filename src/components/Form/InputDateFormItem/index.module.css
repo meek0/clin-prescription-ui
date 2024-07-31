@@ -1,0 +1,12 @@
+div[class$=-has-error] .maskedInputDate {
+  background-color: var(--red-0);
+}
+div[class$=-has-error] .maskedInputDate input {
+  background-color: transparent;
+}
+div[class$=-has-error] .maskedInputDate, div[class$=-has-error] .maskedInputDate:hover {
+  border-color: var(--red-8);
+}
+div[class$=-has-error] .maskedInputDate:global(.ant-input-affix-wrapper-focused) {
+  box-shadow: 0 0 0 1px rgba(var(--red-8-r), var(--red-8-g), var(--red-8-b), 0.2);
+}

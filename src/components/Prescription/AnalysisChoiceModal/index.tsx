@@ -12,7 +12,7 @@ import { MuscularAnalysisType, OtherAnalysisType } from 'store/prescription/type
 
 import { defaultFormItemsRules } from '../Analysis/AnalysisForm/ReusableSteps/constant';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const { Text, Link } = Typography;
 

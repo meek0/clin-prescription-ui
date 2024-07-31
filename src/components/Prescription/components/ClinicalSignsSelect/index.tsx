@@ -11,7 +11,7 @@ import NotObservedSignsList from './NotObservedSignsList';
 import ObservedSignsList from './ObservedSignsList';
 import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignsDataType } from './types';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
   initialData?: IClinicalSignsDataType;

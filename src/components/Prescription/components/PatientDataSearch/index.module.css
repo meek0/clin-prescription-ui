@@ -1,0 +1,3 @@
+.patientDataSearchWrapper :global(.ant-form-item-label) {
+  width: 200px;
+}

@@ -18,7 +18,7 @@ import ClinicalInformationCard from './ClinicalInformationCard';
 import ParentCard from './ParentCard';
 import PatientCard from './PatientCard';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const PrescriptionDetail = () => {
   const { id: prescriptionId } = useParams<{ id: string }>();

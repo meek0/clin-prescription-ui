@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Tooltip } from 'antd';
 import cx from 'classnames';
 
-import style from './index.module.scss';
+import style from './index.module.css';
 
 type TOnClick = () => void;
 

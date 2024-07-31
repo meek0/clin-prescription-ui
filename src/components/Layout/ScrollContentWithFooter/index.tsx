@@ -6,7 +6,7 @@ import ConditionalWrapper from 'components/containers/ConditionalWrapper';
 import Container from '../Container';
 import Footer from '../Footer';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface OwnProps {
   scrollId?: string;

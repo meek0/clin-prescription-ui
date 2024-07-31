@@ -1,0 +1,6 @@
+.patientAddInfoWrapper :global(.ant-form-item-label) {
+  width: 200px;
+}
+.patientAddInfoWrapper .verticalRadioWrapper {
+  margin-top: 5px;
+}

@@ -1,0 +1,51 @@
+.homePageWrapper {
+  height: calc(100vh - var(--main-header-height) - var(--page-header-height));
+}
+.homePageWrapper .contentWrapper {
+  height: 100%;
+}
+.homePageWrapper .contentWrapper .contentCardWrapper {
+  max-width: 1200px;
+  margin: auto;
+}
+.homePageWrapper .contentWrapper .contentCardWrapper .contentCard {
+  padding: 0px;
+  margin-bottom: 24px;
+}
+.homePageWrapper .contentWrapper .contentCardWrapper .contentCard > :global(.ant-card-head) {
+  padding: 16px 24px;
+}
+.homePageWrapper .contentWrapper .contentCardWrapper .contentCard > :global(.ant-card-head) :global(.ant-card-head-title) {
+  padding-bottom: 0px;
+}
+.homePageWrapper .contentWrapper .contentCardWrapper .contentCard > :global(.ant-card-body) {
+  padding: 16px 24px;
+}
+.homePageWrapper .contentWrapper .contentCol {
+  width: 100%;
+}
+
+.questionIcon {
+  color: var(--blue-8);
+}
+
+.successModal {
+  padding: 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-direction: column;
+  flex: 1;
+}
+.successModal h3, .successModal h2, .successModal p {
+  margin: unset;
+}
+.successModal h3, .successModal h2 {
+  line-height: 28px;
+}
+.successModal > span > svg {
+  font-size: 63px;
+  margin-bottom: 10px;
+  color: var(--green-6);
+}

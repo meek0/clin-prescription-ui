@@ -13,7 +13,7 @@ import { defaultFormItemsRules, STEPS_ID } from '../Analysis/AnalysisForm/Reusab
 
 import PrescriptionSummary from './PrescriptionSummary';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export enum ADD_PARENT_FI_KEY {
   PRESCRIPTION_SEARCH_TERM = 'prescription_search_term',

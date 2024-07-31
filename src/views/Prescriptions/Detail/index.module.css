@@ -1,0 +1,3 @@
+.prescriptionEntityWrapper :global(.ant-card) {
+  height: 100%;
+}

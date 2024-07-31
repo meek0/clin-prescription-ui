@@ -11,7 +11,7 @@ import { getFlattenTree } from '../helper';
 import { TreeNode } from '../types';
 import PhenotypeTree from '..';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface OwnProps {
   visible?: boolean;

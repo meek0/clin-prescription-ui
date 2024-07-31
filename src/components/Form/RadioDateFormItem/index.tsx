@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import InputDateFormItem, { InputDateFormItemProps } from '../InputDateFormItem';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface IRadioDateFormItemProps {
   title: string;

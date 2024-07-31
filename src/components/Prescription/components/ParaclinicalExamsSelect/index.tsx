@@ -12,7 +12,7 @@ import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescri
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
   initialData?: IParaclinicalExamsDataType;

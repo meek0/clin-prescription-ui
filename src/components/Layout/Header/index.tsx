@@ -16,7 +16,7 @@ import EnvironmentVariables from 'utils/EnvVariables';
 import { STATIC_ROUTES } from 'utils/routes';
 import { IncludeKeycloakTokenParsed } from 'utils/tokenTypes';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const Header = () => {
   const { keycloak } = useKeycloak();

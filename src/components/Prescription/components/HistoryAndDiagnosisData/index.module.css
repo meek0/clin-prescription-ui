@@ -1,0 +1,53 @@
+:root {
+  --label-width: 200px;
+}
+
+.historyAndDiagnosisHypSelect :global(.ant-form-item-label) {
+  width: var(--label-width);
+}
+.historyAndDiagnosisHypSelect .addHealthCondition {
+  padding-left: 0;
+}
+.historyAndDiagnosisHypSelect .addHealthCondition span {
+  text-decoration: underline;
+}
+.historyAndDiagnosisHypSelect .addHealthCondition span:hover {
+  text-decoration: none;
+}
+.historyAndDiagnosisHypSelect .healthConditionsWrapper .listErrorWrapper {
+  border: 1px solid var(--red-8);
+  padding: 12px;
+  border-radius: 2px;
+  background-color: var(--red-0);
+  margin-left: 200px;
+}
+.historyAndDiagnosisHypSelect .healthConditionsWrapper .listErrorWrapper :global(.ant-form-item-label) {
+  width: unset;
+}
+.historyAndDiagnosisHypSelect .healthConditionsWrapper :global(.ant-form-item-explain) {
+  margin-left: 200px;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem {
+  width: 100%;
+  display: flex;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem :global(.ant-form-item-explain) {
+  margin-left: unset;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem .hidden {
+  visibility: hidden;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem :global(.ant-space-item):first-child {
+  min-width: 60%;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem :global(.ant-space-item):nth-child(-n+2) {
+  width: 100%;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem :global(.ant-form-item) {
+  margin-bottom: 0;
+}
+.historyAndDiagnosisHypSelect .healthConditionListItem .removeIcon {
+  color: var(--blue-8);
+}

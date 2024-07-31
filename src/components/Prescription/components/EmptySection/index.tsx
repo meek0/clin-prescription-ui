@@ -2,7 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Typography } from 'antd';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const EmptySection = () => (
   <Typography.Text italic className={styles.emptySection}>

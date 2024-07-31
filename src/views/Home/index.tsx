@@ -22,7 +22,7 @@ import { DYNAMIC_ROUTES } from 'utils/routes';
 import ActionButton from './components/ActionButton';
 import AddParentButton from './components/AddParent';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const Home = () => {
   const dispatch = useDispatch();

@@ -18,7 +18,7 @@ import { get } from 'lodash';
 
 import { resetFieldError, setFieldError } from 'components/Prescription/utils/form';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export interface ISearchOrNoneFormItemProps<TSearchResult> {
   form: FormInstance;

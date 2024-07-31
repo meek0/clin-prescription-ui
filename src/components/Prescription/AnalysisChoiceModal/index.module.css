@@ -1,0 +1,8 @@
+.analysisPopoverContent {
+  max-width: 275px;
+  display: block;
+}
+
+.recommandationColor {
+  color: var(--gray-7);
+}

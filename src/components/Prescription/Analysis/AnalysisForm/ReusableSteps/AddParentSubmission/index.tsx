@@ -15,7 +15,7 @@ import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
 import intl from 'react-intl-universal';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export enum SUBMISSION_REVIEW_FI_KEY {
   RESPONSIBLE_DOCTOR = 'responsible_doctor',

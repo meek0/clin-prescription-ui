@@ -17,7 +17,7 @@ import { getProTableDictionary } from 'utils/translation';
 
 import { prescriptionsColumns } from './columns';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 interface OwnProps {
   results: GqlResults<AnalysisResult>;

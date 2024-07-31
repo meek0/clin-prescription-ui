@@ -2,7 +2,7 @@
 // required for the theme to be correctly applied
 
 import 'style/themes/clin/dist/antd.css';
-import 'style/themes/clin/main.scss';
+import 'style/themes/clin/main.css';
 import './index.css';
 
 import React from 'react';
