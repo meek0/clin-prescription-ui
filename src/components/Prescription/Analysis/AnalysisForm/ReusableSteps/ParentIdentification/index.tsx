@@ -23,7 +23,7 @@ import { usePrescriptionForm } from 'store/prescription';
 
 import { defaultCollapseProps, defaultFormItemsRules, STEPS_ID } from '../constant';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 type OwnProps = IAnalysisStepForm & {
   parent: 'mother' | 'father';

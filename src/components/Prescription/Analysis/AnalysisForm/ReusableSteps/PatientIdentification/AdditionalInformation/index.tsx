@@ -6,11 +6,11 @@ import { isEmpty } from 'lodash';
 import RadioDateFormItem from 'components/Form/RadioDateFormItem';
 import RadioGroupSex from 'components/Form/RadioGroupSex';
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
 import {
   dateNotEarlierThanTodayRule,
   dateNotLaterThanTodayRule,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -24,7 +24,7 @@ import { SexValue } from 'utils/commonTypes';
 
 import GestationalAge from './GestationalAge';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
   showNewBornSection?: boolean;

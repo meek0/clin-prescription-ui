@@ -1,0 +1,12 @@
+.parentIdentificationForm .parentInfoChoiceWrapper :global(.ant-form-item-label) {
+  width: 250px;
+}
+.parentIdentificationForm .formContentWrapper {
+  width: 100%;
+}
+.parentIdentificationForm .verticalRadioWrapper {
+  margin-top: 5px;
+}
+.parentIdentificationForm .hideMomentField {
+  display: none;
+}

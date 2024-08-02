@@ -19,8 +19,8 @@ import {
 
 import { useUser } from 'store/user';
 
-import styles from './index.module.scss';
-import homeStyles from 'views/Home/index.module.scss';
+import styles from './index.module.css';
+import homeStyles from 'views/Home/index.module.css';
 
 const { Title } = Typography;
 const PractitionerTable = (): React.ReactElement => {

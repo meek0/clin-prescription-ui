@@ -1,0 +1,56 @@
+:root {
+  --label-width: 350px;
+}
+
+.clinicalSignsSelect :global(.ant-form-item-label) {
+  width: var(--label-width);
+}
+.clinicalSignsSelect .clinicalSignNotice {
+  font-weight: 500;
+  line-height: 22px;
+}
+.clinicalSignsSelect .hpoCode {
+  font-weight: 400;
+}
+.clinicalSignsSelect .hpoFormItem {
+  margin-bottom: 8px;
+}
+.clinicalSignsSelect .hpoFormItem :global(.ant-form-item) {
+  margin-bottom: 0;
+}
+.clinicalSignsSelect .ageSelectInput {
+  max-width: 450px;
+  min-width: 450px;
+}
+.clinicalSignsSelect .listErrorWrapper {
+  border: 1px solid var(--red-8);
+  padding: 12px 0;
+  border-radius: 2px;
+  background-color: var(--red-0);
+}
+.clinicalSignsSelect .addClinicalSignBtn {
+  padding-left: 0;
+}
+.clinicalSignsSelect .addClinicalSignBtn span {
+  text-decoration: underline;
+}
+.clinicalSignsSelect .addClinicalSignBtn span:hover {
+  text-decoration: none;
+}
+
+.removeIcon {
+  fill: var(--blue-8);
+  color: var(--blue-8);
+}
+
+.notObservedHpotext {
+  width: max-content;
+}
+.notObservedHpotext :first-child {
+  width: max-content;
+  max-width: max-content;
+}
+
+:global(.ant-form-item-control-input-content) {
+  max-width: none;
+}

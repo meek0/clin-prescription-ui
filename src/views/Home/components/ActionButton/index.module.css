@@ -1,0 +1,68 @@
+.homeActionContent {
+  display: flex;
+  align-items: center;
+}
+
+.homeActionCardWrapper {
+  height: 175px;
+  position: relative;
+}
+.homeActionCardWrapper .homeActionCard {
+  width: 100%;
+  align-items: center;
+}
+.homeActionCardWrapper .homeActionCard .description {
+  display: block;
+  transition: transform 0.1s ease;
+}
+.homeActionCardWrapper .homeActionCard .homeActionButton {
+  width: 100%;
+  text-align: center;
+  transition: transform 0.1s ease;
+}
+.homeActionCardWrapper .homeActionCard .homeActionButton .homeActionIcon {
+  font-size: 48px;
+}
+.homeActionCardWrapper .homeActionCard .homeActionButton .homeActionIcon svg {
+  height: 48px;
+  width: 48px;
+}
+.homeActionCardWrapper.disabled .homeActionCard .homeActionIcon {
+  color: var(--gray-6);
+}
+.homeActionCardWrapper.disabled .homeActionCard .text {
+  color: var(--gray-6);
+}
+.homeActionCardWrapper.disabled .homeActionCard .plusIcon {
+  display: none;
+}
+.homeActionCardWrapper.disabled .homeActionCard:hover {
+  cursor: not-allowed;
+}
+.homeActionCardWrapper.disabled .homeActionCard:hover .description {
+  transform: translateY(0px);
+}
+.homeActionCardWrapper.disabled .homeActionCard:hover .homeActionButton {
+  transform: translateY(0px);
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard .homeActionIcon {
+  color: var(--blue-8);
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard .text {
+  color: var(--blue-8);
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard .plusIcon {
+  display: none;
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard:hover {
+  cursor: pointer;
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard:hover .plusIcon {
+  display: initial;
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard:hover .description {
+  transform: translateY(50px);
+}
+.homeActionCardWrapper:not(.disabled) .homeActionCard:hover .homeActionButton {
+  transform: translateY(10px);
+}

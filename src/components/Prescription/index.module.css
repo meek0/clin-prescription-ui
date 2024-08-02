@@ -1,0 +1,62 @@
+:root {
+  --modal-header-height: 55px;
+}
+
+.createPrescriptionModal :global(.ant-modal-header) {
+  height: var(--modal-header-height);
+}
+.createPrescriptionModal .modalContentRow,
+.createPrescriptionModal .contentCol {
+  height: 100%;
+}
+.createPrescriptionModal :global(.ant-modal-body) {
+  padding: 0 24px;
+}
+.createPrescriptionModal .siderCol {
+  padding-top: 24px;
+}
+.createPrescriptionModal .contentScroller {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  height: 100%;
+}
+.createPrescriptionModal .contentScroller :global(.simplebar-content) {
+  height: unset !important;
+}
+.createPrescriptionModal .contentScroller :global(.simplebar-content-wrapper) {
+  outline: none;
+  border: none;
+}
+.createPrescriptionModal .modalHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.createPrescriptionModal,
+.createPrescriptionModal :global(.ant-modal-content) {
+  height: 100vh !important;
+  width: 100vw !important;
+  margin: 0;
+  top: 0;
+  max-width: unset;
+  padding-bottom: 0;
+}
+.createPrescriptionModal :global(.ant-modal-body) {
+  height: calc(100vh - var(--modal-header-height));
+  background-color: var(--gray-4);
+}
+.createPrescriptionModal :global(.ant-modal-close-x) {
+  width: unset;
+  padding-right: 24px;
+}
+.createPrescriptionModal .customCloseBtn {
+  padding: 0;
+}
+.createPrescriptionModal .prescriptionContentFooter {
+  display: flex;
+  justify-content: space-between;
+}
+.createPrescriptionModal .prescriptionFormCard :global(.ant-card-body) {
+  padding-left: 1px !important;
+  padding-right: 1px !important;
+}

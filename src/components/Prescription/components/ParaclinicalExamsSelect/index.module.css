@@ -1,0 +1,30 @@
+:root {
+  --label-width: 225px;
+}
+
+.paraExamsSelect :global(.ant-form-item-label) {
+  width: var(--label-width);
+}
+.paraExamsSelect .paraExamFormItem {
+  margin-bottom: 12px;
+}
+.paraExamsSelect .paraExamFormItem :global(.ant-form-item) {
+  margin-bottom: 0;
+}
+.paraExamsSelect .paraExamFormItemContent {
+  width: 100%;
+}
+.paraExamsSelect .otherExamsTextarea {
+  margin-top: 24px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  background-color: var(--blue-8);
+  line-height: 22px;
+  color: var(--gray-1);
+}
+.tag > * {
+  color: var(--gray-1);
+}

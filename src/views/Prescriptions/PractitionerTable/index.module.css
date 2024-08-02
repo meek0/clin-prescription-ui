@@ -1,0 +1,4 @@
+.patientContentContainer {
+  width: 100%;
+  padding: 0 var(--default-page-content-padding);
+}

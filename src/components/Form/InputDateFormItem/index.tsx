@@ -5,7 +5,7 @@ import { isValid } from 'date-fns';
 
 import MaskedDateInput from 'components/Form/MaskedDateInput';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type InputDateFormItemProps = {
   formItemProps?: Omit<FormItemProps, 'getValueFromEvent' | 'rules'>;

@@ -18,7 +18,7 @@ import {
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
   initialData?: IHistoryAndDiagnosisDataType;

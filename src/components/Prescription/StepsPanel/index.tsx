@@ -3,7 +3,7 @@ import { Space, Steps, Typography } from 'antd';
 import { useGlobals } from 'store/global';
 import { usePrescriptionForm } from 'store/prescription';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const { Title } = Typography;
 

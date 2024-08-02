@@ -1,0 +1,12 @@
+.prescriptionStepsPanel {
+  background-color: var(--gray-1);
+  padding: 24px;
+  width: 100%;
+  border-radius: 2px;
+}
+.prescriptionStepsPanel .analyseTitle {
+  font-size: 12px;
+}
+.prescriptionStepsPanel .stepsItem:last-child div[class$=-content] {
+  min-height: 34px;
+}

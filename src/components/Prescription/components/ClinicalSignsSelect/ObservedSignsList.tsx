@@ -16,7 +16,7 @@ import { extractPhenotypeTitleAndCode } from 'utils/hpo';
 
 import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignItem } from './types';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const { Text } = Typography;
 

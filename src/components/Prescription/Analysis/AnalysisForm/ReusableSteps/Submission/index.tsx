@@ -30,7 +30,7 @@ import { prescriptionFormActions } from 'store/prescription/slice';
 import { createPrescription } from 'store/prescription/thunk';
 import { useUser } from 'store/user';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export enum SUBMISSION_REVIEW_FI_KEY {
   RESPONSIBLE_DOCTOR = 'supervisor',

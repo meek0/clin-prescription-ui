@@ -18,7 +18,7 @@ import AdditionalInformation, {
   additionalInfoKey, ADD_INFO_FI_KEY, IAddInfoDataType
 } from './AdditionalInformation';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 export type TPatientFormDataType = IPatientDataType & IAddInfoDataType;
 

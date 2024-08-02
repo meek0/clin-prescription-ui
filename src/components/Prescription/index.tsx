@@ -17,7 +17,7 @@ import { prescriptionFormActions } from 'store/prescription/slice';
 import PrescriptionAnalysis from './Analysis';
 import StepsPanel from './StepsPanel';
 
-import styles from './index.module.scss';
+import styles from './index.module.css';
 
 const { Title } = Typography;
 
