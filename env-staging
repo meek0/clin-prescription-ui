@@ -21,5 +21,5 @@ REACT_APP_PANELS_FILE=https://s3.cqgc.hsj.rtss.qc.ca/cqgc-staging-app-public/pan
 # FEATURES
 REACT_APP_FT_beta=true
 
-# Style
-SASS_PATH=/code/src/style/themes/clin
+# SENTRY
+REACT_APP_SENTRY_API="https://cad9c3edb79826744485163717a14ac8@o4505959323860992.ingest.us.sentry.io/4507691063443456"
