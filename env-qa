@@ -18,9 +18,6 @@ REACT_APP_USERS_API_URL=https://users.qa.cqgc.hsj.rtss.qc.ca
 REACT_APP_FORM_API_URL=https://forms.qa.cqgc.hsj.rtss.qc.ca
 REACT_APP_PANELS_FILE=https://s3.cqgc.hsj.rtss.qc.ca/cqgc-qa-app-public/panels/panels.xlsx
 
-# Style
-SASS_PATH=/code/src/style/themes/clin
-
 # FEATURES
 REACT_APP_FT_beta=true
 
@@ -35,3 +32,6 @@ CYPRESS_USERNAME_G_CHUS="paul.parent.g@chus.org"
 CYPRESS_USERNAME_D_CUSM="victor.robitaille.p@cusm.org"
 CYPRESS_USERNAME_R_CHUSJ="sophia.charron.r@chusj.org"
 CYPRESS_PASSWORD=""
+
+# SENTRY
+REACT_APP_SENTRY_API="https://cad9c3edb79826744485163717a14ac8@o4505959323860992.ingest.us.sentry.io/4507691063443456"
