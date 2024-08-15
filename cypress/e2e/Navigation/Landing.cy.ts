@@ -1,17 +1,19 @@
 /// <reference types="cypress"/>
 import '../../support/commands';
+import { oneMinute } from '../../support/utils';
 
 beforeEach(() => {
   cy.visit('/');
+  cy.waitWhileSpin(oneMinute);
 });
 
 describe('Affichage de la page Landing', () => {
   it('Vérifier le texte affiché', () => {
-    cy.contains('Prescriptions et requêtes').should('exist', {timeout: 20*1000});
-    cy.contains('Le Centre québécois de génomique clinique (CQGC) met à disposition un portail web de prescription d’analyses cliniques de séquençage à haut débit (NGS) pour le diagnostic moléculaire aux médecins prescripteurs de la province.').should('exist', {timeout: 20*1000});
-    cy.contains('Connexion').should('exist', {timeout: 20*1000});
-    cy.contains('Créer un compte').should('exist', {timeout: 20*1000});
-    cy.contains('EN').should('not.exist', {timeout: 20*1000});
+    cy.contains('Prescriptions et requêtes').should('exist');
+    cy.contains('Le Centre québécois de génomique clinique (CQGC) met à disposition un portail web de prescription d’analyses cliniques de séquençage à haut débit (NGS) pour le diagnostic moléculaire aux médecins prescripteurs de la province.').should('exist');
+    cy.contains('Connexion').should('exist');
+    cy.contains('Créer un compte').should('exist');
+    cy.contains('EN').should('not.exist');
   });
 
   it('Vérifier les images des partenaires', () => {

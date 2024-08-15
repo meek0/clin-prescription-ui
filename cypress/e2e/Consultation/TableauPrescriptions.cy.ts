@@ -20,10 +20,10 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
 
   it('Valider les liens disponibles Lien Prescription', () => {
     cy.intercept('POST', '**/$graphql*').as('getPOSTgraphql');
-    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(0).find('a[href*="prescription"]').click({force: true});
-    cy.wait('@getPOSTgraphql', {timeout: 20*1000});
+    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(0).find('a[href*="prescription"]').clickAndWait({force: true});
+    cy.wait('@getPOSTgraphql');
 
-    cy.contains('Identifiant').should('exist', {timeout: 20*1000});
+    cy.contains('Identifiant').should('exist');
   });
 });
 

@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 import { Replacement } from '../../support/commands';
-import { getDateTime } from '../../support/utils';
+import { getDateTime, oneMinute } from '../../support/utils';
 
 const { strDate } = getDateTime();
 let epCHUSJ_ldmCHUSJ: any;
@@ -12,7 +12,8 @@ beforeEach(() => {
   cy.login(Cypress.env('username_DG_CHUSJ_CUSM_CHUS'), Cypress.env('password'));
   cy.visitPrescriptionEntityPage(epCHUSJ_ldmCHUSJ.prescriptionId);
 
-  cy.get('[class*="Header_contentHeader"] button[class*="ant-btn-primary"]').click({force: true});
+  cy.get('[class*="Header_contentHeader"] button[class*="ant-btn-primary"]').clickAndWait({force: true});
+  cy.waitUntilFile(oneMinute);
 });
 
 describe('Télécharger la prescription', () => {
