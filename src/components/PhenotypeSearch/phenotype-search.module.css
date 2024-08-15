@@ -1,0 +1,19 @@
+.addClinicalSign{
+    width: 700px;
+}
+
+.addClinicalSignBtn {
+    padding-left: 0;
+    float: right;
+    padding: 0;
+    font-size: 0.9em;
+    margin-top: -6px;
+}
+
+.addClinicalSignBtn span {
+    text-decoration: underline;
+}
+
+.addClinicalSignBtn span:hover {
+    text-decoration: none;
+}

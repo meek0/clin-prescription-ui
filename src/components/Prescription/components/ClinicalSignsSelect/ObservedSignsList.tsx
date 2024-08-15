@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
-import { Button, Checkbox, Form, FormInstance, Select, Space, Typography } from 'antd';
+import { Checkbox, Form, FormInstance, Select, Space, Typography } from 'antd';
 import { NamePath } from 'antd/lib/form/interface';
 import cx from 'classnames';
 import { capitalize } from 'lodash';
 
-import PhenotypeModal from 'components/PhenotypeTree/TransferModal';
+import PhenotypeSearch from 'components/PhenotypeSearch';
 import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { checkShouldUpdate, resetFieldError } from 'components/Prescription/utils/form';
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
-import { extractPhenotypeTitleAndCode } from 'utils/hpo';
 
 import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignItem } from './types';
+import { getExistingHpoIdList } from '.';
 
 import styles from './index.module.css';
 
@@ -27,7 +27,6 @@ interface OwnProps {
 
 const ObservedSignsList = ({ form, getName }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
-  const [isPhenotypeModalVisible, setIsPhenotypeModalVisible] = useState(false);
   const [notObservedSigns, setNotObservedSigns] = useState<string[]>([]);
   const notObservedSignsField = Form.useWatch(
     getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS),
@@ -176,39 +175,23 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
               <Form.Item noStyle>
                 <Form.ErrorList errors={errors} />
               </Form.Item>
-              <Form.Item colon={false}>
-                <Button
-                  type="link"
-                  className={styles.addClinicalSignBtn}
-                  onClick={() => setIsPhenotypeModalVisible(true)}
-                  icon={<PlusOutlined />}
-                >
-                  {intl.get('prescription.form.signs.observed.add')}
-                </Button>
-              </Form.Item>
-              <PhenotypeModal
-                visible={isPhenotypeModalVisible}
-                onVisibleChange={setIsPhenotypeModalVisible}
-                onApply={(nodes) => {
-                  const currentValues = form.getFieldValue(
-                    getName(CLINICAL_SIGNS_FI_KEY.SIGNS),
-                  ) as IClinicalSignItem[];
-                  const valuesList = currentValues.map(({ value }) => value);
-
-                  nodes
-                    .filter(
-                      ({ key }) => !valuesList.includes(key) && !notObservedSigns.includes(key),
-                    )
-                    .forEach((node) =>
+              <Form.Item colon={false} className={styles.addClinicalSign}>
+                <Space size={2}>
+                  <ProLabel title={intl.get('prescription.form.signs.observed.add') + ' :'} />
+                </Space>
+                <PhenotypeSearch
+                  ignoreHpoIds={getExistingHpoIdList(form, getName)}
+                  onSelect={(hpos) => {
+                    for (const hpo of hpos) {
                       add({
-                        [CLINICAL_SIGNS_ITEM_KEY.NAME]: extractPhenotypeTitleAndCode(node.title)
-                          ?.title,
-                        [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: node.key,
+                        [CLINICAL_SIGNS_ITEM_KEY.NAME]: hpo.name,
+                        [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: hpo.id,
                         [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: true,
-                      }),
-                    );
-                }}
-              />
+                      });
+                    }
+                  }}
+                />
+              </Form.Item>
             </>
           )}
         </Form.List>

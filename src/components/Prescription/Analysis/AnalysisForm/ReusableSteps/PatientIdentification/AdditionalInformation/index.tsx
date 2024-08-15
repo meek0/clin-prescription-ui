@@ -111,6 +111,7 @@ const AdditionalInformation = ({
     if (patientSexField == 'male') {
       form.setFieldValue(getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS), false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientSexField]);
 
   return (

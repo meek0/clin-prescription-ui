@@ -73,6 +73,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
         })),
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const buildExtra = (extra: IParaclinicalExamItemExtra | undefined) => {

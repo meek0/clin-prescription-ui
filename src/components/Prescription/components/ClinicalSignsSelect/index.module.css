@@ -30,6 +30,10 @@
 }
 .clinicalSignsSelect .addClinicalSignBtn {
   padding-left: 0;
+  float: right;
+  padding: 0;
+  font-size: 0.9em;
+  margin-top: -6px;
 }
 .clinicalSignsSelect .addClinicalSignBtn span {
   text-decoration: underline;

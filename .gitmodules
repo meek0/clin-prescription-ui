@@ -1,6 +1,3 @@
-[submodule "style"]
-	path = style
-	url = git@github.com:Ferlab-Ste-Justine/clin-portal-theme.git
 [submodule "src/style"]
 	path = src/style
 	url = git@github.com:Ferlab-Ste-Justine/clin-portal-theme.git

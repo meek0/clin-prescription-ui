@@ -56,6 +56,7 @@ const SearchOrNoneFormItem = <TSearchResult,>({
     if (disabled !== isDisabled) {
       setIsDisabled(disabled);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled]);
 
   const processSearch = (value: string) => {

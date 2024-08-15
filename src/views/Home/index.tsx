@@ -62,6 +62,7 @@ const Home = () => {
     return () => {
       window.removeEventListener('beforeunload', clearPrescriptionId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

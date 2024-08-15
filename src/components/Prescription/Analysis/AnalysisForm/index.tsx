@@ -27,6 +27,7 @@ const AnalysisForm = (
         getFieldsValue: props.form.getFieldsValue,
       }),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

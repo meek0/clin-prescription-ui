@@ -9,6 +9,11 @@ export interface IHpoNode {
 
 export interface IHpoChild {
   _source: IHpoNode;
+  highlight: {
+    name: string;
+    hpo_id: string;
+    'hpo_id.autocomplete': string;
+  };
 }
 
 export interface IHpoPayload {
