@@ -10,6 +10,7 @@ beforeEach(() => {
   cy.visitHomePage();
 
   cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(7).find('button').clickAndWait({force: true});
+  cy.wait(2000);
   cy.waitUntilFile(oneMinute);
 });
 
