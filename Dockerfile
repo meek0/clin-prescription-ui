@@ -12,7 +12,6 @@ COPY config /code/config
 
 COPY .env tsconfig.json tsconfig.paths.json craco.config.js /code/
 
-RUN npm run theme
 RUN npm run build
 
 FROM nginx:stable as server

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import intl from 'react-intl-universal';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Form, Input, Space } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
@@ -88,4 +89,19 @@ export function getExistingHpoIdList(
   return observedSignFields
     .concat(nonObservedSignFields)
     .map((field: IClinicalSignItem) => field.value);
+}
+
+// Check if HPO item is valid (name is defined)
+export function hpoValidationRule(hpoNode: IClinicalSignItem) {
+  return [
+    {
+      validator: async () => {
+        if (!hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME]) {
+          return Promise.reject(
+            new Error(intl.get('prescription.form.signs.observed.invalid.hpo')),
+          );
+        }
+      },
+    },
+  ];
 }

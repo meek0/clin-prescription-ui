@@ -1,16 +1,15 @@
 import intl from 'react-intl-universal';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
-import { Form, FormInstance, Space, Typography } from 'antd';
+import { Button, Form, FormInstance, Space, Typography } from 'antd';
 import { NamePath } from 'antd/lib/form/interface';
 import cx from 'classnames';
-import { capitalize } from 'lodash';
 
 import PhenotypeSearch from 'components/PhenotypeSearch';
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 
 import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignItem } from './types';
-import { getExistingHpoIdList } from '.';
+import { getExistingHpoIdList, hpoValidationRule } from '.';
 
 import styles from './index.module.css';
 
@@ -24,6 +23,16 @@ interface OwnProps {
 const NotObservedSignsList = ({ form, getName }: OwnProps) => {
   const getNode = (index: number): IClinicalSignItem =>
     form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS))[index];
+
+  function updateNode(index: number, update: Partial<IClinicalSignItem>) {
+    const nodes = [...form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS))];
+    nodes[index] = { ...nodes[index], ...update };
+    form.setFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS), nodes);
+
+    // Re-set observed sign to trigger re-rendering and validation
+    const notObservedNodes = form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS));
+    form.setFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS), notObservedNodes);
+  }
 
   return (
     <Space direction="vertical">
@@ -45,18 +54,22 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                       <Space size={8} className={styles.hpoFormItemContent}>
                         <Form.Item
                           {...restField}
-                          name={[name, CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]}
-                          valuePropName="checked"
-                          style={{ marginLeft: 10 }}
+                          className={styles['phenotype-search']}
+                          name={[name, CLINICAL_SIGNS_ITEM_KEY.NAME]}
+                          rules={hpoValidationRule(hpoNode)}
+                          validateTrigger="onSelect"
                         >
-                          <Text>
-                            <Space size={4} className={styles.notObservedHpotext}>
-                              {capitalize(hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME])}
-                              <Text type="secondary">
-                                ({hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]})
-                              </Text>
-                            </Space>
-                          </Text>
+                          <PhenotypeSearch
+                            defaultOption={{
+                              id: hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
+                              name: hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME],
+                            }}
+                            ignoreHpoIds={getExistingHpoIdList(form, getName)}
+                            onClear={() => updateNode(name, { value: '', name: '' })}
+                            onSelect={(hpo) => {
+                              updateNode(name, { value: hpo.id, name: hpo.name });
+                            }}
+                          />
                         </Form.Item>
                         <CloseOutlined className={styles.removeIcon} onClick={() => remove(name)} />
                       </Space>
@@ -67,19 +80,21 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
               <Form.Item noStyle>
                 <Form.ErrorList errors={errors} />
               </Form.Item>
-              <Form.Item colon={false} className={styles.addClinicalSign}>
-                <PhenotypeSearch
-                  ignoreHpoIds={getExistingHpoIdList(form, getName)}
-                  onSelect={(hpos) => {
-                    for (const hpo of hpos) {
-                      add({
-                        [CLINICAL_SIGNS_ITEM_KEY.NAME]: hpo.name,
-                        [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: hpo.id,
-                        [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: true,
-                      });
-                    }
-                  }}
-                />
+              <Form.Item colon={false}>
+                <Button
+                  type="link"
+                  className={styles.addClinicalSignBtn}
+                  onClick={() =>
+                    add({
+                      [CLINICAL_SIGNS_ITEM_KEY.NAME]: '',
+                      [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: '',
+                      [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: true,
+                    })
+                  }
+                  icon={<PlusOutlined />}
+                >
+                  {intl.get('prescription.form.signs.not.observed.add')}
+                </Button>
               </Form.Item>
             </>
           )}

@@ -1,68 +1,63 @@
-import { useState } from 'react';
 import intl from 'react-intl-universal';
 import FLAutoComplete, {
   FLAutoCompleteOption,
   FLAutoCompleteProps,
 } from '@ferlab/ui/core/components/Search/FLAutoComplete';
-import { Button } from 'antd';
 import { HpoApi } from 'api/hpo';
 import { IHpoNode } from 'api/hpo/models';
-
-import PhenotypeModal from 'components/PhenotypeTree/TransferModal';
-import { extractPhenotypeTitleAndCode } from 'utils/hpo';
 
 import styles from './phenotype-search.module.css';
 
 export interface PhenotypeSearchProps
-  extends Omit<FLAutoCompleteProps, 'getResults' | 'placeholder' | 'onSelect'> {
-  onSelect: (hpos: HPOResult[]) => void;
+  extends Omit<FLAutoCompleteProps, 'getResults' | 'placeholder' | 'onSelect' | 'defaultValue'> {
+  onSelect: (hpos: HPOResult) => void;
   ignoreHpoIds?: string[];
+  defaultOption?: { id: string; name: string };
+  onClear?: () => void;
 }
+
+const ID_FROM_DISPLAY_VALUE_REGEX = /^[^(]+\s\(\s(hp:\d{7})\s\)$/;
 
 const PhenotypeSearch: React.FC<PhenotypeSearchProps> = ({
   allowClear = true,
-  setSelectedValue = () => '',
+  setSelectedValue = (option) => `${option.data.name} (${option.data.hpo_id})`,
   onSelect,
   ignoreHpoIds = [],
+  defaultOption,
+  onClear,
   ...props
-}) => {
-  const [isPhenotypeModalVisible, setIsPhenotypeModalVisible] = useState(false);
-  return (
-    <div className={styles.addClinicalSign}>
-      <FLAutoComplete
-        key={ignoreHpoIds.toString()}
-        debounceInterval={500}
-        placeholder={intl.get('component.phenotypeTree.searchPlaceholder')}
-        getResults={async (term) => await handleHpoSearchTermChanged(term, ignoreHpoIds)}
-        allowClear={allowClear}
-        setSelectedValue={setSelectedValue}
-        onSelect={(option) => {
-          const hpo = option.data as IHpoNode;
-          onSelect([{ id: hpo.hpo_id, name: hpo.name }]);
-        }}
-        {...props}
-      />
-      <Button
-        type="link"
-        className={styles.addClinicalSignBtn}
-        onClick={() => setIsPhenotypeModalVisible(true)}
-      >
-        {intl.get('prescription.form.signs.observed.add.fullTree')}
-      </Button>
-      <PhenotypeModal
-        visible={isPhenotypeModalVisible}
-        onVisibleChange={setIsPhenotypeModalVisible}
-        onApply={(nodes) => {
-          const hpos = nodes.map((node) => ({
-            id: node.key,
-            name: extractPhenotypeTitleAndCode(node.title)?.title || '',
-          }));
-          onSelect(hpos);
-        }}
-      />
-    </div>
-  );
-};
+}) => (
+  <div className={styles['phenotype-search']}>
+    <FLAutoComplete
+      key={ignoreHpoIds.toString()}
+      debounceInterval={500}
+      defaultValue={
+        defaultOption?.id &&
+        setSelectedValue({
+          id: defaultOption.id,
+          highlight: '',
+          data: { hpo_id: defaultOption.id, name: defaultOption.name },
+        })
+      }
+      placeholder={intl.get('component.phenotypeSearch.placeholder')}
+      getResults={async (term) => {
+        const isValidDisplayValue = term.match(ID_FROM_DISPLAY_VALUE_REGEX);
+        return await handleHpoSearchTermChanged(
+          isValidDisplayValue ? isValidDisplayValue[1] : term,
+          ignoreHpoIds,
+        );
+      }}
+      allowClear={allowClear}
+      setSelectedValue={setSelectedValue}
+      onClear={onClear}
+      onSelect={(option) => {
+        const hpo = option.data as IHpoNode;
+        onSelect({ id: hpo.hpo_id, name: hpo.name });
+      }}
+      {...props}
+    />
+  </div>
+);
 
 interface HPOResult {
   id: string;
@@ -84,7 +79,7 @@ async function handleHpoSearchTermChanged(term: string, ignoreHpoIds: string[] =
         hit._source.hpo_id;
       options.push({
         id: hit._source.hpo_id,
-        highlight: `${highlightName} <span class="fl-auto-complete_highlight_id">( ${highlightId} )</span>`,
+        highlight: `${highlightName} <span class="fl-auto-complete_highlight_id">(${highlightId})</span>`,
         data: hit._source,
       });
     }

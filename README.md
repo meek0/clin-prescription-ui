@@ -57,4 +57,3 @@ Each time we update the projet, the submodules needs to be sync
 
   git submodule deinit -f .
   git submodule update --init
-

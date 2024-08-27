@@ -15,12 +15,17 @@
 .clinicalSignsSelect .hpoFormItem {
   margin-bottom: 8px;
 }
+
+.clinicalSignsSelect .hpoFormItem :global(.ant-space-align-center){
+  align-items: baseline;
+}
+
 .clinicalSignsSelect .hpoFormItem :global(.ant-form-item) {
   margin-bottom: 0;
 }
 .clinicalSignsSelect .ageSelectInput {
-  max-width: 450px;
-  min-width: 450px;
+  max-width: 400px;
+  min-width: 400px;
 }
 .clinicalSignsSelect .listErrorWrapper {
   border: 1px solid var(--red-8);
@@ -30,10 +35,6 @@
 }
 .clinicalSignsSelect .addClinicalSignBtn {
   padding-left: 0;
-  float: right;
-  padding: 0;
-  font-size: 0.9em;
-  margin-top: -6px;
 }
 .clinicalSignsSelect .addClinicalSignBtn span {
   text-decoration: underline;
@@ -57,4 +58,8 @@
 
 :global(.ant-form-item-control-input-content) {
   max-width: none;
+}
+
+.clinicalSignsSelect .phenotype-search {
+  width: 400px;
 }
