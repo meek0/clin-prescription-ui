@@ -12,7 +12,12 @@ Cypress.Commands.add('fetchFhirValues', () => {
 
   return cy.request({
     method: 'GET',
-    url: `https://qlin-me.qa.cqgc.hsj.rtss.qc.ca/api/v1/auth/login?email=${username}&password=${password}`,
+    url: `https://qlin-me-hybrid.qa.cqgc.hsj.rtss.qc.ca/api/v1/auth/login`,
+    form: true,
+    body: {
+      email: username,
+      password: password,
+    },
     failOnStatusCode: false,
   }).then((response) => {
     token = response.body.token;
