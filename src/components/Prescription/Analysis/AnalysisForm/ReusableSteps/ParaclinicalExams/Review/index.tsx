@@ -83,7 +83,9 @@ const ParaclinicalExamsReview = () => {
               key="otherExams"
               label={intl.get('prescription.clinical_exam.other_examination')}
             >
-              <Typography.Text>{getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS)}</Typography.Text>
+              <Typography.Text>
+                {getData(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS).toString()}
+              </Typography.Text>
             </Descriptions.Item>
           )}
         </Descriptions>

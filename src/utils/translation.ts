@@ -11,6 +11,7 @@ export const getProTableDictionary = (): IProTableDictionary => ({
     tableExport: intl.get('protable.tooltips.export'),
   },
   itemCount: {
+    result: intl.get('protable.result'),
     results: intl.get('protable.results'),
     noResults: intl.get('protable.noResults'),
     of: intl.get('protable.of'),
@@ -18,6 +19,7 @@ export const getProTableDictionary = (): IProTableDictionary => ({
     selectedPlural: intl.get('protable.selectedPlural'),
     selectAllResults: intl.get('protable.selectAllResults'),
     clear: intl.get('protable.clear'),
+    clearFilters: intl.get('protable.clear'),
   },
   columnSelector: {
     reset: intl.get('protable.reset'),
@@ -106,6 +108,8 @@ export const getQueryBuilderDictionary = (
         unsetDefaultFilter: intl.get('querybuilder.header.tooltips.unsetDefaultFilter'),
         undoChanges: intl.get('querybuilder.header.tooltips.undoChanges'),
         noSavedFilters: intl.get('querybuilder.header.tooltips.noSavedFilters'),
+        saveDisabled: intl.get('querybuilder.header.tooltips.saveChanges'),
+        shareDisabled: intl.get('querybuilder.header.tooltips.share'),
       },
       myFiltersDropdown: {
         title: intl.get('querybuilder.header.myFiltersDropdown.title'),

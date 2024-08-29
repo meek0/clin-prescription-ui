@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import logger from 'redux-logger';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -23,9 +23,9 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers<RootState>({
-  global: GlobalReducer,
-  user: UserReducer,
-  prescription: PrescriptionReducer,
+  global: GlobalReducer as any,
+  user: UserReducer as any,
+  prescription: PrescriptionReducer as any,
 });
 
 const store = configureStore({
@@ -35,7 +35,7 @@ const store = configureStore({
     const defaultMid = getDefaultMiddleware({
       serializableCheck: false,
     });
-    return devMode ? defaultMid.concat(logger) : defaultMid;
+    return devMode ? defaultMid.concat(logger as Middleware) : defaultMid;
   },
 });
 
