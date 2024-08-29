@@ -75,7 +75,7 @@ const Header = () => {
               <Gravatar
                 className={styles.userGravatar}
                 circle
-                email={tokenParsed.email || tokenParsed.identity_provider_identity}
+                id={tokenParsed.email || tokenParsed.identity_provider_identity}
               />
               <span className={styles.userName}>{getUserFirstName()}</span>
               <DownOutlined />
