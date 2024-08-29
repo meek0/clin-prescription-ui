@@ -1,5 +1,4 @@
 /// <reference types="cypress"/>
-import '@testing-library/cypress/add-commands';
 import { oneMinute } from '../support/utils';
 
 export interface Replacement {
@@ -107,7 +106,7 @@ Cypress.Commands.add('validatePdfFileContent', (fixture: string, replacements?: 
           arrReplacements.forEach((replacement) => {
             valueWithData = valueWithData.replace(replacement.placeholder, replacement.value);
           });
-          expect(fileWithData).to.include(valueWithData);
+          assert.include(fileWithData, valueWithData);
         });
       });
     });
