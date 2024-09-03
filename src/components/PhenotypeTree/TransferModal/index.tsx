@@ -3,10 +3,8 @@ import intl from 'react-intl-universal';
 import { DeleteOutlined } from '@ant-design/icons';
 import Empty from '@ferlab/ui/core/components/Empty';
 import { Button, List, Modal, Transfer, Typography } from 'antd';
-import { HpoApi } from 'api/hpo';
 import { isEmpty } from 'lodash';
 
-import { IHpoCount } from '../../../api/hpo/models';
 import { getFlattenTree } from '../helper';
 import { TreeNode } from '../types';
 import PhenotypeTree from '..';
@@ -23,26 +21,20 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
   const [isVisible, setIsVisible] = useState(visible);
-  const [hpoCount, setHpoCount] = useState<number | null>(null);
-
-  // Temporary solution until search and hpo tree are fixed
-  const showSearchAndCount = false;
 
   useEffect(() => {
     if (visible !== isVisible) {
       setIsVisible(visible);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
   useEffect(() => {
     if (visible !== isVisible) {
       onVisibleChange && onVisibleChange(isVisible);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
-
-  useEffect(() => {
-    HpoApi.getTotal().then((data) => setHpoCount((data as IHpoCount).count));
-  }, []);
 
   const handleCancel = () => {
     setIsVisible(false);
@@ -57,17 +49,6 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
 
   const getSelectedNodes = () =>
     getFlattenTree(treeData).filter(({ key }) => targetKeys.includes(key));
-
-  const renderHeader = () => {
-    if (hpoCount) {
-      return (
-        <span>
-          {hpoCount - targetKeys.length} {intl.get('prescription.phenotypes.header.elements')}
-        </span>
-      );
-    }
-    return null;
-  };
 
   return (
     <Modal
@@ -100,7 +81,6 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
         onSelectChange={(s, t) => {
           targetKeys.filter((el) => !t.includes(el));
         }}
-        selectAllLabels={[() => (showSearchAndCount ? renderHeader() : null)]}
         dataSource={getFlattenTree(treeData)}
         operationStyle={{ visibility: 'hidden', width: '5px' }}
         render={(item) => item.title}
@@ -114,7 +94,6 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
                 checkedKeys={targetKeys}
                 addTargetKey={(key) => setTargetKeys([...targetKeys, key])}
                 setTreeData={setTreeData}
-                showSearch={showSearchAndCount}
               />
             );
           } else {

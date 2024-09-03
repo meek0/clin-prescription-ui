@@ -33,6 +33,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
     if (prescription) {
       dispatch(fetchFormConfig(prescription));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prescription]);
 
   let ethnValue = undefined;

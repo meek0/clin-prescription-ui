@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import intl from 'react-intl-universal';
-import { AutoComplete, Spin, Tree } from 'antd';
+import { Spin, Tree } from 'antd';
 import { HpoApi } from 'api/hpo';
 import { IHpoNode } from 'api/hpo/models';
-import { map } from 'lodash';
 
 import { isChecked } from './helper';
 import { TreeNode } from './types';
-
-import styles from './index.module.css';
 
 interface OwnProps {
   checkedKeys?: string[];
@@ -46,15 +42,13 @@ const fetchRootNodes = async (root: string) => {
 const PhenotypeTree = ({
   checkedKeys = [],
   onCheckItem,
-  addTargetKey,
+  addTargetKey = () => null,
   setTreeData,
   height = 600,
-  showSearch = false,
   className = '',
 }: OwnProps) => {
   const [treeNodes, setTreeNodes] = useState<TreeNode[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentOptions, setCurrentOptions] = useState<IHpoNode[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -66,7 +60,7 @@ const PhenotypeTree = ({
 
   useEffect(() => {
     setTreeData && setTreeData(treeNodes);
-  }, [treeNodes]);
+  }, [treeNodes, setTreeData]);
 
   const onLoadHpoChildren = (treeNodeClicked: any) =>
     new Promise<void>((resolve) => {
@@ -85,40 +79,9 @@ const PhenotypeTree = ({
       });
     });
 
-  const handleHpoSearchTermChanged = (term: string) => {
-    HpoApi.searchHpos(term.toLowerCase().trim()).then(({ data, error }) => {
-      if (!error) {
-        const results = map(data?.hits, '_source');
-        setCurrentOptions(results);
-      }
-    });
-  };
-
   return (
     <div className={className}>
       <Spin spinning={isLoading}>
-        {showSearch && (
-          <AutoComplete
-            className={styles.phenotypeAutocompleteSearch}
-            placeholder={intl.get('component.phenotypeTree.searchPlaceholder')}
-            options={currentOptions.map(({ name, hpo_id }) => ({ label: name, value: hpo_id }))}
-            onChange={handleHpoSearchTermChanged}
-            onSelect={(value: string) => {
-              const currentOptionsAsNodes: TreeNode[] = [];
-
-              currentOptions.forEach((option) => {
-                const optionAsTreeNode = hpoToTreeNode(option);
-                if (treeNodes.findIndex((n) => n.key === optionAsTreeNode.key) === -1) {
-                  currentOptionsAsNodes.push(optionAsTreeNode);
-                }
-              });
-
-              if (currentOptions.length > 0) setTreeNodes(treeNodes.concat(currentOptionsAsNodes));
-
-              addTargetKey && addTargetKey(value);
-            }}
-          />
-        )}
         <Tree
           loadData={onLoadHpoChildren}
           checkStrictly

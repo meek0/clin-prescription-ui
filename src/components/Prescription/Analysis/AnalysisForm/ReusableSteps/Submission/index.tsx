@@ -64,6 +64,7 @@ const Submission = () => {
       },
       SUBMISSION_REVIEW_FI_KEY,
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -72,6 +73,7 @@ const Submission = () => {
         comment: debouncedComment,
       }),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedComment]);
 
   const needToSelectSupervisor = () => {

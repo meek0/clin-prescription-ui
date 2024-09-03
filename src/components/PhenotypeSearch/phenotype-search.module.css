@@ -1,0 +1,20 @@
+.phenotype-search{
+    min-width: 300px;
+    width: 100%;
+}
+
+.phenotype-search .phenotype-search-btn {
+    padding-left: 0;
+    float: right;
+    padding: 0;
+    font-size: 0.9em;
+    margin-top: -6px;
+}
+
+.phenotype-search .phenotype-search-btn span {
+    text-decoration: underline;
+}
+
+.phenotype-search .phenotype-search-btn span:hover {
+    text-decoration: none;
+}

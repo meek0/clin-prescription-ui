@@ -1,0 +1,49 @@
+.ONESHELL:
+
+# Install
+local_env:
+	cp -p env-qa .env
+
+install: local_env git_submodules js_install
+
+# Git Submodules
+git_submodules:
+	git submodule update --init --recursive
+	git submodule update --remote
+
+git_submodules_fix:
+	git submodule deinit -f .
+	git submodule update --init
+
+git_submodules_update:
+	git submodule deinit -f .
+	git submodule update --init --recursive
+
+# JS
+js_install:
+	npm i
+
+js_clean:
+	rm -f package-lock.json
+	rm -rf node_modules/${m}
+
+js_clean_install: js_clean js_install
+
+# Docker
+start:
+	docker-compose up -d
+
+stop: 
+	docker-compose down
+
+# Work with local ferlab-ui
+ferlab_local:
+	npm install ../ferlab-ui/packages/ui
+	mv tsconfig.paths.json tsconfig.external_ferlab.paths.json
+	mv tsconfig.local_ferlab.paths.json tsconfig.paths.json
+
+ferlab_external:
+	sed -i '' '/@ferlab\/ui/d' ./package.json
+	npm install @ferlab/ui
+	mv tsconfig.paths.json tsconfig.local_ferlab.paths.json
+	mv tsconfig.external_ferlab.paths.json tsconfig.paths.json

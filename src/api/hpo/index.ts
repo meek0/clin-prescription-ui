@@ -2,7 +2,7 @@ import { sendRequestWithRpt } from 'api';
 
 import EnvironmentVariables from 'utils/EnvVariables';
 
-import { IHpoCount, IHpoPayload } from './models';
+import { IHpoPayload } from './models';
 
 const HPO_SERVICE_URL = EnvironmentVariables.configFor('ARRANGER_API');
 

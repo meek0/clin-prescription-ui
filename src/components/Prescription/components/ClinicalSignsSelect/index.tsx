@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import intl from 'react-intl-universal';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Form, Input, Space } from 'antd';
+import { FormInstance } from 'antd/es/form/Form';
 import { clone, isEmpty } from 'lodash';
 
 import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescription/utils/form';
@@ -9,7 +11,12 @@ import { usePrescriptionFormConfig } from 'store/prescription';
 
 import NotObservedSignsList from './NotObservedSignsList';
 import ObservedSignsList from './ObservedSignsList';
-import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignsDataType } from './types';
+import {
+  CLINICAL_SIGNS_FI_KEY,
+  CLINICAL_SIGNS_ITEM_KEY,
+  IClinicalSignItem,
+  IClinicalSignsDataType,
+} from './types';
 
 import styles from './index.module.css';
 
@@ -36,10 +43,9 @@ const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
 
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
-      const initialSigns = initialData[CLINICAL_SIGNS_FI_KEY.SIGNS];
-      if (initialSigns) {
+      if (initialData[CLINICAL_SIGNS_FI_KEY.SIGNS]) {
         setHpoList(
-          initialSigns.map((value) => ({
+          initialData[CLINICAL_SIGNS_FI_KEY.SIGNS].map((value) => ({
             name: value[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
             value: value[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
           })),
@@ -70,3 +76,32 @@ const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
 };
 
 export default ClinicalSignsSelect;
+
+export function getExistingHpoIdList(
+  form: FormInstance<any>,
+  getName: (...key: IGetNamePathParams) => any,
+) {
+  const observedSignFields =
+    form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS) as IClinicalSignItem[]) || [];
+  const nonObservedSignFields =
+    form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS) as IClinicalSignItem[]) ||
+    [];
+  return observedSignFields
+    .concat(nonObservedSignFields)
+    .map((field: IClinicalSignItem) => field.value);
+}
+
+// Check if HPO item is valid (name is defined)
+export function hpoValidationRule(hpoNode: IClinicalSignItem) {
+  return [
+    {
+      validator: async () => {
+        if (!hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME]) {
+          return Promise.reject(
+            new Error(intl.get('prescription.form.signs.observed.invalid.hpo')),
+          );
+        }
+      },
+    },
+  ];
+}
