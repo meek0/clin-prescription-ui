@@ -4,24 +4,11 @@
 local_env:
 	cp -p env-qa .env
 
-install: local_env git_submodules js_install
-
-# Git Submodules
-git_submodules:
-	git submodule update --init --recursive
-	git submodule update --remote
-
-git_submodules_fix:
-	git submodule deinit -f .
-	git submodule update --init
-
-git_submodules_update:
-	git submodule deinit -f .
-	git submodule update --init --recursive
+install: local_env js_install
 
 # JS
 js_install:
-	npm i
+	npm i ${m}
 
 js_clean:
 	rm -f package-lock.json
@@ -47,3 +34,18 @@ ferlab_external:
 	npm install @ferlab/ui
 	mv tsconfig.paths.json tsconfig.local_ferlab.paths.json
 	mv tsconfig.external_ferlab.paths.json tsconfig.paths.json
+
+# Work with local clin-portal-theme
+theme_local:
+	mv package.json package.json.external
+	cp package.json.external package.json
+	npm install ../clin-portal-theme
+
+theme_external:
+	rm -f package.json
+	mv package.json.external package.json
+	npm install clin-portal-theme
+
+theme_clean_install: 
+	m=clin-portal-theme make js_clean
+	m=clin-portal-theme make js_install

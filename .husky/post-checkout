@@ -1,5 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-git submodule deinit -f src/style
-git submodule update --init

@@ -89,7 +89,6 @@ jobs:
       trigger: true
     - get: git-prescription-ui
       trigger: false
-      params: { submodule_recursive: true }
     - task: prepare-and-run-cypress
       attempts: 6
       params:
