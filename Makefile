@@ -37,14 +37,11 @@ ferlab_external:
 
 # Work with local clin-portal-theme
 theme_local:
-	mv package.json package.json.external
-	cp package.json.external package.json
 	npm install ../clin-portal-theme
 
 theme_external:
-	rm -f package.json
-	mv package.json.external package.json
-	npm install clin-portal-theme
+	sed -i '' '/clin-portal-theme/d' ./package.json
+	npm install github:Ferlab-Ste-Justine/clin-portal-theme
 
 theme_clean_install: 
 	m=clin-portal-theme make js_clean
