@@ -23,13 +23,13 @@ describe('Formulaires de prescription - Création', () => {
   it('MMG - Solo', () => {
     const strMRN = mrnValues[Math.floor(Math.random() * mrnValues.length)];
 
-    cy.get('[data-cy="CreateNewPrescription"]').find('[data-cy="ActionButton"]').clickAndWait({force: true});
+    cy.get('[data-cy="CreateNewPrescription"] [data-cy="ActionButton"]').clickAndWait({force: true});
 
     // Choix de l'analyse
     cy.get('[data-cy="SelectAnalysis"]').clickAndWait();
     cy.get('[data-cy="SelectOptionMMG"]').clickAndWait({force: true});
-    cy.get('[data-cy="SelectAnalysis"]').find('input').should('have.attr', 'aria-expanded', 'false');
-    cy.get('[data-cy="AnalysisModal"]').find('button[class*="ant-btn-primary"]').clickAndWait({force: true});
+    cy.get('[data-cy="SelectAnalysis"] input').should('have.attr', 'aria-expanded', 'false');
+    cy.get('[data-cy="AnalysisModal"] button[class*="ant-btn-primary"]').clickAndWait({force: true});
 
     // Identification du patient
     cy.get('input[type="radio"][value="CHUS"]').clickAndWait({force: true});
@@ -58,14 +58,9 @@ describe('Formulaires de prescription - Création', () => {
     cy.wait('@getPOSTform');
     
     // Confirmation de la soumission
-    cy.intercept('POST', '**/$graphql*').as('getPOSTgraphql');
-    cy.get('[class*="successModal"]').find('[href*="/prescription/entity/"]').clickAndWait({force: true});
-    cy.wait('@getPOSTgraphql');
-    cy.wait('@getPOSTgraphql');
-    cy.wait('@getPOSTgraphql');
-    cy.wait('@getPOSTgraphql');
+    cy.clickAndIntercept('[class*="successModal"] [href*="/prescription/entity/"]', 'POST', '**/$graphql*', 3);
 
     // Page de la prescription
-    cy.get('body').contains(strMRN).should('exist');
+    cy.get('[data-cy="PatientCard"]').contains(strMRN).should('exist');
   });
 });
