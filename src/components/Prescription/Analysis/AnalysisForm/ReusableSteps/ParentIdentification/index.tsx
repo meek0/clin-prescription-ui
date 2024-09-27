@@ -20,6 +20,7 @@ import {
 } from 'components/Prescription/utils/form';
 import { IAnalysisStepForm, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
+import { SexValue } from 'utils/commonTypes';
 
 import { defaultCollapseProps, defaultFormItemsRules, STEPS_ID } from '../constant';
 
@@ -139,7 +140,11 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                   <PatientDataSearch
                     form={form}
                     parentKey={FORM_NAME}
-                    initialData={getInitialData()}
+                    initialData={{
+                      ...(getInitialData() as IPatientDataType),
+                      [PATIENT_DATA_FI_KEY.SEX]:
+                        parent === 'father' ? SexValue.MALE : SexValue.FEMALE,
+                    }}
                     onRamqSearchStateChange={setRamqSearchDone}
                     initialRamqSearchDone={ramqSearchDone}
                     onResetRamq={() => {}}
