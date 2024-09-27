@@ -20,6 +20,6 @@ describe('Affichage de la page Logout', () => {
     cy.get('[class*="Landing_logoRow"]').eq(0).find('svg').its('length').should('eq', 4);
     cy.get('[class*="Landing_logoRow"]').eq(1).find('svg').its('length').should('eq', 2);
     cy.get('[class*="Landing_logoRow"]').eq(1).find('img').its('length').should('eq', 2);
-    cy.get('[class*="Landing_sssLogoContainer"]').find('svg').its('length').should('eq', 1);
+    cy.get('[class*="Landing_sssLogoContainer"] svg').its('length').should('eq', 1);
   });
 });
