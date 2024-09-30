@@ -38,7 +38,7 @@
               "PRESCRIPTION",
               "Numéro de prescription :{{prescriptionId}}",
               "MÉDECIN PRESCRIPTEUR",
-              "À REMPLIR PAR LE CENTRE / MÉDECIN QUI EFFECTUERA LE PRÉLÈVEMENT",
+              "À REMPLIR PAR LE MÉDECIN PRESCRIPTEUR",
               "Échantillons",
               "Nouveau prélèvement",
               "ADN déjà disponible au laboratoire. Numéro(s) d'échantillon(s) (obligatoire) : ",
