@@ -2,7 +2,9 @@ import { format, parse } from 'date-fns';
 
 import { SexValue } from 'utils/commonTypes';
 
-export const RAMQ_PATTERN = RegExp(/^[a-zA-Z-]{4}\d{8,8}$/);
+export const RAMQ_PATTERN = RegExp(
+  /^[a-zA-Z-]{4}\d{2}(?:(?:[05][1-9])|[16][012])(?:(?:0[1-9])|(?:[12][0-9])|(?:3[01]))\d{2}$/,
+);
 export const RAMQ_NUMBER_LENGTH = 12;
 
 export const isRamqValid = (ramq: string) => RAMQ_PATTERN.test(ramq.replaceAll(' ', ''));

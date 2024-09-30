@@ -1,5 +1,6 @@
 /// <reference types="cypress"/>
 import '../../support/commands';
+
 import { oneMinute } from '../../support/utils';
 
 let epCHUSJ_ldmCHUSJ: any;
@@ -16,11 +17,11 @@ describe('Affichage de toutes les pages et modals', () => {
     cy.contains('Beta').should('exist');
     cy.contains('Créer une nouvelle prescription').should('exist');
     cy.contains('Ajouter un parent à une prescription existante').should('exist');
-    cy.contains('Mes Prescriptions').should('exist');
+    cy.contains('Mes prescriptions').should('exist');
     cy.get('[data-cy="ZeppelinLink"]').should('have.attr', 'href', Cypress.env('zeppelin_URL'));
     cy.get('[data-cy="FhirLink"]').should('have.attr', 'href', Cypress.env('fhir_URL'));
   });
- 
+
   it('Prescription', () => {
     cy.visitPrescriptionEntityPage(epCHUSJ_ldmCHUSJ.prescriptionId);
 
