@@ -11,7 +11,7 @@ Cypress.Commands.add('fetchFhirValues', () => {
   const password = Cypress.env('password');
 
   return cy.request({
-    method: 'GET',
+    method: 'POST',
     url: `https://qlin-me-hybrid.qa.cqgc.hsj.rtss.qc.ca/api/v1/auth/login`,
     form: true,
     body: {
