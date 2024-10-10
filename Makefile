@@ -11,10 +11,16 @@ js_install:
 	npm i ${m}
 
 js_clean:
-	rm -f package-lock.json
 	rm -rf node_modules/${m}
 
 js_clean_install: js_clean js_install
+
+# Only use this target to update the package-lock.json file and dependencies (should be done in a dedicated ticket)
+js_hard_clean: js_clean
+	rm -f package-lock.json
+
+# Only use this target to update the package-lock.json file and dependencies (should be done in a dedicated ticket)
+js_hard_clean_install: js_hard_clean js_install
 
 # Docker
 start:
