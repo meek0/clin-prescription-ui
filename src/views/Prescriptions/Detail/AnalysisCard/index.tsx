@@ -80,7 +80,7 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
               )}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.patientsearch.table.ldm')}>
-              {extractOrganizationId(prescription?.performer.resource.alias)}
+              {extractOrganizationId(prescription?.performer?.resource.alias || EMPTY_FIELD)}
             </Descriptions.Item>
           </Descriptions>
         )}
