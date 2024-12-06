@@ -39,6 +39,7 @@
   "filters.options.status.on-hold": "Soumise",
   "filters.options.status.revoked": "Refusée",
   "filters.options.status.submitted": "Soumise",
+  "filters.options.status.unknown": "Inconnu",
   "first.name": "Prénom",
   "folder": "Dossier",
   "footer.navigation.fhir": "Fhir",
