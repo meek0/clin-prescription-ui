@@ -1,0 +1,13 @@
+FROM cypress/included:latest
+
+WORKDIR /code
+
+COPY package.json package-lock.json /code/
+
+COPY .env tsconfig.json tsconfig.paths.json craco.config.js cypress.config.ts /code/
+
+RUN npm install
+RUN npx update-browserslist-db@latest
+
+ENV PATH=./node_modules/.bin:$PATH
+

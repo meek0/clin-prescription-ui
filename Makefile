@@ -26,7 +26,10 @@ js_hard_clean_install: js_hard_clean js_install
 start:
 	docker-compose up -d
 
-stop: 
+start_cypress:
+	docker compose --profile cypress up -d --build
+
+stop:
 	docker-compose down
 
 # Work with local ferlab-ui
@@ -49,6 +52,6 @@ theme_external:
 	sed -i '' '/clin-portal-theme/d' ./package.json
 	npm install github:Ferlab-Ste-Justine/clin-portal-theme
 
-theme_clean_install: 
+theme_clean_install:
 	m=clin-portal-theme make js_clean
 	m=clin-portal-theme make js_install

@@ -1,5 +1,5 @@
 # About
-This project is the frontend web application for _clin_ and is designed to be used in specific environments specialized in genomics.  
+This project is the frontend web application for _clin_ and is designed to be used in specific environments specialized in genomics.
 
 
 # Usage
@@ -8,7 +8,7 @@ This project is the frontend web application for _clin_ and is designed to be us
 
 This application takes minimally the following variables as input:
 
-- **REACT_APP_KEYCLOAK_CONFIG**: Keycloack configurations needed for auth. 
+- **REACT_APP_KEYCLOAK_CONFIG**: Keycloack configurations needed for auth.
 - **REACT_APP_ARRANGER_API**: Arranger endpoint.
 - **REACT_APP_ARRANGER_PROJECT_ID**: Specific Arranger project's version.
 - **REACT_APP_FHIR_SERVICE_URL**: Fhir endpoint.
@@ -31,14 +31,18 @@ Before going further, make sure that ```docker``` and ```docker compose``` are i
   cp -p env-qa .env
   # Or user the make target:
   make local_env
-
+```
 ### With docker
+```sh
+# 1. To start the containers
+  make start
 
-# 1. in a terminal, run docker-compose from project's docker-compose file.
-  docker compose up
+# 2. To clean up afterwards once your are done developing.
+  make stop
 
-# 2. to clean up afterwards once your are done developing.
-  docker compose down
+# 3. To start cypress container
+  make start_cypress
+
 ```
 :warning: _With this setup, your host and the app's container share the project directory/volume._
 
@@ -52,7 +56,7 @@ To use your local ```clin-portal-theme``` in place of the one in dependencies yo
 ```bash
 make theme_local
 ```
-The project will use your local ```clin-portal-theme``` so watch script will react to any changes (once you build the ```clin-portal-theme```)  
+The project will use your local ```clin-portal-theme``` so watch script will react to any changes (once you build the ```clin-portal-theme```)
 
 To eject the local ```clin-portal-theme``` use the make target:
 ```bash
@@ -60,8 +64,8 @@ make theme_external
 ```
 
 #### using temporary tags
-You can also simply use custom tag in your local ```clin-portal-theme``` (for exemple you can use a tag matching the Jira story: @clin-xxxx).  
-You'll need to update the tag after any changes in the project (you can use the make target **retag** of theme: ```t=@clin-xxxx make retag```).  
+You can also simply use custom tag in your local ```clin-portal-theme``` (for exemple you can use a tag matching the Jira story: @clin-xxxx).
+You'll need to update the tag after any changes in the project (you can use the make target **retag** of theme: ```t=@clin-xxxx make retag```).
 Once ```clin-portal-theme``` is re-tagged, you can simply use the make target:
  ```bash
 make theme_clean_install

@@ -1,10 +1,19 @@
-version: "3"
+version: '3'
 services:
   frontend:
     image: node:18.1-alpine
     working_dir: /code
     ports:
-      - "2005:2005"
+      - '2005:2005'
     volumes:
       - .:/code
     command: sh -c 'npm install && npm run start'
+  cypress:
+    profiles: ['cypress']
+    build:
+      context: .
+      dockerfile: Dockerfile.cypress
+    volumes:
+      - ./cypress:/code/cypress
+    entrypoint: >
+      sh -c "cypress --help && sleep infinity"
