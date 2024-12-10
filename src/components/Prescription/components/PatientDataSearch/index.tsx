@@ -29,7 +29,9 @@ import {
   isRamqValid,
 } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
+import { useAppDispatch } from 'store';
 import { usePrescriptionFormConfig } from 'store/prescription';
+import { prescriptionFormActions } from 'store/prescription/slice';
 import { SexValue } from 'utils/commonTypes';
 import { hasSpecialCharacters } from 'utils/helper';
 
@@ -45,6 +47,7 @@ type OwnProps = IAnalysisFormPart & {
 };
 
 export enum PATIENT_DATA_FI_KEY {
+  PATIENT_ID = 'id',
   PRESCRIBING_INSTITUTION = 'ep',
   FILE_NUMBER = 'mrn',
   NO_FILE = 'no_mrn',
@@ -57,6 +60,7 @@ export enum PATIENT_DATA_FI_KEY {
 }
 
 export interface IPatientDataType {
+  [PATIENT_DATA_FI_KEY.PATIENT_ID]: string;
   [PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION]: string;
   [PATIENT_DATA_FI_KEY.BIRTH_DATE]: string;
   [PATIENT_DATA_FI_KEY.FILE_NUMBER]: string;
@@ -81,6 +85,7 @@ const PatientDataSearch = ({
   initialData,
 }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
+  const dispatch = useAppDispatch();
   const [isNewFileNumber, setIsNewFileNumber] = useState(false);
   const [fileSearchDone, setFileSearchDone] = useState(initialFileSearchDone);
   const [ramqSearchDone, setRamqSearchDone] = useState(initialRamqSearchDone);
@@ -308,7 +313,6 @@ const PatientDataSearch = ({
                   onSearch: (value, search) => {
                     const fixedRamq = value.replace(/\s/g, '');
                     resetFieldError(form, getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER));
-
                     if (
                       extractBirthDateAndSexFromRamq(fixedRamq, INPUT_DATE_OUTPUT_FORMAT)
                         .birthDate &&
@@ -345,6 +349,7 @@ const PatientDataSearch = ({
                     getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
                     getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
                   ]);
+                  dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                 }}
                 onSearchDone={(value, searchValue) => {
                   if (isEmpty(value) && searchValue) {

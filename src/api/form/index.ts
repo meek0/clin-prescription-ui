@@ -37,10 +37,36 @@ const searchSupervisor = ({ ep, prefix }: { ep: string; prefix: string }) =>
     headers,
   });
 
-const createPrescription = (data: TCompleteAnalysis) =>
-  sendRequestWithRpt<{ id: string }>({
+const createPrescription = (data: TCompleteAnalysis, isDraft?: boolean) =>
+  sendRequestWithRpt<{
+    id: string;
+    patients: {
+      id: string;
+      family_member: string;
+    }[];
+  }>({
     method: 'POST',
     url: `${FORM_API_URL}/form`,
+    params: {
+      draft: !!isDraft || null,
+    },
+    headers,
+    data,
+  });
+
+const updatePrescription = (data: TCompleteAnalysis, prescriptionId: string, isDraft?: boolean) =>
+  sendRequestWithRpt<{
+    id: string;
+    patients: {
+      id: string;
+      family_member: string;
+    }[];
+  }>({
+    method: 'PUT',
+    url: `${FORM_API_URL}/form/${prescriptionId}`,
+    params: {
+      draft: !!isDraft || null,
+    },
     headers,
     data,
   });
@@ -67,6 +93,7 @@ export const PrescriptionFormApi = {
   searchPatient,
   searchSupervisor,
   createPrescription,
+  updatePrescription,
   downloadDocuments,
   prescriptionShare,
 };

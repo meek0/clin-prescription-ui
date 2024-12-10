@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { logout } from 'auth/keycloak';
 import { RptManager } from 'auth/rpt';
 import { isUndefined } from 'lodash';
+import _ from 'lodash';
 
 import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
 import { MuscularDiseaseConfig } from 'store/prescription/analysis/muscular';
@@ -67,10 +68,20 @@ const prescriptionFormSlice = createSlice({
   initialState: PrescriptionState,
   reducers: {
     saveStepData: (state, action: PayloadAction<any>) => {
-      state.analysisData = {
-        ...state.analysisData,
-        ...action.payload,
-      };
+      state.analysisData = _.merge(state.analysisData, action.payload);
+    },
+    setDraft: (state, action: PayloadAction<boolean>) => {
+      state.isDraft = action.payload;
+    },
+    setDisplayActionModal: (
+      state,
+      action: PayloadAction<{
+        displayActionModal: 'saved' | 'submitted' | 'error' | undefined;
+        prescriptionVisible: boolean;
+      }>,
+    ) => {
+      state.displayActionModal = action.payload.displayActionModal;
+      state.prescriptionVisible = action.payload.prescriptionVisible;
     },
     goTo: (
       state,
@@ -167,7 +178,24 @@ const prescriptionFormSlice = createSlice({
       }
     },
     saveCreatedPrescription: (state, action: PayloadAction<any>) => {
-      state.prescriptionId = action.payload;
+      state.prescriptionId = action.payload?.prescriptionId || undefined;
+      state.isDraft = !!action.payload?.isDraft;
+      state.displayActionModal = state.isDraft ? 'saved' : 'submitted';
+      if (action.payload?.patients) {
+        for (const patient of action.payload.patients) {
+          switch (patient.family_member) {
+            case 'PROBAND':
+              if (state.analysisData.patient) state.analysisData.patient.id = patient.id;
+              break;
+            case 'FATHER':
+              if (state.analysisData.father) state.analysisData.father.id = patient.id;
+              break;
+            case 'MOTHER':
+              if (state.analysisData.mother) state.analysisData.mother.id = patient.id;
+              break;
+          }
+        }
+      }
     },
   },
   extraReducers: (builder) => {
@@ -189,7 +217,7 @@ const prescriptionFormSlice = createSlice({
     });
     builder.addCase(createPrescription.fulfilled, (state) => {
       state.isCreatingPrescription = false;
-      state.prescriptionVisible = false;
+      if (!state.isDraft) state.prescriptionVisible = false;
     });
     builder.addCase(createPrescription.rejected, (state) => {
       state.isCreatingPrescription = false;

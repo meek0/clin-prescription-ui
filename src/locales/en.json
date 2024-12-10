@@ -110,8 +110,8 @@
   "prescription.clinical.signs.review.label.observed": "Signs observed",
   "prescription.form.cancel.modal.cancel.btn": "Cancel the prescription",
   "prescription.form.cancel.modal.close.btn": "Cancel",
-  "prescription.form.cancel.modal.content": "If you cancel the current prescription, all data will be lost.",
-  "prescription.form.cancel.modal.title": "Cancel this prescription?",
+  "prescription.form.cancel.modal.content": "All unsaved information will be lost if you close this form.",
+  "prescription.form.cancel.modal.title": "Close the form ?",
   "prescription.history.diagnosis.add.health.conditions": "Add",
   "prescription.history.diagnosis.report.health.conditions": "Report relevant health conditions",
   "prescription.history.diagnosis.review.label.ethnicity": "Ethnicity",
@@ -531,8 +531,25 @@
         "message": "The prescription <span style='font-weight: 500;'>{id}</span> was created successfully.",
         "link": "View the prescription"
       },
+      "error": {
+        "title": "Prescription submission error",
+        "message": "An error occurred while creating the prescription. Please try again."
+      },
       "actions": {
         "download": "Download documents"
+      }
+    },
+    "saved": {
+      "success": {
+        "title": "Prescription not saved",
+        "message": "An error occurred while saving the prescription. Please try again."
+      },
+      "error": {
+        "title": "Prescription non soumise",
+        "message": "Une erreur s’est produite lors de la création de la prescription. Veuillez essayer de nouveau."
+      },
+      "actions": {
+         "continue": "Continue editing"
       }
     },
     "parent": {
