@@ -4,8 +4,10 @@ import { StatusOptions } from 'views/Prescriptions/components/StatusTag';
 
 export const getPrescriptionStatusDictionnary = () => ({
   [StatusOptions.Active]: intl.get('filters.options.status.active'),
+  [StatusOptions.Draft]: intl.get('filters.options.status.draft'),
   [StatusOptions.OnHold]: intl.get('filters.options.status.on-hold'),
   [StatusOptions.Completed]: intl.get('filters.options.status.completed'),
+  [StatusOptions.Unknown]: intl.get('filters.options.status.unknown'),
 });
 
 export const prescriptionPriorityDictionnary = () => ({

@@ -39,6 +39,7 @@
   "filters.options.status.on-hold": "Submitted",
   "filters.options.status.revoked": "Revoked",
   "filters.options.status.submitted": "Submitted",
+  "filters.options.status.unknown": "Unknown",
   "first.name": "First name",
   "folder": "MRN",
   "footer.navigation.fhir": "Fhir",

@@ -1,4 +1,9 @@
-import { CheckCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  FormOutlined,
+  SyncOutlined,
+  WarningOutlined,
+} from '@ant-design/icons';
 import { Tag } from 'antd';
 
 /**
@@ -11,8 +16,10 @@ import { Tag } from 'antd';
 
 export enum StatusOptions {
   Active = 'active',
+  Draft = 'draft',
   OnHold = 'on-hold',
   Completed = 'completed',
+  Unknown = 'unknown',
 }
 
 export type TranslationDictionary = Record<StatusOptions, string>;
@@ -32,6 +39,11 @@ export const StatusLabelElement: Record<
       {d[StatusOptions.Active]}
     </Tag>
   ),
+  [StatusOptions.Draft]: (d) => (
+    <Tag color="default" icon={<FormOutlined />}>
+      {d[StatusOptions.Draft]}
+    </Tag>
+  ),
   [StatusOptions.OnHold]: (d) => (
     <Tag color="blue" icon={<SyncOutlined />}>
       {d[StatusOptions.OnHold]}
@@ -42,9 +54,16 @@ export const StatusLabelElement: Record<
       {d[StatusOptions.Completed]}
     </Tag>
   ),
+  [StatusOptions.Unknown]: (d) => (
+    <Tag color="error" icon={<WarningOutlined />}>
+      {d[StatusOptions.Unknown]}
+    </Tag>
+  ),
 };
 
 const StatusTag = ({ dictionary, status }: StatusLabelProps) =>
-  StatusLabelElement[status as StatusOptions](dictionary);
+  StatusLabelElement[status as StatusOptions]
+    ? StatusLabelElement[status as StatusOptions](dictionary)
+    : StatusLabelElement.unknown(dictionary);
 
 export default StatusTag;
