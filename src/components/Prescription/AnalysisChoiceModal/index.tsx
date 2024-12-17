@@ -31,7 +31,7 @@ const AnalysisChoiceModal = () => {
     <Modal
       title={intl.get('prescription.analysis.choici.modal.title')}
       data-cy="AnalysisModal"
-      visible={analysisChoiceModalVisible}
+      open={analysisChoiceModalVisible}
       onCancel={() => {
         dispatch(prescriptionFormActions.cancel());
         form.resetFields();

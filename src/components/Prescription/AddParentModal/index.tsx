@@ -36,7 +36,7 @@ const AddParentModal = () => {
   return (
     <Modal
       title={intl.get('prescription.add.parent.modal.title')}
-      visible={addParentModalVisible}
+      open={addParentModalVisible}
       onCancel={() => {
         dispatch(prescriptionFormActions.cancel());
         onDone();
