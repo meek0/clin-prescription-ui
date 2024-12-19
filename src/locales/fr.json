@@ -566,8 +566,7 @@
         "clear":"Aucun partage"
       },
       "select":{
-        "searchPlaceholder":"Rechercher",
-        "notAssign":"Non assignée"
+        "searchPlaceholder":"Rechercher"
       }
     },
     "filter":{

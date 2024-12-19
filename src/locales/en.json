@@ -564,8 +564,7 @@
         "clear":"No sharing"
       },
       "select":{
-        "searchPlaceholder":"Search",
-        "notAssign":"Not assigned"
+        "searchPlaceholder":"Search"
       }
     },
     "filter":{
