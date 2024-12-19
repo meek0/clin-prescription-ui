@@ -52,10 +52,21 @@ const downloadDocuments = (analysis_id: string, lang = LANG.FR) =>
     responseType: 'blob',
   });
 
+const prescriptionShare = (analysis_id: string, role: string[]) =>
+  sendRequestWithRpt<{ analysis_id: string; roles: string[] }>({
+    method: 'POST',
+    url: `${FORM_API_URL}/share`,
+    data: {
+      analysis_id: analysis_id,
+      roles: role,
+    },
+  });
+
 export const PrescriptionFormApi = {
   fetchConfig,
   searchPatient,
   searchSupervisor,
   createPrescription,
   downloadDocuments,
+  prescriptionShare,
 };

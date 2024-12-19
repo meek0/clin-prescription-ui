@@ -7,7 +7,7 @@
     "@apollo/client": "^3.4.17",
     "@babel/core": "^7.16.0",
     "@ferlab/core": "^1.0.0",
-    "@ferlab/ui": "^10.7.2",
+    "@ferlab/ui": "^10.14.5",
     "@loadable/component": "^5.15.2",
     "@nivo/pie": "^0.84.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",

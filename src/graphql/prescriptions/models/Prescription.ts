@@ -29,7 +29,7 @@ export interface AnalysisResult extends ArrangerNodeData {
   prescription_id: string;
   priority: string;
   requester: string;
-  security_tags: string;
+  security_tags: string[];
   status: string;
   timestamp: string;
   sequencing_requests: ArrangerResultsTree<AnalysisSequencingRequest>;

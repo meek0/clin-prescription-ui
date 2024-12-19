@@ -1,4 +1,5 @@
 import intl from 'react-intl-universal';
+import { IAssignmentsDictionary } from '@ferlab/ui/core/components/Assignments/types';
 import { IProTableDictionary } from '@ferlab/ui/core/components/ProTable/types';
 import { IDictionary as QueryBuilderDict } from '@ferlab/ui/core/components/QueryBuilder/types';
 
@@ -176,3 +177,24 @@ export const getQueryBuilderDictionary = (
     },
   };
 };
+
+export const getShareDictionairy = (): IAssignmentsDictionary => ({
+  select: {
+    actions: {
+      clear: intl.get('sharing.dropdown.actions.clear'),
+    },
+    textInfo: {
+      searchPlaceholder: intl.get('sharing.dropdown.select.searchPlaceholder'),
+      notAssigned: intl.get('sharing.dropdown.select.notAssign'),
+    },
+  },
+  filter: {
+    actions: {
+      reset: intl.get('sharing.filter.actions.reset'),
+      filter: intl.get('sharing.filter.actions.ok'),
+    },
+    textInfo: {
+      searchPlaceholder: intl.get('sharing.dropdown.select.searchPlaceholder'),
+    },
+  },
+});

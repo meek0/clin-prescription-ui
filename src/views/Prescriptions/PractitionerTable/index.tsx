@@ -7,7 +7,9 @@ import { generateQuery, generateValueFilter } from '@ferlab/ui/core/data/sqon/ut
 import { SortDirection } from '@ferlab/ui/core/graphql/constants';
 import useDebounce from '@ferlab/ui/core/hooks/useDebounce';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
-import { Input, Row, Typography } from 'antd';
+import { Input, Row, Typography } from 'antd'; 
+import { FhirApi } from 'api/fhir';
+import { PractitionerRole } from 'api/fhir/models';
 import { usePractitionnerPrescriptions } from 'graphql/prescriptions/actions';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
@@ -23,6 +25,8 @@ import {
 import { useUser } from 'store/user';
 
 import { commonPrescriptionFilterFields } from '../utils/constant';
+
+import { getPractitionerInfoList } from './utils/export';
 
 import styles from './index.module.css';
 import homeStyles from 'views/Home/index.module.css';
@@ -46,6 +50,8 @@ const generateSearchFilter = (search: string) =>
 const { Title } = Typography;
 const PractitionerTable = (): React.ReactElement => {
   const [prescriptionPageIndex, setPrescriptionPageIndex] = useState(DEFAULT_PAGE_INDEX);
+  const [practitionerInfoList, setPractitionerInfoList] = useState<any[]>([]);
+  const [loadindPractitionner, setLoadindPractitionner] = useState<boolean>(true);
   const [prescriptionQueryConfig, setPrescriptionQueryConfig] = useState({
     ...DEFAULT_QUERY_CONFIG,
     size: DEFAULT_PAGE_SIZE,
@@ -58,6 +64,13 @@ const PractitionerTable = (): React.ReactElement => {
   const searchQuery = useMemo(() => generateSearchFilter(debouncedSearch), [debouncedSearch]);
 
   const sqonContent: TSyntheticSqonContent = [
+    {
+      op: 'in',
+      content: {
+        field: 'security_tags',
+        value: user.practitionerRoles.map((pr) => 'PractitionerRole/' + pr.id),
+      },
+    },
     {
       op: 'in',
       content: { field: 'requester', value: user.practitionerRoles.map((pr) => pr.id) },
@@ -74,7 +87,7 @@ const PractitionerTable = (): React.ReactElement => {
     searchAfter: prescriptionQueryConfig.searchAfter,
     sqon: {
       content: sqonContent,
-      op: 'and',
+      op: 'or',
     } as ISyntheticSqon,
     sort: tieBreaker({
       sort: prescriptionQueryConfig.sort,
@@ -88,6 +101,20 @@ const PractitionerTable = (): React.ReactElement => {
     prescriptionsQueryVariables,
     prescriptionQueryConfig.operations,
   );
+
+  useEffect(() => {
+    FhirApi.searchPractitionerRoles()
+      .then(({ data }) => {
+        const practionerList =
+          data?.entry?.map((entry) => entry.resource as PractitionerRole) || [];
+        if (practionerList) {
+          setPractitionerInfoList(getPractitionerInfoList(practionerList));
+        }
+      })
+      .finally(() => {
+        setLoadindPractitionner(false);
+      });
+  }, []);
 
   useEffect(() => {
     if (
@@ -121,6 +148,8 @@ const PractitionerTable = (): React.ReactElement => {
               queryConfig={prescriptionQueryConfig}
               setQueryConfig={setPrescriptionQueryConfig}
               loading={prescriptions.loading}
+              loadingPractitioner={loadindPractitionner}
+              practitionerInfoList={practitionerInfoList}
               pageIndex={prescriptionPageIndex}
               setPageIndex={setPrescriptionPageIndex}
             />

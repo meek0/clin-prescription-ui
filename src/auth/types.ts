@@ -15,6 +15,7 @@ export type DecodedRpt = {
     }[];
   };
   fhir_organization_id: string[];
+  fhir_practitioner_id: string;
 };
 
 export interface IRptPayload {
