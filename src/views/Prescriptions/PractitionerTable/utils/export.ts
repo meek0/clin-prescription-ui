@@ -12,18 +12,14 @@ export const getPractitionerInfoList = (
     (p) => p.resourceType === 'PractitionerRole',
   ) as PractitionerRole[];
   const infoList = practitionerRoles?.map((pr: PractitionerRole) => {
-    const practitionerInfo: Practitioner = practitionerRolesBundle?.find((p) => {
-      const practitioner = pr as PractitionerRole;
-      if (p.resourceType === 'Practitioner') {
-        return p.id === practitioner.practitioner.reference.split('/')[1];
-      }
-      p.id === practitioner.practitioner.reference.split('/')[1];
-    }) as Practitioner;
+    const practitionerInfo: Practitioner = practitionerRolesBundle?.find(
+      (p) => p.resourceType === 'Practitioner' && p.id === pr.practitioner.reference.split('/')[1],
+    ) as Practitioner;
     const email = getEmailfromPractionnerRole(pr);
     const obj: TPractitionnerInfo = {
       practitionerRoles_Id: pr.id,
-      practitioner: practitionerInfo.id,
-      name: practitionerInfo.name,
+      practitioner: practitionerInfo?.id,
+      name: practitionerInfo?.name,
       email: email?.value,
       ldm: pr.organization.reference.split('/')[1],
     };

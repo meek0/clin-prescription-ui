@@ -64,78 +64,65 @@ const userPopOverContent = (userInfos: TPractitionnerInfo[]) =>
 
 const renderAvatarGroup = (selectedInfoList: TPractitionnerInfo[]) => {
   const shareCount = selectedInfoList.length;
-  return shareCount <= 2 ? (
+
+  return (
     <div className={styles.sharingCell}>
       {selectedInfoList.map((p, index) => (
         <Popover
           trigger="hover"
           key={p.practitionerRoles_Id}
           overlayClassName={styles.userPopOverContent}
-          content={userPopOverContent([selectedInfoList[index]])}
+          content={
+            index <= 1 ? (
+              shareCount > 2 && index === 1 ? (
+                <Space size={8} direction="vertical">
+                  {userPopOverContent(selectedInfoList.slice(1))}
+                </Space>
+              ) : (
+                userPopOverContent([p])
+              )
+            ) : null
+          }
         >
-          <div>
-            <UserAvatar
-              className={
-                index === 1 ? `${styles.outlineAvatar} ${styles.userAvatar}` : styles.userAvatar
-              }
-              size={24}
-              userName={getPractitionnerName(p.name)}
-            />
-          </div>
+          {index <= 1 ? (
+            shareCount > 2 && index === 1 ? (
+              <Avatar className={styles.moresharing} size={24}>
+                {`+${shareCount - 1}`}
+              </Avatar>
+            ) : (
+              <div>
+                <UserAvatar
+                  className={
+                    index === 1 ? `${styles.outlineAvatar} ${styles.userAvatar}` : styles.userAvatar
+                  }
+                  size={24}
+                  userName={getPractitionnerName(p.name)}
+                />
+              </div>
+            )
+          ) : null}
         </Popover>
       ))}
-    </div>
-  ) : (
-    <div className={styles.sharingCell}>
-      <Popover
-        trigger="hover"
-        overlayClassName={styles.userPopOverContent}
-        content={userPopOverContent([selectedInfoList[0]])}
-      >
-        <div>
-          <UserAvatar
-            className={styles.userAvatar}
-            key={selectedInfoList[0].practitionerRoles_Id}
-            size={24}
-            userName={getPractitionnerName(selectedInfoList[0].name)}
-          />
-        </div>
-      </Popover>
-      <Popover
-        trigger="hover"
-        overlayClassName={styles.userPopOverContent}
-        content={
-          <Space size={8} direction="vertical">
-            {userPopOverContent(selectedInfoList.slice(1))}
-          </Space>
-        }
-      >
-        <Avatar className={styles.moresharing} size={24}>
-          {`+${shareCount - 1}`}
-        </Avatar>
-      </Popover>
     </div>
   );
 };
 
 export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactElement => {
   const { decodedRpt } = useRpt();
-  const filterSecurityTag = results.security_tags
-    .filter((s) => s.includes('PractitionerRole'))
-    .map((s) => s.split('/')[1]);
+  const filterSecurityTag = results.security_tags.reduce((securityTags: string[], s: string) => {
+    if (s.includes('PractitionerRole')) securityTags.push(s.split('/')[1]);
+    return securityTags;
+  }, []);
   const [practitionerInfoList, setPractitionerInfoList] = useState<any[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSharing, setSelectedSharing] = useState<string[]>(filterSecurityTag);
   const [loadingSelect, setLoadingSelect] = useState<boolean>();
   const handleSelect = (practitionerRoles_ids: string[]) => {
-    if (
-      [...(practitionerRoles_ids || [])]?.sort().toString() !==
-      [...(selectedSharing || [])]?.sort().toString()
-    ) {
+    if (practitionerRoles_ids?.sort().toString() !== selectedSharing?.sort().toString()) {
       setLoadingSelect(true);
       PrescriptionFormApi.prescriptionShare(results.prescription_id, practitionerRoles_ids)
         .then(({ data }) => {
-          setSelectedSharing(data?.roles ? data.roles : []);
+          setSelectedSharing(data?.roles || []);
         })
         .finally(() => {
           setLoadingSelect(false);
@@ -170,7 +157,7 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
       showLdm={false}
     />
   );
-  return selectedSharing.length > 0 ? (
+  return (
     <Space>
       <Popover
         overlayClassName={styles.sharingPopOver}
@@ -181,32 +168,22 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
         onOpenChange={(open: boolean) => setOpen(open)}
         destroyTooltipOnHide
       >
-        <div>
-          <Space direction="horizontal">
-            {selectedSharing.length > 0 && renderAvatarGroup(selectedInfoList)}
-          </Space>
-        </div>
-      </Popover>
-    </Space>
-  ) : (
-    <Space>
-      <Popover
-        overlayClassName={styles.sharingPopOver}
-        placement="bottomLeft"
-        trigger="click"
-        content={content}
-        onOpenChange={(open: boolean) => setOpen(open)}
-        open={open}
-        destroyTooltipOnHide
-      >
-        <Tooltip
-          title={canShare ? intl.get('sharing.tooltip') : intl.get('assignment.tooltip.disable')}
-          placement="top"
-        >
-          <div className={styles.unAssignAvatar}>
-            <UnAssignAvatar canAssign={canShare} />
+        {selectedSharing.length > 0 ? (
+          <div>
+            <Space direction="horizontal">
+              {selectedSharing.length > 0 && renderAvatarGroup(selectedInfoList)}
+            </Space>
           </div>
-        </Tooltip>
+        ) : (
+          <Tooltip
+            title={canShare ? intl.get('sharing.tooltip') : intl.get('assignment.tooltip.disable')}
+            placement="top"
+          >
+            <div className={styles.unAssignAvatar}>
+              <UnAssignAvatar canAssign={canShare} />
+            </div>
+          </Tooltip>
+        )}
       </Popover>
     </Space>
   );
