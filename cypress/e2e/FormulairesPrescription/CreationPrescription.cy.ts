@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 describe('Formulaires de prescription - Création', () => {
-  it('MMG - Solo', () => {
+  it('MMG - Solo [PRESC-318]', () => {
     const strMRN = mrnValues[Math.floor(Math.random() * mrnValues.length)];
 
     cy.get('[data-cy="CreateNewPrescription"] [data-cy="ActionButton"]').clickAndWait({force: true});
