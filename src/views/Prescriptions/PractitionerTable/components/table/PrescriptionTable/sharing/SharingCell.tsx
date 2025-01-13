@@ -64,28 +64,27 @@ const userPopOverContent = (userInfos: TPractitionnerInfo[]) =>
 
 const renderAvatarGroup = (selectedInfoList: TPractitionnerInfo[]) => {
   const shareCount = selectedInfoList.length;
-
-  return (
-    <div className={styles.sharingCell}>
-      {selectedInfoList.map((p, index) => (
-        <Popover
-          trigger="hover"
-          key={p.practitionerRoles_Id}
-          overlayClassName={styles.userPopOverContent}
-          content={
-            index <= 1 ? (
-              shareCount > 2 && index === 1 ? (
-                <Space size={8} direction="vertical">
-                  {userPopOverContent(selectedInfoList.slice(1))}
-                </Space>
-              ) : (
-                userPopOverContent([p])
-              )
-            ) : null
-          }
-        >
-          {index <= 1 ? (
-            shareCount > 2 && index === 1 ? (
+  const result: React.ReactNode[] = selectedInfoList.reduce(
+    (acc: React.ReactNode[], item, index) => {
+      if (index <= 1) {
+        const element = (
+          <Popover
+            trigger="hover"
+            key={item.practitionerRoles_Id}
+            overlayClassName={styles.userPopOverContent}
+            content={
+              index <= 1 ? (
+                shareCount > 2 && index === 1 ? (
+                  <Space size={8} direction="vertical">
+                    {userPopOverContent(selectedInfoList.slice(1))}
+                  </Space>
+                ) : (
+                  userPopOverContent([item])
+                )
+              ) : null
+            }
+          >
+            {shareCount > 2 && index === 1 ? (
               <Avatar className={styles.moresharing} size={24}>
                 {`+${shareCount - 1}`}
               </Avatar>
@@ -96,15 +95,19 @@ const renderAvatarGroup = (selectedInfoList: TPractitionnerInfo[]) => {
                     index === 1 ? `${styles.outlineAvatar} ${styles.userAvatar}` : styles.userAvatar
                   }
                   size={24}
-                  userName={getPractitionnerName(p.name)}
+                  userName={getPractitionnerName(item.name)}
                 />
               </div>
-            )
-          ) : null}
-        </Popover>
-      ))}
-    </div>
+            )}
+          </Popover>
+        );
+        acc.push(element);
+      }
+      return acc;
+    },
+    [],
   );
+  return <div className={styles.sharingCell}>{result}</div>;
 };
 
 export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactElement => {
