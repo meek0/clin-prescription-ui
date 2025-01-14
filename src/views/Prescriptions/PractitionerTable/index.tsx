@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import intl from 'react-intl-universal';
 import { tieBreaker } from '@ferlab/ui/core/components/ProTable/utils';
-import { ISyntheticSqon } from '@ferlab/ui/core/data/sqon/types';
+import { BooleanOperators } from '@ferlab/ui/core/data/sqon/operators';
+import { ISyntheticSqon, TSyntheticSqonContent } from '@ferlab/ui/core/data/sqon/types';
+import { generateQuery, generateValueFilter } from '@ferlab/ui/core/data/sqon/utils';
 import { SortDirection } from '@ferlab/ui/core/graphql/constants';
+import useDebounce from '@ferlab/ui/core/hooks/useDebounce';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
-import { Row, Space, Typography } from 'antd';
+import { Input, Row, Typography } from 'antd';
 import { usePractitionnerPrescriptions } from 'graphql/prescriptions/actions';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
@@ -19,8 +22,26 @@ import {
 
 import { useUser } from 'store/user';
 
+import { commonPrescriptionFilterFields } from '../utils/constant';
+
 import styles from './index.module.css';
 import homeStyles from 'views/Home/index.module.css';
+
+const generateSearchFilter = (search: string) =>
+  generateQuery({
+    operator: BooleanOperators.or,
+    newFilters: [
+      ...commonPrescriptionFilterFields,
+      'person.first_name',
+      'person.last_name',
+      'person.ramq',
+    ].map((key) =>
+      generateValueFilter({
+        field: key,
+        value: [`${search.replaceAll(' ', '').trim()}*`],
+      }),
+    ),
+  });
 
 const { Title } = Typography;
 const PractitionerTable = (): React.ReactElement => {
@@ -30,18 +51,29 @@ const PractitionerTable = (): React.ReactElement => {
     size: DEFAULT_PAGE_SIZE,
   });
   const { user } = useUser();
+  const [search, setSearch] = useState('');
+
+  const debouncedSearch = useDebounce(search, 350);
+
+  const searchQuery = useMemo(() => generateSearchFilter(debouncedSearch), [debouncedSearch]);
+
+  const sqonContent: TSyntheticSqonContent = [
+    {
+      op: 'in',
+      content: { field: 'requester', value: user.practitionerRoles.map((pr) => pr.id) },
+    },
+  ];
+
+  if (debouncedSearch) {
+    sqonContent.push(searchQuery);
+  }
 
   const prescriptionsQueryVariables = {
     first: prescriptionQueryConfig.size,
     offset: DEFAULT_OFFSET,
     searchAfter: prescriptionQueryConfig.searchAfter,
     sqon: {
-      content: [
-        {
-          op: 'in',
-          content: { field: 'requester', value: user.practitionerRoles.map((pr) => pr.id) },
-        },
-      ],
+      content: sqonContent,
       op: 'and',
     } as ISyntheticSqon,
     sort: tieBreaker({
@@ -71,10 +103,6 @@ const PractitionerTable = (): React.ReactElement => {
     });
   }, [prescriptionQueryConfig]);
 
-  if (!prescriptions || prescriptions.total === 0) {
-    return <></>;
-  }
-
   return (
     <GridCard
       title={<Title level={3}>{intl.get('my.prescriptions')}</Title>}
@@ -83,7 +111,11 @@ const PractitionerTable = (): React.ReactElement => {
       wrapperClassName={homeStyles.contentCardWrapper}
       content={
         <Row gutter={[48, 48]}>
-          <Space direction="vertical" size="middle" className={styles.patientContentContainer}>
+          <div className={styles.patientContentContainer}>
+            <Input
+              placeholder={intl.get('my.prescriptions.search.placeholder')}
+              onChange={(t) => setSearch(t.target.value)}
+            />
             <PrescriptionsTable
               results={prescriptions}
               queryConfig={prescriptionQueryConfig}
@@ -92,7 +124,7 @@ const PractitionerTable = (): React.ReactElement => {
               pageIndex={prescriptionPageIndex}
               setPageIndex={setPrescriptionPageIndex}
             />
-          </Space>
+          </div>
         </Row>
       }
     />
