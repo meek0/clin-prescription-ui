@@ -14,6 +14,7 @@ import { isUndefined } from 'lodash';
 
 import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
+import EnvironmentVariables from 'utils/EnvVariables';
 
 import PrescriptionAnalysis from './Analysis';
 import SaveModal from './SaveModal';
@@ -114,17 +115,19 @@ const PrescriptionForm = () => {
                       )}
                     </Space>
                     <Space className={styles.footerRightSide}>
-                      <Button
-                        type="primary"
-                        data-cy="SaveButton"
-                        onClick={() => {
-                          dispatch(prescriptionFormActions.setDraft(true));
-                          currentFormRefs?.sumbit();
-                        }}
-                        loading={isCreatingPrescription}
-                      >
-                        {intl.get('save')}
-                      </Button>
+                      {EnvironmentVariables.configFor('USE_DRAFT') === 'true' && (
+                        <Button
+                          type="primary"
+                          data-cy="SaveButton"
+                          onClick={() => {
+                            dispatch(prescriptionFormActions.setDraft(true));
+                            currentFormRefs?.sumbit();
+                          }}
+                          loading={isCreatingPrescription}
+                        >
+                          {intl.get('save')}
+                        </Button>
+                      )}
                       {!currentStep?.nextStepIndex && (
                         <Button
                           type="primary"
