@@ -29,7 +29,7 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
   const [ramqSearchDone, setRamqSearchDone] = useState(false);
 
   const getName = (...key: string[]) => getNamePath(FORM_NAME, key);
-  const getInitialData = () => (analysisData ? analysisData[FORM_NAME] : undefined);
+  const initialData = analysisData ? analysisData[FORM_NAME] : undefined;
 
   return (
     <AnalysisForm form={form} className={styles.patientIdentificationForm} name={FORM_NAME}>
@@ -41,7 +41,7 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
               parentKey={FORM_NAME}
               onRamqSearchStateChange={setRamqSearchDone}
               initialRamqSearchDone={ramqSearchDone}
-              initialData={getInitialData()}
+              initialData={initialData}
               onResetRamq={() => {
                 form.resetFields([
                   getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS),
@@ -62,7 +62,7 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
                     form={form}
                     parentKey={FORM_NAME}
                     showNewBornSection={getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))}
-                    initialData={getInitialData()?.[additionalInfoKey]}
+                    initialData={initialData?.[additionalInfoKey]}
                   />
                 </CollapsePanel>
               </Collapse>

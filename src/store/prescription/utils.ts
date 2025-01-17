@@ -55,20 +55,20 @@ const cleanParaclinicalExams = (
   paraclinicalData: IParaclinicalExamsDataType,
 ): IParaclinicalExamsDataType => ({
   ...paraclinicalData,
-  exams: paraclinicalData[PARACLINICAL_EXAMS_FI_KEY.EXAMS].filter(
+  exams: paraclinicalData[PARACLINICAL_EXAMS_FI_KEY.EXAMS]?.filter(
     (exam) => exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] !== ParaclinicalExamStatus.NOT_DONE,
   ),
 });
 
 const cleanClinicalSigns = (clinicalSigns: IClinicalSignsDataType): IClinicalSignsDataType => {
   const { not_observed_signs, signs, ...rest } = clinicalSigns;
-  const cleanedObservedSigns = signs.filter(
-    (sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true,
-  );
-  const cleanedNotObservedSigns: IClinicalSignItem[] = (not_observed_signs || []).map((sign) => ({
-    ...sign,
-    is_observed: false,
-  }));
+  const cleanedObservedSigns =
+    signs?.filter((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true) || [];
+  const cleanedNotObservedSigns: IClinicalSignItem[] =
+    (not_observed_signs || [])?.map((sign) => ({
+      ...sign,
+      is_observed: false,
+    })) || [];
 
   return {
     ...rest,

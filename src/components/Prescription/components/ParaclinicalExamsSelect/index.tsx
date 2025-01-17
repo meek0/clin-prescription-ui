@@ -26,6 +26,7 @@ interface IParaclinicalExamSimpleInputExtra {
 interface IParaclinicalExamMultiSelectExtra extends IParaclinicalExamSimpleInputExtra {
   options: IListNameValueItem[];
   required: boolean;
+  defaultValue?: string[];
 }
 
 export enum PARACLINICAL_EXAMS_FI_KEY {
@@ -36,6 +37,7 @@ export enum PARACLINICAL_EXAMS_FI_KEY {
 export enum PARACLINICAL_EXAM_ITEM_KEY {
   CODE = 'code',
   INTERPRETATION = 'interpretation',
+  VALUES = 'values',
 }
 
 export enum ParaclinicalExamStatus {
@@ -62,7 +64,16 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
 
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
-      setInitialValues(form, getName, initialData, PARACLINICAL_EXAMS_FI_KEY);
+      const values = (formConfig?.paraclinical_exams.default_list ?? []).map((exam) => {
+        const foundExam = initialData.exams.find((item) => item.code === exam.value);
+        return {
+          [PARACLINICAL_EXAM_ITEM_KEY.CODE]: foundExam?.value || exam.value,
+          [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]:
+            foundExam?.interpretation?.toLowerCase() || ParaclinicalExamStatus.NOT_DONE,
+          [PARACLINICAL_EXAM_ITEM_KEY.VALUES]: foundExam?.values || [],
+        };
+      });
+      setInitialValues(form, getName, { ...initialData, exams: values }, PARACLINICAL_EXAMS_FI_KEY);
     } else {
       setFieldValue(
         form,
@@ -155,6 +166,7 @@ const MultiSelectExtra = ({
   label,
   options,
   required,
+  defaultValue,
 }: IParaclinicalExamMultiSelectExtra) => (
   <Form.Item colon={false} label={<></>}>
     <ProLabel title={label || "Sélectionner tout ce qui s'applique"} colon size="small" />
@@ -165,6 +177,7 @@ const MultiSelectExtra = ({
       <Select
         mode="multiple"
         placeholder="Sélectionner"
+        defaultValue={defaultValue}
         tagRender={({ onClose, label }) => (
           <Tag className={styles.tag} closable onClose={onClose} style={{ marginRight: 3 }}>
             {label}

@@ -2,8 +2,11 @@ import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
-import { Tooltip } from 'antd';
+import { Button, Tooltip } from 'antd';
+import { HybridApi } from 'api/hybrid';
+import { HybridPrescription } from 'api/hybrid/models';
 import { AnalysisResult, ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
+import { capitalize } from 'lodash';
 import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
 import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
@@ -12,8 +15,16 @@ import {
   prescriptionPriorityDictionnary,
 } from 'views/Prescriptions/utils/constant';
 
+import getStoreConfig from 'store';
+import { globalActions } from 'store/global';
+import { prescriptionFormActions } from 'store/prescription/slice';
+import { fetchFormConfig } from 'store/prescription/thunk';
+import { AnalysisType } from 'store/prescription/types';
 import { TABLE_EMPTY_PLACE_HOLDER } from 'utils/constants';
 import { formatDate } from 'utils/date';
+import EnvironmentVariables from 'utils/EnvVariables';
+
+const { store } = getStoreConfig();
 
 import SharingCell from './sharing/SharingCell';
 
@@ -28,8 +39,16 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
   {
     key: 'prescription_id',
     dataIndex: ['prescription_id'],
-    render: (prescription_id: string) => (
-      <Link to={`/prescription/entity/${prescription_id}`}>{prescription_id}</Link>
+    render: (prescription_id: string, record: AnalysisResult) => (
+      <>
+        {EnvironmentVariables.configFor('USE_DRAFT') !== 'true' || record.status !== 'draft' ? (
+          <Link to={`/prescription/entity/${prescription_id}`}>{prescription_id}</Link>
+        ) : (
+          <Button style={{ padding: 0 }} type="link" onClick={() => openDraft(prescription_id)}>
+            {prescription_id}
+          </Button>
+        )}
+      </>
     ),
     title: intl.get('screen.patientsearch.table.prescription'),
     sorter: { multiple: 1 },
@@ -120,3 +139,23 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
     ),
   },
 ];
+
+async function openDraft(prescription_id: string) {
+  const { data: prescription, error } = await HybridApi.getPrescription(prescription_id);
+  if (error) {
+    store.dispatch(
+      globalActions.displayNotification({
+        message: capitalize(intl.get('notification.error')),
+        description: intl.get('notification.error.prescription.form.loadDraft'),
+        type: 'error',
+      }),
+    );
+  } else {
+    store.dispatch(
+      fetchFormConfig({
+        code: prescription?.analysis_code as AnalysisType,
+      }),
+    );
+    store.dispatch(prescriptionFormActions.openFormForDraft(prescription as HybridPrescription));
+  }
+}

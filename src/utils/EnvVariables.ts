@@ -11,6 +11,7 @@ export default class EnvironmentVariables {
     FHIR_API: process.env.REACT_APP_FHIR_SERVICE_URL,
     USERS_API_URL: process.env.REACT_APP_USERS_API_URL,
     FORM_API_URL: process.env.REACT_APP_FORM_API_URL,
+    HYBRID_API_URL: process.env.REACT_APP_HYBRID_API_URL,
     PANELS_FILE: process.env.REACT_APP_PANELS_FILE,
     SENTRY_API: process.env.REACT_APP_SENTRY_API,
     // FEATURES

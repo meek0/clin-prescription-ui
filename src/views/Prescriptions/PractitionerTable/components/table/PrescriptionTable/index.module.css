@@ -1,3 +1,7 @@
 .prescriptionTableWrapper :global(.ant-pagination) {
   margin-bottom: 0;
 }
+
+.prescription-edit-draft-button {
+  margin-bottom: 0;
+}

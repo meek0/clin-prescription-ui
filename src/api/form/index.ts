@@ -71,20 +71,6 @@ const updatePrescription = (data: TCompleteAnalysis, prescriptionId: string, isD
     data,
   });
 
-const getPrescription = (data: TCompleteAnalysis, prescriptionId: string) =>
-  sendRequestWithRpt<{
-    id: string;
-    patients: {
-      id: string;
-      family_member: string;
-    }[];
-  }>({
-    method: 'GET',
-    url: `${FORM_API_URL}/form/${prescriptionId}`,
-    headers,
-    data,
-  });
-
 const downloadDocuments = (analysis_id: string, lang = LANG.FR) =>
   sendRequestWithRpt({
     method: 'GET',
@@ -108,7 +94,6 @@ export const PrescriptionFormApi = {
   searchSupervisor,
   createPrescription,
   updatePrescription,
-  getPrescription,
   downloadDocuments,
   prescriptionShare,
 };
