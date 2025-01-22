@@ -35,6 +35,7 @@ const userPopOverContent = (userInfos: TPractitionnerInfo[]) =>
         email={ui.email ? ui.email : ''}
         name={getPractitionnerName(ui.name)}
         organization={ui.ldm}
+        showLdm={false}
       />
       <Button
         onClick={(event) => {
@@ -145,9 +146,7 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
   }, [list, decodedRpt]);
 
   const canShare = decodedRpt ? validate([Roles.Variants], decodedRpt, false) : false;
-  const selectedInfoList = practitionerInfoList.filter((r) =>
-    selectedSharing?.includes(r.practitionerRoles_Id),
-  );
+  const selectedInfoList = list?.filter((r) => selectedSharing?.includes(r.practitionerRoles_Id));
 
   const content = (
     <AssignmentSelect
@@ -174,7 +173,7 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
         {selectedSharing.length > 0 ? (
           <div>
             <Space direction="horizontal">
-              {selectedSharing.length > 0 && renderAvatarGroup(selectedInfoList)}
+              {selectedSharing.length > 0 && renderAvatarGroup(selectedInfoList || [])}
             </Space>
           </div>
         ) : (
