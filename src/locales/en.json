@@ -508,6 +508,7 @@
   "add.parent.to.existing.prescription": "Add a parent to an existing prescription",
   "find.analysis.and.add.family.member": "Find an analysis in progress and add a family member",
   "my.prescriptions": "My Prescriptions",
+  "my.prescriptions.search.placeholder": "Search by prescription, medical record, RAMQ number, and patient name:",
   "prescription.parent.info.title.father": "Identification of the father",
   "prescription.parent.info.title.mother": "Identification of the mother",
   "mother.ramq": "Mother's RAMQ",
