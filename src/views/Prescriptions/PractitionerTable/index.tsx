@@ -7,7 +7,7 @@ import { generateQuery, generateValueFilter } from '@ferlab/ui/core/data/sqon/ut
 import { SortDirection } from '@ferlab/ui/core/graphql/constants';
 import useDebounce from '@ferlab/ui/core/hooks/useDebounce';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
-import { Input, Row, Typography } from 'antd'; 
+import { Input, Row, Typography } from 'antd';
 import { FhirApi } from 'api/fhir';
 import { PractitionerRole } from 'api/fhir/models';
 import { usePractitionnerPrescriptions } from 'graphql/prescriptions/actions';
