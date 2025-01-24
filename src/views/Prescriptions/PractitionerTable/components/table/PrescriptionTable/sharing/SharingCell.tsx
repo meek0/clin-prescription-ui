@@ -19,7 +19,7 @@ import styles from './index.module.css';
 
 export type TAssignmentsCell = {
   results: AnalysisResult;
-  list?: any[];
+  list?: TPractitionnerInfo[];
 };
 
 export type TAssignmentsData = {
@@ -121,26 +121,37 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSharing, setSelectedSharing] = useState<string[]>(filterSecurityTag);
   const [loadingSelect, setLoadingSelect] = useState<boolean>();
+  const [userId, setUserId] = useState<string>();
   const handleSelect = (practitionerRoles_ids: string[]) => {
     if (practitionerRoles_ids?.sort().toString() !== selectedSharing?.sort().toString()) {
       setLoadingSelect(true);
-      PrescriptionFormApi.prescriptionShare(results.prescription_id, practitionerRoles_ids)
+      const practitionerRoles_idsWithoutUser = practitionerRoles_ids.filter((p) => p !== userId);
+      PrescriptionFormApi.prescriptionShare(
+        results.prescription_id,
+        practitionerRoles_idsWithoutUser,
+      )
         .then(({ data }) => {
-          setSelectedSharing(data?.roles || []);
+          const newSelected: string[] = [];
+          if (data) {
+            newSelected.push(...data.roles);
+            if (practitionerRoles_ids.length > data?.roles.length && userId) {
+              newSelected.push(userId);
+            }
+          }
+          setSelectedSharing(newSelected);
         })
         .finally(() => {
           setLoadingSelect(false);
         });
     }
   };
-
   useEffect(() => {
     if (list) {
+      const filteredList = list.filter((l) => l.ldm === results.ep);
+      setPractitionerInfoList(filteredList);
       if (decodedRpt) {
-        const filteredList = list.filter(
-          (l) => l.ldm === results.ep && l.practitioner !== decodedRpt?.fhir_practitioner_id,
-        );
-        setPractitionerInfoList(filteredList);
+        const userId = filteredList.find((l) => l.practitioner === decodedRpt.fhir_practitioner_id);
+        setUserId(userId?.practitionerRoles_Id);
       }
     }
   }, [list, decodedRpt]);
@@ -157,6 +168,7 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
       visibleOptions={true}
       loading={loadingSelect}
       showLdm={false}
+      userIdToRemove={decodedRpt?.fhir_practitioner_id}
     />
   );
   return (
