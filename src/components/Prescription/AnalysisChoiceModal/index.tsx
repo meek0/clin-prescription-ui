@@ -77,41 +77,54 @@ const AnalysisChoiceModal = () => {
           className="noMarginBtm"
         >
           <Select placeholder="Sélectionner" data-cy="SelectAnalysis">
-            <Select.Option value={OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY}>
+            <Select.Option value={OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY} title={null}>
               {getAnalysisNameByCode(OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY, false)}
             </Select.Option>
-            <Select.Option value={OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY}>
+            <Select.Option value={OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY} title={null}>
               {getAnalysisNameByCode(OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY, false)}
             </Select.Option>
             <Select.OptGroup label="Maladies musculaires">
               <Select.Option
                 value={MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL}
                 data-cy={`SelectOption${MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL}`}
+                title={null}
               >
                 {getAnalysisNameByCode(MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL, false)}
               </Select.Option>
-              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_DYSTROPHIES}>
+              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_DYSTROPHIES} title={null}>
                 {getAnalysisNameByCode(MuscularAnalysisType.MUSCULAR_DISEASE_DYSTROPHIES, false)}
               </Select.Option>
-              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_MALIGNANT_HYPERTHERMIA}>
+              <Select.Option
+                value={MuscularAnalysisType.MUSCULAR_DISEASE_MALIGNANT_HYPERTHERMIA}
+                title={null}
+              >
                 {getAnalysisNameByCode(
                   MuscularAnalysisType.MUSCULAR_DISEASE_MALIGNANT_HYPERTHERMIA,
                   false,
                 )}
               </Select.Option>
-              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYASTHENIA}>
+              <Select.Option
+                value={MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYASTHENIA}
+                title={null}
+              >
                 {getAnalysisNameByCode(
                   MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYASTHENIA,
                   false,
                 )}
               </Select.Option>
-              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYOPATHIES}>
+              <Select.Option
+                value={MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYOPATHIES}
+                title={null}
+              >
                 {getAnalysisNameByCode(
                   MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYOPATHIES,
                   false,
                 )}
               </Select.Option>
-              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_RHABDOMYOLYSIS}>
+              <Select.Option
+                value={MuscularAnalysisType.MUSCULAR_DISEASE_RHABDOMYOLYSIS}
+                title={null}
+              >
                 {getAnalysisNameByCode(MuscularAnalysisType.MUSCULAR_DISEASE_RHABDOMYOLYSIS, false)}
               </Select.Option>
             </Select.OptGroup>
