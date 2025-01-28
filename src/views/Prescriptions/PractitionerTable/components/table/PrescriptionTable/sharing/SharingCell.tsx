@@ -13,7 +13,7 @@ import { AnalysisResult } from 'graphql/prescriptions/models/Prescription';
 
 import { Roles, validate } from 'components/Roles/Rules';
 import { useRpt } from 'hooks/useRpt';
-import { getShareDictionairy } from 'utils/translation';
+import { getShareDictionary } from 'utils/translation';
 
 import styles from './index.module.css';
 
@@ -147,7 +147,7 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
 
   const content = (
     <AssignmentSelect
-      dictionary={getShareDictionairy()}
+      dictionary={getShareDictionary()}
       options={practitionerInfoList}
       handleSelect={handleSelect}
       assignedPractionnerRoles={selectedSharing}

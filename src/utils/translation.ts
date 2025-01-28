@@ -178,7 +178,7 @@ export const getQueryBuilderDictionary = (
   };
 };
 
-export const getShareDictionairy = (): IAssignmentsDictionary => ({
+export const getShareDictionary = (): IAssignmentsDictionary => ({
   select: {
     actions: {
       clear: intl.get('sharing.dropdown.actions.clear'),
