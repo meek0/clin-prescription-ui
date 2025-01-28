@@ -55,6 +55,7 @@ export const PRESCRIPTIONS_SEARCH_QUERY = gql`
             ldm
             analysis_code
             status
+            security_tags
             priority
           }
         }

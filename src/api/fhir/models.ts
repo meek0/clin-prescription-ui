@@ -146,6 +146,19 @@ export interface PractitionerRole {
   code: CodeableConcept[];
 }
 
+export type PractitionerBundleType = (Practitioner | PractitionerRole)[];
+
+export interface Practitioner {
+  id: string;
+  name: [
+    {
+      family: string;
+      given: string[];
+    },
+  ];
+  resourceType: string;
+}
+
 export interface Investigation {
   item: {
     item?: {

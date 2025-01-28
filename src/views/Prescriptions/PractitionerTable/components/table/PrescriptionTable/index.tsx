@@ -28,6 +28,8 @@ interface OwnProps {
   queryConfig: IQueryConfig;
   pageIndex: number;
   setPageIndex: (value: number) => void;
+  loadingPractitioner: boolean;
+  practitionerInfoList: any[];
 }
 
 const PrescriptionsTable = ({
@@ -36,6 +38,8 @@ const PrescriptionsTable = ({
   queryConfig,
   pageIndex,
   setPageIndex,
+  loadingPractitioner,
+  practitionerInfoList,
   loading = false,
 }: OwnProps): React.ReactElement => {
   const dispatch = useDispatch();
@@ -45,11 +49,11 @@ const PrescriptionsTable = ({
   return (
     <ProTable<ITableAnalysisResult>
       tableId="prescription_table"
-      columns={prescriptionsColumns()}
+      columns={prescriptionsColumns(practitionerInfoList)}
       initialColumnState={initialColumns}
       dataSource={results?.data.map((i) => ({ ...i, key: i.id }))}
       className={styles.prescriptionTableWrapper}
-      loading={loading}
+      loading={loading && loadingPractitioner}
       dictionary={getProTableDictionary()}
       showSorterTooltip={false}
       bordered

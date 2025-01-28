@@ -316,6 +316,8 @@
   "screen.patientsearch.table.prenatal": "Prénatal",
   "screen.patientsearch.table.prenatal.tooltip": "Diagnostic prénatal",
   "screen.patientsearch.table.prescription": "Prescription",
+  "screen.patientsearch.table.sharing": "Partage",
+  "screen.patientsearch.table.sharing.tooltip": "Partage de prescription",
   "screen.patientsearch.table.priority": "Priorité",
   "screen.patientsearch.table.requester": "Requérant",
   "screen.patientsearch.table.requester.tooltip": "Médecin prescripteur",
@@ -554,6 +556,29 @@
     "phenotypes": {
       "header": {
         "elements": "éléments"
+      }
+    }
+  },
+  "sharing": {
+    "tooltip": "Partager cette prescription",
+    "dropdown":{
+      "actions":{
+        "clear":"Aucun partage"
+      },
+      "select":{
+        "searchPlaceholder":"Rechercher"
+      }
+    },
+    "filter":{
+      "actions":{
+        "reset":"Réinitialiser",
+        "ok":"OK"
+      }
+    },
+    "popOver":{
+      "copy":{
+        "tooltip":"Copier l’adresse",
+        "copied":"Copié"
       }
     }
   }

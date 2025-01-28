@@ -1,5 +1,6 @@
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
+import { UserOutlined } from '@ant-design/icons/lib/icons';
 import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
 import { Tooltip } from 'antd';
 import { ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
@@ -14,7 +15,16 @@ import {
 import { TABLE_EMPTY_PLACE_HOLDER } from 'utils/constants';
 import { formatDate } from 'utils/date';
 
-export const prescriptionsColumns = (): ProColumnType<ITableAnalysisResult>[] => [
+import SharingCell from './sharing/SharingCell';
+
+export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisResult>[] => [
+  {
+    key: 'sharing',
+    render: (results: any) => <SharingCell results={results} list={list} />,
+    title: intl.get('screen.patientsearch.table.sharing'),
+    tooltip: intl.get('screen.patientsearch.table.sharing.tooltip'),
+    iconTitle: <UserOutlined style={{ fontSize: '16px' }} />,
+  },
   {
     key: 'prescription_id',
     dataIndex: ['prescription_id'],
