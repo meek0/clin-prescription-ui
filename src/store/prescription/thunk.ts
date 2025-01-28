@@ -54,13 +54,7 @@ const createPrescription = createAsyncThunk<
     : await PrescriptionFormApi.createPrescription(prescriptionData, prescription.isDraft);
 
   if (error) {
-    thunkApi.dispatch(
-      prescriptionFormActions.setDisplayActionModal({
-        displayActionModal: 'error',
-        prescriptionVisible: true,
-      }),
-    );
-
+    thunkApi.dispatch(prescriptionFormActions.setSubmissionError(error));
     return thunkApi.rejectWithValue(error.response?.data);
   }
 

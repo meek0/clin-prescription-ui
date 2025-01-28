@@ -70,8 +70,14 @@ const prescriptionFormSlice = createSlice({
     saveStepData: (state, action: PayloadAction<any>) => {
       state.analysisData = _.merge(state.analysisData, action.payload);
     },
+    prescriptionChanged: (state) => {
+      state.analysisData.changed = true;
+    },
     setDraft: (state, action: PayloadAction<boolean>) => {
       state.isDraft = action.payload;
+    },
+    setSubmissionError: (state, action: PayloadAction<any>) => {
+      state.submissionError = action.payload;
     },
     setDisplayActionModal: (
       state,
@@ -180,7 +186,7 @@ const prescriptionFormSlice = createSlice({
     saveCreatedPrescription: (state, action: PayloadAction<any>) => {
       state.prescriptionId = action.payload?.prescriptionId || undefined;
       state.isDraft = !!action.payload?.isDraft;
-      state.displayActionModal = state.isDraft ? 'saved' : 'submitted';
+      state.analysisData.changed = false;
       if (action.payload?.patients) {
         for (const patient of action.payload.patients) {
           switch (patient.family_member) {

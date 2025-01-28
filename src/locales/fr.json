@@ -14,10 +14,10 @@
   "api.savedFilter.error.title": "Erreur",
   "birthdate": "Date de naissance",
   "cancel": "Annuler",
+  "submit": "Soumettre",
   "cant.have.two.file.number.same.patient": "Impossible d'avoir deux numéros de dossier différents pour le même patient",
   "ch.tooltip": "Hétérozygote composé",
   "close": "Fermer",
-  "submit": "Soumettre",
   "component.phenotypeSearch.placeholder": "Rechercher un signe clinique...",
   "component.phenotypeTree.modal.cancelText": "Annuler",
   "component.phenotypeTree.modal.okText": "Ajouter",
@@ -110,8 +110,6 @@
   "prescription.clinical.signs.review.label.observed": "Signes observés",
   "prescription.form.cancel.modal.cancel.btn": "Annuler la prescription",
   "prescription.form.cancel.modal.close.btn": "Fermer",
-  "prescription.form.cancel.modal.content" : "Toutes les informations non sauvegardées seront perdues si vous fermez ce formulaire.",
-  "prescription.form.cancel.modal.title" : "Fermer le formulaire ?",
   "prescription.history.diagnosis.add.health.conditions": "Ajouter",
   "prescription.history.diagnosis.report.health.conditions": "Rapporter des conditions de santé pertinentes",
   "prescription.history.diagnosis.review.label.ethnicity": "Ethnicité",
@@ -515,7 +513,7 @@
   "prescription.parent.info.title.mother": "Identification de la mère",
   "mother.ramq": "RAMQ de la mère",
   "ramq": "RAMQ",
-  "save": "Enregistrer",
+  "save": "Sauvegarder",
   "prescription.parent.identification.review.permanent.absence": "Absence définitive",
   "prescription.parent.identification.review.temporary.absence": "Absence temporaire",
   "prescription": {
@@ -524,33 +522,6 @@
         "not_done": "Non effectué"
       },
       "other_examination": "Autres examens paracliniques"
-    },
-    "submitted": {
-      "success": {
-        "title": "Prescription soumise",
-        "message": "La prescription <span style='font-weight: 500;'>{id}</span> a été créée avec succès.",
-        "link": "Consulter la prescription"
-      },
-      "error": {
-        "title": "Prescription non soumise",
-        "message": "Une erreur s’est produite lors de la création de la prescription. Veuillez essayer de nouveau."
-      },
-      "actions": {
-        "download": "Télécharger les documents"
-      }
-    },
-    "saved": {
-      "success": {
-        "title": "Prescription sauvegardée",
-        "message": "Le brouillon de la prescription <span style='font-weight: 500;'>{id}</span> a été sauvegardé."
-      },
-      "error": {
-        "title": "Prescription non sauvegardée",
-        "message": "Une erreur s’est produite lors de la sauvegarde de la prescription. Veuillez essayer de nouveau."
-      },
-      "actions": {
-        "continue": "Continuer l'édition"
-      }
     },
     "parent": {
       "info": {
@@ -573,6 +544,47 @@
     "phenotypes": {
       "header": {
         "elements": "éléments"
+      }
+    }
+  },
+  "prescriptionForm": {
+    "continueEditionButton": "Continuer l’édition",
+    "saveButtonTooltip": "La prescription sera sauvegardée en tant que « brouillon ». Vous pourrez la compléter et la soumettre ultérieurement.",
+    "saved": {
+      "success": {
+        "title": "Prescription sauvegardée",
+        "content": "Le brouillon de la prescription <span style='font-weight: 500;'>{id}</span> a été sauvegardé."
+      },
+      "error": {
+        "title": "Prescription non sauvegardée",
+        "content": "Une erreur s’est produite lors de la sauvegarde de la prescription. Veuillez essayer de nouveau."
+      }
+    },
+    "submitted": {
+      "success": {
+        "title": "Prescription soumise",
+        "content": "La prescription <span style='font-weight: 500;'>{id}</span> a été créée avec succès.",
+        "link": "Consulter la prescription"
+      },
+      "error": {
+        "title": "Prescription non soumise",
+        "content": "Une erreur s’est produite lors de la création de la prescription. Veuillez essayer de nouveau."
+      },
+      "actions": {
+        "download": "Télécharger les documents"
+      }
+    },
+    "cancelModal": {
+      "title": "Fermer le formulaire ?",
+      "content": "Toutes les informations non sauvegardées seront perdues si vous fermez ce formulaire."
+    },
+    "review": {
+      "saveButton": "Sauvegarder les modifications",
+      "cancelButtonTooltip": "Revenir à la page de soumission sans apporter de modifications.",
+      "savedModal": {
+        "title": "Modifications sauvegardées",
+        "content": "Vos modifications ont été sauvegardées avec succès. Vous pouvez revenir à la page de soumission.",
+        "okButton": "Retour à la soumission"
       }
     }
   },

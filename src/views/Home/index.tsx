@@ -22,9 +22,7 @@ import styles from './index.module.css';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { prescriptionVisible, displayActionModal } = usePrescriptionForm();
-
-  const isVisibleTable = !prescriptionVisible && !displayActionModal;
+  const { prescriptionVisible } = usePrescriptionForm();
 
   return (
     <ContentWithHeader
@@ -50,12 +48,12 @@ const Home = () => {
                       onClick={() => dispatch(prescriptionFormActions.startAnalyseChoice())}
                     />
                   </Col>
-                  {isVisibleTable && <AddParentButton />}
+                  {!prescriptionVisible && <AddParentButton />}
                 </LimitTo>
               </Row>
             }
           />
-          {isVisibleTable && <PractitionerTable />}
+          {!prescriptionVisible && <PractitionerTable />}
         </div>
       </ScrollContentWithFooter>
       <PrescriptionForm />

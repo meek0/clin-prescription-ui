@@ -36,12 +36,12 @@ const SaveModal = () => {
     case 'submitted':
       modalData = {
         icon: <CheckCircleFilled />,
-        title: intl.get('prescription.submitted.success.title'),
+        title: intl.get('prescriptionForm.submitted.success.title'),
         text: (
           <>
-            {intl.getHTML('prescription.submitted.success.message', { id: prescriptionId })}&nbsp;
+            {intl.getHTML('prescriptionForm.submitted.success.content', { id: prescriptionId })}
             <a href={DYNAMIC_ROUTES.PRESCRIPTION_ENTITY.replace(':id', prescriptionId!)}>
-              {intl.get('prescription.submitted.success.link')}
+              {intl.get('prescriptionForm.submitted.success.link')}
             </a>
           </>
         ),
@@ -49,7 +49,7 @@ const SaveModal = () => {
           <>
             <DownloadButton
               prescriptionId={prescriptionId!}
-              text={intl.get('prescription.submitted.actions.download')}
+              text={intl.get('prescriptionForm.submitted.actions.download')}
             />
             <Button key="close" onClick={closeModal}>
               {intl.get('close')}
@@ -61,24 +61,24 @@ const SaveModal = () => {
     case 'saved':
       modalData = {
         icon: <SaveFilled />,
-        title: intl.get('prescription.saved.success.title'),
-        text: intl.getHTML('prescription.saved.success.message', { id: prescriptionId }),
+        title: intl.get('prescriptionForm.saved.success.title'),
+        text: intl.getHTML('prescriptionForm.saved.success.content', { id: prescriptionId }),
         buttons: (
           <>
             <Button
               key="continue"
-              onClick={() =>
+              onClick={() => {
                 dispatch(
                   prescriptionFormActions.setDisplayActionModal({
                     displayActionModal: undefined,
                     prescriptionVisible: true,
                   }),
-                )
-              }
+                );
+              }}
               icon={<FormOutlined />}
               type="primary"
             >
-              {intl.get('prescription.saved.actions.continue')}
+              {intl.get('prescriptionForm.continueEditionButton')}
             </Button>
             <Button key="close" onClick={closeModal}>
               {intl.get('close')}
@@ -90,8 +90,8 @@ const SaveModal = () => {
     case 'error':
       modalData = {
         icon: <CloseCircleFilled style={{ color: 'var(--red-7)' }} />,
-        title: intl.get(`prescription.${isDraft ? 'saved' : 'submitted'}.error.title`),
-        text: intl.getHTML(`prescription.${isDraft ? 'saved' : 'submitted'}.error.message`),
+        title: intl.get(`prescriptionForm.${isDraft ? 'saved' : 'submitted'}.error.title`),
+        text: intl.getHTML(`prescriptionForm.${isDraft ? 'saved' : 'submitted'}.error.content`),
         buttons: (
           <>
             <Button

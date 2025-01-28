@@ -16,6 +16,7 @@ const PrescriptionAnalysis = () => {
 
   return (
     <Form.Provider
+      onFormChange={() => dispatch(prescriptionFormActions.prescriptionChanged())}
       onFormFinish={async (formName, info) => {
         try {
           dispatch(prescriptionFormActions.saveStepData(info.values));
@@ -27,8 +28,19 @@ const PrescriptionAnalysis = () => {
               patients: response.patients,
             }),
           );
+          dispatch(
+            prescriptionFormActions.setDisplayActionModal({
+              displayActionModal: isDraft ? 'saved' : 'submitted',
+              prescriptionVisible: false,
+            }),
+          );
         } catch (error) {
-          console.error('Error while saving prescription', error);
+          dispatch(
+            prescriptionFormActions.setDisplayActionModal({
+              displayActionModal: 'error',
+              prescriptionVisible: true,
+            }),
+          );
         }
       }}
     >

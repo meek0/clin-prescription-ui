@@ -1,22 +1,16 @@
 import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { useDispatch } from 'react-redux';
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  CloseOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import ScrollContent from '@ferlab/ui/core/layout/ScrollContent';
 import GridCard from '@ferlab/ui/core/view/v2/GridCard';
 import { Button, Col, Modal, Row, Space, Typography } from 'antd';
-import { isUndefined } from 'lodash';
 
 import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
-import EnvironmentVariables from 'utils/EnvVariables';
 
 import PrescriptionAnalysis from './Analysis';
+import { PrescriptionButtons } from './PrescriptionButtons';
 import SaveModal from './SaveModal';
 import StepsPanel from './StepsPanel';
 
@@ -26,23 +20,14 @@ const { Title } = Typography;
 
 const PrescriptionForm = () => {
   const dispatch = useDispatch();
-  const {
-    prescriptionVisible,
-    currentStep,
-    currentFormRefs,
-    lastStepIsNext,
-    isAddingParent,
-    isCreatingPrescription,
-    prescriptionId,
-  } = usePrescriptionForm();
+  const { prescriptionVisible, currentStep, isAddingParent, prescriptionId, analysisData } =
+    usePrescriptionForm();
 
   useEffect(() => {
     const clearPrescriptionId = () =>
       dispatch(prescriptionFormActions.saveCreatedPrescription(null));
     window.addEventListener('beforeunload', clearPrescriptionId);
-    return () => {
-      window.removeEventListener('beforeunload', clearPrescriptionId);
-    };
+    return () => window.removeEventListener('beforeunload', clearPrescriptionId);
   }, [dispatch]);
 
   return (
@@ -62,26 +47,33 @@ const PrescriptionForm = () => {
               icon={<CloseOutlined />}
               danger
               size="small"
-              onClick={() =>
+              onClick={() => {
+                if (!analysisData.changed) {
+                  dispatch(prescriptionFormActions.cancel());
+                  return;
+                }
+                const modalConfig = isAddingParent
+                  ? {
+                      title: intl.get('prescription.form.cancel.add.parent.modal.title'),
+                      content: intl.get('prescription.form.cancel.add.parent.modal.content'),
+                      okText: intl.get('prescription.form.cancel.add.parent.modal.cancel.btn'),
+                    }
+                  : {
+                      title: intl.get('prescriptionForm.cancelModal.title'),
+                      content: intl.get('prescriptionForm.cancelModal.content'),
+                      okText: intl.get('close'),
+                    };
                 Modal.confirm({
-                  title: isAddingParent
-                    ? intl.get('prescription.form.cancel.add.parent.modal.title')
-                    : intl.get('prescription.form.cancel.modal.title'),
+                  ...modalConfig,
                   icon: <ExclamationCircleOutlined />,
-                  okText: isAddingParent
-                    ? intl.get('prescription.form.cancel.add.parent.modal.cancel.btn')
-                    : intl.get('close'),
-                  content: isAddingParent
-                    ? intl.get('prescription.form.cancel.add.parent.modal.content')
-                    : intl.get('prescription.form.cancel.modal.content'),
-                  cancelText: intl.get('prescription.saved.success.continue'),
+                  cancelText: intl.get('prescriptionForm.continueEditionButton'),
                   okButtonProps: { danger: true },
                   onOk: (close) => {
                     close();
                     dispatch(prescriptionFormActions.cancel());
                   },
-                })
-              }
+                });
+              }}
             >
               {intl.get('close')}
             </Button>
@@ -104,67 +96,7 @@ const PrescriptionForm = () => {
                 bordered={false}
                 footer={
                   <div className={styles.prescriptionContentFooter}>
-                    <Space className={styles.footerLeftSide}>
-                      {!isUndefined(currentStep?.previousStepIndex) && (
-                        <Button
-                          icon={<ArrowLeftOutlined />}
-                          onClick={() => dispatch(prescriptionFormActions.previousStep())}
-                        >
-                          {intl.get('previous')}
-                        </Button>
-                      )}
-                    </Space>
-                    <Space className={styles.footerRightSide}>
-                      {EnvironmentVariables.configFor('USE_DRAFT') === 'true' && (
-                        <Button
-                          type="primary"
-                          data-cy="SaveButton"
-                          onClick={() => {
-                            dispatch(prescriptionFormActions.setDraft(true));
-                            currentFormRefs?.sumbit();
-                          }}
-                          loading={isCreatingPrescription}
-                        >
-                          {intl.get('save')}
-                        </Button>
-                      )}
-                      {!currentStep?.nextStepIndex && (
-                        <Button
-                          type="primary"
-                          data-cy="SubmitButton"
-                          onClick={() => {
-                            dispatch(prescriptionFormActions.setDraft(false));
-                            currentFormRefs?.sumbit();
-                          }}
-                          loading={isCreatingPrescription}
-                        >
-                          {intl.get('submit')}
-                        </Button>
-                      )}
-                      {currentStep?.nextStepIndex && (
-                        <Button
-                          icon={<ArrowRightOutlined />}
-                          type="primary"
-                          data-cy="NextButton"
-                          onClick={async () => {
-                            try {
-                              const values = await currentFormRefs?.validateFields();
-                              dispatch(prescriptionFormActions.saveStepData(values));
-                              dispatch(
-                                lastStepIsNext
-                                  ? prescriptionFormActions.goToLastStep()
-                                  : prescriptionFormActions.nextStep(),
-                              );
-                            } catch (errorInfo) {
-                              console.error('Failed:', errorInfo);
-                            }
-                          }}
-                          loading={isCreatingPrescription}
-                        >
-                          {intl.get('next')}
-                        </Button>
-                      )}
-                    </Space>
+                    <PrescriptionButtons />
                   </div>
                 }
               />
