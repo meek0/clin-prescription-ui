@@ -121,24 +121,12 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSharing, setSelectedSharing] = useState<string[]>(filterSecurityTag);
   const [loadingSelect, setLoadingSelect] = useState<boolean>();
-  const [userId, setUserId] = useState<string>();
   const handleSelect = (practitionerRoles_ids: string[]) => {
     if (practitionerRoles_ids?.sort().toString() !== selectedSharing?.sort().toString()) {
       setLoadingSelect(true);
-      const practitionerRoles_idsWithoutUser = practitionerRoles_ids.filter((p) => p !== userId);
-      PrescriptionFormApi.prescriptionShare(
-        results.prescription_id,
-        practitionerRoles_idsWithoutUser,
-      )
+      PrescriptionFormApi.prescriptionShare(results.prescription_id, practitionerRoles_ids)
         .then(({ data }) => {
-          const newSelected: string[] = [];
-          if (data) {
-            newSelected.push(...data.roles);
-            if (practitionerRoles_ids.length > data?.roles.length && userId) {
-              newSelected.push(userId);
-            }
-          }
-          setSelectedSharing(newSelected);
+          setSelectedSharing(data?.roles || []);
         })
         .finally(() => {
           setLoadingSelect(false);
@@ -147,12 +135,10 @@ export const SharingCell = ({ results, list }: TAssignmentsCell): React.ReactEle
   };
   useEffect(() => {
     if (list) {
-      const filteredList = list.filter((l) => l.ldm === results.ep);
+      const filteredList = list.filter(
+        (l) => l.ldm === results.ep && l.practitionerRoles_Id !== results.requester,
+      );
       setPractitionerInfoList(filteredList);
-      if (decodedRpt) {
-        const userId = filteredList.find((l) => l.practitioner === decodedRpt.fhir_practitioner_id);
-        setUserId(userId?.practitionerRoles_Id);
-      }
     }
   }, [list, decodedRpt]);
 
