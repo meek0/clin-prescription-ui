@@ -8,6 +8,7 @@ beforeEach(() => {
   cy.login(Cypress.env('username_DG_CHUSJ_CUSM_CHUS'), Cypress.env('password'));
 
   cy.visitHomePage();
+  cy.resetColumns(0);
 });
 
 describe('Page des prescriptions - Rechercher des prescriptions [PRESC-376]', () => {

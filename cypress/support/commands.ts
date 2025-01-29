@@ -58,9 +58,26 @@ Cypress.Commands.add('removeFilesFromFolder', (folder: string) => {
 
 Cypress.Commands.add('resetColumns', (eq: number) => {
   cy.get('svg[data-icon="setting"]').eq(eq).clickAndWait({force: true});
-  cy.get('button[class*="ProTablePopoverColumnResetBtn"]').eq(eq).clickAndWait({force: true});
+  cy.waitWhileSpin(oneMinute);
+  cy.get('button[class*="ProTablePopoverColumnResetBtn"]').eq(eq).then(($button) => {
+    cy.wrap($button).clickAndWait({force: true});
+    cy.waitWhileSpin(oneMinute);
+    cy.wrap($button).clickAndWait({force: true});
+    cy.waitWhileSpin(oneMinute);
+  });
+  
+  cy.get('button[class*="ProTablePopoverColumnResetBtn"]').eq(eq).should('be.disabled', {timeout: 20*1000});
+  cy.get('svg[data-icon="setting"]').eq(eq).clickAndWait({force: true});
+  cy.get('div[class*="Header_ProTableHeader"]').clickAndWait({force: true, multiple: true});
+});
 
-  cy.get('button[class*="ProTablePopoverColumnResetBtn"]').should('be.disabled');
+Cypress.Commands.add('showColumn', (column: string|RegExp, eq: number) => {
+  cy.intercept('PUT', '**/user').as('getPOSTuser');
+
+  cy.get('div[class="ant-popover-inner"]').eq(eq).find('div[class="ant-space-item"]').contains(column).find('[type="checkbox"]').check({force: true});
+  cy.wait('@getPOSTuser', {timeout: oneMinute});
+  cy.get('div[class*="Header_ProTableHeader"]').clickAndWait({force: true, multiple: true});
+  cy.waitWhileSpin(oneMinute);
 });
 
 Cypress.Commands.add('sortTableAndIntercept', (column: string|RegExp, nbCalls: number, eq: number = 0) => {
@@ -115,9 +132,11 @@ Cypress.Commands.add('validatePdfFileContent', (fixture: string, replacements?: 
 
 Cypress.Commands.add('validateTableFirstRow', (expectedValue: string|RegExp, eq: number, selector: string = '') => {
   cy.waitWhileSpin(oneMinute);
-  cy.get(selector+' tr[class*="ant-table-row"]').eq(0).then(($firstRow) => {
-    cy.wrap($firstRow).find('td').eq(eq).contains(expectedValue).should('exist');
-  });
+  cy.wait(3000);
+  cy.get(selector+' tr[class*="ant-table-row"]').eq(0)
+    .then(($firstRow) => {
+      cy.wrap($firstRow).find('td').eq(eq).contains(expectedValue).should('exist');
+    });
 });
 
 Cypress.Commands.add('visitAndIntercept', (url: string, methodHTTP: string, routeMatcher: string, nbCalls: number) => {
