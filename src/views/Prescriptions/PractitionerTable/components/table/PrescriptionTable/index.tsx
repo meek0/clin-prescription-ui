@@ -76,7 +76,7 @@ const PrescriptionsTable = ({
           total: results?.total || 0,
         },
         hideItemsCount: true,
-        enableColumnSort: false,
+        enableColumnSort: true,
         enableTableExport: false,
         onColumnSortChange: (columns) => {
           dispatch(

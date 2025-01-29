@@ -57,6 +57,12 @@ export const PRESCRIPTIONS_SEARCH_QUERY = gql`
             status
             security_tags
             priority
+            person {
+              id
+              first_name
+              last_name
+              ramq
+            }
           }
         }
         total
