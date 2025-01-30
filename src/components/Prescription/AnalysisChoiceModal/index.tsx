@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import intl from 'react-intl-universal';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Checkbox, Form, Modal, Select, Typography } from 'antd';
@@ -149,7 +150,12 @@ const AnalysisChoiceModal = () => {
               <Form.Item className="marginTop noMarginBtm">
                 <Text className={styles.recommandationColor}>
                   {intl.get('prescription.analysis.choici.modal.consult.algo.1')}{' '}
-                  <Link>{intl.get('prescription.analysis.choici.modal.consult.algo.2')}</Link>{' '}
+                  <Link
+                    href="https://www.chusj.org/fr/soins-services/L/Laboratoires/Analyses-genomiques-(SNG)-du-Reseau-quebecois-de-d"
+                    target="_blank"
+                  >
+                    {intl.get('prescription.analysis.choici.modal.consult.algo.2')}
+                  </Link>
                   {intl.get('prescription.analysis.choici.modal.consult.algo.3')}
                 </Text>
               </Form.Item>
