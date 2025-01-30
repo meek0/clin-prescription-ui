@@ -27,7 +27,7 @@ const searchPractitionerRoles = () =>
   sendRequestWithRpt<Bundle<PractitionerRole | Practitioner>>({
     method: 'GET',
     // eslint-disable-next-line max-len
-    url: `${FHIR_API_URL}/PractitionerRole?role=doctor,310189009&_include=PractitionerRole:organization&_include=PractitionerRole:practitioner&&_count=1000`,
+    url: `${FHIR_API_URL}/PractitionerRole?role=doctor,310189009,405277009&_include=PractitionerRole:organization&_include=PractitionerRole:practitioner&&_count=1000`,
   });
 
 export const FhirApi = {
