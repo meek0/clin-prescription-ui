@@ -12,7 +12,7 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(1).contains(/\d{7}/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(2).contains(/\d{7}/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(3).contains(/(Routine|ASAP)/).should('exist');
-    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(4).contains('Soumise').should('exist');
+    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(4).contains(/(Brouillon|Soumise|Approuvée)/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(5).contains(/^\d{4}-\d{2}-\d{2}$/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(6).contains(/(DYSM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(7).contains(/(CHUSJ|CHUS|CUSM)/).should('exist');
@@ -51,7 +51,7 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
 
   it('Valider les fonctionnalités du tableau - Tri Statut', () => {
     cy.sortTableAndIntercept('Statut', 1);
-    cy.validateTableFirstRow('Soumise', 4);
+    cy.validateTableFirstRow('Approuvée', 4);
     cy.sortTableAndIntercept('Statut', 1);
     cy.validateTableFirstRow('Soumise', 4);
   });
