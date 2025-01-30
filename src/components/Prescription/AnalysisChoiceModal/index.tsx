@@ -69,19 +69,7 @@ const AnalysisChoiceModal = () => {
       >
         <Form.Item
           label={
-            <ProLabel
-              title={intl.get('prescription.analysis.choici.modal.select.panel')}
-              popoverProps={{
-                title: intl.get('prescription.analysis.choici.modal.title'),
-                content: (
-                  <Text className={styles.analysisPopoverContent}>
-                    Veuillez <Link>consulter la documentation</Link> pour obtenir la définition de
-                    chaque analyse.
-                  </Text>
-                ),
-              }}
-              colon
-            />
+            <ProLabel title={intl.get('prescription.analysis.choici.modal.select.panel')} colon />
           }
           name={ANALYSIS_CHOICE_FI_KEY.ANALYSIS_TYPE}
           rules={defaultFormItemsRules}
