@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+
 import { getDateTime } from './cypress/support/utils';
 
 const { strDate, strTime } = getDateTime();
