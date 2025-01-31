@@ -52,7 +52,7 @@ const PhenotypeModal = ({ visible = false, onApply, onVisibleChange }: OwnProps)
 
   return (
     <Modal
-      visible={isVisible}
+      open={isVisible}
       title={intl.get('component.phenotypeTree.modal.title')}
       wrapClassName={styles.phenotypeTreeModalWrapper}
       className={styles.phenotypeTreeModal}

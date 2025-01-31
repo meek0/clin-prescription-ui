@@ -21,6 +21,9 @@ export type initialState = {
     isLoadingConfig: boolean;
   };
   prescriptionId?: string;
+  isDraft?: boolean;
+  displayActionModal?: 'saved' | 'submitted' | 'error';
+  submissionError?: any;
 };
 
 export type TCompleteAnalysis = IAnalysisDataType & {
@@ -33,6 +36,7 @@ export type TCompleteAnalysis = IAnalysisDataType & {
     resident_supervisor?: string;
     comment?: string;
   };
+  changed?: boolean;
 };
 
 export interface ICurrentFormRefs {

@@ -7,6 +7,6 @@
 .prescriptionStepsPanel .analyseTitle {
   font-size: 12px;
 }
-.prescriptionStepsPanel .stepsItem:last-child div[class$=-content] {
+.prescriptionStepsPanel :global(.ant-steps-item):last-child div[class$=-content] {
   min-height: 34px;
 }

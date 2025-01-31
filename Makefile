@@ -30,7 +30,7 @@ start_cypress:
 	docker compose --profile cypress up -d --build
 
 stop:
-	docker-compose down
+	docker compose down
 
 # Work with local ferlab-ui
 ferlab_local:

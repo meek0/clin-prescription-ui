@@ -13,6 +13,8 @@ export default class EnvironmentVariables {
     FORM_API_URL: process.env.REACT_APP_FORM_API_URL,
     PANELS_FILE: process.env.REACT_APP_PANELS_FILE,
     SENTRY_API: process.env.REACT_APP_SENTRY_API,
+    // FEATURES
+    USE_DRAFT: process.env.REACT_APP_USE_DRAFT,
   };
 
   static configFor(key: string): string {

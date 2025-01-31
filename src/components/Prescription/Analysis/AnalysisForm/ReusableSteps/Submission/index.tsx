@@ -27,7 +27,6 @@ import { useAppDispatch } from 'store';
 import { useGlobals } from 'store/global';
 import { usePrescriptionForm } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
-import { createPrescription } from 'store/prescription/thunk';
 import { useUser } from 'store/user';
 
 import styles from './index.module.css';
@@ -117,14 +116,6 @@ const Submission = () => {
         className={styles.submissionForm}
         name={FORM_NAME}
         layout="vertical"
-        onFinish={() => {
-          dispatch(createPrescription())
-            .unwrap()
-            .then(({ prescriptionId }) => {
-              dispatch(prescriptionFormActions.clearForm());
-              dispatch(prescriptionFormActions.saveCreatedPrescription(prescriptionId));
-            });
-        }}
       >
         <div className={styles.supervisorCommentWrapper}>
           {needToSelectSupervisor() && (

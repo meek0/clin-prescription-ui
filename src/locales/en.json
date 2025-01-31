@@ -110,8 +110,6 @@
   "prescription.clinical.signs.review.label.observed": "Signs observed",
   "prescription.form.cancel.modal.cancel.btn": "Cancel the prescription",
   "prescription.form.cancel.modal.close.btn": "Cancel",
-  "prescription.form.cancel.modal.content": "If you cancel the current prescription, all data will be lost.",
-  "prescription.form.cancel.modal.title": "Cancel this prescription?",
   "prescription.history.diagnosis.add.health.conditions": "Add",
   "prescription.history.diagnosis.report.health.conditions": "Report relevant health conditions",
   "prescription.history.diagnosis.review.label.ethnicity": "Ethnicity",
@@ -525,16 +523,6 @@
       },
       "other_examination": "Other paraclinical examinations"
     },
-    "submitted": {
-      "success": {
-        "title": "Prescription submitted",
-        "message": "The prescription <span style='font-weight: 500;'>{id}</span> was created successfully.",
-        "link": "View the prescription"
-      },
-      "actions": {
-        "download": "Download documents"
-      }
-    },
     "parent": {
       "info": {
         "moment": {
@@ -546,14 +534,57 @@
           "father": "Enter information about the father"
         },
         "clinical": {
-          "mother": "Mother's clinical information",
-          "father": "Father's clinical information"
+          "title": {
+            "mother": "Mother's clinical information",
+            "father": "Father's clinical information"
+          }
         }
       }
     },
     "phenotypes": {
       "header": {
         "elements": "elements"
+      }
+    }
+  },
+  "prescriptionForm": {
+    "continueEditionButton": "Continue editing",
+    "saveButtonTooltip": "The prescription will be saved as a \"draft\". You will be able to complete and submit it later.",
+    "saved": {
+      "success": {
+        "title": "Prescription saved",
+        "content": "Prescription <span style='font-weight: 500;'>{id}</span> has been saved as a draft."
+      },
+      "error": {
+        "title": "Prescription not saved",
+        "content": "An error occurred while saving the prescription. Please try again."
+      }
+    },
+    "submitted": {
+      "success": {
+        "title": "Prescription submitted",
+        "message": "The prescription <span style='font-weight: 500;'>{id}</span> was created successfully.",
+        "link": "View the prescription"
+      },
+      "error": {
+        "title": "Prescription submission error",
+        "message": "An error occurred while creating the prescription. Please try again."
+      },
+      "actions": {
+        "download": "Download documents"
+      }
+    },
+    "cancelModal": {
+      "title": "Close the form?",
+      "content": "All unsaved information will be lost if you close this form."
+    },
+    "review": {
+      "saveButton": "Save changes",
+      "cancelButtonTooltip": "Go back to the submission page without making changes.",
+      "savedModal": {
+        "title": "Updates saved",
+        "content": "Your changes have been successfully saved. You can return to the submission page.",
+        "okButton": "Return to submission"
       }
     }
   },

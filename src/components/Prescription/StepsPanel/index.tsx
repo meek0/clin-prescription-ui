@@ -17,22 +17,12 @@ const StepsPanel = () => {
         <Title className={styles.analyseTitle}>Analyse</Title>
         <Title level={4}>{getAnalysisNameByCode(config?.analysisTitle!, false)}</Title>
       </Space>
-      <Steps direction="vertical" size="small" current={currentStep?.index}>
-        {config?.steps.map((step) => (
-          <Steps.Step
-            className={styles.stepsItem}
-            key={step.index}
-            title={step.title}
-            //onStepClick={(index) => {
-            //  dispatch(
-            //    prescriptionFormActions.goTo({
-            //      index,
-            //    }),
-            //  );
-            //}}
-          />
-        ))}
-      </Steps>
+      <Steps
+        direction="vertical"
+        size="small"
+        current={currentStep?.index}
+        items={config?.steps.map((step) => ({ title: step.title }))}
+      />
     </Space>
   );
 };
