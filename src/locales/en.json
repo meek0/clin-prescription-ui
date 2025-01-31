@@ -582,7 +582,7 @@
       "saveButton": "Save changes",
       "cancelButtonTooltip": "Go back to the submission page without making changes.",
       "savedModal": {
-        "title": "Updates Saved",
+        "title": "Updates saved",
         "content": "Your changes have been successfully saved. You can return to the submission page.",
         "okButton": "Return to submission"
       }
