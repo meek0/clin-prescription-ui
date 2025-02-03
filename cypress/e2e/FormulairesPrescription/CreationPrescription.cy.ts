@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 describe('Formulaires de prescription - Création', () => {
-  it('MMG - Solo [PRESC-318]', () => {
+  it('MMG - Solo', () => {
     const strMRN = mrnValues[Math.floor(Math.random() * mrnValues.length)];
 
     cy.get('[data-cy="CreateNewPrescription"] [data-cy="ActionButton"]').clickAndWait({force: true});
@@ -54,11 +54,11 @@ describe('Formulaires de prescription - Création', () => {
 
     // Soumission
     cy.intercept('POST', '**/form').as('getPOSTform');
-    cy.get('[data-cy="NextButton"]').clickAndWait({force: true});
+    cy.get('[data-cy="SubmitButton"]').clickAndWait({force: true});
     cy.wait('@getPOSTform');
     
     // Confirmation de la soumission
-    cy.clickAndIntercept('[class*="successModal"] [href*="/prescription/entity/"]', 'POST', '**/$graphql*', 3);
+    cy.clickAndIntercept('[class*="SaveModal"] [href*="/prescription/entity/"]', 'POST', '**/$graphql*', 3);
 
     // Page de la prescription
     cy.get('[data-cy="PatientCard"]').contains(strMRN).should('exist');
