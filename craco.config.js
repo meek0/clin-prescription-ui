@@ -19,6 +19,11 @@ module.exports = {
             warning.details.includes('source-map-loader')
           );
         },
+
+        // Ignore css conflict order warnings (this is not relevant whe using CSS modules)
+        function ignoreCssConflictOrder(warning) {
+          return warning.message?.includes('mini-css-extract-plugin');
+        },
       ],
     },
   },
