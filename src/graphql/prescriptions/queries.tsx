@@ -37,6 +37,7 @@ export const PRESCRIPTIONS_QUERY = gql`
   }
 `;
 
+/* Person.id est mandatory pour le Back End */
 export const PRESCRIPTIONS_SEARCH_QUERY = gql`
   query AnalysisSearch($sqon: JSON, $first: Int, $offset: Int, $sort: [Sort], $searchAfter: JSON) {
     Analyses {

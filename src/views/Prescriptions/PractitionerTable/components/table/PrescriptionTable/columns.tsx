@@ -85,14 +85,15 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
   },
   {
     key: 'person.ramq',
-    render: (record: AnalysisResult) => record.person.ramq,
+    render: (record: AnalysisResult) =>
+      record.person.ramq ? record.person.ramq : TABLE_EMPTY_PLACE_HOLDER,
     title: intl.get('screen.patientsearch.table.ramq'),
     sorter: { multiple: 1 },
   },
   {
     key: 'patient_mrn',
     dataIndex: ['patient_mrn'],
-    render: (patient_mrn: string) => patient_mrn,
+    render: (patient_mrn: string) => (patient_mrn ? patient_mrn : TABLE_EMPTY_PLACE_HOLDER),
     title: intl.get('screen.patientsearch.table.mrn'),
     sorter: { multiple: 1 },
   },
