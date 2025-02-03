@@ -30,3 +30,10 @@ body {
 [ant-click-animating-without-extra-node='true']::after{
   display:none;
 }
+
+.ant-form-item-label label {
+  pointer-events: none;
+  .ant-form-item-tooltip, .ant-typography-secondary {
+    pointer-events: all;
+  }
+}
