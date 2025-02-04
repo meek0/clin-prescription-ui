@@ -68,7 +68,10 @@ const prescriptionFormSlice = createSlice({
   initialState: PrescriptionState,
   reducers: {
     saveStepData: (state, action: PayloadAction<any>) => {
-      state.analysisData = _.merge(state.analysisData, action.payload);
+      // The mergeWith option is used to replace array if array is empty (https://github.com/lodash/lodash/issues/1313)
+      state.analysisData = _.mergeWith(state.analysisData, action.payload, (obj, src) =>
+        !_.isNil(src) ? src : obj,
+      );
     },
     prescriptionChanged: (state) => {
       state.analysisData.changed = true;
