@@ -188,12 +188,12 @@ const prescriptionFormSlice = createSlice({
     },
     openFormForDraft: (state, action: PayloadAction<HybridPrescription>) => {
       const prescription = action.payload;
-      const config = getAnalysisConfigMapping(prescription.type as AnalysisType)!;
+      const config = getAnalysisConfigMapping(prescription.analysis_code as AnalysisType)!;
       config.steps = enrichSteps(config.steps);
 
       state.prescriptionVisible = true;
       state.isDraft = true;
-      state.analysisType = prescription.type as AnalysisType;
+      state.analysisType = prescription.analysis_code as AnalysisType;
       state.prescriptionId = prescription.analysis_id;
       state.currentStep = config.steps[0];
 
