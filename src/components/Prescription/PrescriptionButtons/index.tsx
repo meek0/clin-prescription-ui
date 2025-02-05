@@ -15,18 +15,6 @@ export const PrescriptionButtons = () => {
 
   const showDraftButtons = EnvironmentVariables.configFor('USE_DRAFT') === 'true';
 
-  async function saveStep() {
-    try {
-      const values = await currentFormRefs?.validateFields();
-      dispatch(prescriptionFormActions.saveStepData(values));
-      lastStepIsNext
-        ? dispatch(prescriptionFormActions.goToLastStep())
-        : dispatch(prescriptionFormActions.nextStep());
-    } catch (errorInfo) {
-      console.error('Failed:', errorInfo);
-    }
-  }
-
   const reviewButtons = (
     <>
       <Tooltip title={intl.get('prescriptionForm.review.cancelButtonTooltip')}>
@@ -106,14 +94,24 @@ export const PrescriptionButtons = () => {
         )}
       </Space>
       <Space>
-        {showDraftButtons && lastStepIsNext ? reviewButtons : saveButton}
+        {showDraftButtons ? (lastStepIsNext ? reviewButtons : saveButton) : null}
         {!currentStep?.nextStepIndex && submitButton}
         {currentStep?.nextStepIndex && !lastStepIsNext && (
           <Button
             icon={<ArrowRightOutlined />}
             type="primary"
             data-cy="NextButton"
-            onClick={saveStep}
+            onClick={async () => {
+              try {
+                const values = await currentFormRefs?.validateFields();
+                dispatch(prescriptionFormActions.saveStepData(values));
+                lastStepIsNext
+                  ? dispatch(prescriptionFormActions.goToLastStep())
+                  : dispatch(prescriptionFormActions.nextStep());
+              } catch (errorInfo) {
+                console.error('Failed:', errorInfo);
+              }
+            }}
           >
             {intl.get('next')}
           </Button>
