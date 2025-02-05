@@ -43,6 +43,7 @@ const AnalysisForm = (
         validateMessages={{
           required: intl.get('this.field.is.required'),
         }}
+        onValuesChange={() => dispatch(prescriptionFormActions.prescriptionChanged())}
         onFinish={(values) => {
           if (props.onFinish) {
             props.onFinish(values);

@@ -16,7 +16,6 @@ const PrescriptionAnalysis = () => {
 
   return (
     <Form.Provider
-      onFormChange={() => dispatch(prescriptionFormActions.prescriptionChanged())}
       onFormFinish={async (formName, info) => {
         try {
           dispatch(prescriptionFormActions.saveStepData(info.values));
