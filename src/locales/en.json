@@ -556,6 +556,10 @@
     }
   },
   "prescriptionForm": {
+    "header": {
+      "creation": "Analysis prescription",
+      "edition": "Prescription ID: {prescriptionId}"
+    },
     "continueEditionButton": "Continue editing",
     "saveButtonTooltip": "The prescription will be saved as a \"draft\". You will be able to complete and submit it later.",
     "saved": {

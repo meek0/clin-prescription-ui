@@ -556,6 +556,10 @@
     }
   },
   "prescriptionForm": {
+    "header": {
+      "creation": "Prescription d'analyse",
+      "edition": "Prescription ID : {prescriptionId}"
+    },
     "continueEditionButton": "Continuer l’édition",
     "saveButtonTooltip": "La prescription sera sauvegardée en tant que « brouillon ». Vous pourrez la compléter et la soumettre ultérieurement.",
     "saved": {
