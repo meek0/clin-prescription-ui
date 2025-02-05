@@ -44,7 +44,7 @@ const PrescriptionsTable = ({
 }: OwnProps): React.ReactElement => {
   const dispatch = useDispatch();
   const { user } = useUser();
-  const initialColumns = user.config.data_exploration?.tables?.prescriptions?.columns;
+  const initialColumns = user.config.data_exploration?.tables?.prescriptionsAnalyse?.columns;
 
   return (
     <ProTable<ITableAnalysisResult>
@@ -76,14 +76,14 @@ const PrescriptionsTable = ({
           total: results?.total || 0,
         },
         hideItemsCount: true,
-        enableColumnSort: false,
+        enableColumnSort: true,
         enableTableExport: false,
         onColumnSortChange: (columns) => {
           dispatch(
             updateConfig({
               data_exploration: {
                 tables: {
-                  prescriptions: { columns },
+                  prescriptionsAnalyse: { columns },
                 },
               },
             }),
@@ -105,7 +105,7 @@ const PrescriptionsTable = ({
               data_exploration: {
                 tables: {
                   prescriptions: {
-                    ...user?.config.data_exploration?.tables?.prescriptions,
+                    ...user?.config.data_exploration?.tables?.prescriptionsAnalyse,
                     viewPerQuery,
                   },
                 },

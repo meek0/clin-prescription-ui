@@ -32,6 +32,12 @@ export interface AnalysisResult extends ArrangerNodeData {
   security_tags: string[];
   status: string;
   timestamp: string;
+  person: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    ramq: string;
+  };
   sequencing_requests: ArrangerResultsTree<AnalysisSequencingRequest>;
 }
 

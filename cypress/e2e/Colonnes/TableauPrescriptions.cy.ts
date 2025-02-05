@@ -9,6 +9,7 @@ describe('Page des prescriptions - Colonnes du tableau des prescriptions', () =>
 
   beforeEach(() => {
     cy.visitHomePage();
+    cy.resetColumns(0);
   });
 
   it('Valider l\'affichage (par défaut/optionnel) et l\'ordre des colonnes', () => {
@@ -54,6 +55,22 @@ describe('Page des prescriptions - Colonnes du tableau des prescriptions', () =>
 
     cy.get('thead[class="ant-table-thead"]').eq(0)
       .find('th[class*="ant-table-cell"]').eq(8)
+      .should('have.class', 'ant-table-column-has-sorters')
+      .contains('RAMQ').should('exist');
+
+    cy.get('thead[class="ant-table-thead"]').eq(0)
+      .find('th[class*="ant-table-cell"]').eq(9)
+      .should('have.class', 'ant-table-column-has-sorters')
+      .contains('Dossier').should('exist');
+
+    cy.get('thead[class="ant-table-thead"]').eq(0)
+      .find('th[class*="ant-table-cell"]').eq(10)
       .should('have.css', 'text-align', 'center');
+
+    cy.get('thead[class="ant-table-thead"]').eq(0)
+      .contains('Patient ID').should('not.exist');
+    cy.get('div[class="ant-popover-inner"]')
+      .find('div[class="ant-space-item"]').eq(11)
+      .contains('Patient ID').should('exist');
   });
 });

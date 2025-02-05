@@ -8,8 +8,9 @@ beforeEach(() => {
 
   cy.login(Cypress.env('username_DG_CHUSJ_CUSM_CHUS'), Cypress.env('password'));
   cy.visitHomePage();
+  cy.resetColumns(0);
 
-  cy.get('tr[class*="ant-table-row"]').eq(0).find('[class="ant-table-cell"]').eq(8).find('button').clickAndWait({force: true});
+  cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(10).find('button').clickAndWait({force: true});
   cy.wait(2000);
   cy.waitUntilFile(oneMinute);
 });

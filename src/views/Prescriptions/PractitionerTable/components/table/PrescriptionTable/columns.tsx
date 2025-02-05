@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons/lib/icons';
 import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
 import { Tooltip } from 'antd';
-import { ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
+import { AnalysisResult, ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
 import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
@@ -35,9 +35,9 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
     sorter: { multiple: 1 },
   },
   {
-    key: 'patient_id',
-    dataIndex: ['patient_id'],
-    render: (patient_id: string) => patient_id,
+    key: 'person.last_name',
+    render: (record: AnalysisResult) =>
+      `${record.person.last_name.toUpperCase()} ${record.person.first_name}`,
     title: intl.get('screen.patientsearch.table.patient'),
     sorter: { multiple: 1 },
   },
@@ -84,10 +84,34 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
     sorter: { multiple: 1 },
   },
   {
+    key: 'person.ramq',
+    render: (record: AnalysisResult) =>
+      record.person.ramq ? record.person.ramq : TABLE_EMPTY_PLACE_HOLDER,
+    title: intl.get('screen.patientsearch.table.ramq'),
+    sorter: { multiple: 1 },
+  },
+  {
+    key: 'patient_mrn',
+    dataIndex: ['patient_mrn'],
+    render: (patient_mrn: string) => (patient_mrn ? patient_mrn : TABLE_EMPTY_PLACE_HOLDER),
+    title: intl.get('screen.patientsearch.table.mrn'),
+    sorter: { multiple: 1 },
+  },
+  {
+    key: 'patient_id',
+    dataIndex: ['patient_id'],
+    render: (patient_id: string) => patient_id,
+    defaultHidden: true,
+    title: intl.get('screen.patientsearch.table.patientID'),
+    sorter: { multiple: 1 },
+  },
+  {
     key: 'download',
-    title: '',
+    title: intl.get('screen.patientsearch.table.links'),
+    tooltip: intl.get('screen.patientsearch.table.links.tooltip'),
     align: 'center',
     width: 40,
+    fixed: 'right',
     dataIndex: ['prescription_id'],
     render: (prescription_id: string) => (
       <Tooltip title={intl.get('download.documents')}>
