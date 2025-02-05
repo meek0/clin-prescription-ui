@@ -4,6 +4,7 @@ import {
 } from 'components/Prescription/components/ClinicalSignsSelect/types';
 import { IClinicalSignItem } from 'components/Prescription/components/ClinicalSignsSelect/types';
 import {
+  IParaclinicalExamItem,
   IParaclinicalExamsDataType,
   PARACLINICAL_EXAM_ITEM_KEY,
   PARACLINICAL_EXAMS_FI_KEY,
@@ -53,12 +54,24 @@ export const cleanAnalysisData = (analysis: TCompleteAnalysis) => {
 
 const cleanParaclinicalExams = (
   paraclinicalData: IParaclinicalExamsDataType,
-): IParaclinicalExamsDataType => ({
-  ...paraclinicalData,
-  exams: paraclinicalData[PARACLINICAL_EXAMS_FI_KEY.EXAMS]?.filter(
-    (exam) => exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] !== ParaclinicalExamStatus.NOT_DONE,
-  ),
-});
+): IParaclinicalExamsDataType => {
+  const exams: IParaclinicalExamItem[] = [];
+  paraclinicalData[PARACLINICAL_EXAMS_FI_KEY.EXAMS]?.forEach((exam) => {
+    if (exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] !== ParaclinicalExamStatus.NOT_DONE)
+      exams.push({
+        [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]:
+          exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION],
+        [PARACLINICAL_EXAM_ITEM_KEY.CODE]: exam[PARACLINICAL_EXAM_ITEM_KEY.CODE],
+        [PARACLINICAL_EXAM_ITEM_KEY.VALUES]: exam[PARACLINICAL_EXAM_ITEM_KEY.VALUE]
+          ? [exam[PARACLINICAL_EXAM_ITEM_KEY.VALUE]]
+          : exam[PARACLINICAL_EXAM_ITEM_KEY.VALUES],
+      });
+  });
+  return {
+    ...paraclinicalData,
+    exams,
+  };
+};
 
 const cleanClinicalSigns = (clinicalSigns: IClinicalSignsDataType): IClinicalSignsDataType => {
   const { not_observed_signs, signs, ...rest } = clinicalSigns;
