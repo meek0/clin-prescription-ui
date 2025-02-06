@@ -1,6 +1,8 @@
 {
   "FTH": "Father",
   "MTH": "Mother",
+  "SIS": "Sister",
+  "BRO": "Brother",
   "MFTH": "Father",
   "MMTH": "Mother",
   "affected": "Affected",
