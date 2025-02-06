@@ -15,6 +15,8 @@ import { TCompleteAnalysis } from './types';
 
 export const cleanAnalysisData = (analysis: TCompleteAnalysis) => {
   const analysisCopy = JSON.parse(JSON.stringify(analysis));
+  if (analysisCopy.submission)
+    analysisCopy.analysis.comment = analysisCopy.submission.general_comment;
 
   if (analysisCopy.paraclinical_exams) {
     analysisCopy.paraclinical_exams = cleanParaclinicalExams(analysisCopy.paraclinical_exams);
