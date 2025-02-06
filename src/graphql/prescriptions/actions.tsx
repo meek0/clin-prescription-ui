@@ -7,6 +7,7 @@ import { ExtendedMappingResults, GqlResults } from 'graphql/models';
 import { AnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import { INDEX_EXTENDED_MAPPING } from 'graphql/queries';
 import { useLazyResultQuery, useLazyResultQueryOnLoadOnly } from 'graphql/utils/query';
+import { StatusOptions } from 'views/Prescriptions/components/StatusTag';
 
 import {
   ANALYSE_CODESYSTEME,
@@ -207,7 +208,10 @@ export const useServiceRequestEntity = (
     },
   });
 
-  if (!data?.ServiceRequest.meta?.profile?.includes(ANALYSIS_SERVICE_REQUEST_PROFILE) && !error) {
+  if (
+    (!data?.ServiceRequest.meta?.profile?.includes(ANALYSIS_SERVICE_REQUEST_PROFILE) && !error) ||
+    data?.ServiceRequest.status === StatusOptions.Draft
+  ) {
     const newError = new GraphQLError('Forbidden request', {
       extensions: {
         code: 'FORBIDDEN',
