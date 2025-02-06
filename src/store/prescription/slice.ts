@@ -18,6 +18,7 @@ import {
   IClinicalSignItem,
   IClinicalSignsDataType,
 } from 'components/Prescription/components/ClinicalSignsSelect/types';
+import { IHistoryAndDiagnosisDataType } from 'components/Prescription/components/HistoryAndDiagnosisData';
 import { IParaclinicalExamsDataType } from 'components/Prescription/components/ParaclinicalExamsSelect';
 import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
 import { MuscularDiseaseConfig } from 'store/prescription/analysis/muscular';
@@ -209,13 +210,15 @@ const prescriptionFormSlice = createSlice({
         state.analysisData.history_and_diagnosis = {
           diagnostic_hypothesis: prescription.diagnosis_hypothesis,
           ethnicity: prescription.ethnicity_code,
-          inbreeding: prescription.inbreeding?.toLowerCase() === 'true',
           report_health_conditions: !!prescription.history?.length,
           health_conditions: prescription.history?.map((history) => ({
             condition: history.condition,
             parental_link: history.parental_link_code,
           })),
-        };
+        } as IHistoryAndDiagnosisDataType;
+        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding)
+          state.analysisData.history_and_diagnosis.inbreeding =
+            prescription.inbreeding.toLowerCase() === 'true';
       }
 
       function getPatientInfos(
