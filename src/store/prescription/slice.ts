@@ -1,9 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  HybridPatient,
+  HybridPatientNotPresent,
+  HybridPatientPresent,
+  HybridPrescription,
+} from 'api/hybrid/models';
 import { logout } from 'auth/keycloak';
 import { RptManager } from 'auth/rpt';
 import { isUndefined } from 'lodash';
 import _ from 'lodash';
 
+import { EnterInfoMomentValue } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification';
+import { TPatientFormDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification';
+// eslint-disable-next-line max-len
+import { GestationalAgeValues } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/AdditionalInformation';
+import {
+  IClinicalSignItem,
+  IClinicalSignsDataType,
+} from 'components/Prescription/components/ClinicalSignsSelect/types';
+import { IHistoryAndDiagnosisDataType } from 'components/Prescription/components/HistoryAndDiagnosisData';
+import { IParaclinicalExamsDataType } from 'components/Prescription/components/ParaclinicalExamsSelect';
 import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
 import { MuscularDiseaseConfig } from 'store/prescription/analysis/muscular';
 import { isMuscularAnalysis } from 'store/prescription/helper';
@@ -17,6 +33,7 @@ import {
   IStartAddingParent,
   ISubmissionStepDataReview,
 } from 'store/prescription/types';
+import { SexValue } from 'utils/commonTypes';
 
 import { getAddParentSteps } from './analysis/addParent';
 import { createPrescription, fetchFormConfig } from './thunk';
@@ -156,22 +173,138 @@ const prescriptionFormSlice = createSlice({
       state.analysisChoiceModalVisible = true;
     },
     completeAnalysisChoice: (state, action: PayloadAction<ICompleteAnalysisChoice>) => {
-      let config = getAnalysisConfigMapping(action.payload.type)!;
+      const config = getAnalysisConfigMapping(action.payload.type)!;
+      config.steps = enrichSteps(config.steps);
 
-      config = {
-        ...config,
-        steps: enrichSteps(config.steps),
-      };
+      state.currentStep = config.steps[0];
+      state.config = config;
+      state.analysisType = action.payload.type;
+      state.analysisChoiceModalVisible = false;
+      state.prescriptionVisible = true;
 
       state.analysisData.analysis = {
         panel_code: action.payload.type,
         is_reflex: action.payload.extraData.isReflex ?? false,
       };
+    },
+    openFormForDraft: (state, action: PayloadAction<HybridPrescription>) => {
+      const prescription = action.payload;
+      const config = getAnalysisConfigMapping(prescription.analysis_code as AnalysisType)!;
+      config.steps = enrichSteps(config.steps);
 
-      state.analysisType = action.payload.type;
-      state.analysisChoiceModalVisible = false;
       state.prescriptionVisible = true;
+      state.isDraft = true;
+      state.analysisType = prescription.analysis_code as AnalysisType;
+      state.prescriptionId = prescription.analysis_id;
       state.currentStep = config.steps[0];
+
+      // Prescription data in analysisData object
+
+      state.analysisData.analysis = {
+        is_reflex: prescription.is_reflex,
+        panel_code: prescription.analysis_code,
+        comment: prescription.comment,
+      };
+
+      if (prescription.diagnosis_hypothesis) {
+        state.analysisData.history_and_diagnosis = {
+          diagnostic_hypothesis: prescription.diagnosis_hypothesis,
+          ethnicity: prescription.ethnicity_code,
+          report_health_conditions: !!prescription.history?.length,
+          health_conditions: prescription.history?.map((history) => ({
+            condition: history.condition,
+            parental_link: history.parental_link_code,
+          })),
+        } as IHistoryAndDiagnosisDataType;
+        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding)
+          state.analysisData.history_and_diagnosis.inbreeding =
+            prescription.inbreeding.toLowerCase() === 'true';
+      }
+
+      function getPatientInfos(
+        patient: HybridPatient,
+        proband?: HybridPatientPresent,
+      ): TPatientFormDataType {
+        return {
+          parent_enter_moment: (!(patient as HybridPatientNotPresent).status
+            ? 'now'
+            : (patient as HybridPatientNotPresent).status?.toLowerCase()) as EnterInfoMomentValue,
+          parent_no_info_reason: (patient as HybridPatientNotPresent).reason,
+          id: (patient as HybridPatientPresent).patient_id,
+          ep: (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
+          first_name: (patient as HybridPatientPresent).first_name,
+          last_name: (patient as HybridPatientPresent).last_name,
+          no_mrn: !(patient as HybridPatientPresent).mrn,
+          mrn: (patient as HybridPatientPresent).mrn,
+          ramq: (patient as HybridPatientPresent).jhn,
+          no_ramq: !(patient as HybridPatientPresent).jhn,
+          birth_date: (patient as HybridPatientPresent).birth_date,
+          gender: (patient as HybridPatientPresent).sex?.toLowerCase() as SexValue,
+        } as any;
+      }
+
+      function getClinical(patient: HybridPatientPresent): IClinicalSignsDataType {
+        const observedSigns: IClinicalSignItem[] = [];
+        const nonObservedSigns: IClinicalSignItem[] = [];
+        patient.clinical?.signs?.forEach((sign) =>
+          (sign.observed ? observedSigns : nonObservedSigns).push({
+            value: sign.code,
+            is_observed: sign.observed,
+            age_code: sign.age_code,
+            name: '',
+          }),
+        );
+        return {
+          signs: observedSigns,
+          not_observed_signs: nonObservedSigns,
+          comment: patient.clinical?.comment,
+        };
+      }
+
+      function getParaClinical(patient: HybridPatientPresent): IParaclinicalExamsDataType {
+        return {
+          exams: patient.para_clinical?.exams || [],
+          comment: patient.para_clinical?.other,
+        };
+      }
+
+      const proband = prescription.patients[0] as HybridPatientPresent;
+      state.analysisData.patient = getPatientInfos(proband);
+      state.analysisData.clinical_signs = getClinical(proband);
+      state.analysisData.paraclinical_exams = getParaClinical(proband);
+
+      if (proband.foetus) {
+        state.analysisData.patient.additional_info = {
+          foetus_gender: proband.foetus.sex?.toLowerCase() as SexValue,
+          gestational_age:
+            proband.foetus.gestational_method?.toLocaleLowerCase() as GestationalAgeValues,
+          gestational_date: proband.foetus.gestational_date,
+          is_new_born: proband.foetus.type === 'NEW_BORN',
+          is_prenatal_diagnosis: proband.foetus.type === 'PRENATAL',
+          mother_ramq: proband.foetus.mother_jhn,
+        };
+      }
+
+      for (let i = 1; i < prescription.patients.length; i++) {
+        const patient = prescription.patients[i];
+        const familyMember = {
+          ...getPatientInfos(patient, proband),
+          parent_clinical_status: (patient as HybridPatientPresent).clinical?.signs,
+          ...getClinical(patient as HybridPatientPresent),
+          ...getParaClinical(patient as HybridPatientPresent),
+        } as any;
+
+        familyMember.parent_clinical_status = familyMember.signs?.length
+          ? 'affected'
+          : 'not_affected';
+
+        if (patient.family_member === 'FATHER') {
+          state.analysisData.father = familyMember;
+        } else if (patient.family_member === 'MOTHER') {
+          state.analysisData.mother = familyMember;
+        }
+      }
+
       state.config = config;
     },
     currentFormRefs: (state, action: PayloadAction<ICurrentFormRefs>) => {

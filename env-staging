@@ -17,6 +17,7 @@ REACT_APP_WEB_ROOT=https://portail.staging.cqgc.hsj.rtss.qc.ca
 REACT_APP_USERS_API_URL=https://users.staging.cqgc.hsj.rtss.qc.ca
 REACT_APP_FORM_API_URL=https://forms.staging.cqgc.hsj.rtss.qc.ca
 REACT_APP_PANELS_FILE=https://s3.cqgc.hsj.rtss.qc.ca/cqgc-staging-app-public/panels/panels.xlsx
+REACT_APP_HYBRID_API_URL=https://qlin-me-hybrid.staging.cqgc.hsj.rtss.qc.ca
 
 # FEATURES
 REACT_APP_FT_beta=true

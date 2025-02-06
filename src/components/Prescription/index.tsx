@@ -39,7 +39,9 @@ const PrescriptionForm = () => {
         title={
           <Space className={styles.modalHeader} align="center">
             <Title level={4}>
-              {prescriptionId ? `Prescription ID: ${prescriptionId}` : "Prescription d'analyse"}
+              {prescriptionId
+                ? intl.getHTML('prescriptionForm.header.edition', { prescriptionId })
+                : intl.get('prescriptionForm.header.creation')}
             </Title>
             <Button
               className={styles.customCloseBtn}

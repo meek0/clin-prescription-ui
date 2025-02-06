@@ -36,6 +36,8 @@ export enum PARACLINICAL_EXAMS_FI_KEY {
 export enum PARACLINICAL_EXAM_ITEM_KEY {
   CODE = 'code',
   INTERPRETATION = 'interpretation',
+  VALUES = 'values',
+  VALUE = 'value',
 }
 
 export enum ParaclinicalExamStatus {
@@ -62,7 +64,20 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
 
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
-      setInitialValues(form, getName, initialData, PARACLINICAL_EXAMS_FI_KEY);
+      const values = (formConfig?.paraclinical_exams.default_list ?? []).map((exam) => {
+        const foundExam = initialData.exams.find((item) => item.code === exam.value);
+        return {
+          [PARACLINICAL_EXAM_ITEM_KEY.CODE]: exam.value,
+          [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]:
+            foundExam?.interpretation?.toLowerCase() || ParaclinicalExamStatus.NOT_DONE,
+          [PARACLINICAL_EXAM_ITEM_KEY.VALUES]: foundExam?.values || [],
+          [PARACLINICAL_EXAM_ITEM_KEY.VALUE]:
+            exam.extra?.type === 'multi_select'
+              ? undefined
+              : foundExam?.value || foundExam?.values[0],
+        };
+      });
+      setInitialValues(form, getName, { ...initialData, exams: values }, PARACLINICAL_EXAMS_FI_KEY);
     } else {
       setFieldValue(
         form,

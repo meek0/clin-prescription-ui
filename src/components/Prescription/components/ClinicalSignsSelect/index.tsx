@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Form, Input, Space } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { clone, isEmpty } from 'lodash';
+import { HpoApi } from 'api/hpo';
 
 import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescription/utils/form';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
@@ -26,37 +26,60 @@ type OwnProps = IAnalysisFormPart & {
 
 const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
-  const [hpoList, setHpoList] = useState(clone(formConfig?.clinical_signs.default_list) ?? []);
-
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
-  const setDefaultList = () =>
-    setFieldValue(
-      form,
-      getName(CLINICAL_SIGNS_FI_KEY.SIGNS),
-      hpoList.map((term) => ({
-        [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: term.value,
-        [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: false,
-        [CLINICAL_SIGNS_ITEM_KEY.NAME]: term.name,
-      })),
-    );
+  const defaultHpo =
+    formConfig?.clinical_signs.default_list.map((term) => ({
+      [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: term.value,
+      [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: false,
+      [CLINICAL_SIGNS_ITEM_KEY.NAME]: term.name,
+    })) || [];
 
   useEffect(() => {
-    if (initialData && !isEmpty(initialData)) {
-      if (initialData[CLINICAL_SIGNS_FI_KEY.SIGNS]) {
-        setHpoList(
-          initialData[CLINICAL_SIGNS_FI_KEY.SIGNS].map((value) => ({
-            name: value[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-            value: value[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-          })),
-        );
-      } else {
-        setDefaultList();
-      }
+    if (
+      initialData &&
+      (initialData[CLINICAL_SIGNS_FI_KEY.SIGNS] ||
+        initialData[CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS])
+    ) {
+      const defaultObservedHposWithValue: IClinicalSignItem[] = [...defaultHpo];
+      const customHpos: IClinicalSignItem[] = [];
 
-      setInitialValues(form, getName, initialData, CLINICAL_SIGNS_FI_KEY);
+      initialData[CLINICAL_SIGNS_FI_KEY.SIGNS].forEach((hpo) => {
+        const defaultHpo = defaultObservedHposWithValue.find(({ value }) => value === hpo.value);
+        if (defaultHpo) {
+          defaultHpo[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] =
+            hpo[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED];
+          defaultHpo[CLINICAL_SIGNS_ITEM_KEY.AGE_CODE] = hpo[CLINICAL_SIGNS_ITEM_KEY.AGE_CODE];
+        } else if (hpo[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]) {
+          customHpos.push(hpo);
+        }
+      });
+
+      getHPOWithLabels([
+        ...customHpos,
+        ...(initialData[CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS] || []).map((hpo) => ({
+          ...hpo,
+          is_observed: false,
+        })),
+      ]).then((hpos) => {
+        const observedSigns: IClinicalSignItem[] = [];
+        const nonObservedSigns: IClinicalSignItem[] = [];
+        hpos.forEach((hpo) => (hpo.is_observed ? observedSigns : nonObservedSigns).push(hpo));
+
+        setInitialValues(
+          form,
+          getName,
+          {
+            ...initialData,
+            [CLINICAL_SIGNS_FI_KEY.SIGNS]: [...defaultObservedHposWithValue, ...observedSigns],
+            [CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS]: nonObservedSigns,
+          },
+          CLINICAL_SIGNS_FI_KEY,
+        );
+      });
     } else {
-      setDefaultList();
+      // Set default list
+      setFieldValue(form, getName(CLINICAL_SIGNS_FI_KEY.SIGNS), defaultHpo);
     }
     // eslint-disable-next-line
   }, []);
@@ -104,4 +127,20 @@ export function hpoValidationRule(hpoNode: IClinicalSignItem) {
       },
     },
   ];
+}
+
+async function getHPOWithLabels(data: IClinicalSignItem[]) {
+  return await Promise.all(
+    data.map(async (value) => {
+      const { data } = await HpoApi.searchHpos(value[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]);
+      const hpo = data?.hits[0];
+      return {
+        [CLINICAL_SIGNS_ITEM_KEY.NAME]: hpo?._source.name ?? 'cannot find HPO',
+        [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]:
+          hpo?._source.hpo_id ?? value[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
+        [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: value[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED],
+        [CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]: value[CLINICAL_SIGNS_ITEM_KEY.AGE_CODE],
+      } as IClinicalSignItem;
+    }),
+  );
 }

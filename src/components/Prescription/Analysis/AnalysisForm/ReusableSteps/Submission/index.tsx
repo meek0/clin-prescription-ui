@@ -4,7 +4,6 @@ import intl from 'react-intl-universal';
 import { FormOutlined } from '@ant-design/icons';
 import Collapse, { CollapsePanel } from '@ferlab/ui/core/components/Collapse';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
-import useDebounce from '@ferlab/ui/core/hooks/useDebounce';
 import { Descriptions, Form, Input, Select, Tag } from 'antd';
 import { DefaultOptionType } from 'antd/lib/select';
 import {
@@ -44,9 +43,7 @@ const Submission = () => {
   const { getAnalysisNameByCode } = useGlobals();
   const { analysisData, config, currentStep, analysisType } = usePrescriptionForm();
   const [supervisors, setSupervisors] = useState<DefaultOptionType[]>([]);
-  const [generalComment, setGeneralComment] = useState('');
   const [autoCompleteDropdownIsOpen, setAutoCompleteDropdownIsOpen] = useState(false);
-  const debouncedComment = useDebounce(generalComment, 300);
 
   const getName = (...key: IGetNamePathParams) => getNamePath(FORM_NAME, key);
 
@@ -58,22 +55,14 @@ const Submission = () => {
       form,
       getName,
       {
-        [SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT]: analysisData.analysis.comment,
+        [SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT]:
+          analysisData.submission?.general_comment || analysisData.analysis.comment,
         [SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR]: analysisData.analysis.resident_supervisor,
       },
       SUBMISSION_REVIEW_FI_KEY,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    dispatch(
-      prescriptionFormActions.saveSubmissionStepData({
-        comment: debouncedComment,
-      }),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedComment]);
 
   const needToSelectSupervisor = () => {
     const org = getPrescribingOrg()!;
@@ -153,7 +142,7 @@ const Submission = () => {
             name={getName(SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT)}
             label={<ProLabel title={intl.get('prescription.submission.general.comment')} colon />}
           >
-            <Input.TextArea rows={3} onChange={(value) => setGeneralComment(value.target.value)} />
+            <Input.TextArea rows={3} />
           </Form.Item>
         </div>
       </AnalysisForm>

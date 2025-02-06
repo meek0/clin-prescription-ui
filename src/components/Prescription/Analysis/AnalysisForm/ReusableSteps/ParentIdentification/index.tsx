@@ -128,9 +128,13 @@ const ParentIdentification = ({ parent }: OwnProps) => {
           checkShouldUpdate(prev, next, [getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)])
         }
       >
-        {({ getFieldValue }) =>
-          getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
-          EnterInfoMomentValue.NOW ? (
+        {({ getFieldValue }) => {
+          const initialData = getInitialData() as IPatientDataType;
+          const gender =
+            initialData?.[PATIENT_DATA_FI_KEY.SEX] ||
+            (parent === 'father' ? SexValue.MALE : SexValue.FEMALE);
+          return getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
+            EnterInfoMomentValue.NOW ? (
             <Space direction="vertical" className={styles.formContentWrapper}>
               <Collapse {...defaultCollapseProps} defaultActiveKey={[parent]}>
                 <CollapsePanel
@@ -141,9 +145,8 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                     form={form}
                     parentKey={FORM_NAME}
                     initialData={{
-                      ...(getInitialData() as IPatientDataType),
-                      [PATIENT_DATA_FI_KEY.SEX]:
-                        parent === 'father' ? SexValue.MALE : SexValue.FEMALE,
+                      ...initialData,
+                      [PATIENT_DATA_FI_KEY.SEX]: gender,
                     }}
                     onRamqSearchStateChange={setRamqSearchDone}
                     initialRamqSearchDone={ramqSearchDone}
@@ -152,8 +155,8 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                 </CollapsePanel>
               </Collapse>
             </Space>
-          ) : null
-        }
+          ) : null;
+        }}
       </Form.Item>
       <Form.Item
         noStyle

@@ -78,6 +78,7 @@
   "notification.error.file.download": "An error occured while downloading your file",
   "notification.error.prescription.form.config": "An error occured while initializing the prescription form",
   "notification.error.prescription.form.create": "An error occured while creating the prescription",
+  "notification.error.prescription.form.loadDraft" : "An error occured while loading the prescription",
   "notification.success": "Success",
   "notification.success.file.download": "File downloaded successfully",
   "occurrence.patient": "Patient occurrence",
@@ -555,6 +556,10 @@
     }
   },
   "prescriptionForm": {
+    "header": {
+      "creation": "Analysis prescription",
+      "edition": "Prescription ID: {prescriptionId}"
+    },
     "continueEditionButton": "Continue editing",
     "saveButtonTooltip": "The prescription will be saved as a \"draft\". You will be able to complete and submit it later.",
     "saved": {

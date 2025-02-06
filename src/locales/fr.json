@@ -78,6 +78,7 @@
   "notification.error.file.download": "Une erreur s'est produite lors du téléchargement de votre fichier",
   "notification.error.prescription.form.config": "Une erreur s'est produite lors de l'initialisation du formulaire de prescription",
   "notification.error.prescription.form.create": "Une erreur s'est produite lors de la création de la prescription",
+  "notification.error.prescription.form.loadDraft" : "Une erreur s'est produite lors du chargement de la prescription",
   "notification.success": "Succès",
   "notification.success.file.download": "Fichier téléchargé avec succès",
   "occurrence.patient": "Occurrence chez ce patient",
@@ -555,6 +556,10 @@
     }
   },
   "prescriptionForm": {
+    "header": {
+      "creation": "Prescription d'analyse",
+      "edition": "Prescription ID : {prescriptionId}"
+    },
     "continueEditionButton": "Continuer l’édition",
     "saveButtonTooltip": "La prescription sera sauvegardée en tant que « brouillon ». Vous pourrez la compléter et la soumettre ultérieurement.",
     "saved": {
