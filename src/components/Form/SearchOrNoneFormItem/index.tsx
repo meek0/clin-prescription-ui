@@ -35,6 +35,7 @@ export interface ISearchOrNoneFormItemProps<TSearchResult> {
   onSearchDone: (result: TSearchResult | undefined, searchValue?: string) => void;
   apiPromise: (value: string) => Promise<ApiResponse<TSearchResult>>;
   disabled?: boolean;
+  disableReset?: boolean;
 }
 
 const SearchOrNoneFormItem = <TSearchResult,>({
@@ -47,6 +48,7 @@ const SearchOrNoneFormItem = <TSearchResult,>({
   onSearchDone,
   apiPromise,
   disabled = false,
+  disableReset = false,
 }: ISearchOrNoneFormItemProps<TSearchResult>) => {
   const checkboxName = checkboxFormItemProps.name;
   const [isLoading, setIsLoading] = useState(false);
@@ -117,8 +119,12 @@ const SearchOrNoneFormItem = <TSearchResult,>({
                   />
                 </Form.Item>
                 {isDisabled && (
-                  <Typography.Link className={styles.resetLink} onClick={handleReset}>
-                    Réinitialiser
+                  <Typography.Link
+                    disabled={disableReset}
+                    className={styles.resetLink}
+                    onClick={handleReset}
+                  >
+                    {intl.get('sharing.filter.actions.reset')}
                   </Typography.Link>
                 )}
               </Space>

@@ -30,7 +30,7 @@ import {
 } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { useAppDispatch } from 'store';
-import { usePrescriptionFormConfig } from 'store/prescription';
+import { usePrescriptionForm, usePrescriptionFormConfig } from 'store/prescription';
 import { prescriptionFormActions } from 'store/prescription/slice';
 import { SexValue } from 'utils/commonTypes';
 import { hasSpecialCharacters } from 'utils/helper';
@@ -85,6 +85,7 @@ const PatientDataSearch = ({
   initialData,
 }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
+  const { prescriptionId } = usePrescriptionForm();
   const dispatch = useAppDispatch();
   const [isNewFileNumber, setIsNewFileNumber] = useState(false);
   const [fileSearchDone, setFileSearchDone] = useState(initialFileSearchDone);
@@ -186,6 +187,7 @@ const PatientDataSearch = ({
         {({ getFieldValue }) =>
           getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)) ? (
             <SearchOrNoneFormItem<IFormPatient>
+              disableReset={!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.FILE_NUMBER]}
               form={form}
               inputFormItemProps={{
                 name: getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
@@ -277,6 +279,7 @@ const PatientDataSearch = ({
           getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) || fileSearchDone ? (
             <>
               <SearchOrNoneFormItem<IFormPatient>
+                disableReset={!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.RAMQ_NUMBER]}
                 form={form}
                 inputFormItemProps={{
                   name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
