@@ -65,15 +65,20 @@ const PractitionerTable = (): React.ReactElement => {
 
   const sqonContent: TSyntheticSqonContent = [
     {
-      op: 'in',
-      content: {
-        field: 'security_tags',
-        value: user.practitionerRoles.map((pr) => 'PractitionerRole/' + pr.id),
-      },
-    },
-    {
-      op: 'in',
-      content: { field: 'requester', value: user.practitionerRoles.map((pr) => pr.id) },
+      op: 'or',
+      content: [
+        {
+          op: 'in',
+          content: {
+            field: 'security_tags',
+            value: user.practitionerRoles.map((pr) => 'PractitionerRole/' + pr.id),
+          },
+        },
+        {
+          op: 'in',
+          content: { field: 'requester', value: user.practitionerRoles.map((pr) => pr.id) },
+        },
+      ],
     },
   ];
 
@@ -87,7 +92,7 @@ const PractitionerTable = (): React.ReactElement => {
     searchAfter: prescriptionQueryConfig.searchAfter,
     sqon: {
       content: sqonContent,
-      op: 'or',
+      op: 'and',
     } as ISyntheticSqon,
     sort: tieBreaker({
       sort: prescriptionQueryConfig.sort,
