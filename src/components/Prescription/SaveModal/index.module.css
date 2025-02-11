@@ -23,4 +23,6 @@
   color: var(--red-7);
 }
 
-
+.actionModal p a{
+  margin: 0 4px;
+}
