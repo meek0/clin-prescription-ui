@@ -22,7 +22,7 @@ describe('Télécharger la prescription', () => {
     cy.validateFileName(epCHUSJ_ldmCHUSJ.prescriptionId+'_'+strDate+'T*.pdf');
   });
 
-  it('Valider le contenu du fichier [PRESC-269]', () => {
+  it('Valider le contenu du fichier', () => {
     const replacements: Replacement[] = [
       { placeholder: '{{stampDate}}', value: epCHUSJ_ldmCHUSJ.stampDate.substring(0, 7) },
       { placeholder: '{{lastNameProb}}', value: epCHUSJ_ldmCHUSJ.lastNameProb },
