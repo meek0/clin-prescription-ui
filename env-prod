@@ -17,7 +17,7 @@ REACT_APP_WEB_ROOT=https://portail.cqgc.hsj.rtss.qc.ca
 REACT_APP_USERS_API_URL=https://users.cqgc.hsj.rtss.qc.ca
 REACT_APP_FORM_API_URL=https://forms.cqgc.hsj.rtss.qc.ca
 REACT_APP_PANELS_FILE=https://s3.cqgc.hsj.rtss.qc.ca/cqgc-prod-app-public/panels/panels.xlsx
-REACT_APP_HYBRID_API_URL=https://qlin-me-hybrid.cqgc.hsj.rtss.qc.ca
+REACT_APP_HYBRID_API_URL=https://qlin-me-hybrid.cqgc.hsj.rtss.qc.ca/api/v1
 
 # FEATURES
 REACT_APP_FT_beta=true
