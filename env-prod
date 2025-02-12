@@ -21,7 +21,7 @@ REACT_APP_HYBRID_API_URL=https://qlin-me-hybrid.cqgc.hsj.rtss.qc.ca
 
 # FEATURES
 REACT_APP_FT_beta=true
-REACT_APP_USE_DRAFT=false
+REACT_APP_USE_DRAFT=true
 
 # SENTRY
 REACT_APP_SENTRY_API="https://cad9c3edb79826744485163717a14ac8@o4505959323860992.ingest.us.sentry.io/4507691063443456"
