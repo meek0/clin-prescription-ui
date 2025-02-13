@@ -8,6 +8,7 @@ import {
   FormItemProps,
   Input,
   Space,
+  Tooltip,
   Typography,
 } from 'antd';
 import { NamePath } from 'antd/lib/form/interface';
@@ -119,13 +120,19 @@ const SearchOrNoneFormItem = <TSearchResult,>({
                   />
                 </Form.Item>
                 {isDisabled && (
-                  <Typography.Link
-                    disabled={disableReset}
-                    className={styles.resetLink}
-                    onClick={handleReset}
+                  <Tooltip
+                    title={
+                      disableReset ? intl.get('prescriptionForm.patient.reset.disabledTooltip') : ''
+                    }
                   >
-                    {intl.get('sharing.filter.actions.reset')}
-                  </Typography.Link>
+                    <Typography.Link
+                      disabled={disableReset}
+                      className={styles.resetLink}
+                      onClick={handleReset}
+                    >
+                      {intl.get('sharing.filter.actions.reset')}
+                    </Typography.Link>
+                  </Tooltip>
                 )}
               </Space>
             </Form.Item>

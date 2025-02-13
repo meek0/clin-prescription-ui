@@ -562,6 +562,11 @@
       "creation": "Prescription d'analyse",
       "edition": "Prescription ID : {prescriptionId}"
     },
+    "patient":{
+      "reset": {
+        "disabledTooltip": "Ce champ ne peut être modifié pour un patient existant" 
+      }
+    },
     "continueEditionButton": "Continuer l’édition",
     "saveButtonTooltip": "La prescription sera sauvegardée en tant que « brouillon ». Vous pourrez la compléter et la soumettre ultérieurement.",
     "saved": {
