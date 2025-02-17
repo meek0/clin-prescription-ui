@@ -48,7 +48,7 @@ const App = () => {
     if (keycloakIsReady && keycloak.authenticated) {
       const script = document.createElement('script');
       document.body.appendChild(script);
-      const idByLang = lang === LANG.FR ? 'pD6A3kMjCfERq52yyEZYg8' : '57UqYYjNEqnTnVV3qf97Yz';
+      const idByLang = lang === LANG.FR ? 'r59n4ahJdfMTC7QUDKfCAw' : 'wYyudboWoJnb9aYp2SmD2i';
       script.innerHTML = `
         var releasecat = {
           id: '${idByLang}',
