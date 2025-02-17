@@ -289,19 +289,14 @@ const prescriptionFormSlice = createSlice({
         const patient = prescription.patients[i];
         const familyMember = {
           ...getPatientInfos(patient, proband),
+          parent_clinical_status: (patient as HybridPatientPresent).clinical?.signs,
           ...getClinical(patient as HybridPatientPresent),
           ...getParaClinical(patient as HybridPatientPresent),
         } as any;
 
-        if ((patient as HybridPatientPresent).affected !== undefined) {
-          if ((patient as HybridPatientPresent).affected == null) {
-            familyMember.parent_clinical_status = 'unknown';
-          } else {
-            familyMember.parent_clinical_status = (patient as HybridPatientPresent).affected
-              ? 'affected'
-              : 'not_affected';
-          }
-        }
+        familyMember.parent_clinical_status = familyMember.signs?.length
+          ? 'affected'
+          : 'not_affected';
 
         if (patient.family_member === 'FATHER') {
           state.analysisData.father = familyMember;
