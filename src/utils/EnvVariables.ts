@@ -3,6 +3,7 @@ export default class EnvironmentVariables {
     // GENERAL
     ENV: process.env.NODE_ENV,
     SHOW_TRANSLATION_BTN: process.env.REACT_APP_SHOW_TRANSLATION_BTN,
+    SHOW_ONLY_NEW_INFO_POPUP: process.env.REACT_APP_SHOW_ONLY_NEW_INFO_POPUP,
     KEYCLOAK_CONFIG: process.env.REACT_APP_KEYCLOAK_CONFIG,
     WEB_ROOT: process.env.REACT_APP_WEB_ROOT,
     // APIS

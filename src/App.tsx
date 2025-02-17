@@ -28,6 +28,7 @@ import { useLang } from 'store/global';
 import { fetchFhirServiceRequestCodes } from 'store/global/thunks';
 import { fetchConfig, fetchPractitionerRole } from 'store/user/thunks';
 import { LANG } from 'utils/constants';
+import EnvironmentVariables from 'utils/EnvVariables';
 import { DYNAMIC_ROUTES, STATIC_ROUTES } from 'utils/routes';
 
 const loadableProps = { fallback: <Spinner size="large" /> };
@@ -42,6 +43,31 @@ const App = () => {
   // const params = useQueryParams();
   const { keycloak, initialized } = useKeycloak();
   const keycloakIsReady = keycloak && initialized;
+
+  useEffect(() => {
+    if (keycloakIsReady && keycloak.authenticated) {
+      const script = document.createElement('script');
+      document.body.appendChild(script);
+      const idByLang = lang === LANG.FR ? 'r59n4ahJdfMTC7QUDKfCAw' : 'wYyudboWoJnb9aYp2SmD2i';
+      script.innerHTML = `
+        var releasecat = {
+          id: '${idByLang}',
+          production: ${EnvironmentVariables.configFor(
+            'SHOW_ONLY_NEW_INFO_POPUP',
+          )} // Change to 'true' for production. keep false for QA
+        };
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://www.releasecat.io/embed/index.js';
+        script.defer = true;
+        document.head.appendChild(script);
+      `;
+      // Nettoyer le script à la désinstallation du composant
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [lang, keycloakIsReady, keycloak]);
 
   useEffect(() => {
     if (keycloakIsReady && keycloak.authenticated) {
