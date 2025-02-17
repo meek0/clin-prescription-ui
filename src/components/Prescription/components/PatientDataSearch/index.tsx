@@ -280,7 +280,7 @@ const PatientDataSearch = ({
             <>
               <SearchOrNoneFormItem<IFormPatient>
                 disableReset={
-                  ramqSearchDone ||
+                  (!isNewFileNumber && ramqSearchDone) ||
                   (!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.RAMQ_NUMBER])
                 }
                 form={form}
