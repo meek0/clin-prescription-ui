@@ -52,9 +52,9 @@ const App = () => {
       script.innerHTML = `
         var releasecat = {
           id: '${idByLang}',
-          production: ${EnvironmentVariables.configFor(
-            'SHOW_ONLY_NEW_INFO_POPUP',
-          )} // Change to 'true' for production. keep false for QA
+          production: ${
+            EnvironmentVariables.configFor('SHOW_ONLY_NEW_INFO_POPUP') || false
+          } // Change to 'true' for production. keep false for QA
         };
         var script = document.createElement('script');
         script.type = 'text/javascript';
