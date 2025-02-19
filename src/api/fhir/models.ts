@@ -317,6 +317,12 @@ export interface PatientRequestSpecimen {
 }
 
 export interface PatientRequest {
+  category?: {
+    text: string;
+    coding: {
+      code: string;
+    }[];
+  }[];
   authoredOn: string;
   id: string;
   status: string;

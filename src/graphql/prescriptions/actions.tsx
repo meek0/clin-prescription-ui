@@ -1,7 +1,7 @@
 import { ApolloError } from '@apollo/client';
 import { IQueryOperationsConfig, IQueryVariable } from '@ferlab/ui/core/graphql/types';
 import { computeSearchAfter, hydrateResults } from '@ferlab/ui/core/graphql/utils';
-import { AnalysisTaskEntity, ServiceRequestEntity } from 'api/fhir/models';
+import { AnalysisTaskEntity, PatientRequest, ServiceRequestEntity } from 'api/fhir/models';
 import { GraphQLError } from 'graphql';
 import { ExtendedMappingResults, GqlResults } from 'graphql/models';
 import { AnalysisResult } from 'graphql/prescriptions/models/Prescription';
@@ -25,6 +25,7 @@ import {
   ANALYSIS_TASK_QUERY,
   PRESCRIPTIONS_QUERY,
   PRESCRIPTIONS_SEARCH_QUERY,
+  SERVICE_REQUEST_QUERY,
 } from './queries';
 
 const ANALYSIS_SERVICE_REQUEST_PROFILE =
@@ -227,6 +228,27 @@ export const useServiceRequestEntity = (
 
   return {
     prescription: data?.ServiceRequest,
+    loading,
+    error,
+  };
+};
+
+export const useBasedOnServiceRequests = (
+  id: string,
+): {
+  serviceRequests: PatientRequest[];
+  loading: boolean;
+  error: ApolloError | undefined;
+} => {
+  const { loading, data, error } = useLazyResultQueryOnLoadOnly<any>(SERVICE_REQUEST_QUERY(id), {
+    skip: !id,
+    variables: {
+      requestId: id,
+    },
+  });
+
+  return {
+    serviceRequests: data?.ServiceRequestList || [],
     loading,
     error,
   };
