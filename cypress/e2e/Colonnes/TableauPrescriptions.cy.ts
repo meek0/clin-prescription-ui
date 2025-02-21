@@ -3,15 +3,11 @@ import '../../support/commands';
 
 beforeEach(() => {
   cy.login(Cypress.env('username_DG_CHUSJ_CUSM_CHUS'), Cypress.env('password'));
+  cy.visitHomePage();
+  cy.resetColumns(0);
 });
 
 describe('Page des prescriptions - Colonnes du tableau des prescriptions', () => {
-
-  beforeEach(() => {
-    cy.visitHomePage();
-    cy.resetColumns(0);
-  });
-
   it('Valider l\'affichage (par défaut/optionnel) et l\'ordre des colonnes', () => {
     cy.get('thead[class="ant-table-thead"]').eq(0)
       .find('th[class*="ant-table-cell"]').eq(0)
