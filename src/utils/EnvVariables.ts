@@ -15,6 +15,8 @@ export default class EnvironmentVariables {
     HYBRID_API_URL: process.env.REACT_APP_HYBRID_API_URL,
     PANELS_FILE: process.env.REACT_APP_PANELS_FILE,
     SENTRY_API: process.env.REACT_APP_SENTRY_API,
+    // URL
+    USER_GUIDE_URL: process.env.REACT_APP_USER_GUIDE_URL,
     // FEATURES
     USE_DRAFT: process.env.REACT_APP_USE_DRAFT,
   };

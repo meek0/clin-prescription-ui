@@ -62,6 +62,7 @@
   "layout.main.menu.home": "Prescriptions",
   "layout.main.menu.panels": "Panels",
   "layout.main.menu.panels.tooltip": "Download the RQDM panels as Excel",
+  "layout.main.menu.documentation.tooltip": "Documentation",
   "layout.main.menu.prescriptions": "Prescriptions",
   "layout.main.menu.variants": "Variants",
   "links.files": "Files",
