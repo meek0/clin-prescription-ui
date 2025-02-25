@@ -132,11 +132,18 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
     width: 40,
     fixed: 'right',
     dataIndex: ['prescription_id'],
-    render: (prescription_id: string) => (
-      <Tooltip title={intl.get('download.documents')}>
-        <DownloadButton prescriptionId={prescription_id} iconOnly />
-      </Tooltip>
-    ),
+    render: (prescription_id: string, record: AnalysisResult) => {
+      const isDraft = record.status === 'draft';
+      return (
+        <Tooltip
+          title={intl.get(isDraft ? 'prescriptionTable.download.disabled' : 'download.documents')}
+        >
+          <span>
+            <DownloadButton prescriptionId={prescription_id} iconOnly disabled={isDraft} />
+          </span>
+        </Tooltip>
+      );
+    },
   },
 ];
 

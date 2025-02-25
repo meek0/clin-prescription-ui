@@ -629,5 +629,10 @@
         "copied":"Copy"
       }
     }
+  },
+  "prescriptionTable": {
+    "download": {
+      "disabled": "Cannot download a draft prescription"
+    }
   }
 }

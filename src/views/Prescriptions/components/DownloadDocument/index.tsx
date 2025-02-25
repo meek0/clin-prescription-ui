@@ -14,9 +14,16 @@ interface OwnProps {
   loading?: boolean;
   iconOnly?: boolean;
   text?: string;
+  disabled?: boolean;
 }
 const getRtp = async () => (await RptManager.readRpt()).access_token;
-const DownloadButton = ({ prescriptionId, loading, iconOnly, text }: OwnProps) => {
+const DownloadButton = ({
+  prescriptionId,
+  loading,
+  iconOnly,
+  text,
+  disabled = false,
+}: OwnProps) => {
   const lang = useLang();
   const dispatch = useDispatch();
   const [downloadingDocuments, setDownloadingDocuments] = useState(false);
@@ -45,7 +52,7 @@ const DownloadButton = ({ prescriptionId, loading, iconOnly, text }: OwnProps) =
       icon={<DownloadOutlined />}
       size="small"
       loading={downloadingDocuments}
-      disabled={!!loading}
+      disabled={!!loading || disabled}
       onClick={() =>
         downloadDocuments(prescriptionId, setDownloadingDocuments, config, errorNotification)
       }
@@ -55,7 +62,7 @@ const DownloadButton = ({ prescriptionId, loading, iconOnly, text }: OwnProps) =
       key="download-docs"
       type="primary"
       loading={downloadingDocuments}
-      disabled={!!loading}
+      disabled={!!loading || disabled}
       onClick={() =>
         downloadDocuments(prescriptionId, setDownloadingDocuments, config, errorNotification)
       }

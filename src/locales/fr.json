@@ -629,5 +629,10 @@
         "copied":"Copié"
       }
     }
+  },
+  "prescriptionTable": {
+    "download": {
+      "disabled": "Impossible de télécharger une prescription au statut brouillon"
+    }
   }
 }
