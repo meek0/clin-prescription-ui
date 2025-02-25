@@ -218,7 +218,7 @@ const prescriptionFormSlice = createSlice({
         } as IHistoryAndDiagnosisDataType;
         if (state.analysisData?.history_and_diagnosis && prescription.inbreeding)
           state.analysisData.history_and_diagnosis.inbreeding =
-            prescription.inbreeding.toLowerCase() === 'true';
+            prescription.inbreeding?.toLowerCase() === 'true';
       }
 
       function getPatientInfos(

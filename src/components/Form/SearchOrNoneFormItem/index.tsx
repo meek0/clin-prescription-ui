@@ -8,6 +8,7 @@ import {
   FormItemProps,
   Input,
   Space,
+  Tooltip,
   Typography,
 } from 'antd';
 import { NamePath } from 'antd/lib/form/interface';
@@ -35,6 +36,7 @@ export interface ISearchOrNoneFormItemProps<TSearchResult> {
   onSearchDone: (result: TSearchResult | undefined, searchValue?: string) => void;
   apiPromise: (value: string) => Promise<ApiResponse<TSearchResult>>;
   disabled?: boolean;
+  disableReset?: boolean;
 }
 
 const SearchOrNoneFormItem = <TSearchResult,>({
@@ -47,6 +49,7 @@ const SearchOrNoneFormItem = <TSearchResult,>({
   onSearchDone,
   apiPromise,
   disabled = false,
+  disableReset = false,
 }: ISearchOrNoneFormItemProps<TSearchResult>) => {
   const checkboxName = checkboxFormItemProps.name;
   const [isLoading, setIsLoading] = useState(false);
@@ -117,9 +120,19 @@ const SearchOrNoneFormItem = <TSearchResult,>({
                   />
                 </Form.Item>
                 {isDisabled && (
-                  <Typography.Link className={styles.resetLink} onClick={handleReset}>
-                    Réinitialiser
-                  </Typography.Link>
+                  <Tooltip
+                    title={
+                      disableReset ? intl.get('prescriptionForm.patient.reset.disabledTooltip') : ''
+                    }
+                  >
+                    <Typography.Link
+                      disabled={disableReset}
+                      className={styles.resetLink}
+                      onClick={handleReset}
+                    >
+                      {intl.get('sharing.filter.actions.reset')}
+                    </Typography.Link>
+                  </Tooltip>
                 )}
               </Space>
             </Form.Item>

@@ -562,6 +562,11 @@
       "creation": "Analysis prescription",
       "edition": "Prescription ID: {prescriptionId}"
     },
+    "patient":{
+      "reset": {
+        "disabledTooltip": "This field cannot be modified for an existing patient" 
+      }
+    },
     "continueEditionButton": "Continue editing",
     "saveButtonTooltip": "The prescription will be saved as a \"draft\". You will be able to complete and submit it later.",
     "saved": {
