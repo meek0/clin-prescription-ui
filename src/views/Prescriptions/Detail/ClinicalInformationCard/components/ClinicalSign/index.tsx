@@ -9,7 +9,7 @@ import {
   useObservationPhenotypeEntity,
   useValueSet,
 } from 'graphql/prescriptions/actions';
-import { filter, find, map, some } from 'lodash';
+import { filter, find, map } from 'lodash';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { useLang } from 'store/global';
