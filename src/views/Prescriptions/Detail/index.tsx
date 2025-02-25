@@ -15,6 +15,7 @@ import DownloadButton from '../components/DownloadDocument';
 import AbsentParentCard from './AbsentParentCard';
 import AnalysisCard from './AnalysisCard';
 import ClinicalInformationCard from './ClinicalInformationCard';
+import FoetusClinicalInformation from './FoetusClinicalInformationCard';
 import ParentCard from './ParentCard';
 import PatientCard from './PatientCard';
 
@@ -27,6 +28,8 @@ const PrescriptionDetail = () => {
   if (!loading && !prescription) {
     return <Forbidden />;
   }
+
+  const isFoetusPrescription = prescription?.category?.[0]?.coding?.[0]?.code === 'Prenatal';
 
   return (
     <ContentWithHeader
@@ -54,7 +57,15 @@ const PrescriptionDetail = () => {
             </Col>
           )}
           <Col span={24}>
-            <ClinicalInformationCard prescription={prescription} loading={loading} />
+            {isFoetusPrescription ? (
+              <FoetusClinicalInformation
+                prescription={prescription}
+                prescriptionId={prescriptionId}
+                loading={loading}
+              />
+            ) : (
+              <ClinicalInformationCard prescription={prescription} loading={loading} />
+            )}
           </Col>
           {prescription?.extensions?.map((extension, index) => (
             <Col key={index} span={24}>

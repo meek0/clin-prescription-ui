@@ -156,6 +156,61 @@ const ANALYSIS_PATIENT_FRAGMENT = (requestId: string) => gql`
   }
 `;
 
+export const SERVICE_REQUEST_QUERY = (requestId: string) => gql`
+  ${ANALYSIS_PATIENT_FRAGMENT(requestId)}
+  query GetBasedOnServiceRequests($requestId: String = "${requestId}") {
+    ServiceRequestList(based_on: "${requestId}") {
+      id
+      authoredOn
+      category{
+        text
+        coding{
+          code
+        }
+      }
+      subject {
+        reference
+        resource {
+          ...PatientFields
+        }
+      }
+      code @flatten {
+        coding {
+          code
+          system
+        }
+      }
+      specimen {
+        reference
+        resource {
+          parent {
+            reference
+          }
+          accessionIdentifier {
+            system
+            value
+          }
+        }
+      }
+      requester @flatten {
+        requester: resource(type: PractitionerRole) {
+          practitioner @flatten {
+            practitioner: resource(type: Practitioner){
+              id
+              name @first{
+                family
+                given
+              }
+            }
+
+          }
+        }
+      }
+      status
+    }
+  }
+`;
+
 export const ANALYSIS_ENTITY_QUERY = (requestId: string) => gql`
   ${ANALYSIS_PATIENT_FRAGMENT(requestId)}
   query GetAnalysisEntity($requestId: String = "${requestId}") {

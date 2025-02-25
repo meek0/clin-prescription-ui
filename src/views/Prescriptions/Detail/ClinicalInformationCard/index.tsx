@@ -126,7 +126,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
             </Card.Grid>
           </div>
           <RequestTable
-            patientId={extractPatientId(prescription?.subject.reference)}
+            patientId={extractPatientId(prescription?.subject?.reference)}
             data={prescription?.subject?.resource?.requests}
           />
         </Space>
