@@ -14,6 +14,7 @@ REACT_APP_ARRANGER_PROJECT_ID=clin_staging
 REACT_APP_FHIR_SERVICE_URL=https://fhir.staging.cqgc.hsj.rtss.qc.ca/fhir
 REACT_APP_ZEPLIN_URL=https://notebook.staging.cqgc.hsj.rtss.qc.ca
 REACT_APP_FHIR_CONSOLE_URL=https://fhir-console.staging.cqgc.hsj.rtss.qc.ca/home
+REACT_APP_USER_GUIDE_URL=https://docs.cqgc.hsj.rtss.qc.ca
 REACT_APP_WEB_ROOT=https://portail.staging.cqgc.hsj.rtss.qc.ca
 REACT_APP_USERS_API_URL=https://users.staging.cqgc.hsj.rtss.qc.ca
 REACT_APP_FORM_API_URL=https://forms.staging.cqgc.hsj.rtss.qc.ca

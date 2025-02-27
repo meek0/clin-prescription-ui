@@ -8,7 +8,7 @@ type TOnClick = () => void;
 
 interface OwnProps {
   className?: string;
-  title: string;
+  title?: string;
   tooltip: string;
   onClick: TOnClick;
   loading?: boolean;
@@ -36,7 +36,7 @@ const HeaderButton = ({
       onClick={(e) => doOnClick(e, onClick)}
       onMouseDown={(e) => e.preventDefault()} // remove focus after click
     >
-      {title}
+      {title && title}
     </Button>
   </Tooltip>
 );

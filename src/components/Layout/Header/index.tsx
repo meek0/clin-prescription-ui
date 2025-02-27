@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { MedicineBoxOutlined } from '@ant-design/icons';
+import { MedicineBoxOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import Gravatar from '@ferlab/ui/core/components/Gravatar';
 import { useKeycloak } from '@react-keycloak/web';
@@ -16,7 +16,14 @@ import EnvironmentVariables from 'utils/EnvVariables';
 import { STATIC_ROUTES } from 'utils/routes';
 import { IncludeKeycloakTokenParsed } from 'utils/tokenTypes';
 
+import HeaderButton from './HeaderButton';
+
 import styles from './index.module.css';
+
+export const getUserGuidelink = (lang: LANG) =>
+  `${EnvironmentVariables.configFor('USER_GUIDE_URL')}/#${
+    lang === LANG.FR ? '/fr' : ''
+  }/qlin_prescriptions/create_prescription`;
 
 const Header = () => {
   const { keycloak } = useKeycloak();
@@ -61,6 +68,12 @@ const Header = () => {
             onClick={() => handlePanelsFileDownload()}
             loading={downloadPanelsFile.fetching}
           /> */}
+          <HeaderButton
+            key="userGuide"
+            icon={<QuestionCircleOutlined />}
+            tooltip={intl.get('layout.main.menu.documentation.tooltip')}
+            onClick={() => window.open(getUserGuidelink(lang), '_blank')}
+          />
           <Dropdown
             key="user-menu"
             trigger={['click']}
