@@ -34,6 +34,12 @@ const PrescriptionAnalysis = () => {
             }),
           );
         } catch (error) {
+          if (error instanceof Error) {
+            const frontError = new Error((error as Error).message);
+            frontError.name = 'frontend error';
+            dispatch(prescriptionFormActions.setSubmissionError(frontError));
+          }
+
           dispatch(
             prescriptionFormActions.setDisplayActionModal({
               displayActionModal: 'error',
