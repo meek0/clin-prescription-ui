@@ -8,7 +8,6 @@ import cx from 'classnames';
 import { capitalize } from 'lodash';
 
 import PhenotypeSearch from 'components/PhenotypeSearch';
-import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { checkShouldUpdate, resetFieldError } from 'components/Prescription/utils/form';
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
@@ -170,7 +169,6 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                               <Form.Item
                                 colon={false}
                                 name={[name, CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]}
-                                rules={defaultFormItemsRules}
                                 required={false}
                               >
                                 <Select
