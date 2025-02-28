@@ -409,6 +409,7 @@ const PatientDataSearch = ({
                   {
                     type: 'string',
                     min: 2,
+                    whitespace: true,
                     validateTrigger: 'onSumbit',
                     message: intl.get('enter.at.least.character', {
                       count: 2,
@@ -428,6 +429,7 @@ const PatientDataSearch = ({
                   {
                     type: 'string',
                     min: 2,
+                    whitespace: true,
                     validateTrigger: 'onSumbit',
                     message: intl.get('enter.at.least.character', {
                       count: 2,
