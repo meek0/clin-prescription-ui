@@ -87,6 +87,13 @@ const SearchOrNoneFormItem = <TSearchResult,>({
     }
   };
 
+  const onSearch = (value: string) => {
+    if (inputProps?.onSearch) {
+      inputProps.onSearch(value, processSearch);
+    } else {
+      processSearch(value);
+    }
+  };
   return (
     <>
       <Form.Item
@@ -108,14 +115,12 @@ const SearchOrNoneFormItem = <TSearchResult,>({
                     className={cx(styles.searchInput, inputProps?.className)}
                     enterButton
                     disabled={isDisabled}
-                    onPressEnter={(e) => e.preventDefault()}
-                    onSearch={(value) => {
-                      if (inputProps?.onSearch) {
-                        inputProps.onSearch(value, processSearch);
-                      } else {
-                        processSearch(value);
-                      }
+                    onPressEnter={(e) => {
+                      const target = e.target as HTMLInputElement;
+                      onSearch(target.value);
+                      e.preventDefault();
                     }}
+                    onSearch={(value) => onSearch(value)}
                     loading={isLoading}
                   />
                 </Form.Item>
