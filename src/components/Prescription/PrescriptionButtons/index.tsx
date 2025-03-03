@@ -10,8 +10,14 @@ import EnvironmentVariables from 'utils/EnvVariables';
 
 export const PrescriptionButtons = () => {
   const dispatch = useDispatch();
-  const { currentStep, currentFormRefs, lastStepIsNext, isCreatingPrescription, isDraft } =
-    usePrescriptionForm();
+  const {
+    currentStep,
+    currentFormRefs,
+    lastStepIsNext,
+    isCreatingPrescription,
+    isDraft,
+    analysisData,
+  } = usePrescriptionForm();
 
   const showDraftButtons = EnvironmentVariables.configFor('USE_DRAFT') === 'true';
 
@@ -87,7 +93,15 @@ export const PrescriptionButtons = () => {
         {!isUndefined(currentStep?.previousStepIndex) && !lastStepIsNext && (
           <Button
             icon={<ArrowLeftOutlined />}
-            onClick={() => dispatch(prescriptionFormActions.previousStep())}
+            onClick={async () => {
+              try {
+                if (currentStep?.id && analysisData.changed?.[currentStep?.id])
+                  await currentFormRefs?.validateFields();
+                dispatch(prescriptionFormActions.previousStep());
+              } catch (e) {
+                console.error('Failed:', e);
+              }
+            }}
           >
             {intl.get('previous')}
           </Button>
