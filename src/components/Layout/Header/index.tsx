@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { MedicineBoxOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { BulbOutlined, MedicineBoxOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { DownOutlined } from '@ant-design/icons';
 import Gravatar from '@ferlab/ui/core/components/Gravatar';
 import { useKeycloak } from '@react-keycloak/web';
@@ -19,6 +19,7 @@ import { IncludeKeycloakTokenParsed } from 'utils/tokenTypes';
 import HeaderButton from './HeaderButton';
 
 import styles from './index.module.css';
+declare const Releasecat: any;
 
 export const getUserGuidelink = (lang: LANG) =>
   `${EnvironmentVariables.configFor('USER_GUIDE_URL')}/#${
@@ -73,6 +74,12 @@ const Header = () => {
             icon={<QuestionCircleOutlined />}
             tooltip={intl.get('layout.main.menu.documentation.tooltip')}
             onClick={() => window.open(getUserGuidelink(lang), '_blank')}
+          />
+          <HeaderButton
+            key="releaseNote"
+            icon={<BulbOutlined />}
+            tooltip={intl.get('layout.main.menu.releaseNote.tooltip')}
+            onClick={() => Releasecat.showSidePanel()}
           />
           <Dropdown
             key="user-menu"
