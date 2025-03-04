@@ -24,6 +24,8 @@ jobs:
         - uses: actions/checkout@v3
         - name: Install modules
           run: npm i
+        - name: Set the QA configuration file
+          run: mv env-qa .env
         - name: Run tests
           id: tests
           run: |
