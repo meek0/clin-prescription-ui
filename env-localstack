@@ -10,7 +10,7 @@ REACT_APP_SHOW_ONLY_NEW_INFO_POPUP=false
 REACT_APP_KEYCLOAK_CONFIG={"realm": "clin", "url": "http://keycloak:8081/", "clientId": "clin-prescription-client", "authClientId": "clin-acl"}
 # API
 REACT_APP_ARRANGER_API=http://localhost:5050
-REACT_APP_ARRANGER_PROJECT_ID=clin_localstack
+REACT_APP_ARRANGER_PROJECT_ID=clin_qa
 REACT_APP_FHIR_SERVICE_URL=http://localhost:8080/fhir
 REACT_APP_ZEPLIN_URL=https://notebook.qa.cqgc.hsj.rtss.qc.ca
 REACT_APP_FHIR_CONSOLE_URL=https://fhir-console.qa.cqgc.hsj.rtss.qc.ca/home
