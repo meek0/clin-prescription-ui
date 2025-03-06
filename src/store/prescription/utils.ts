@@ -26,6 +26,11 @@ export const cleanAnalysisData = (analysis: TCompleteAnalysis) => {
     analysisCopy.clinical_signs = cleanClinicalSigns(analysisCopy.clinical_signs);
   }
 
+  if (analysisCopy.history_and_diagnosis && !Object.keys(analysisCopy.history_and_diagnosis).length)
+    delete analysisCopy.history_and_diagnosis;
+
+  if (analysisCopy.mother && !Object.keys(analysisCopy.mother).length) delete analysisCopy.mother;
+
   if (analysisCopy.mother?.signs) {
     analysisCopy.mother = cleanClinicalSigns(analysisCopy.mother);
   }
@@ -33,6 +38,8 @@ export const cleanAnalysisData = (analysis: TCompleteAnalysis) => {
   if (analysisCopy.mother?.ramq) {
     analysisCopy.mother.ramq = analysisCopy.mother.ramq.replace(/\s/g, '');
   }
+
+  if (analysisCopy.father && !Object.keys(analysisCopy.father).length) delete analysisCopy.father;
 
   if (analysisCopy.father?.signs) {
     analysisCopy.father = cleanClinicalSigns(analysisCopy.father);

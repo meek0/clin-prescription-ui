@@ -90,8 +90,8 @@ const prescriptionFormSlice = createSlice({
         !_.isNil(src) ? src : obj,
       );
     },
-    prescriptionChanged: (state) => {
-      state.analysisData.changed = true;
+    prescriptionChanged: (state, action: PayloadAction<any>) => {
+      state.analysisData.changed = action.payload;
     },
     setDraft: (state, action: PayloadAction<boolean>) => {
       state.isDraft = action.payload;
@@ -136,7 +136,7 @@ const prescriptionFormSlice = createSlice({
       if (RptManager.isStoredRptExpired()) {
         logout();
       }
-      const previousStepIndex = state.currentStep?.previousStepIndex;
+
       if (state.currentFormRefs?.getFieldsValue) {
         state.analysisData = {
           ...state.analysisData,
@@ -144,6 +144,7 @@ const prescriptionFormSlice = createSlice({
         };
       }
 
+      const previousStepIndex = state.currentStep?.previousStepIndex;
       if (!isUndefined(previousStepIndex)) {
         state.currentStep = state.config?.steps[previousStepIndex];
       }
@@ -327,7 +328,7 @@ const prescriptionFormSlice = createSlice({
     saveCreatedPrescription: (state, action: PayloadAction<any>) => {
       state.prescriptionId = action.payload?.prescriptionId || undefined;
       state.isDraft = !!action.payload?.isDraft;
-      state.analysisData.changed = false;
+      state.analysisData.changed = undefined;
       if (action.payload?.patients) {
         for (const patient of action.payload.patients) {
           switch (patient.family_member) {

@@ -36,7 +36,7 @@ export type TCompleteAnalysis = IAnalysisDataType & {
     resident_supervisor?: string;
     comment?: string;
   };
-  changed?: boolean;
+  changed?: any;
 };
 
 export interface ICurrentFormRefs {

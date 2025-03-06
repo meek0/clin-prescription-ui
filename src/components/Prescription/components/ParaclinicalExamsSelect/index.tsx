@@ -74,7 +74,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
           [PARACLINICAL_EXAM_ITEM_KEY.VALUE]:
             exam.extra?.type === 'multi_select'
               ? undefined
-              : foundExam?.value || foundExam?.values[0],
+              : foundExam?.value || foundExam?.values?.[0],
         };
       });
       setInitialValues(form, getName, { ...initialData, exams: values }, PARACLINICAL_EXAMS_FI_KEY);
