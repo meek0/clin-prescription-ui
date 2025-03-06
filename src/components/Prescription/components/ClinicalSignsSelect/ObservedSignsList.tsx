@@ -176,6 +176,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                                   placeholder="Âge d'apparition"
                                   className={styles.ageSelectInput}
                                   data-cy="SelectAge"
+                                  defaultValue={'unknown'}
                                 >
                                   {formConfig?.clinical_signs.onset_age.map((age) => (
                                     <Select.Option
@@ -215,6 +216,7 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                       [CLINICAL_SIGNS_ITEM_KEY.NAME]: '',
                       [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: '',
                       [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: true,
+                      [CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]: 'unknown',
                     })
                   }
                   icon={<PlusOutlined />}
