@@ -51,12 +51,20 @@ describe('Formulaires de prescription - Création', () => {
     // Histoire et hypothèse diagnostique
     cy.get('[data-cy="InputHypothesis"]').type('Cypress', {force: true});
     cy.get('[data-cy="NextButton"]').clickAndWait({force: true});
+    cy.wait(2000);
 
     // Soumission
     cy.intercept('POST', '**/form').as('getPOSTform');
     cy.get('[data-cy="SubmitButton"]').clickAndWait({force: true});
     cy.wait('@getPOSTform');
     
+    // Afficher les erreurs s'il y en a
+    cy.get('[class*="SaveModal"]').invoke('text').then((invokeText) => {
+      if (invokeText.includes('error info')) {
+        cy.get('[class*="SaveModal"] [class*="ant-collapse-expand-icon"]').clickAndWait({force: true});
+      };
+    });
+
     // Confirmation de la soumission
     cy.clickAndIntercept('[class*="SaveModal"] [href*="/prescription/entity/"]', 'POST', '**/$graphql*', 3);
 

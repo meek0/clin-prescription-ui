@@ -19,6 +19,7 @@ export default class EnvironmentVariables {
     USER_GUIDE_URL: process.env.REACT_APP_USER_GUIDE_URL,
     // FEATURES
     USE_DRAFT: process.env.REACT_APP_USE_DRAFT,
+    DRAFT_SHOW_ERROR: process.env.REACT_APP_DRAFT_SHOW_ERROR,
   };
 
   static configFor(key: string): string {
