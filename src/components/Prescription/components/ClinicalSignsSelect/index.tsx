@@ -33,6 +33,7 @@ const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
       [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: term.value,
       [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: false,
       [CLINICAL_SIGNS_ITEM_KEY.NAME]: term.name,
+      [CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]: 'unknown',
     })) || [];
 
   useEffect(() => {

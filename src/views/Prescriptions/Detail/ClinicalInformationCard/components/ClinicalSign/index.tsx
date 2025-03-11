@@ -44,7 +44,14 @@ const handleHpoSearchTerm = (
 
 export const ClinicalSign = ({ phenotypeIds, generalObervationId }: ClinicalSignOwnProps) => {
   const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
-  const [ageList, setAgeList] = useState<IHpoNode[]>([]);
+  const [ageList, setAgeList] = useState<IHpoNode[]>([
+    {
+      hpo_id: 'unknown',
+      name: 'Unknown',
+      is_leaf: false,
+      parents: [],
+    },
+  ]);
   const { phenotypeValue } = useObservationPhenotypeEntity(phenotypeIds);
   const { valueSet } = useValueSet('age-at-onset');
   const lang = useLang();

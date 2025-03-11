@@ -4,6 +4,9 @@
 local_env:
 	cp -p env-qa .env
 
+localstack_env:
+	cp -p env-localstack .env
+
 install: local_env js_install
 
 # JS
@@ -55,3 +58,7 @@ theme_external:
 theme_clean_install:
 	m=clin-portal-theme make js_clean
 	m=clin-portal-theme make js_install
+
+# Tests
+ferlease_test:
+	CYPRESS_BASE_URL=https://prescription-ui-${jira}.qa.cqgc.hsj.rtss.qc.ca/ ./node_modules/cypress/bin/cypress run --spec "${spec}"
