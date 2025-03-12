@@ -10,10 +10,7 @@ import { capitalize } from 'lodash';
 import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
 import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
-import {
-  getPrescriptionStatusDictionnary,
-  prescriptionPriorityDictionnary,
-} from 'views/Prescriptions/utils/constant';
+import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
 
 import getStoreConfig from 'store';
 import { globalActions } from 'store/global';
@@ -64,11 +61,7 @@ export const prescriptionsColumns = (list: any[]): ProColumnType<ITableAnalysisR
     key: 'priority',
     dataIndex: ['priority'],
     render: (value: string) =>
-      value ? (
-        <PriorityTag dictionaries={prescriptionPriorityDictionnary()} priority={value} />
-      ) : (
-        TABLE_EMPTY_PLACE_HOLDER
-      ),
+      value ? <PriorityTag priority={value} /> : TABLE_EMPTY_PLACE_HOLDER,
     title: intl.get('screen.patientsearch.table.priority'),
     sorter: { multiple: 1 },
   },

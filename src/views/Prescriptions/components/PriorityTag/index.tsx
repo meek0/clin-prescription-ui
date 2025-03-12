@@ -1,34 +1,46 @@
+import intl from 'react-intl-universal';
 import { Tag, Tooltip } from 'antd';
 
-export enum PriorityOptions {
-  Asap = 'asap',
-  Routine = 'routine',
-}
+export const Priorites = {
+  Asap: 'asap',
+  Routine: 'routine',
+  Urgent: 'urgent',
+  Stat: 'stat',
+};
 
-export type TranslationDictionary = Record<PriorityOptions, string>;
-
-export type PriorityLabelProps = {
-  dictionaries: { text: TranslationDictionary; tooltip: TranslationDictionary };
+export type PriorityTagProps = {
   priority: string;
 };
 
-export const PriorityLabelElement: Record<
-  PriorityOptions,
-  (d: { text: TranslationDictionary; tooltip: TranslationDictionary }) => React.ReactElement
-> = {
-  [PriorityOptions.Asap]: (d) => (
-    <Tooltip title={d.tooltip[PriorityOptions.Asap]}>
-      <Tag color="red">{d.text[PriorityOptions.Asap]}</Tag>
+const PriorityTag = ({ priority }: PriorityTagProps) => {
+  let tagColor = 'default';
+  switch (priority) {
+    case Priorites.Asap:
+      tagColor = 'orange';
+      break;
+    case Priorites.Routine:
+      tagColor = 'default';
+      break;
+    case Priorites.Urgent:
+      tagColor = 'cyan';
+      break;
+    case Priorites.Stat:
+      tagColor = 'red';
+      break;
+  }
+  return (
+    <Tooltip
+      title={
+        intl.get(`filters.options.priority.${priority}.tooltip`) ||
+        intl.get(`filters.options.priority.unknown.tooltip`)
+      }
+    >
+      <Tag color={tagColor}>
+        {intl.get(`filters.options.priority.${priority}`) ||
+          intl.get(`filters.options.priority.unknown`)}
+      </Tag>
     </Tooltip>
-  ),
-  [PriorityOptions.Routine]: (d) => (
-    <Tooltip title={d.tooltip[PriorityOptions.Routine]}>
-      <Tag color="default">{d.text[PriorityOptions.Routine]}</Tag>
-    </Tooltip>
-  ),
+  );
 };
-
-const PriorityTag = ({ dictionaries, priority }: PriorityLabelProps) =>
-  PriorityLabelElement[priority as PriorityOptions](dictionaries);
 
 export default PriorityTag;
