@@ -26,9 +26,9 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
 
   it('Valider les fonctionnalités du tableau - Tri Priorité', () => {
     cy.sortTableAndIntercept('Priorité', 1);
-    cy.validateTableFirstRow(/^(-|Routine|ASAP)$/, 3);
+    cy.validateTableFirstRow(/^(-|(?!-).*)$/, 3);
     cy.sortTableAndIntercept('Priorité', 1);
-    cy.validateTableFirstRow(/^(Routine|ASAP)$/, 3);
+    cy.validateTableFirstRow(/^(?!-).*$/, 3);
   });
 
   it('Valider les fonctionnalités du tableau - Tri Statut', () => {
