@@ -4,10 +4,7 @@ import { extractOrganizationId, extractServiceRequestId } from 'api/fhir/helper'
 import { RequesterType, ServiceRequestEntity } from 'api/fhir/models';
 import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
-import {
-  getPrescriptionStatusDictionnary,
-  prescriptionPriorityDictionnary,
-} from 'views/Prescriptions/utils/constant';
+import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import ParagraphLoader from 'components/uiKit/ParagraphLoader';
@@ -40,10 +37,7 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.prescription.entity.request.priority')}>
               {prescription?.priority ? (
-                <PriorityTag
-                  dictionaries={prescriptionPriorityDictionnary()}
-                  priority={prescription?.priority}
-                />
+                <PriorityTag priority={prescription?.priority} />
               ) : (
                 EMPTY_FIELD
               )}

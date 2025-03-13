@@ -1,5 +1,4 @@
 import intl from 'react-intl-universal';
-import { PriorityOptions } from 'views/Prescriptions/components/PriorityTag';
 import { StatusOptions } from 'views/Prescriptions/components/StatusTag';
 
 export const getPrescriptionStatusDictionnary = () => ({
@@ -8,17 +7,6 @@ export const getPrescriptionStatusDictionnary = () => ({
   [StatusOptions.OnHold]: intl.get('filters.options.status.on-hold'),
   [StatusOptions.Completed]: intl.get('filters.options.status.completed'),
   [StatusOptions.Unknown]: intl.get('filters.options.status.unknown'),
-});
-
-export const prescriptionPriorityDictionnary = () => ({
-  text: {
-    [PriorityOptions.Asap]: intl.get('filters.options.priority.asap'),
-    [PriorityOptions.Routine]: intl.get('filters.options.priority.routine'),
-  },
-  tooltip: {
-    [PriorityOptions.Asap]: intl.get('filters.options.priority.asap.tooltip'),
-    [PriorityOptions.Routine]: intl.get('filters.options.priority.routine.tooltip'),
-  },
 });
 
 export const commonPrescriptionFilterFields = [
