@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import intl from 'react-intl-universal';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
-import { Checkbox, Form, Modal, Select, Typography } from 'antd';
+import { Checkbox, Form, Modal, Select, Space, Typography } from 'antd';
 
 import { useAppDispatch } from 'store';
 import { useGlobals } from 'store/global';
@@ -149,16 +149,21 @@ const AnalysisChoiceModal = () => {
           {({ getFieldValue }) =>
             getFieldValue(ANALYSIS_CHOICE_FI_KEY.ANALYSIS_TYPE) ? (
               <Form.Item className="marginTop noMarginBtm">
-                <Text className={styles.recommandationColor}>
-                  {intl.get('prescription.analysis.choici.modal.consult.algo.1')}{' '}
-                  <Link
-                    href="https://www.chusj.org/fr/soins-services/L/Laboratoires/Analyses-genomiques-(SNG)-du-Reseau-quebecois-de-d"
-                    target="_blank"
-                  >
-                    {intl.get('prescription.analysis.choici.modal.consult.algo.2')}
-                  </Link>
-                  {intl.get('prescription.analysis.choici.modal.consult.algo.3')}
-                </Text>
+                <Space size={8} direction="vertical">
+                  <Text className={styles.recommandationColor}>
+                    {intl.get('prescription.analysis.choici.modal.consult.algo.1')}{' '}
+                    <Link
+                      href="https://www.chusj.org/fr/soins-services/L/Laboratoires/Analyses-genomiques-(SNG)-du-Reseau-quebecois-de-d"
+                      target="_blank"
+                    >
+                      {intl.get('prescription.analysis.choici.modal.consult.algo.2')}
+                    </Link>{' '}
+                    {intl.get('prescription.analysis.choici.modal.consult.algo.3')}
+                  </Text>
+                  <Text className={styles.recommandationColor}>
+                    {intl.get('prescription.analysis.choici.modal.approbation')}
+                  </Text>
+                </Space>
               </Form.Item>
             ) : null
           }

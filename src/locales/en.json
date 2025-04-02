@@ -518,6 +518,7 @@
   "prescription.analysis.choici.modal.consult.algo.1": "It is recommended to consult",
   "prescription.analysis.choici.modal.consult.algo.2": "the RQDM clinical algorithm",
   "prescription.analysis.choici.modal.consult.algo.3": "on the selected analysis before proceeding to the prescription form.",
+  "prescription.analysis.choici.modal.approbation": "The prescription of a molecular test is restricted to certain categories of prescribers, which vary depending on the requested analysis. Each prescription is subject to approval by the molecular diagnostic laboratory before the sequencing of the sample begins.",
   "enter.at.least.character": "Enter at least {count} characters",
   "how.it.works": "How it works",
   "download.documents": "Download",
