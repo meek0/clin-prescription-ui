@@ -408,15 +408,6 @@ const PatientDataSearch = ({
                   ...defaultFormItemsRules,
                   minimumTwoNonEmptyCharacters,
                   noSpecialCharactersRule,
-                  {
-                    type: 'string',
-                    min: 2,
-                    whitespace: true,
-                    validateTrigger: 'onSumbit',
-                    message: intl.get('enter.at.least.character', {
-                      count: 2,
-                    }),
-                  },
                 ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
@@ -429,15 +420,6 @@ const PatientDataSearch = ({
                   ...defaultFormItemsRules,
                   minimumTwoNonEmptyCharacters,
                   noSpecialCharactersRule,
-                  {
-                    type: 'string',
-                    min: 2,
-                    whitespace: true,
-                    validateTrigger: 'onSumbit',
-                    message: intl.get('enter.at.least.character', {
-                      count: 2,
-                    }),
-                  },
                 ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
