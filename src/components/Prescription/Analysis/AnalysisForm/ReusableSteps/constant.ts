@@ -94,3 +94,15 @@ export const dateNotEarlierThanTodayRule: Rule = {
     return Promise.resolve();
   },
 };
+
+export const minimumTwoNonEmptyCharacters: Rule = {
+  validateTrigger: 'onSubmit',
+  validator: (_, value) => {
+    if (value) {
+      if (value.trim().length < 2) {
+        return Promise.reject(intl.get('enter.at.least.character', { count: 2 }));
+      }
+    }
+    return Promise.resolve();
+  },
+};

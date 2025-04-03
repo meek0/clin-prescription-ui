@@ -14,6 +14,7 @@ import SearchOrNoneFormItem from 'components/Form/SearchOrNoneFormItem';
 import {
   dateNotLaterThanTodayRule,
   defaultFormItemsRules,
+  minimumTwoNonEmptyCharacters,
   noSpecialCharactersRule,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
@@ -405,6 +406,7 @@ const PatientDataSearch = ({
                 label={intl.get('last.name')}
                 rules={[
                   ...defaultFormItemsRules,
+                  minimumTwoNonEmptyCharacters,
                   noSpecialCharactersRule,
                   {
                     type: 'string',
@@ -425,6 +427,7 @@ const PatientDataSearch = ({
                 label={intl.get('first.name')}
                 rules={[
                   ...defaultFormItemsRules,
+                  minimumTwoNonEmptyCharacters,
                   noSpecialCharactersRule,
                   {
                     type: 'string',
