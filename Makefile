@@ -1,13 +1,21 @@
 .ONESHELL:
 
 # Install
-local_env:
-	cp -p env-qa .env
+env_load:
+ifneq ("$(wildcard env-${env}-custom)","")
+	cp -p env-${env}-custom .env
+	@echo "custom env file loaded!"
+else
+	cp -p env-${env} .env
+	@echo "default env file loaded!"
+endif
 
-localstack_env:
-	cp -p env-localstack .env
+env_save:
+	cp -p .env env-${env}-custom
 
-install: local_env js_install
+install: 
+	make env=localstack env_load
+	make js_install
 
 # JS
 js_install:
