@@ -99,8 +99,7 @@ export const minimumTwoNonEmptyCharacters: Rule = {
   validateTrigger: 'onSubmit',
   validator: async (_, value) => {
     if (value?.trim().length < 2) {
-      return Promise.reject(intl.get('enter.at.least.character', { count: 2 }));
+      throw new Error(intl.get('enter.at.least.character', { count: 2 }));
     }
-    return Promise.resolve();
   },
 };
