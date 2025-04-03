@@ -511,7 +511,7 @@
   "prescription.form.signs.not.observed.label": "Ajouter les signes cliniques NON OBSERVÉS que vous jugez pertinents à l’analyse",
   "prescription.form.signs.not.observed.add": "Ajouter un signe clinique non observé",
   "prescription.form.signs.observed.label": "Sélectionner au moins un signe clinique OBSERVÉ",
-  "prescription.form.signs.observed.error": "Sélectionner au moins un (1) signe clinique",
+  "prescription.form.signs.observed.error": "Sélectionner ou ajouter au moins un (1) signe clinique observé",
   "prescription.form.signs.observed.invalid.hpo": "Signe clinique non valide",
   "prescription.form.signs.observed.add": "Ajouter un signe clinique observé",
   "prescription.form.signs.observed.add.fullTree": "parcourir l'arbre HPO complet",
