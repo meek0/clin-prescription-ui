@@ -12,6 +12,7 @@ export type InputDateFormItemProps = {
   extra?: React.ReactNode;
   onValidate?: (valid: boolean, value: Date) => void;
   moreRules?: Rule[];
+  disabled?: boolean;
 };
 
 const InputDateFormItem = ({
@@ -19,6 +20,7 @@ const InputDateFormItem = ({
   extra,
   onValidate,
   moreRules,
+  disabled,
 }: InputDateFormItemProps) => {
   let rules: Rule[] = [
     {
@@ -42,6 +44,7 @@ const InputDateFormItem = ({
       <Space style={{ position: 'relative' }}>
         <Form.Item {...formItemProps} getValueFromEvent={(e) => e.unmaskedValue} rules={rules}>
           <MaskedDateInput
+            disabled={disabled}
             className={styles.maskedInputDate}
             onChange={(e) => {
               if (onValidate) {

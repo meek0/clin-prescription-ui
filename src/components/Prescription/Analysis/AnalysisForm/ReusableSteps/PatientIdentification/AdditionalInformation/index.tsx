@@ -19,6 +19,7 @@ import {
 } from 'components/Prescription/utils/form';
 import { formatRamq, isRamqValid } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
+import { usePrescriptionForm } from 'store/prescription';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
 import { SexValue } from 'utils/commonTypes';
 
@@ -72,6 +73,7 @@ const AdditionalInformation = ({
   const [localShowNewBorn, setLocalShowNewBorn] = useState(showNewBornSection);
   const [gestationalAgeDPA, setGestationalAgeDPA] = useState<number | undefined>(undefined);
   const [gestationalAgeDDM, setGestationalAgeDDM] = useState<number | undefined>(undefined);
+  const { isDraft } = usePrescriptionForm();
 
   const patientSexField = Form.useWatch(
     [STEPS_ID.PATIENT_IDENTIFICATION, PATIENT_DATA_FI_KEY.SEX],
@@ -198,6 +200,7 @@ const AdditionalInformation = ({
                           name: getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA),
                           required: true,
                         },
+                        disabled: isDraft,
                         extra: <GestationalAge value={gestationalAgeDPA} />,
                         onValidate: (valid, value) => {
                           if (!valid && gestationalAgeDPA) {
