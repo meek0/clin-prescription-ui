@@ -14,6 +14,7 @@ import SearchOrNoneFormItem from 'components/Form/SearchOrNoneFormItem';
 import {
   dateNotLaterThanTodayRule,
   defaultFormItemsRules,
+  minimumTwoNonEmptyCharacters,
   noSpecialCharactersRule,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
@@ -405,16 +406,8 @@ const PatientDataSearch = ({
                 label={intl.get('last.name')}
                 rules={[
                   ...defaultFormItemsRules,
+                  minimumTwoNonEmptyCharacters,
                   noSpecialCharactersRule,
-                  {
-                    type: 'string',
-                    min: 2,
-                    whitespace: true,
-                    validateTrigger: 'onSumbit',
-                    message: intl.get('enter.at.least.character', {
-                      count: 2,
-                    }),
-                  },
                 ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
@@ -425,16 +418,8 @@ const PatientDataSearch = ({
                 label={intl.get('first.name')}
                 rules={[
                   ...defaultFormItemsRules,
+                  minimumTwoNonEmptyCharacters,
                   noSpecialCharactersRule,
-                  {
-                    type: 'string',
-                    min: 2,
-                    whitespace: true,
-                    validateTrigger: 'onSumbit',
-                    message: intl.get('enter.at.least.character', {
-                      count: 2,
-                    }),
-                  },
                 ]}
                 wrapperCol={{ span: 10, sm: 12, xxl: 6 }}
               >
