@@ -200,7 +200,6 @@ const AdditionalInformation = ({
                           name: getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA),
                           required: true,
                         },
-                        disabled: isDraft,
                         extra: <GestationalAge value={gestationalAgeDPA} />,
                         onValidate: (valid, value) => {
                           if (!valid && gestationalAgeDPA) {
@@ -210,7 +209,7 @@ const AdditionalInformation = ({
                           }
                         },
                       }}
-                      moreDateRules={[dateNotEarlierThanTodayRule]}
+                      moreDateRules={!isDraft ? [dateNotEarlierThanTodayRule] : []}
                       parentFormItemName={getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE)}
                     />
                     <Radio value={GestationalAgeValues.DEAD_FOETUS}>
