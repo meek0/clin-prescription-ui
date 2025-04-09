@@ -106,6 +106,28 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
     }
   };
 
+  const canRemoveHealthConditionFormItem = (formItemPosition: number) => {
+    const formFieldValueItems = getFieldValue(
+      form,
+      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+    );
+
+    if (Array.isArray(formFieldValueItems) && formFieldValueItems.length == 1) {
+      return (
+        formFieldValueItems[0][HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
+        formFieldValueItems[0][HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]
+      );
+    } else {
+      const formLength = Array.isArray(formFieldValueItems) ? formFieldValueItems.length : 0;
+      return (
+        formItemPosition > 0 &&
+        formItemPosition === formLength - 1 &&
+        (formFieldValueItems[formLength - 1][HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
+          formFieldValueItems[formLength - 1][HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK])
+      );
+    }
+  };
+
   return (
     <div className={styles.historyAndDiagnosisHypSelect}>
       <Form.Item>
@@ -201,10 +223,17 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                                 </Select>
                               </Form.Item>
                               <CloseOutlined
-                                className={cx(!name ? styles.hidden : '', styles.removeIcon)}
+                                className={cx(
+                                  !canRemoveHealthConditionFormItem(name) ? styles.hidden : '',
+                                  styles.removeIcon,
+                                )}
                                 onClick={() => {
                                   setCanAddHealthCondition(true);
-                                  remove(name);
+                                  if (!name) {
+                                    setDefaultCondition();
+                                  } else {
+                                    remove(name);
+                                  }
                                 }}
                               />
                             </Space>
