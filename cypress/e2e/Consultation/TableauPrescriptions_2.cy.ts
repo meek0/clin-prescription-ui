@@ -47,9 +47,9 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
 
   it('Valider les fonctionnalités du tableau - Tri Analyse', () => {
     cy.sortTableAndIntercept('Analyse', 1);
-    cy.validateTableFirstRow(/(DYSM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/, 6);
+    cy.validateTableFirstRow(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/, 6);
     cy.sortTableAndIntercept('Analyse', 1);
-    cy.validateTableFirstRow(/(DYSM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/, 6);
+    cy.validateTableFirstRow(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/, 6);
   });
 
   it('Valider les fonctionnalités du tableau - Tri EP', () => {
