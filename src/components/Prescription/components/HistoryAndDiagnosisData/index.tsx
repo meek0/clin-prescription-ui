@@ -240,10 +240,11 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                                   styles.removeIcon,
                                 )}
                                 onClick={() => {
-                                  setCanAddHealthCondition(true);
                                   if (isTheOnlyOne(name)) {
                                     setDefaultCondition();
+                                    setCanAddHealthCondition(false);
                                   } else {
+                                    setCanAddHealthCondition(true);
                                     remove(name);
                                   }
                                 }}
