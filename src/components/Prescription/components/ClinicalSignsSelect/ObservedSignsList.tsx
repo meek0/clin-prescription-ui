@@ -138,7 +138,11 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
                                 id: hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
                                 name: hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME],
                               }}
-                              ignoreHpoIds={getExistingHpoIdList(form, getName)}
+                              ignoreHpoIds={getExistingHpoIdList(
+                                form,
+                                getName,
+                                CLINICAL_SIGNS_FI_KEY.SIGNS,
+                              )}
                               onClear={() => updateNode(name, { value: '', name: '' })}
                               onSelect={(hpo) =>
                                 updateNode(name, { value: hpo.id, name: hpo.name })
