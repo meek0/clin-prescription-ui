@@ -106,6 +106,40 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
     }
   };
 
+  const canRemoveHealthConditionFormItem = (formItemPosition: number) => {
+    const formFieldValueItems = getFieldValue(
+      form,
+      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+    );
+
+    if (Array.isArray(formFieldValueItems) && formItemPosition === 0) {
+      return (
+        formFieldValueItems[0][HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
+        formFieldValueItems[0][HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]
+      );
+    } else {
+      const previousPosition = (formItemPosition || 0) - 1;
+      return (
+        previousPosition >= 0 &&
+        (formFieldValueItems[previousPosition][HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
+          formFieldValueItems[previousPosition][HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK])
+      );
+    }
+  };
+
+  const isTheOnlyOne = (formItemPosition: number) => {
+    const formFieldValueItems = getFieldValue(
+      form,
+      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+    );
+
+    return (
+      Array.isArray(formFieldValueItems) &&
+      formItemPosition === 0 &&
+      formFieldValueItems.length === 1
+    );
+  };
+
   return (
     <div className={styles.historyAndDiagnosisHypSelect}>
       <Form.Item>
@@ -201,10 +235,18 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                                 </Select>
                               </Form.Item>
                               <CloseOutlined
-                                className={cx(!name ? styles.hidden : '', styles.removeIcon)}
+                                className={cx(
+                                  !canRemoveHealthConditionFormItem(name) ? styles.hidden : '',
+                                  styles.removeIcon,
+                                )}
                                 onClick={() => {
-                                  setCanAddHealthCondition(true);
-                                  remove(name);
+                                  if (isTheOnlyOne(name)) {
+                                    setDefaultCondition();
+                                    setCanAddHealthCondition(false);
+                                  } else {
+                                    setCanAddHealthCondition(true);
+                                    remove(name);
+                                  }
                                 }}
                               />
                             </Space>
