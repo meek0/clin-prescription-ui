@@ -104,13 +104,18 @@ export default ClinicalSignsSelect;
 export function getExistingHpoIdList(
   form: FormInstance<any>,
   getName: (...key: IGetNamePathParams) => any,
+  forFormSection: CLINICAL_SIGNS_FI_KEY,
 ) {
   const observedSignFields =
     form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS) as IClinicalSignItem[]) || [];
   const nonObservedSignFields =
     form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS) as IClinicalSignItem[]) ||
     [];
-  return observedSignFields
+  return (
+    forFormSection === CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS
+      ? observedSignFields.filter((i: IClinicalSignItem) => i.is_observed)
+      : observedSignFields
+  )
     .concat(nonObservedSignFields)
     .map((field: IClinicalSignItem) => field.value);
 }
