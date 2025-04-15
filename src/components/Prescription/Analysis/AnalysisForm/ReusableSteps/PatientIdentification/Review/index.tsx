@@ -7,7 +7,7 @@ import {
   EMPTY_FIELD,
   STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import { usePrescriptionForm } from 'store/prescription';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
 

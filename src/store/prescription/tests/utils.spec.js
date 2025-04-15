@@ -67,45 +67,54 @@ describe('cleanAnalysisData', () => {
     };
 
     const expected = {
-      paraclinical_exams: {
-        exams: [
-          {
-            interpretation: 'abnormal',
+      type: 'GERMLINE',
+      analysis_code: undefined,
+      is_reflex: undefined,
+      inbreeding: undefined,
+      comment: undefined,
+      resident_supervisor_id: undefined,
+      history: [],
+      diagnosis_hypothesis: undefined,
+      ethnicity_code: undefined,
+      patients: [
+        {
+          first_name: undefined,
+          last_name: undefined,
+          jhn: 'XXXX00001111',
+          mrn: undefined,
+          sex: undefined,
+          birth_date: undefined,
+          organization_id: undefined,
+          family_member: 'PROBAND',
+          clinical: {
+            comment: undefined,
+            signs: [
+              {
+                age_code: undefined,
+                code: undefined,
+                observed: true,
+              },
+              {
+                age_code: undefined,
+                code: undefined,
+                observed: false,
+              },
+            ],
           },
-        ],
-      },
-      clinical_signs: {
-        signs: [
-          {
-            is_observed: true,
+          para_clinical: {
+            exams: [
+              {
+                code: undefined,
+                interpretation: 'ABNORMAL',
+                values: undefined,
+              },
+            ],
+            other: undefined,
           },
-          {
-            is_observed: false,
-          },
-        ],
-      },
-      patient: {
-        ramq: 'XXXX00001111',
-        additional_info: {
-          mother_ramq: 'XXXX00001111',
         },
-      },
-      mother: {
-        ramq: 'XXXX00001111',
-        signs: [
-          {
-            is_observed: false,
-          },
-        ],
-      },
-      father: {
-        ramq: 'XXXX00001111',
-        signs: [
-          {
-            is_observed: true,
-          },
-        ],
-      },
+        undefined,
+        undefined,
+      ],
     };
 
     expect(cleanAnalysisData(payload)).toEqual(expected);

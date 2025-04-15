@@ -8,7 +8,7 @@ import {
   ClinicalStatusValue,
   EnterInfoMomentValue,
   PARENT_DATA_FI_KEY,
-} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification';
+} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
 import PatientIdentificationReview from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/Review';
 import EmptySection from 'components/Prescription/components/EmptySection';
 import { usePrescriptionForm } from 'store/prescription';

@@ -10,10 +10,9 @@ import ParaclinicalExams, {
   TParaclinicalExamsDataType,
 } from './AnalysisForm/ReusableSteps/ParaclinicalExams';
 import ParaclinicalExamsReview from './AnalysisForm/ReusableSteps/ParaclinicalExams/Review';
-import ParentIdentification, {
-  TParentDataType,
-} from './AnalysisForm/ReusableSteps/ParentIdentification';
+import ParentIdentification from './AnalysisForm/ReusableSteps/ParentIdentification';
 import ParentIdentificationReview from './AnalysisForm/ReusableSteps/ParentIdentification/Review';
+import { TParentDataType } from './AnalysisForm/ReusableSteps/ParentIdentification/types';
 import PatientIdentification, {
   TPatientFormDataType,
 } from './AnalysisForm/ReusableSteps/PatientIdentification';

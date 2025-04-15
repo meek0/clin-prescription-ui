@@ -10,7 +10,10 @@ import { RptManager } from 'auth/rpt';
 import { isUndefined } from 'lodash';
 import _ from 'lodash';
 
-import { EnterInfoMomentValue } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification';
+import {
+  EnterInfoMomentValue,
+  PARENT_DATA_FI_KEY,
+} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
 import { TPatientFormDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification';
 // eslint-disable-next-line max-len
 import { GestationalAgeValues } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/AdditionalInformation';
@@ -20,6 +23,7 @@ import {
 } from 'components/Prescription/components/ClinicalSignsSelect/types';
 import { IHistoryAndDiagnosisDataType } from 'components/Prescription/components/HistoryAndDiagnosisData';
 import { IParaclinicalExamsDataType } from 'components/Prescription/components/ParaclinicalExamsSelect';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
 import { MuscularDiseaseConfig } from 'store/prescription/analysis/muscular';
 import { isMuscularAnalysis } from 'store/prescription/helper';
@@ -223,11 +227,8 @@ const prescriptionFormSlice = createSlice({
             parental_link: history.parental_link_code,
           })),
         } as IHistoryAndDiagnosisDataType;
-        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding !== undefined) {
-          state.analysisData.history_and_diagnosis.inbreeding = prescription.inbreeding
-            ? true
-            : false;
-        }
+        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding)
+          state.analysisData.history_and_diagnosis.inbreeding = prescription.inbreeding;
       }
 
       function getPatientInfos(
@@ -235,20 +236,23 @@ const prescriptionFormSlice = createSlice({
         proband?: HybridPatientPresent,
       ): TPatientFormDataType {
         return {
-          parent_enter_moment: (!(patient as HybridPatientNotPresent).status
+          [PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT]: (!(patient as HybridPatientNotPresent).status
             ? 'now'
             : (patient as HybridPatientNotPresent).status?.toLowerCase()) as EnterInfoMomentValue,
-          parent_no_info_reason: (patient as HybridPatientNotPresent).reason,
-          id: (patient as HybridPatientPresent).patient_id,
-          ep: (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
-          first_name: (patient as HybridPatientPresent).first_name,
-          last_name: (patient as HybridPatientPresent).last_name,
-          no_mrn: !(patient as HybridPatientPresent).mrn,
-          mrn: (patient as HybridPatientPresent).mrn,
-          ramq: (patient as HybridPatientPresent).jhn,
-          no_ramq: !(patient as HybridPatientPresent).jhn,
-          birth_date: (patient as HybridPatientPresent).birth_date,
-          gender: (patient as HybridPatientPresent).sex?.toLowerCase() as SexValue,
+          [PARENT_DATA_FI_KEY.NO_INFO_REASON]: (patient as HybridPatientNotPresent).reason,
+          [PATIENT_DATA_FI_KEY.PATIENT_ID]: (patient as HybridPatientPresent).patient_id,
+          [PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION]:
+            (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
+          [PATIENT_DATA_FI_KEY.FIRST_NAME]: (patient as HybridPatientPresent).first_name,
+          [PATIENT_DATA_FI_KEY.LAST_NAME]: (patient as HybridPatientPresent).last_name,
+          [PATIENT_DATA_FI_KEY.NO_FILE]: !(patient as HybridPatientPresent).mrn,
+          [PATIENT_DATA_FI_KEY.FILE_NUMBER]: (patient as HybridPatientPresent).mrn,
+          [PATIENT_DATA_FI_KEY.RAMQ_NUMBER]: (patient as HybridPatientPresent).jhn,
+          [PATIENT_DATA_FI_KEY.NO_RAMQ]: !(patient as HybridPatientPresent).jhn,
+          [PATIENT_DATA_FI_KEY.BIRTH_DATE]: (patient as HybridPatientPresent).birth_date,
+          [PATIENT_DATA_FI_KEY.SEX]: (
+            patient as HybridPatientPresent
+          ).sex?.toLowerCase() as SexValue,
         } as any;
       }
 
@@ -298,8 +302,8 @@ const prescriptionFormSlice = createSlice({
         const patient = prescription.patients[i];
         const familyMember = {
           ...getPatientInfos(patient, proband),
-          ...getClinical(patient as HybridPatientPresent),
           ...getParaClinical(patient as HybridPatientPresent),
+          ...getClinical(patient as HybridPatientPresent),
         } as any;
 
         if ((patient as HybridPatientPresent).affected !== undefined) {
