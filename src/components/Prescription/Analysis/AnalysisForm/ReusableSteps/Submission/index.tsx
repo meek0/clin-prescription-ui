@@ -10,7 +10,7 @@ import {
   findPractitionerRoleByOrganization,
   isPractitionerResident,
 } from 'api/fhir/practitionerHelper';
-import { PrescriptionFormApi } from 'api/form';
+import { HybridApi } from 'api/hybrid';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
 import {
@@ -75,12 +75,12 @@ const Submission = () => {
 
   const onSearch = (searchText: string) => {
     if (searchText) {
-      PrescriptionFormApi.searchSupervisor({
-        ep: getPrescribingOrg()!,
+      HybridApi.searchSupervisors({
+        organizationId: getPrescribingOrg()!,
         prefix: searchText,
-      }).then((resp) => {
+      }).then(({ data }) => {
         setSupervisors(
-          resp.data?.map((supervisor) => ({
+          data?.supervisors.map((supervisor) => ({
             label: supervisor.license ? (
               <>
                 {supervisor.name} &mdash; {supervisor.license}

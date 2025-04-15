@@ -4,7 +4,7 @@ import { TCompleteAnalysis } from 'store/prescription/types';
 import { LANG } from 'utils/constants';
 import EnvironmentVariables from 'utils/EnvVariables';
 
-import { IFormPatient, ISupervisor, TFormConfig } from './models';
+import { TFormConfig } from './models';
 
 export const FORM_API_URL = `${EnvironmentVariables.configFor('FORM_API_URL')}`;
 
@@ -16,24 +16,6 @@ const fetchConfig = (code: string) =>
   sendRequestWithRpt<{ config: TFormConfig }>({
     method: 'GET',
     url: `${FORM_API_URL}/form/${code}`,
-    headers,
-  });
-
-const searchPatient = ({ ep, mrn, ramq }: { ep: string; mrn?: string; ramq?: string }) =>
-  sendRequestWithRpt<IFormPatient>({
-    method: 'GET',
-    url: `${FORM_API_URL}/search/patient/${ep}`,
-    params: {
-      mrn,
-      ramq,
-    },
-    headers,
-  });
-
-const searchSupervisor = ({ ep, prefix }: { ep: string; prefix: string }) =>
-  sendRequestWithRpt<ISupervisor[]>({
-    method: 'GET',
-    url: `${FORM_API_URL}/autocomplete/supervisor/${ep}/${prefix}`,
     headers,
   });
 
@@ -90,8 +72,6 @@ const prescriptionShare = (analysis_id: string, roles: string[]) =>
 
 export const PrescriptionFormApi = {
   fetchConfig,
-  searchPatient,
-  searchSupervisor,
   createPrescription,
   updatePrescription,
   downloadDocuments,

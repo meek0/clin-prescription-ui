@@ -130,7 +130,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
       >
         {({ getFieldValue }) => {
           const initialData = getInitialData() as IPatientDataType;
-          const gender =
+          const sex =
             initialData?.[PATIENT_DATA_FI_KEY.SEX] ||
             (parent === 'father' ? SexValue.MALE : SexValue.FEMALE);
           return getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
@@ -146,7 +146,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                     parentKey={FORM_NAME}
                     initialData={{
                       ...initialData,
-                      [PATIENT_DATA_FI_KEY.SEX]: gender,
+                      [PATIENT_DATA_FI_KEY.SEX]: sex,
                     }}
                     onRamqSearchStateChange={setRamqSearchDone}
                     initialRamqSearchDone={ramqSearchDone}
