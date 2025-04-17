@@ -22,9 +22,10 @@ const { Text } = Typography;
 interface OwnProps {
   form: FormInstance<any>;
   getName(...key: IGetNamePathParams): NamePath;
+  isOptional?: boolean;
 }
 
-const ObservedSignsList = ({ form, getName }: OwnProps) => {
+const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const [notObservedSigns, setNotObservedSigns] = useState<string[]>([]);
   const notObservedSignsField = Form.useWatch(
@@ -39,6 +40,20 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
 
   const getNode = (index: number): IClinicalSignItem =>
     form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS))[index];
+
+  const defaultRules = [
+    {
+      validator: async (_: any, signs: IClinicalSignItem[]) => {
+        if (
+          !signs.some((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true) &&
+          !isRemoveClicked
+        ) {
+          return Promise.reject(new Error(intl.get('prescription.form.signs.observed.error')));
+        }
+        setIsRemoveClicked(false);
+      },
+    },
+  ];
 
   function updateNode(index: number, update: Partial<IClinicalSignItem>) {
     const nodes = [...form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS))];
@@ -65,25 +80,15 @@ const ObservedSignsList = ({ form, getName }: OwnProps) => {
 
   return (
     <Space direction="vertical">
-      <ProLabel requiredMark title={intl.get('prescription.form.signs.observed.label')} colon />
+      <ProLabel
+        requiredMark={!isOptional}
+        title={intl.get('prescription.form.signs.observed.label')}
+        colon
+      />
       <Form.Item className="noMarginBtm">
         <Form.List
           name={getName(CLINICAL_SIGNS_FI_KEY.SIGNS)}
-          rules={[
-            {
-              validator: async (_, signs: IClinicalSignItem[]) => {
-                if (
-                  !signs.some((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true) &&
-                  !isRemoveClicked
-                ) {
-                  return Promise.reject(
-                    new Error(intl.get('prescription.form.signs.observed.error')),
-                  );
-                }
-                setIsRemoveClicked(false);
-              },
-            },
-          ]}
+          rules={isOptional ? undefined : defaultRules}
         >
           {(fields, { add, remove }, { errors }) => (
             <>

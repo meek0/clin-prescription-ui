@@ -23,6 +23,7 @@ import { usePrescriptionForm } from 'store/prescription';
 import { SexValue } from 'utils/commonTypes';
 
 import { defaultCollapseProps, defaultFormItemsRules, STEPS_ID } from '../constant';
+import { additionalInfoKey } from '../PatientIdentification/AdditionalInformation';
 
 import {
   ClinicalStatusValue,
@@ -44,6 +45,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
     parent === 'father' ? STEPS_ID.FATHER_IDENTIFICATION : STEPS_ID.MOTHER_IDENTIFICATION;
   const [form] = Form.useForm();
   const [ramqSearchDone, setRamqSearchDone] = useState(false);
+  const [isParentIdentificationFormHidden, setParentIdentificationFormHidden] = useState(true);
   const { analysisData, isAddingParent } = usePrescriptionForm();
 
   const getName = (...key: IGetNamePathParams) => getNamePath(FORM_NAME, key);
@@ -52,6 +54,10 @@ const ParentIdentification = ({ parent }: OwnProps) => {
 
   useEffect(() => {
     const initialData = getInitialData();
+    const isPrenatal =
+      analysisData[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.is_prenatal_diagnosis;
+
+    setParentIdentificationFormHidden(parent !== 'father' && !!isPrenatal);
     if (initialData && !isEmpty(initialData)) {
       setInitialValues(form, getName, initialData, PARENT_DATA_FI_KEY);
     } else if (isAddingParent) {
@@ -116,7 +122,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
             initialData?.[PATIENT_DATA_FI_KEY.SEX] ||
             (parent === 'father' ? SexValue.MALE : SexValue.FEMALE);
           return getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
-            EnterInfoMomentValue.NOW ? (
+            EnterInfoMomentValue.NOW && !isParentIdentificationFormHidden ? (
             <Space direction="vertical" className={styles.formContentWrapper}>
               <Collapse {...defaultCollapseProps} defaultActiveKey={[parent]}>
                 <CollapsePanel
@@ -153,7 +159,9 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         {({ getFieldValue }) =>
           getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
             EnterInfoMomentValue.NOW &&
-          (ramqSearchDone || getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ? (
+          (isParentIdentificationFormHidden ||
+            ramqSearchDone ||
+            getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ? (
             <Collapse {...defaultCollapseProps} defaultActiveKey={['clinical_information']}>
               <CollapsePanel
                 key="clinical_information"
@@ -181,6 +189,8 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                   <ClinicalSignsSelect
                     form={form}
                     parentKey={FORM_NAME}
+                    hideHpoFromDefaultList={isParentIdentificationFormHidden}
+                    observedListIsOptional={isParentIdentificationFormHidden}
                     initialData={getInitialData()}
                   />
                 )}
