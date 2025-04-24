@@ -60,16 +60,16 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
   });
 
   it('Valider les fonctionnalités du tableau - Tri RAMQ', () => {
-    cy.sortTableAndIntercept('Patient', 1);
-    cy.validateTableFirstRow(/^(?!-).*$/, 8);
-    cy.sortTableAndIntercept('Patient', 1);
+    cy.sortTableAndIntercept('RAMQ', 1);
+    cy.validateTableFirstRow(/^(-|(?!-).*)$/, 8);
+    cy.sortTableAndIntercept('RAMQ', 1);
     cy.validateTableFirstRow(/^(?!-).*$/, 8);
   });
 
   it('Valider les fonctionnalités du tableau - Tri Dossier', () => {
-    cy.sortTableAndIntercept('Patient', 1);
+    cy.sortTableAndIntercept('Dossier', 1);
     cy.validateTableFirstRow(/^(?!-).*$/, 9);
-    cy.sortTableAndIntercept('Patient', 1);
+    cy.sortTableAndIntercept('Dossier', 1);
     cy.validateTableFirstRow(/^(?!-).*$/, 9);
   });
 
