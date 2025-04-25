@@ -75,7 +75,7 @@ const RequestTable = ({ loading = false, data = [] }: OwnProps) => (
     dataSource={data.map((data, index) => ({ ...data, key: index }))}
     bordered
     locale={{
-      emptyText: <Empty description="Aucune requêtes" />,
+      emptyText: <Empty description="Aucune requête" />,
     }}
     pagination={{
       hideOnSinglePage: true,
