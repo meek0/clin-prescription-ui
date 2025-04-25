@@ -116,6 +116,12 @@ const prescriptionFormSlice = createSlice({
         lastStepIsNext?: boolean;
       }>,
     ) => {
+      if (state.currentFormRefs?.getFieldsValue) {
+        state.analysisData = {
+          ...state.analysisData,
+          ...state.currentFormRefs.getFieldsValue(),
+        };
+      }
       state.currentStep = state.config?.steps[action.payload.index];
       state.lastStepIsNext = action.payload.lastStepIsNext;
     },
