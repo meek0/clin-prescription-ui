@@ -5,15 +5,15 @@ export const DevelopmentDelayConfig: IAnalysisConfig = {
   analysisTitle: 'Retard global de développement / Déficience intellectuelle',
   steps: [
     {
-      id: STEPS_ID.PATIENT_IDENTIFICATION,
+      id: STEPS_ID.PROBAND_IDENTIFICATION,
       title: 'Identification du patient',
     },
     {
-      id: STEPS_ID.CLINICAL_SIGNS,
+      id: STEPS_ID.PROBAND_CLINICAL,
       title: 'Signes cliniques',
     },
     {
-      id: STEPS_ID.PARACLINICAL_EXAMS,
+      id: STEPS_ID.PROBAND_PARACLINICAL,
       title: 'Examens paracliniques',
     },
     {

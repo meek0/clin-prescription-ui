@@ -3,6 +3,7 @@ import intl from 'react-intl-universal';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Button, Checkbox, Form, Input, Radio, Select, Space } from 'antd';
+import { HybridAnalysis } from 'api/hybrid/models';
 import cx from 'classnames';
 import { isEmpty } from 'lodash';
 
@@ -18,37 +19,13 @@ import {
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 
+import { IHistoryAndDiagnosisDataType } from './types';
+
 import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
   initialData?: IHistoryAndDiagnosisDataType;
 };
-
-export enum HISTORY_AND_DIAG_FI_KEY {
-  REPORT_HEALTH_CONDITIONS = 'report_health_conditions',
-  HAS_INBREEDING = 'inbreeding',
-  HEALTH_CONDITIONS = 'health_conditions',
-  ETHNICITY = 'ethnicity',
-  DIAGNOSIS_HYPOTHESIS = 'diagnostic_hypothesis',
-}
-
-export enum HEALTH_CONDITION_ITEM_KEY {
-  CONDITION = 'condition',
-  PARENTAL_LINK = 'parental_link',
-}
-
-export interface IHealthConditionItem {
-  [HEALTH_CONDITION_ITEM_KEY.CONDITION]: string;
-  [HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]: string;
-}
-
-export interface IHistoryAndDiagnosisDataType {
-  [HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS]: IHealthConditionItem[];
-  [HISTORY_AND_DIAG_FI_KEY.REPORT_HEALTH_CONDITIONS]: boolean;
-  [HISTORY_AND_DIAG_FI_KEY.ETHNICITY]: string[];
-  [HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING]: boolean | undefined;
-  [HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS]: string;
-}
 
 const hiddenLabelConfig = { colon: false, label: <></> };
 
@@ -59,68 +36,67 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
 
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
-      setInitialValues(form, getName, initialData, HISTORY_AND_DIAG_FI_KEY);
-      if (!initialData[HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS]) {
+      setInitialValues(form, getName, initialData);
+      if (!initialData.history?.length) {
         setDefaultCondition();
       } else {
-        const initialHealthConditions = initialData[HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS];
+        const initialHealthConditions = initialData.history;
         const lastInitialHealthConditionsItem =
           initialHealthConditions[initialHealthConditions.length - 1];
 
         setCanAddHealthCondition(
-          !!lastInitialHealthConditionsItem[HEALTH_CONDITION_ITEM_KEY.CONDITION] &&
-            !!lastInitialHealthConditionsItem[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK],
+          !!lastInitialHealthConditionsItem?.condition &&
+            !!lastInitialHealthConditionsItem.parental_link_code,
         );
       }
     } else {
       setDefaultCondition();
-      setFieldValue(form, getName(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING), undefined);
+      setFieldValue(
+        form,
+        getName('inbreeding' satisfies keyof IHistoryAndDiagnosisDataType),
+        undefined,
+      );
     }
     // eslint-disable-next-line
   }, []);
 
   const setDefaultCondition = () =>
-    setFieldValue(form, getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS), [
+    setFieldValue(form, getName('history' satisfies keyof IHistoryAndDiagnosisDataType), [
       {
         condition: '',
-        parental_link: undefined,
+        parental_link_code: undefined,
       },
     ]);
 
   const resetListError = () => {
-    resetFieldError(form, getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS));
+    resetFieldError(form, getName('history' satisfies keyof IHistoryAndDiagnosisDataType));
 
-    const formFieldValueItems = form.getFieldValue(
-      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+    const formFieldValueItems = getFieldValue(
+      form,
+      getName('history' satisfies keyof IHistoryAndDiagnosisDataType),
     );
 
     if (Array.isArray(formFieldValueItems) && formFieldValueItems.length > 0) {
       const lastItem = formFieldValueItems[formFieldValueItems.length - 1];
-      setCanAddHealthCondition(
-        !!lastItem[HEALTH_CONDITION_ITEM_KEY.CONDITION] &&
-          !!lastItem[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK],
-      );
+      setCanAddHealthCondition(!!lastItem?.condition && !!lastItem.parental_link_code);
     } else {
       setCanAddHealthCondition(false);
     }
   };
 
-  const canRemoveHealthConditionFormItem = (formItemPosition: number = 0) => {
+  const canRemoveHealthConditionFormItem = (formItemPosition: number) => {
     const formFieldValueItems = form.getFieldValue(
-      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+      getName('history' satisfies keyof IHistoryAndDiagnosisDataType),
     );
 
     if (Array.isArray(formFieldValueItems) && formItemPosition === 0) {
-      return (
-        formFieldValueItems[0]?.[HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
-        formFieldValueItems[0]?.[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]
-      );
+      return formFieldValueItems[0]?.condition || formFieldValueItems[0]?.parental_link_code;
     } else {
       const previousPosition = formItemPosition - 1;
       return (
         previousPosition >= 0 &&
-        (formFieldValueItems[previousPosition]?.[HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
-          formFieldValueItems[previousPosition]?.[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK])
+        (formFieldValueItems[previousPosition]?.condition ||
+          formFieldValueItems[previousPosition]?.parental_link_code)
       );
     }
   };
@@ -128,7 +104,7 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
   const isTheOnlyOne = (formItemPosition: number) => {
     const formFieldValueItems = getFieldValue(
       form,
-      getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
+      getName('history' satisfies keyof IHistoryAndDiagnosisDataType),
     );
 
     return (
@@ -143,7 +119,7 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
       <Form.Item>
         <Form.Item
           label={intl.get('prescription.history.diagnosis.review.label.family.history')}
-          name={getName(HISTORY_AND_DIAG_FI_KEY.REPORT_HEALTH_CONDITIONS)}
+          name={getName('report_health_conditions' satisfies keyof IHistoryAndDiagnosisDataType)}
           valuePropName="checked"
           className="noMarginBtm"
         >
@@ -153,12 +129,14 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
           noStyle
           shouldUpdate={(prev, next) =>
             checkShouldUpdate(prev, next, [
-              getName(HISTORY_AND_DIAG_FI_KEY.REPORT_HEALTH_CONDITIONS),
+              getName('report_health_conditions' satisfies keyof IHistoryAndDiagnosisDataType),
             ])
           }
         >
           {({ getFieldValue }) =>
-            getFieldValue(getName(HISTORY_AND_DIAG_FI_KEY.REPORT_HEALTH_CONDITIONS)) ? (
+            getFieldValue(
+              getName('report_health_conditions' satisfies keyof IHistoryAndDiagnosisDataType),
+            ) ? (
               <Form.Item className={cx('noMarginBtm', styles.healthConditionsWrapper)}>
                 <Form.Item {...hiddenLabelConfig} className="noMarginBtm">
                   <ProLabel
@@ -169,15 +147,13 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                   />
                 </Form.Item>
                 <Form.List
-                  name={getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS)}
+                  name={getName('history' satisfies keyof IHistoryAndDiagnosisDataType)}
                   rules={[
                     {
-                      validator: async (_, conditions: IHealthConditionItem[]) => {
+                      validator: async (_, conditions: HybridAnalysis['history']) => {
                         if (
                           !conditions.some(
-                            (condition) =>
-                              condition[HEALTH_CONDITION_ITEM_KEY.CONDITION] &&
-                              condition[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK],
+                            (condition) => condition.condition && condition.parental_link_code,
                           )
                         ) {
                           return Promise.reject(
@@ -205,7 +181,10 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                               <Form.Item
                                 {...restField}
                                 rules={key > 0 ? defaultFormItemsRules : undefined}
-                                name={[name, HEALTH_CONDITION_ITEM_KEY.CONDITION]}
+                                name={[
+                                  name,
+                                  'condition' satisfies keyof HybridAnalysis['history'][0],
+                                ]}
                               >
                                 <Input
                                   placeholder={intl.get(
@@ -217,7 +196,10 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
                               <Form.Item
                                 {...restField}
                                 rules={key > 0 ? defaultFormItemsRules : undefined}
-                                name={[name, HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]}
+                                name={[
+                                  name,
+                                  'parental_link_code' satisfies keyof HybridAnalysis['history'][0],
+                                ]}
                               >
                                 <Select
                                   placeholder={intl.get(
@@ -280,7 +262,7 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
       </Form.Item>
       <Form.Item
         label={intl.get('prescription.history.diagnosis.review.label.inbreeding')}
-        name={getName(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING)}
+        name={getName('inbreeding' satisfies keyof IHistoryAndDiagnosisDataType)}
       >
         <Radio.Group>
           <Radio value={false}>{intl.get('no')}</Radio>
@@ -290,13 +272,18 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
       </Form.Item>
       <Form.Item
         label={intl.get('prescription.history.diagnosis.review.label.ethnicity')}
-        name={getName(HISTORY_AND_DIAG_FI_KEY.ETHNICITY)}
+        name={getName('ethnicity_codes' satisfies keyof IHistoryAndDiagnosisDataType)}
         className={styles.ethnicities}
       >
         <Select
           placeholder={intl.get('prescription.add.parent.modal.select')}
           mode="multiple"
-          onChange={() => resetFieldError(form, getName(HISTORY_AND_DIAG_FI_KEY.ETHNICITY))}
+          onChange={() =>
+            resetFieldError(
+              form,
+              getName('ethnicity_codes' satisfies keyof IHistoryAndDiagnosisDataType),
+            )
+          }
         >
           {formConfig?.history_and_diagnosis.ethnicities.map((eth) => (
             <Select.Option key={eth.value} value={eth.value} title={null}>
@@ -307,7 +294,7 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
       </Form.Item>
       <Form.Item
         label={intl.get('prescription.history.diagnosis.review.label.hypothesis')}
-        name={getName(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS)}
+        name={getName('diagnosis_hypothesis' satisfies keyof IHistoryAndDiagnosisDataType)}
         rules={defaultFormItemsRules}
         className="noMarginBtm"
       >

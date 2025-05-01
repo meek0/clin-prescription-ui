@@ -122,7 +122,7 @@ const PatientContent = ({ patient, reference, isPrenatal, labelClass = 'label-35
           {formatDate(patient.person[0].birthdate)}
         </Descriptions.Item>
         <Descriptions.Item label={intl.get('sex')}>
-          {intl.get(`sex.${patient.gender?.toLowerCase()}` ?? 'key')}
+          {intl.get(`sex.${patient.gender?.toLowerCase()}`)}
         </Descriptions.Item>
       </Descriptions>
       {foetusInfo}

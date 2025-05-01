@@ -22,7 +22,7 @@ exports[`Submission should be as the snapshot 1`] = `
           >
             <label
               className=""
-              htmlFor="submission_submission_general_comment"
+              htmlFor="submission_submission_comment"
               title=""
             >
               <span
@@ -59,7 +59,7 @@ exports[`Submission should be as the snapshot 1`] = `
                 <textarea
                   className="ant-input"
                   disabled={false}
-                  id="submission_submission_general_comment"
+                  id="submission_submission_comment"
                   onBlur={[Function]}
                   onChange={[Function]}
                   onCompositionEnd={[Function]}

@@ -16,7 +16,7 @@ export const PrescriptionButtons = () => {
     lastStepIsNext,
     isCreatingPrescription,
     isDraft,
-    analysisData,
+    analysisFormData,
   } = usePrescriptionForm();
 
   const showDraftButtons = EnvironmentVariables.configFor('USE_DRAFT') === 'true';
@@ -95,7 +95,7 @@ export const PrescriptionButtons = () => {
             icon={<ArrowLeftOutlined />}
             onClick={async () => {
               try {
-                if (currentStep?.id && analysisData.changed?.[currentStep?.id])
+                if (currentStep?.id && analysisFormData.changed?.[currentStep?.id])
                   await currentFormRefs?.validateFields();
                 dispatch(prescriptionFormActions.previousStep());
               } catch (e) {

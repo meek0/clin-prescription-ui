@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Form, FormInstance, Input, Radio } from 'antd';
-import {
-  hybridToFormPatient,
-  IFormPatient,
-  IHybridFormPatient,
-  IHybridFormPatients,
-} from 'api/form/models';
 import { HybridApi } from 'api/hybrid';
+import { IHybridPatientForm } from 'api/hybrid/models';
 import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
-import { FieldData } from 'rc-field-form/lib/interface';
 
 import InputDateFormItem from 'components/Form/InputDateFormItem';
 import { INPUT_DATE_OUTPUT_FORMAT } from 'components/Form/MaskedDateInput';
@@ -23,6 +17,7 @@ import {
   noSpecialCharactersRule,
   STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
+import { TParentDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
 import {
   getNamePath,
   resetFieldError,
@@ -41,7 +36,7 @@ import { usePrescriptionForm, usePrescriptionFormConfig } from 'store/prescripti
 import { prescriptionFormActions } from 'store/prescription/slice';
 import { hasSpecialCharacters } from 'utils/helper';
 
-import { IPatientDataType, PATIENT_DATA_FI_KEY } from './types';
+import { IPatientDataType } from './types';
 
 import styles from './index.module.css';
 
@@ -51,7 +46,7 @@ type OwnProps = IAnalysisFormPart & {
   onResetRamq?: () => void;
   initialFileSearchDone?: boolean;
   initialRamqSearchDone?: boolean;
-  initialData?: IPatientDataType;
+  initialData?: IPatientDataType | TParentDataType;
   populateFromJhn?: {
     jhn: string;
     organization_id: string;
@@ -79,48 +74,39 @@ const PatientDataSearch = ({
   const [ramqSearchDone, setRamqSearchDone] = useState(initialRamqSearchDone);
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
-  const updateFormFromPatient = (form: FormInstance, patient?: IFormPatient) => {
+  const updateFormFromPatient = (form: FormInstance, patient?: IHybridPatientForm) => {
     if (patient && !isEmpty(patient)) {
-      const fields: FieldData[] = [];
-
-      if (patient.ramq) {
-        fields.push({
-          name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
-          value: formatRamq(patient.ramq),
-        });
-      }
-      if (patient.mrn && populateFromJhn?.organization_id === patient.ep) {
-        setFileSearchDone(true);
-        fields.push({
-          name: getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
-          value: formatRamq(patient.mrn),
-        });
-      }
-
-      if (patient.first_name) {
-        fields.push({
-          name: getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
-          value: patient.first_name,
-        });
-      }
-
-      if (patient.last_name) {
-        fields.push({
-          name: getName(PATIENT_DATA_FI_KEY.LAST_NAME),
-          value: patient.last_name,
-        });
-      }
-
-      fields.push(
+      const fields = [
         {
-          name: getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+          name: getName('first_name' satisfies keyof IPatientDataType),
+          value: patient.first_name,
+        },
+        {
+          name: getName('last_name' satisfies keyof IPatientDataType),
+          value: patient.last_name,
+        },
+        {
+          name: getName('birth_date' satisfies keyof IPatientDataType),
           value: format(new Date(patient.birth_date + TIME), INPUT_DATE_OUTPUT_FORMAT),
         },
         {
-          name: getName(PATIENT_DATA_FI_KEY.SEX),
-          value: patient?.gender,
+          name: getName('sex' satisfies keyof IPatientDataType),
+          value: patient?.sex?.toUpperCase(),
         },
-      );
+      ];
+
+      if (patient.jhn)
+        fields.push({
+          name: getName('jhn' satisfies keyof IPatientDataType),
+          value: formatRamq(patient.jhn),
+        });
+
+      if (patient.mrn && populateFromJhn?.organization_id === patient.organization_id) {
+        fields.push({
+          name: getName('mrn' satisfies keyof IPatientDataType),
+          value: formatRamq(patient.mrn),
+        });
+      }
 
       form.setFields(fields);
     }
@@ -130,13 +116,13 @@ const PatientDataSearch = ({
   useEffect(() => setRamqSearchDone(initialRamqSearchDone), [initialRamqSearchDone]);
 
   useEffect(
-    () => onRamqSearchStateChange && onRamqSearchStateChange(ramqSearchDone),
+    () => onRamqSearchStateChange?.(ramqSearchDone),
     // eslint-disable-next-line
     [ramqSearchDone],
   );
 
   useEffect(
-    () => onFileSearchStateChange && onFileSearchStateChange(fileSearchDone),
+    () => onFileSearchStateChange?.(fileSearchDone),
     // eslint-disable-next-line
     [fileSearchDone],
   );
@@ -144,31 +130,40 @@ const PatientDataSearch = ({
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
       setFileSearchDone(!!(initialData.no_mrn || initialData.mrn));
-      setRamqSearchDone(!!(initialData.no_ramq || initialData.ramq));
-      setInitialValues(form, getName, initialData, PATIENT_DATA_FI_KEY);
+      setRamqSearchDone(!!(initialData.no_jhn || initialData.jhn));
+      setInitialValues(
+        form,
+        getName,
+        initialData,
+        Object.keys(initialData).filter((key) => !['status', 'reason'].includes(key)),
+      );
 
       // Populate from JHN if available
       if (populateFromJhn) {
         setFieldValue(
           form,
-          getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
+          getName('organization_id' satisfies keyof IPatientDataType),
           populateFromJhn.organization_id,
         );
-        setFieldValue(form, getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER), populateFromJhn.jhn);
-        const ramqData = extractBirthDateAndSexFromRamq(
+        setFieldValue(form, getName('jhn' satisfies keyof IPatientDataType), populateFromJhn.jhn);
+        const jhnData = extractBirthDateAndSexFromRamq(
           populateFromJhn.jhn.replace(/\s/g, ''),
           INPUT_DATE_OUTPUT_FORMAT,
         );
-        if (ramqData.birthDate) {
-          setFieldValue(form, getName(PATIENT_DATA_FI_KEY.BIRTH_DATE), ramqData.birthDate);
-          setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
+        if (jhnData.birthDate) {
+          setFieldValue(
+            form,
+            getName('birth_date' satisfies keyof IPatientDataType),
+            jhnData.birthDate,
+          );
+          setFieldValue(form, getName('sex' satisfies keyof IPatientDataType), jhnData.sex);
         }
         HybridApi.searchPatients({ jhn: populateFromJhn.jhn.replace(/\s/g, '') }).then(
           ({ data }) => {
             const motherData = data?.patients?.[0];
             setRamqSearchDone(true);
             if (!motherData) return;
-            updateFormFromPatient(form, hybridToFormPatient(motherData));
+            updateFormFromPatient(form, motherData);
           },
         );
       }
@@ -181,14 +176,14 @@ const PatientDataSearch = ({
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => (
           <Form.Item
-            name={getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)}
+            name={getName('organization_id' satisfies keyof IPatientDataType)}
             label={intl.get('prescribing.institution')}
             rules={defaultFormItemsRules}
           >
             <Radio.Group
               disabled={
-                getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) ||
-                getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) ||
+                getFieldValue(getName('no_mrn' satisfies keyof IPatientDataType)) ||
+                getFieldValue(getName('no_jhn' satisfies keyof IPatientDataType)) ||
                 fileSearchDone
               }
             >
@@ -205,12 +200,12 @@ const PatientDataSearch = ({
         <Form.Item noStyle shouldUpdate>
           {({ getFieldValue }) => (
             <>
-              <SearchOrNoneFormItem<IHybridFormPatients>
+              <SearchOrNoneFormItem<{ patients: IHybridPatientForm[] }>
                 disableReset
                 form={form}
                 noReset
                 inputFormItemProps={{
-                  name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                  name: getName('jhn' satisfies keyof IPatientDataType),
                   rules: [
                     {
                       required: true,
@@ -243,7 +238,7 @@ const PatientDataSearch = ({
                   placeholder: 'AAAA 0000 0000',
                   onSearch: (value, search) => {
                     const fixedRamq = value.replace(/\s/g, '');
-                    resetFieldError(form, getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER));
+                    resetFieldError(form, getName('jhn' satisfies keyof IPatientDataType));
                     if (
                       extractBirthDateAndSexFromRamq(fixedRamq, INPUT_DATE_OUTPUT_FORMAT)
                         .birthDate &&
@@ -253,7 +248,7 @@ const PatientDataSearch = ({
                     } else {
                       setFieldError(
                         form,
-                        getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                        getName('jhn' satisfies keyof IPatientDataType),
                         intl.get('ramq.number.invalid'),
                       );
                     }
@@ -261,12 +256,12 @@ const PatientDataSearch = ({
                   onChange: (event) =>
                     setFieldValue(
                       form,
-                      getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                      getName('jhn' satisfies keyof IPatientDataType),
                       formatRamq(event.currentTarget.value),
                     ),
                 }}
                 checkboxFormItemProps={{
-                  name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
+                  name: getName('no_jhn' satisfies keyof IPatientDataType),
                   title:
                     parentKey === 'patient' ? intl.get('no.ramq.or.new.born') : intl.get('no.ramq'),
                 }}
@@ -274,46 +269,50 @@ const PatientDataSearch = ({
                   onResetRamq && onResetRamq();
                   setRamqSearchDone(false);
                   form.resetFields([
-                    getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
-                    getName(PATIENT_DATA_FI_KEY.LAST_NAME),
-                    getName(PATIENT_DATA_FI_KEY.SEX),
+                    getName('first_name' satisfies keyof IPatientDataType),
+                    getName('last_name' satisfies keyof IPatientDataType),
+                    getName('sex' satisfies keyof IPatientDataType),
                   ]);
                   dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                 }}
-                onSearchDone={(values, searchValue) => {
-                  if (values?.patients && Array.isArray(values?.patients)) {
-                    if (values.patients.length === 0 && searchValue) {
-                      const ramqData = extractBirthDateAndSexFromRamq(
-                        searchValue,
-                        INPUT_DATE_OUTPUT_FORMAT,
-                      );
+                onSearchDone={(value, searchValue) => {
+                  const patients = value?.patients;
+                  if (!patients) return;
+                  if (!patients.length && searchValue) {
+                    const ramqData = extractBirthDateAndSexFromRamq(
+                      searchValue,
+                      INPUT_DATE_OUTPUT_FORMAT,
+                    );
 
-                      if (ramqData.birthDate) {
-                        setFieldValue(
-                          form,
-                          getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
-                          ramqData.birthDate,
-                        );
-                        setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
-                      }
-                    }
-                    if (
-                      isNewFileNumber &&
-                      values.patients.filter(
-                        (v) =>
-                          v.organization_id ===
-                          getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)),
-                      ).length > 0
-                    ) {
-                      setFieldError(
+                    if (ramqData.birthDate) {
+                      setFieldValue(
                         form,
-                        getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
-                        intl.get('cant.have.two.file.number.same.patient'),
+                        getName('birth_date' satisfies keyof IPatientDataType),
+                        ramqData.birthDate,
                       );
-                    } else {
-                      updateFormFromPatient(form, hybridToFormPatient(values.patients[0]));
-                      setRamqSearchDone(true);
+                      setFieldValue(
+                        form,
+                        getName('sex' satisfies keyof IPatientDataType),
+                        ramqData.sex?.toUpperCase(),
+                      );
                     }
+                  }
+                  if (
+                    isNewFileNumber &&
+                    patients.find(
+                      (p) =>
+                        p.organization_id ===
+                        getFieldValue(getName('organization_id' satisfies keyof IPatientDataType)),
+                    )
+                  ) {
+                    setFieldError(
+                      form,
+                      getName('jhn' satisfies keyof IPatientDataType),
+                      intl.get('cant.have.two.file.number.same.patient'),
+                    );
+                  } else {
+                    updateFormFromPatient(form, patients[0]);
+                    setRamqSearchDone(true);
                   }
                 }}
                 apiPromise={(value) =>
@@ -329,12 +328,12 @@ const PatientDataSearch = ({
       )}
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) =>
-          getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)) ? (
-            <SearchOrNoneFormItem<IHybridFormPatient>
-              disableReset={!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.FILE_NUMBER]}
+          getFieldValue(getName('organization_id' satisfies keyof IPatientDataType)) ? (
+            <SearchOrNoneFormItem<IHybridPatientForm>
+              disableReset={!!prescriptionId && !!initialData?.mrn}
               form={form}
               inputFormItemProps={{
-                name: getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                name: getName('mrn' satisfies keyof IPatientDataType),
                 rules: [
                   {
                     required: true,
@@ -364,7 +363,7 @@ const PatientDataSearch = ({
                   if (hasSpecialCharacters(fixedFileNumber)) {
                     setFieldError(
                       form,
-                      getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                      getName('mrn' satisfies keyof IPatientDataType),
                       intl.get('must.not.contain.special.characters'),
                     );
                   } else {
@@ -373,7 +372,7 @@ const PatientDataSearch = ({
                 },
               }}
               checkboxFormItemProps={{
-                name: getName(PATIENT_DATA_FI_KEY.NO_FILE),
+                name: getName('no_mrn' satisfies keyof IPatientDataType),
                 title: intl.get('no.folder.number'),
               }}
               checkboxProps={{
@@ -382,58 +381,56 @@ const PatientDataSearch = ({
               onReset={() => {
                 if (populateFromJhn) {
                   setFileSearchDone(false);
-                  form.resetFields([getName(PATIENT_DATA_FI_KEY.NO_FILE)]);
+                  form.resetFields([getName('no_mrn' satisfies keyof IPatientDataType)]);
                 } else {
                   setFileSearchDone(false);
                   setRamqSearchDone(false);
                   form.resetFields([
-                    getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
-                    getName(PATIENT_DATA_FI_KEY.LAST_NAME),
-                    getName(PATIENT_DATA_FI_KEY.SEX),
-                    getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
-                    getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                    getName(PATIENT_DATA_FI_KEY.NO_FILE),
-                    getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                    getName('first_name' satisfies keyof IPatientDataType),
+                    getName('last_name' satisfies keyof IPatientDataType),
+                    getName('sex' satisfies keyof IPatientDataType),
+                    getName('jhn' satisfies keyof IPatientDataType),
+                    getName('no_jhn' satisfies keyof IPatientDataType),
+                    getName('no_mrn' satisfies keyof IPatientDataType),
+                    getName('birth_date' satisfies keyof IPatientDataType),
                   ]);
                 }
               }}
-              onSearchDone={(value) => {
-                if (
-                  populateFromJhn &&
-                  value &&
-                  hybridToFormPatient(value)?.ramq !== populateFromJhn?.jhn
-                ) {
+              onSearchDone={(patientFound) => {
+                if (populateFromJhn && patientFound && patientFound?.jhn !== populateFromJhn?.jhn) {
                   setFieldError(
                     form,
-                    getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                    getName('mrn' satisfies keyof IPatientDataType),
                     intl.get('cant.have.two.file.number.same.patient'),
                   );
                 } else {
-                  updateFormFromPatient(form, hybridToFormPatient(value));
+                  updateFormFromPatient(form, patientFound);
                   setFileSearchDone(true);
-                  setIsNewFileNumber(isEmpty(value));
+                  setIsNewFileNumber(isEmpty(patientFound));
 
-                  if (value && value.jhn) {
+                  if (patientFound && patientFound.jhn) {
                     setRamqSearchDone(true);
-                  } else if (value && Object.keys(value).length > 0 && !value.jhn) {
-                    setFieldValue(form, getName(PATIENT_DATA_FI_KEY.NO_RAMQ), 'true');
+                  } else if (patientFound && !patientFound.jhn) {
+                    setFieldValue(form, getName('no_jhn' satisfies keyof IPatientDataType), 'true');
                   }
                 }
               }}
               apiPromise={(value) =>
                 HybridApi.searchPatient({
                   organization_id: getFieldValue(
-                    getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
+                    getName('organization_id' satisfies keyof IPatientDataType),
                   ),
                   mrn: value,
                 })
               }
               disabled={
                 populateFromJhn
-                  ? fileSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE))
+                  ? fileSearchDone &&
+                    !getFieldValue(getName('no_mrn' satisfies keyof IPatientDataType))
                   : ramqSearchDone ||
-                    getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) ||
-                    (fileSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)))
+                    getFieldValue(getName('no_jhn' satisfies keyof IPatientDataType)) ||
+                    (fileSearchDone &&
+                      !getFieldValue(getName('no_mrn' satisfies keyof IPatientDataType)))
               }
             />
           ) : null
@@ -442,17 +439,17 @@ const PatientDataSearch = ({
       {!populateFromJhn && (
         <Form.Item noStyle shouldUpdate>
           {({ getFieldValue }) =>
-            getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) || fileSearchDone ? (
+            getFieldValue(getName('no_mrn' satisfies keyof IPatientDataType)) || fileSearchDone ? (
               <>
-                <SearchOrNoneFormItem<IHybridFormPatients>
+                <SearchOrNoneFormItem<{ patients: IHybridPatientForm[] }>
                   disableReset={
                     !!prescriptionId &&
                     ((!isNewFileNumber && ramqSearchDone) ||
-                      !!initialData?.[PATIENT_DATA_FI_KEY.RAMQ_NUMBER])
+                      !!initialData?.['jhn' satisfies keyof IPatientDataType])
                   }
                   form={form}
                   inputFormItemProps={{
-                    name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                    name: getName('jhn' satisfies keyof IPatientDataType),
                     rules: [
                       {
                         required: true,
@@ -485,7 +482,7 @@ const PatientDataSearch = ({
                     placeholder: 'AAAA 0000 0000',
                     onSearch: (value, search) => {
                       const fixedRamq = value.replace(/\s/g, '');
-                      resetFieldError(form, getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER));
+                      resetFieldError(form, getName('jhn' satisfies keyof IPatientDataType));
                       if (
                         extractBirthDateAndSexFromRamq(fixedRamq, INPUT_DATE_OUTPUT_FORMAT)
                           .birthDate &&
@@ -495,7 +492,7 @@ const PatientDataSearch = ({
                       } else {
                         setFieldError(
                           form,
-                          getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                          getName('jhn' satisfies keyof IPatientDataType),
                           intl.get('ramq.number.invalid'),
                         );
                       }
@@ -503,17 +500,17 @@ const PatientDataSearch = ({
                     onChange: (event) =>
                       setFieldValue(
                         form,
-                        getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                        getName('jhn' satisfies keyof IPatientDataType),
                         formatRamq(event.currentTarget.value),
                       ),
                   }}
                   checkboxFormItemProps={{
-                    name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                    className: getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE))
+                    name: getName('no_jhn' satisfies keyof IPatientDataType),
+                    className: getFieldValue(getName('no_mrn' satisfies keyof IPatientDataType))
                       ? styles.checkboxHidden
                       : '',
                     title:
-                      parentKey === STEPS_ID.PATIENT_IDENTIFICATION
+                      parentKey === STEPS_ID.PROBAND_IDENTIFICATION
                         ? intl.get('no.ramq.or.new.born')
                         : intl.get('no.ramq'),
                   }}
@@ -521,13 +518,13 @@ const PatientDataSearch = ({
                     onResetRamq && onResetRamq();
                     setRamqSearchDone(false);
                     form.resetFields([
-                      getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
-                      getName(PATIENT_DATA_FI_KEY.LAST_NAME),
-                      getName(PATIENT_DATA_FI_KEY.SEX),
-                      getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                      getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                      getName('first_name' satisfies keyof IPatientDataType),
+                      getName('last_name' satisfies keyof IPatientDataType),
+                      getName('sex' satisfies keyof IPatientDataType),
+                      getName('no_jhn' satisfies keyof IPatientDataType),
+                      getName('birth_date' satisfies keyof IPatientDataType),
                     ]);
-                    if (parentKey === STEPS_ID.PATIENT_IDENTIFICATION)
+                    if (parentKey === STEPS_ID.PROBAND_IDENTIFICATION)
                       dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                   }}
                   onSearchDone={(values, searchValue) => {
@@ -541,10 +538,14 @@ const PatientDataSearch = ({
                         if (ramqData.birthDate) {
                           setFieldValue(
                             form,
-                            getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                            getName('birth_date' satisfies keyof IPatientDataType),
                             ramqData.birthDate,
                           );
-                          setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
+                          setFieldValue(
+                            form,
+                            getName('sex' satisfies keyof IPatientDataType),
+                            ramqData.sex,
+                          );
                         }
                       }
                       if (
@@ -552,16 +553,18 @@ const PatientDataSearch = ({
                         values.patients.filter(
                           (v) =>
                             v.organization_id ===
-                            getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)),
+                            getFieldValue(
+                              getName('organization_id' satisfies keyof IPatientDataType),
+                            ),
                         ).length > 0
                       ) {
                         setFieldError(
                           form,
-                          getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                          getName('jhn' satisfies keyof IPatientDataType),
                           intl.get('cant.have.two.file.number.same.patient'),
                         );
                       } else {
-                        updateFormFromPatient(form, hybridToFormPatient(values.patients[0]));
+                        updateFormFromPatient(form, values.patients[0]);
                         setRamqSearchDone(true);
                       }
                     }
@@ -572,8 +575,10 @@ const PatientDataSearch = ({
                     })
                   }
                   disabled={
-                    (ramqSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ||
-                    (prescriptionId && getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)))
+                    (ramqSearchDone &&
+                      !getFieldValue(getName('no_jhn' satisfies keyof IPatientDataType))) ||
+                    (prescriptionId &&
+                      getFieldValue(getName('no_jhn' satisfies keyof IPatientDataType)))
                   }
                 />
               </>
@@ -584,10 +589,10 @@ const PatientDataSearch = ({
 
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) =>
-          getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) || ramqSearchDone ? (
+          getFieldValue(getName('no_jhn' satisfies keyof IPatientDataType)) || ramqSearchDone ? (
             <>
               <Form.Item
-                name={getName(PATIENT_DATA_FI_KEY.LAST_NAME)}
+                name={getName('last_name' satisfies keyof IPatientDataType)}
                 label={intl.get('last.name')}
                 rules={[
                   ...defaultFormItemsRules,
@@ -599,7 +604,7 @@ const PatientDataSearch = ({
                 <Input />
               </Form.Item>
               <Form.Item
-                name={getName(PATIENT_DATA_FI_KEY.FIRST_NAME)}
+                name={getName('first_name' satisfies keyof IPatientDataType)}
                 label={intl.get('first.name')}
                 rules={[
                   ...defaultFormItemsRules,
@@ -613,13 +618,13 @@ const PatientDataSearch = ({
               <InputDateFormItem
                 formItemProps={{
                   label: intl.get('birthdate'),
-                  name: getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                  name: getName('birth_date' satisfies keyof IPatientDataType),
                   required: true,
                 }}
                 moreRules={[dateNotLaterThanTodayRule]}
               />
               <Form.Item
-                name={getName(PATIENT_DATA_FI_KEY.SEX)}
+                name={getName('sex' satisfies keyof IPatientDataType)}
                 label={intl.get('sex')}
                 rules={defaultFormItemsRules}
                 className="noMarginBtm"

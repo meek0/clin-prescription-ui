@@ -26,7 +26,7 @@ export const setFieldError = (form: FormInstance, namePath: NamePath, error: str
 export const setFieldValue = (
   form: FormInstance,
   namePath: NamePath,
-  value: string | any[] | undefined,
+  value: string | any[] | undefined | boolean,
 ) =>
   form.setFields([
     {
@@ -40,11 +40,11 @@ export const setInitialValues = (
   form: FormInstance,
   getName: (...key: IGetNamePathParams) => NamePath,
   initialData: any,
-  keyEnum: any,
+  keyEnum?: any,
 ) => {
   form.setFields(
     Object.entries(initialData)
-      .filter((value) => isEnumHasField(keyEnum, value[0]))
+      .filter((value) => !keyEnum || isEnumHasField(keyEnum, value[0]))
       .map((value) => ({
         name: getName(value[0]),
         value: value[1],

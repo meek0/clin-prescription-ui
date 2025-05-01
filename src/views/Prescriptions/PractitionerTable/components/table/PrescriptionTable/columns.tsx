@@ -4,7 +4,7 @@ import { UserOutlined } from '@ant-design/icons/lib/icons';
 import { ProColumnType } from '@ferlab/ui/core/components/ProTable/types';
 import { Button, Tooltip } from 'antd';
 import { HybridApi } from 'api/hybrid';
-import { HybridPrescription } from 'api/hybrid/models';
+import { HybridAnalysis } from 'api/hybrid/models';
 import { AnalysisResult, ITableAnalysisResult } from 'graphql/prescriptions/models/Prescription';
 import { capitalize } from 'lodash';
 import DownloadButton from 'views/Prescriptions/components/DownloadDocument';
@@ -156,6 +156,6 @@ async function openDraft(prescription_id: string) {
         code: prescription?.analysis_code as AnalysisType,
       }),
     );
-    store.dispatch(prescriptionFormActions.openFormForDraft(prescription as HybridPrescription));
+    store.dispatch(prescriptionFormActions.openFormFromDraft(prescription as HybridAnalysis));
   }
 }

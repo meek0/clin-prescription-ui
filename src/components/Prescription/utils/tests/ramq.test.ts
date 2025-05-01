@@ -17,7 +17,7 @@ describe('extract ramq', () => {
   });
 
   test('should return the good sex', () => {
-    expect(extractBirthDateAndSexFromRamq('TEST55072223', 'yyyy-MM-dd').sex).toEqual('male');
-    expect(extractBirthDateAndSexFromRamq('TEST55572223', 'yyyy-MM-dd').sex).toEqual('female');
+    expect(extractBirthDateAndSexFromRamq('TEST55072223', 'yyyy-MM-dd').sex).toEqual('MALE');
+    expect(extractBirthDateAndSexFromRamq('TEST55572223', 'yyyy-MM-dd').sex).toEqual('FEMALE');
   });
 });

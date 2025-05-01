@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Checkbox, Form, Input, Radio, Space } from 'antd';
+import { HybridPatientFoetus } from 'api/hybrid/models';
 import { isEmpty } from 'lodash';
 
 import RadioDateFormItem from 'components/Form/RadioDateFormItem';
@@ -10,7 +11,6 @@ import {
   dateNotEarlierThanTodayRule,
   dateNotLaterThanTodayRule,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -21,7 +21,8 @@ import { formatRamq, isRamqValid } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
-import { SexValue } from 'utils/commonTypes';
+
+import { TProbandDataType } from '../types';
 
 import GestationalAge from './GestationalAge';
 
@@ -29,88 +30,67 @@ import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
   showNewBornSection?: boolean;
-  initialData?: IAddInfoDataContent;
+  initialData?: TProbandDataType['foetus'];
 };
 
 export enum GestationalAgeValues {
-  DDM = 'ddm',
-  DPA = 'dpa',
-  DEAD_FOETUS = 'deceased',
+  DDM = 'DDM',
+  DPA = 'DPA',
+  DEAD_FOETUS = 'DECEASED',
 }
 
 export enum ADD_INFO_FI_KEY {
-  GESTATIONAL_AGE = 'gestational_age',
-  GESTATIONAL_DATE_DDM = 'gestational_date',
-  GESTATIONAL_DATE_DPA = 'gestational_date',
   PRENATAL_DIAGNOSIS = 'is_prenatal_diagnosis',
-  FOETUS_SEX = 'foetus_gender',
   NEW_BORN = 'is_new_born',
-  MOTHER_RAMQ_NUMBER = 'mother_ramq',
 }
 
-export const additionalInfoKey = 'additional_info';
-
-export interface IAddInfoDataType {
-  [additionalInfoKey]?: IAddInfoDataContent;
-}
-
-export interface IAddInfoDataContent {
-  [ADD_INFO_FI_KEY.GESTATIONAL_AGE]: GestationalAgeValues;
-  [ADD_INFO_FI_KEY.GESTATIONAL_DATE_DDM]: string;
-  [ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA]: string;
-  [ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS]: boolean;
-  [ADD_INFO_FI_KEY.FOETUS_SEX]: SexValue;
-  [ADD_INFO_FI_KEY.NEW_BORN]: boolean;
-  [ADD_INFO_FI_KEY.MOTHER_RAMQ_NUMBER]: string;
-}
-
-const AdditionalInformation = ({
-  form,
-  parentKey,
-  showNewBornSection = false,
-  initialData,
-}: OwnProps) => {
+const FoetusInfos = ({ form, parentKey, showNewBornSection = false, initialData }: OwnProps) => {
   const [localShowNewBorn, setLocalShowNewBorn] = useState(showNewBornSection);
   const [gestationalAgeDPA, setGestationalAgeDPA] = useState<number | undefined>(undefined);
   const [gestationalAgeDDM, setGestationalAgeDDM] = useState<number | undefined>(undefined);
   const { isDraft } = usePrescriptionForm();
 
   const patientSexField = Form.useWatch(
-    [STEPS_ID.PATIENT_IDENTIFICATION, PATIENT_DATA_FI_KEY.SEX],
+    [STEPS_ID.PROBAND_IDENTIFICATION, 'sex' satisfies keyof TProbandDataType],
     form,
   );
 
   const getName = (...key: IGetNamePathParams) =>
-    getNamePath([parentKey as string, additionalInfoKey], key);
+    getNamePath([parentKey as string, 'foetus' satisfies keyof TProbandDataType], key);
 
   useEffect(() => {
     if (localShowNewBorn !== showNewBornSection) {
       setLocalShowNewBorn(showNewBornSection);
+    }
+    if (!showNewBornSection) {
+      form.setFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN), false);
     }
     // eslint-disable-next-line
   }, [showNewBornSection]);
 
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
-      if (initialData.gestational_age === GestationalAgeValues.DDM) {
+      if (initialData.gestational_method)
+        form.setFieldValue(getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS), true);
+      if (initialData.gestational_method === GestationalAgeValues.DDM) {
         setGestationalAgeDDM(
           calculateGestationalAgeFromDDM(new Date(initialData.gestational_date)),
         );
       }
 
-      if (initialData.gestational_age === GestationalAgeValues.DPA) {
+      if (initialData.gestational_method === GestationalAgeValues.DPA) {
         setGestationalAgeDPA(
           calculateGestationalAgeFromDPA(new Date(initialData.gestational_date)),
         );
       }
 
-      setInitialValues(form, getName, initialData, ADD_INFO_FI_KEY);
+      setInitialValues(form, getName, initialData);
     }
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    if (patientSexField == 'male') {
+    if (patientSexField == 'MALE') {
       form.setFieldValue(getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS), false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +105,7 @@ const AdditionalInformation = ({
       >
         <Checkbox
           disabled={
-            form.getFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN)) || patientSexField == 'male'
+            form.getFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN)) || patientSexField == 'MALE'
           }
         >
           {intl.get('yes')}
@@ -141,7 +121,7 @@ const AdditionalInformation = ({
           getFieldValue(getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS)) ? (
             <>
               <Form.Item
-                name={getName(ADD_INFO_FI_KEY.FOETUS_SEX)}
+                name={getName('sex' satisfies keyof HybridPatientFoetus)}
                 label={intl.get('prescription.patient.identification.sexe.foetus')}
                 rules={[{ required: true }]}
               >
@@ -149,7 +129,7 @@ const AdditionalInformation = ({
               </Form.Item>
               <Form.Item
                 label={intl.get('prescription.patient.identification.gestational.age')}
-                name={getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE)}
+                name={getName('gestational_method' satisfies keyof HybridPatientFoetus)}
                 rules={[{ required: true }]}
               >
                 <Radio.Group
@@ -157,11 +137,17 @@ const AdditionalInformation = ({
                     if (value.target.name === GestationalAgeValues.DDM) {
                       setGestationalAgeDDM(undefined);
                       setGestationalAgeDPA(undefined);
-                      setFieldValue(getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DDM), undefined);
+                      setFieldValue(
+                        getName('gestational_date' satisfies keyof HybridPatientFoetus),
+                        undefined,
+                      );
                     } else {
                       setGestationalAgeDPA(undefined);
                       setGestationalAgeDDM(undefined);
-                      setFieldValue(getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA), undefined);
+                      setFieldValue(
+                        getName('gestational_date' satisfies keyof HybridPatientFoetus),
+                        undefined,
+                      );
                     }
                   }}
                 >
@@ -174,7 +160,7 @@ const AdditionalInformation = ({
                       }}
                       dateInputProps={{
                         formItemProps: {
-                          name: getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DDM),
+                          name: getName('gestational_date' satisfies keyof HybridPatientFoetus),
                           required: true,
                         },
                         extra: <GestationalAge value={gestationalAgeDDM} />,
@@ -187,7 +173,9 @@ const AdditionalInformation = ({
                         },
                       }}
                       moreDateRules={[dateNotLaterThanTodayRule]}
-                      parentFormItemName={getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE)}
+                      parentFormItemName={getName(
+                        'gestational_method' satisfies keyof HybridPatientFoetus,
+                      )}
                     />
                     <RadioDateFormItem
                       title={intl.get('prescription.patient.identification.last.dpa.date')}
@@ -197,7 +185,7 @@ const AdditionalInformation = ({
                       }}
                       dateInputProps={{
                         formItemProps: {
-                          name: getName(ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA),
+                          name: getName('gestational_date' satisfies keyof HybridPatientFoetus),
                           required: true,
                         },
                         extra: <GestationalAge value={gestationalAgeDPA} />,
@@ -210,7 +198,9 @@ const AdditionalInformation = ({
                         },
                       }}
                       moreDateRules={!isDraft ? [dateNotEarlierThanTodayRule] : []}
-                      parentFormItemName={getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE)}
+                      parentFormItemName={getName(
+                        'gestational_method' satisfies keyof HybridPatientFoetus,
+                      )}
                     />
                     <Radio value={GestationalAgeValues.DEAD_FOETUS}>
                       {intl.get('prescription.patient.identification.foetus.dead')}
@@ -243,7 +233,7 @@ const AdditionalInformation = ({
               getFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN)) ? (
                 <Form.Item
                   label={intl.get('prescription.patient.identification.mother.ramq')}
-                  name={getName(ADD_INFO_FI_KEY.MOTHER_RAMQ_NUMBER)}
+                  name={getName('mother_jhn' satisfies keyof HybridPatientFoetus)}
                   rules={[
                     {
                       required: true,
@@ -265,7 +255,7 @@ const AdditionalInformation = ({
                     onChange={(e) =>
                       setFieldValue(
                         form,
-                        getName(ADD_INFO_FI_KEY.MOTHER_RAMQ_NUMBER),
+                        getName('mother_jhn' satisfies keyof HybridPatientFoetus),
                         formatRamq(e.currentTarget.value),
                       )
                     }
@@ -280,4 +270,4 @@ const AdditionalInformation = ({
   );
 };
 
-export default AdditionalInformation;
+export default FoetusInfos;

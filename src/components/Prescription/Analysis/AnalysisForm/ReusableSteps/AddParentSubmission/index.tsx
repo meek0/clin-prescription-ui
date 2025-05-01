@@ -17,11 +17,6 @@ import intl from 'react-intl-universal';
 
 import styles from './index.module.css';
 
-export enum SUBMISSION_REVIEW_FI_KEY {
-  RESPONSIBLE_DOCTOR = 'responsible_doctor',
-  GENERAL_COMMENT = 'general_comment',
-}
-
 const AddParentSubmission = () => {
   const FORM_NAME = STEPS_ID.SUBMISSION;
   const [form] = Form.useForm();

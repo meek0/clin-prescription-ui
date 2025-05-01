@@ -1,268 +1,230 @@
 import {
+  FOETUS_TYPE,
+  HybridAnalysis,
   HybridPatient,
+  HybridPatientFoetusForm,
+  HybridPatientNotPresent,
   HybridPatientPresent,
-  HybridPatientSign,
-  HybridPrescription,
 } from 'api/hybrid/models';
 
-import { TClinicalSignsDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ClinicalSigns';
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
   ClinicalStatusValue,
-  EnterInfoMomentValue,
-  PARENT_DATA_FI_KEY,
   TParentDataType,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
-import { TPatientFormDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification';
-import {
-  ADD_INFO_FI_KEY,
-  additionalInfoKey,
-} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/AdditionalInformation';
-import {
-  CLINICAL_SIGNS_FI_KEY,
-  CLINICAL_SIGNS_ITEM_KEY,
-  IClinicalSignsDataType,
-} from 'components/Prescription/components/ClinicalSignsSelect/types';
-import { IClinicalSignItem } from 'components/Prescription/components/ClinicalSignsSelect/types';
-import {
-  HEALTH_CONDITION_ITEM_KEY,
-  HISTORY_AND_DIAG_FI_KEY,
-} from 'components/Prescription/components/HistoryAndDiagnosisData';
-import {
-  IParaclinicalExamItem,
-  IParaclinicalExamsDataType,
-  PARACLINICAL_EXAM_ITEM_KEY,
-  PARACLINICAL_EXAMS_FI_KEY,
-  ParaclinicalExamStatus,
-} from 'components/Prescription/components/ParaclinicalExamsSelect';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
+import { TProbandDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/types';
+import { IClinicalSignsDataType } from 'components/Prescription/components/ClinicalSignsSelect/types';
+import { ParaclinicalExamStatus } from 'components/Prescription/components/ParaclinicalExamsSelect/types';
+import { IPatientDataType } from 'components/Prescription/components/PatientDataSearch/types';
 
 import { TCompleteAnalysis } from './types';
 
-// eslint-disable-next-line complexity
-export function cleanAnalysisData(analysis: TCompleteAnalysis): HybridPrescription {
+export function getAnalysisFromFormData(analysis: TCompleteAnalysis): HybridAnalysis {
   const analysisCopy: TCompleteAnalysis = JSON.parse(JSON.stringify(analysis));
-  if (analysisCopy.submission)
-    analysisCopy.analysis.comment = analysisCopy.submission.general_comment;
-
-  if (analysisCopy.paraclinical_exams) {
-    analysisCopy.paraclinical_exams = cleanParaclinicalExams(analysisCopy.paraclinical_exams);
-  }
-
-  if (analysisCopy.clinical_signs) {
-    analysisCopy.clinical_signs = cleanClinicalSigns(analysisCopy.clinical_signs);
-  }
-
-  if (analysisCopy.history_and_diagnosis && !Object.keys(analysisCopy.history_and_diagnosis).length)
-    delete analysisCopy.history_and_diagnosis;
-
-  if (analysisCopy.mother && !Object.keys(analysisCopy.mother).length) delete analysisCopy.mother;
-
-  if (analysisCopy.mother?.signs) {
-    analysisCopy.mother = cleanClinicalSigns(analysisCopy.mother);
-  }
-
-  if (analysisCopy.mother?.ramq) {
-    analysisCopy.mother.ramq = analysisCopy.mother.ramq.replace(/\s/g, '');
-  }
-
-  if (analysisCopy.father && !Object.keys(analysisCopy.father).length) delete analysisCopy.father;
-
-  if (analysisCopy.father?.signs) {
-    analysisCopy.father = cleanClinicalSigns(analysisCopy.father);
-  }
-
-  if (analysisCopy.father?.ramq) {
-    analysisCopy.father.ramq = analysisCopy.father.ramq.replace(/\s/g, '');
-  }
-
-  if (analysisCopy.patient?.ramq) {
-    analysisCopy.patient.ramq = analysisCopy.patient.ramq.replace(/\s/g, '');
-  }
-
-  if (analysisCopy.patient?.additional_info?.mother_ramq) {
-    analysisCopy.patient.additional_info.mother_ramq =
-      analysisCopy.patient.additional_info.mother_ramq.replace(/\s/g, '');
-  }
-
   const patients: HybridPatient[] = [];
 
-  const proband: HybridPatient = getPatientData(analysisCopy.patient!, 'PROBAND');
-  patients.push(proband);
+  // Get proband
+  if (analysisCopy.proband) {
+    const clinical = getFormsClinicalSigns(analysisCopy?.proband_clinical, true);
+    const proband = {
+      family_member: 'PROBAND',
+      ...cleanPatientFormData(analysisCopy.proband),
+      clinical,
+      para_clinical: analysisCopy.proband_paraclinical
+        ? {
+            exams: analysisCopy.proband_paraclinical.exams
+              .filter((exam) => exam.interpretation !== ParaclinicalExamStatus.NOT_DONE)
+              .map((exam) => ({
+                code: exam.code,
+                interpretation: exam.interpretation,
+                values: exam.value ? [exam.value] : exam.values,
+              })),
+            other: analysisCopy.proband_paraclinical.other,
+          }
+        : undefined,
+    } as HybridPatientPresent;
 
-  // Add foetus or newborn data to proband
-  if (
-    analysisCopy[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.[
-      ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS
-    ] ||
-    analysisCopy[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.[ADD_INFO_FI_KEY.NEW_BORN]
-  ) {
-    const foetusData = analysisCopy[STEPS_ID.PATIENT_IDENTIFICATION][additionalInfoKey];
-    (proband as HybridPatientPresent).foetus = {
-      type: foetusData[ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS]
-        ? 'PRENATAL'
-        : foetusData[ADD_INFO_FI_KEY.NEW_BORN]
-        ? 'NEW_BORN'
-        : 'UNKNOWN',
-      sex: foetusData[ADD_INFO_FI_KEY.FOETUS_SEX]?.toUpperCase(),
-      gestational_method: foetusData[ADD_INFO_FI_KEY.GESTATIONAL_AGE]?.toUpperCase(),
-      gestational_date: foetusData[ADD_INFO_FI_KEY.GESTATIONAL_DATE_DPA],
-      mother_jhn: foetusData[ADD_INFO_FI_KEY.MOTHER_RAMQ_NUMBER],
-    };
+    // Foetus
+    if ((analysisCopy.proband?.foetus as HybridPatientFoetusForm)?.is_prenatal_diagnosis) {
+      proband!.foetus!.type = FOETUS_TYPE.PRENATAL;
+    } else if ((analysisCopy.proband?.foetus as HybridPatientFoetusForm)?.is_new_born) {
+      proband!.foetus!.type = FOETUS_TYPE.NEW_BORN;
+    }
+
+    patients.push(proband);
   }
 
-  // Add clinical signs to proband
-  if (analysisCopy[STEPS_ID.CLINICAL_SIGNS]?.[CLINICAL_SIGNS_FI_KEY.SIGNS].length) {
-    (proband as HybridPatientPresent).clinical = getClinicalSigns(
-      analysisCopy[STEPS_ID.CLINICAL_SIGNS],
-    );
+  // Parents
+  for (const familyMember of [STEPS_ID.MOTHER_IDENTIFICATION, STEPS_ID.FATHER_IDENTIFICATION]) {
+    const patientData: TParentDataType = analysisCopy[familyMember as keyof TCompleteAnalysis];
+    if (!patientData?.parent_clinical_status) continue;
+
+    const affected =
+      patientData.parent_clinical_status === ClinicalStatusValue.UNKNOWN
+        ? undefined
+        : patientData.parent_clinical_status === ClinicalStatusValue.AFFECTED;
+
+    const clinical = affected ? getFormsClinicalSigns(patientData) : undefined;
+
+    patients.push({
+      ...(cleanPatientFormData(patientData) as TParentDataType),
+      clinical,
+      affected,
+      family_member: familyMember.toUpperCase(),
+    });
   }
 
-  // Add para clinical signs to proband
-  if (
-    analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.EXAMS].length ||
-    analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS]?.length
-  ) {
-    (proband as HybridPatientPresent).para_clinical = {
-      exams: analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.EXAMS].length
-        ? analysisCopy[STEPS_ID.PARACLINICAL_EXAMS][PARACLINICAL_EXAMS_FI_KEY.EXAMS].map(
-            (exam) => ({
-              code: exam[PARACLINICAL_EXAM_ITEM_KEY.CODE],
-              interpretation: exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]?.toUpperCase(),
-              values: exam[PARACLINICAL_EXAM_ITEM_KEY.VALUES],
-            }),
-          )
-        : [],
-      other: analysisCopy[STEPS_ID.PARACLINICAL_EXAMS][PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS],
-    };
-  }
-
-  if (analysisCopy[STEPS_ID.MOTHER_IDENTIFICATION]) {
-    const motherData = analysisCopy[STEPS_ID.MOTHER_IDENTIFICATION];
-    patients.push(getParent(motherData, 'MOTHER'));
-  }
-
-  if (analysisCopy[STEPS_ID.FATHER_IDENTIFICATION]) {
-    const fatherData = analysisCopy[STEPS_ID.FATHER_IDENTIFICATION];
-    patients.push(getParent(fatherData, 'FATHER'));
-  }
-
-  const hybridPrescritpion: HybridPrescription = {
+  return {
     type: 'GERMLINE',
     analysis_code: analysisCopy.analysis?.panel_code,
     is_reflex: analysisCopy.analysis?.is_reflex,
-    inbreeding: analysisCopy.history_and_diagnosis?.[HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING],
-    comment: analysisCopy.analysis?.comment,
-    resident_supervisor_id: analysisCopy.analysis?.resident_supervisor,
-    history:
-      analysisCopy[STEPS_ID.HISTORY_AND_DIAGNOSIS]?.[
-        HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS
-      ]?.map((healthCondition) => ({
-        condition: healthCondition[HEALTH_CONDITION_ITEM_KEY.CONDITION],
-        parental_link_code: healthCondition[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK],
-      })) || [],
-    diagnosis_hypothesis:
-      analysisCopy.history_and_diagnosis?.[HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS],
-    ethnicity_codes: analysisCopy.history_and_diagnosis?.[
-      HISTORY_AND_DIAG_FI_KEY.ETHNICITY
-    ]?.filter((eth) => !!eth),
+    comment: analysisCopy.submission?.comment,
+    resident_supervisor_id: analysisCopy.analysis?.resident_supervisor_id,
+    history: [],
+    ...analysisCopy.history_and_diagnosis,
     patients,
   };
-
-  return hybridPrescritpion;
 }
 
-const cleanParaclinicalExams = (
-  paraclinicalData: IParaclinicalExamsDataType,
-): IParaclinicalExamsDataType => {
-  const exams: IParaclinicalExamItem[] = [];
-  paraclinicalData[PARACLINICAL_EXAMS_FI_KEY.EXAMS]?.forEach((exam) => {
-    if (exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION] !== ParaclinicalExamStatus.NOT_DONE)
-      exams.push({
-        [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]:
-          exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION],
-        [PARACLINICAL_EXAM_ITEM_KEY.CODE]: exam[PARACLINICAL_EXAM_ITEM_KEY.CODE],
-        [PARACLINICAL_EXAM_ITEM_KEY.VALUES]: exam[PARACLINICAL_EXAM_ITEM_KEY.VALUE]
-          ? [exam[PARACLINICAL_EXAM_ITEM_KEY.VALUE]]
-          : exam[PARACLINICAL_EXAM_ITEM_KEY.VALUES],
-      });
-  });
-  return {
-    ...paraclinicalData,
-    exams,
-  };
-};
+function cleanPatientFormData(patient: IPatientDataType | TProbandDataType) {
+  const cleanPatient: IPatientDataType | TProbandDataType = JSON.parse(JSON.stringify(patient));
 
-function cleanClinicalSigns<T extends TParentDataType | TClinicalSignsDataType>(
-  clinicalSigns: T,
-): T {
-  const { not_observed_signs, signs, ...rest } = clinicalSigns;
-  const cleanedObservedSigns =
-    signs?.filter((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true) || [];
-  const cleanedNotObservedSigns: IClinicalSignItem[] =
-    (not_observed_signs || [])?.map((sign) => ({
-      ...sign,
-      is_observed: false,
-    })) || [];
+  // Clean jhn
+  const cleanJhn = (jhn: string) => jhn.replace(/\s/g, '');
+  if (cleanPatient.jhn) cleanPatient.jhn = cleanJhn(cleanPatient.jhn);
+  if ((cleanPatient as TProbandDataType).foetus?.mother_jhn)
+    (cleanPatient as TProbandDataType).foetus!.mother_jhn = cleanJhn(
+      (cleanPatient as TProbandDataType).foetus!.mother_jhn!,
+    );
 
-  return {
-    ...rest,
-    signs: cleanedObservedSigns.concat(cleanedNotObservedSigns),
-  } as T;
+  // Remove fields not needed for the api
+  if ((cleanPatient as any).foetus && !Object.keys((cleanPatient as any).foetus).length)
+    delete (cleanPatient as any).foetus;
+  delete (cleanPatient as any).no_jhn;
+  delete (cleanPatient as any).no_mrn;
+  delete (cleanPatient as any).parent_clinical_status;
+  delete (cleanPatient as any).observed_signs;
+  delete (cleanPatient as any).not_observed_signs;
+  delete (cleanPatient as any).comment;
+  delete (cleanPatient as any).sequencings;
+
+  return cleanPatient;
 }
 
-function getPatientData(patient: TPatientFormDataType, family_member: string): HybridPatient {
+function getFormsClinicalSigns(
+  signsData?: IClinicalSignsDataType,
+  isProband = false,
+): HybridPatientPresent['clinical'] {
+  const observedSigns = (signsData?.observed_signs || []).filter((sign) => sign.observed);
+
+  if (!signsData || (isProband && !observedSigns.length)) return undefined;
+
   return {
-    first_name: patient[PATIENT_DATA_FI_KEY.FIRST_NAME],
-    last_name: patient[PATIENT_DATA_FI_KEY.LAST_NAME],
-    jhn: patient[PATIENT_DATA_FI_KEY.RAMQ_NUMBER],
-    mrn: patient[PATIENT_DATA_FI_KEY.FILE_NUMBER],
-    sex: patient[PATIENT_DATA_FI_KEY.SEX]?.toUpperCase(),
-    birth_date: patient[PATIENT_DATA_FI_KEY.BIRTH_DATE],
-    organization_id: patient[PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION],
-    family_member,
+    signs: [...observedSigns, ...(signsData.not_observed_signs || [])],
+    comment: signsData.comment,
   };
 }
 
-function getClinicalSigns(signsData: IClinicalSignsDataType): HybridPatientPresent['clinical'] {
-  return {
-    signs: signsData[CLINICAL_SIGNS_FI_KEY.SIGNS].map(
-      (sign) =>
-        ({
-          code: sign[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-          observed: sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED],
-          age_code: sign[CLINICAL_SIGNS_ITEM_KEY.AGE_CODE],
-        } as HybridPatientSign),
-    ),
-    comment: signsData[CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK],
+export function getFormDataFromAnalysis(analysis: HybridAnalysis): TCompleteAnalysis {
+  const analysisFormData: TCompleteAnalysis = {
+    analysis: {
+      is_reflex: analysis.is_reflex,
+      panel_code: analysis.analysis_code,
+      comment: analysis.comment,
+      resident_supervisor_id: analysis.resident_supervisor_id,
+    },
+    history_and_diagnosis: {
+      diagnosis_hypothesis: analysis.diagnosis_hypothesis,
+      ethnicity_codes: analysis.ethnicity_codes,
+      report_health_conditions: !!analysis.history?.length,
+      history: analysis.history || [],
+      inbreeding: analysis.inbreeding,
+    },
+    proband_clinical: {
+      observed_signs: [],
+      not_observed_signs: [],
+    },
   };
-}
 
-function getParent(parentData: TParentDataType, family_member: 'MOTHER' | 'FATHER'): HybridPatient {
-  let parent: HybridPatient;
-  switch (parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT]) {
-    case EnterInfoMomentValue.LATER:
-    case EnterInfoMomentValue.NEVER:
-      parent = {
-        family_member,
-        status: parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT],
-        reason: parentData[PARENT_DATA_FI_KEY.NO_INFO_REASON],
-      };
-      break;
-    case EnterInfoMomentValue.NOW:
-      parent = getPatientData(parentData as TPatientFormDataType, family_member);
-      parent.status = parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT];
-      switch (parentData[PARENT_DATA_FI_KEY.CLINICAL_STATUS]) {
-        case ClinicalStatusValue.AFFECTED:
-          (parent as HybridPatientPresent).clinical = getClinicalSigns(
-            parentData as IClinicalSignsDataType,
-          );
-          (parent as HybridPatientPresent).affected = true;
-          break;
-        case ClinicalStatusValue.NOT_AFFECTED:
-          (parent as HybridPatientPresent).affected = false;
-          break;
-      }
+  // Get proband
+  const proband = analysis.patients[0] as HybridPatientPresent;
+  delete proband.affected;
+  analysisFormData.proband = {
+    ...proband,
+    no_mrn: !proband.mrn,
+    no_jhn: !proband.jhn,
+  };
+
+  if (proband.clinical) {
+    analysisFormData.proband_clinical = getClinicalSignsFromAnalysis(proband);
   }
-  return parent;
+
+  if (proband.para_clinical) {
+    analysisFormData.proband_paraclinical = proband.para_clinical;
+  }
+
+  // Get parents
+  for (let i = 1; i < analysis.patients.length; i++) {
+    const patient = analysis.patients[i];
+    const parent_clinical_status = getClinicalStatus(patient as HybridPatientPresent);
+    const patientClinical = getClinicalSignsFromAnalysis(patient as HybridPatientPresent);
+    const patientData = {
+      ...(patient as HybridPatientNotPresent),
+      organization_id:
+        (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
+      no_mrn: !(patient as HybridPatientPresent).mrn,
+      no_jhn: !(patient as HybridPatientPresent).jhn,
+      status: (patient as HybridPatientNotPresent).status || 'NOW',
+      parent_clinical_status,
+      ...patientClinical,
+    } as TParentDataType;
+    if (patient.family_member === 'FATHER') {
+      analysisFormData.father = patientData;
+    } else if (patient.family_member === 'MOTHER') {
+      analysisFormData.mother = patientData;
+    }
+  }
+
+  return analysisFormData;
+}
+
+function getClinicalSignsFromAnalysis(
+  patient: HybridPatientPresent,
+): IClinicalSignsDataType | undefined {
+  if (patient.clinical) {
+    const clinical: IClinicalSignsDataType = {
+      observed_signs: [],
+      not_observed_signs: [],
+      comment: patient.clinical.comment,
+    };
+    for (const sign of patient.clinical.signs) {
+      clinical[sign.observed ? 'observed_signs' : 'not_observed_signs'].push({ ...sign, name: '' });
+    }
+    return clinical;
+  }
+}
+
+export function getClinicalStatus(patient: HybridPatientPresent) {
+  return patient.affected === true
+    ? ClinicalStatusValue.AFFECTED
+    : patient.affected === false
+    ? ClinicalStatusValue.NOT_AFFECTED
+    : ClinicalStatusValue.UNKNOWN;
+}
+
+export function orderPatients(a: HybridPatient, b: HybridPatient) {
+  const familyMemberValue = (familyMember: string) => {
+    switch (familyMember) {
+      case 'PROBAND':
+        return 0;
+      case 'MOTHER':
+        return 1;
+      case 'FATHER':
+        return 3;
+      default:
+        return 4;
+    }
+  };
+
+  return familyMemberValue(a.family_member!) - familyMemberValue(b.family_member);
 }

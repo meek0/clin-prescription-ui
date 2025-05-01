@@ -1,33 +1,31 @@
 import intl from 'react-intl-universal';
 import { Descriptions } from 'antd';
+import { HybridAnalysis } from 'api/hybrid/models';
 import { isEmpty } from 'lodash';
 
 import {
   EMPTY_FIELD,
   STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import {
-  HISTORY_AND_DIAG_FI_KEY,
-  IHealthConditionItem,
-} from 'components/Prescription/components/HistoryAndDiagnosisData';
+import { IHistoryAndDiagnosisDataType } from 'components/Prescription/components/HistoryAndDiagnosisData/types';
 import { usePrescriptionForm, usePrescriptionFormConfig } from 'store/prescription';
 
 const HistoryAndDiagnosisReview = () => {
-  const { analysisData } = usePrescriptionForm();
+  const { analysisFormData } = usePrescriptionForm();
   const formConfig = usePrescriptionFormConfig();
-  const getData = (key: HISTORY_AND_DIAG_FI_KEY) =>
-    analysisData[STEPS_ID.HISTORY_AND_DIAGNOSIS]?.[key];
+  const getData = (key: keyof IHistoryAndDiagnosisDataType) =>
+    analysisFormData[STEPS_ID.HISTORY_AND_DIAGNOSIS]?.[key];
 
   const getHealthConditions = () => {
-    const conditions = getData(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS);
-    return isEmpty(conditions)
+    const history = getData('history' satisfies keyof IHistoryAndDiagnosisDataType);
+    return isEmpty(history)
       ? EMPTY_FIELD
-      : (conditions as IHealthConditionItem[])
+      : (history as HybridAnalysis['history'])
           .map(
             (item) =>
               `${item.condition} (${
                 formConfig?.history_and_diagnosis.parental_links.find(
-                  (link) => link.value === item.parental_link,
+                  (link) => link.value === item.parental_link_code,
                 )?.name
               })`,
           )
@@ -35,12 +33,17 @@ const HistoryAndDiagnosisReview = () => {
   };
 
   const getHypothesisDiagnosis = () => {
-    const hypothesis = getData(HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS) ?? EMPTY_FIELD;
+    const hypothesis =
+      getData('diagnosis_hypothesis' satisfies keyof IHistoryAndDiagnosisDataType) ?? EMPTY_FIELD;
     return isEmpty(hypothesis.toString().trim()) ? EMPTY_FIELD : hypothesis;
   };
 
   const ethnicities = formConfig?.history_and_diagnosis.ethnicities.reduce((ethnicities, eth) => {
-    if ((getData(HISTORY_AND_DIAG_FI_KEY.ETHNICITY) as string[])?.includes(eth.value))
+    if (
+      (
+        getData('ethnicity_codes' satisfies keyof IHistoryAndDiagnosisDataType) as string[]
+      )?.includes(eth.value)
+    )
       ethnicities.push(eth.name);
     return ethnicities;
   }, [] as string[]);
@@ -53,9 +56,11 @@ const HistoryAndDiagnosisReview = () => {
         {getHealthConditions()}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.inbreeding')}>
-        {getData(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING) === undefined
+        {getData('inbreeding' satisfies keyof IHistoryAndDiagnosisDataType) === undefined
           ? EMPTY_FIELD
-          : intl.get(getData(HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING) ? 'yes' : 'no')}
+          : intl.get(
+              getData('inbreeding' satisfies keyof IHistoryAndDiagnosisDataType) ? 'yes' : 'no',
+            )}
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('prescription.history.diagnosis.review.label.ethnicity')}>
         {ethnicities?.length ? ethnicities.join(' | ') : EMPTY_FIELD}

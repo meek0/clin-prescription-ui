@@ -7,50 +7,45 @@ import {
   EMPTY_FIELD,
   STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import { usePrescriptionForm } from 'store/prescription';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
 
-import { ADD_INFO_FI_KEY, additionalInfoKey, GestationalAgeValues } from '../AdditionalInformation';
+import { GestationalAgeValues } from '../AdditionalInformation';
 
 interface OwnProps {
   stepId?:
     | STEPS_ID.FATHER_IDENTIFICATION
     | STEPS_ID.MOTHER_IDENTIFICATION
-    | STEPS_ID.PATIENT_IDENTIFICATION;
+    | STEPS_ID.PROBAND_IDENTIFICATION;
 }
 
-const PatientIdentificationReview = ({ stepId = STEPS_ID.PATIENT_IDENTIFICATION }: OwnProps) => {
-  const { analysisData } = usePrescriptionForm();
+const PatientIdentificationReview = ({ stepId = STEPS_ID.PROBAND_IDENTIFICATION }: OwnProps) => {
+  const { analysisFormData } = usePrescriptionForm();
+  const patient = analysisFormData[stepId];
 
-  const getData = (key: PATIENT_DATA_FI_KEY) => analysisData[stepId]?.[key];
-
-  const getAdditionalInfo = () =>
-    stepId === STEPS_ID.PATIENT_IDENTIFICATION
-      ? analysisData[stepId]?.[additionalInfoKey]
-      : undefined;
+  const foetusInfos =
+    stepId === STEPS_ID.PROBAND_IDENTIFICATION ? analysisFormData[stepId]?.foetus : undefined;
 
   const getFileNumber = () => {
-    const fileNumber = getData(PATIENT_DATA_FI_KEY.FILE_NUMBER);
-    const institution = getData(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION);
+    const fileNumber = patient?.mrn;
+    const institution = patient?.organization_id;
     return fileNumber ? `${fileNumber} - ${institution}` : institution;
   };
 
   const getName = () => {
-    const firstName = getData(PATIENT_DATA_FI_KEY.FIRST_NAME);
-    const lastName = getData(PATIENT_DATA_FI_KEY.LAST_NAME);
+    const firstName = patient?.first_name;
+    const lastName = patient?.last_name;
     return `${lastName?.toString().toUpperCase()} ${capitalize(firstName?.toString())}`;
   };
 
   const getGestationalDate = () => {
-    const addInfo = getAdditionalInfo();
     let date: number | undefined = undefined;
 
-    if (addInfo?.[ADD_INFO_FI_KEY.GESTATIONAL_AGE] === GestationalAgeValues.DDM) {
-      date = calculateGestationalAgeFromDDM(new Date(addInfo?.gestational_date!));
-    } else if (addInfo?.[ADD_INFO_FI_KEY.GESTATIONAL_AGE] === GestationalAgeValues.DPA) {
-      date = calculateGestationalAgeFromDPA(new Date(addInfo?.gestational_date!));
-    } else if (addInfo?.[ADD_INFO_FI_KEY.GESTATIONAL_AGE] === GestationalAgeValues.DEAD_FOETUS) {
+    if (foetusInfos?.gestational_method === GestationalAgeValues.DDM) {
+      date = calculateGestationalAgeFromDDM(new Date(foetusInfos?.gestational_date!));
+    } else if (foetusInfos?.gestational_method === GestationalAgeValues.DPA) {
+      date = calculateGestationalAgeFromDPA(new Date(foetusInfos?.gestational_date!));
+    } else if (foetusInfos?.gestational_method === GestationalAgeValues.DEAD_FOETUS) {
       return intl.get('prescription.patient.identification.foetus.dead');
     }
 
@@ -65,27 +60,21 @@ const PatientIdentificationReview = ({ stepId = STEPS_ID.PATIENT_IDENTIFICATION 
     <Fragment>
       <Descriptions className="label-20" column={1} size="small">
         <Descriptions.Item label={intl.get('folder')}>{getFileNumber()}</Descriptions.Item>
-        <Descriptions.Item
-          label={intl.get(getAdditionalInfo()?.is_new_born ? 'mother.ramq' : 'ramq')}
-        >
-          {getAdditionalInfo()?.is_new_born
-            ? getAdditionalInfo()?.mother_ramq
-            : getData(PATIENT_DATA_FI_KEY.RAMQ_NUMBER) ?? EMPTY_FIELD}
+        <Descriptions.Item label={intl.get(foetusInfos?.is_new_born ? 'mother.ramq' : 'ramq')}>
+          {foetusInfos?.is_new_born ? foetusInfos?.mother_jhn : patient?.jhn ?? EMPTY_FIELD}
         </Descriptions.Item>
         <Descriptions.Item label={intl.get('name')}>{getName()}</Descriptions.Item>
-        <Descriptions.Item label={intl.get('birthdate')}>
-          {getData(PATIENT_DATA_FI_KEY.BIRTH_DATE)}
-        </Descriptions.Item>
+        <Descriptions.Item label={intl.get('birthdate')}>{patient?.birth_date}</Descriptions.Item>
         <Descriptions.Item label={intl.get('sex')}>
-          {intl.get(`sex.${getData(PATIENT_DATA_FI_KEY.SEX)}`)}
+          {intl.get(`sex.${patient?.sex.toLowerCase()}`)}
         </Descriptions.Item>
       </Descriptions>
-      {getAdditionalInfo()?.is_prenatal_diagnosis && (
+      {foetusInfos?.is_prenatal_diagnosis && (
         <Fragment>
           <Divider style={{ margin: '12px 0' }} />
           <Descriptions className="label-20" column={1} size="small">
             <Descriptions.Item label={intl.get('prescription.patient.identification.sexe.foetus')}>
-              {intl.get(`sex.${getAdditionalInfo()?.foetus_gender!}`)}
+              {intl.get(`sex.${foetusInfos?.sex.toLowerCase()}`)}
             </Descriptions.Item>
             <Descriptions.Item
               label={intl.get('prescription.patient.identification.gestational.age')}

@@ -20,7 +20,7 @@ const { Title } = Typography;
 
 const PrescriptionForm = () => {
   const dispatch = useDispatch();
-  const { prescriptionVisible, currentStep, isAddingParent, prescriptionId, analysisData } =
+  const { prescriptionVisible, currentStep, isAddingParent, prescriptionId, analysisFormData } =
     usePrescriptionForm();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const PrescriptionForm = () => {
               danger
               size="small"
               onClick={() => {
-                if (!analysisData.changed) {
+                if (!analysisFormData.changed) {
                   dispatch(prescriptionFormActions.cancel());
                   return;
                 }

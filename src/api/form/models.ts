@@ -41,33 +41,6 @@ export interface IFormPatient {
   mrn: string;
 }
 
-export interface IHybridFormPatient {
-  first_name: string;
-  last_name: string;
-  sex: string;
-  organization_id: string;
-  birth_date: string;
-  jhn: string;
-  mrn: string;
-}
-
-export interface IHybridFormPatients {
-  patients: IHybridFormPatient[];
-}
-
-export function hybridToFormPatient(hybridPatient?: IHybridFormPatient): IFormPatient | undefined {
-  if (!hybridPatient) return undefined;
-  return {
-    first_name: hybridPatient.first_name,
-    last_name: hybridPatient.last_name,
-    gender: hybridPatient.sex,
-    ep: hybridPatient.organization_id,
-    birth_date: hybridPatient.birth_date,
-    ramq: hybridPatient.jhn,
-    mrn: hybridPatient.mrn,
-  };
-}
-
 export interface ISupervisor {
   supervisors: {
     id: string;

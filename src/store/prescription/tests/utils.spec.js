@@ -1,66 +1,56 @@
-import { cleanAnalysisData } from '../utils';
+import { getAnalysisFromFormData } from '../utils';
 
 describe('cleanAnalysisData', () => {
   test('Should remove NA from sign', () => {
     const payload = {
-      paraclinical_exams: {
+      proband_paraclinical: {
         exams: [
           {
-            interpretation: 'not_done',
+            interpretation: 'NOT_DONE',
           },
           {
-            interpretation: 'abnormal',
+            interpretation: 'ABNORMAL',
           },
         ],
       },
-      clinical_signs: {
-        signs: [
+      proband_clinical: {
+        observed_signs: [
           {
-            is_observed: 'NA',
-          },
-          {
-            is_observed: true,
-          },
-          {
-            is_observed: false,
+            observed: true,
           },
         ],
         not_observed_signs: [
           {
-            is_observed: false,
+            observed: false,
           },
         ],
       },
-      patient: {
-        ramq: 'XXXX 0000 1111',
-        additional_info: {
-          mother_ramq: 'XXXX 0000 1111',
+      proband: {
+        jhn: 'XXXX 0000 1111',
+        foetus: {
+          mother_jhn: 'XXXX 0000 1111',
         },
       },
       mother: {
-        ramq: 'XXXX 0000 1111',
-        signs: [
+        jhn: 'XXXX 0000 1111',
+        parent_clinical_status: 'affected',
+        observed_signs: [
           {
-            is_observed: 'NA',
-          },
-          {
-            is_observed: false,
+            observed: true,
           },
         ],
         not_observed_signs: [
           {
-            is_observed: false,
+            observed: false,
           },
         ],
       },
       father: {
-        ramq: 'XXXX 0000 1111',
-        signs: [
+        jhn: 'XXXX 0000 1111',
+        parent_clinical_status: 'affected',
+        observed_signs: [
           {
-            is_observed: 'NA',
-          },
-          {
-            is_observed: true,
+            observed: true,
           },
         ],
       },
@@ -70,33 +60,23 @@ describe('cleanAnalysisData', () => {
       type: 'GERMLINE',
       analysis_code: undefined,
       is_reflex: undefined,
-      inbreeding: undefined,
       comment: undefined,
       resident_supervisor_id: undefined,
       history: [],
-      diagnosis_hypothesis: undefined,
-      ethnicity_codes: undefined,
       patients: [
         {
-          first_name: undefined,
-          last_name: undefined,
           jhn: 'XXXX00001111',
-          mrn: undefined,
-          sex: undefined,
-          birth_date: undefined,
-          organization_id: undefined,
           family_member: 'PROBAND',
+          foetus: {
+            mother_jhn: 'XXXX00001111',
+          },
           clinical: {
             comment: undefined,
             signs: [
               {
-                age_code: undefined,
-                code: undefined,
                 observed: true,
               },
               {
-                age_code: undefined,
-                code: undefined,
                 observed: false,
               },
             ],
@@ -112,11 +92,38 @@ describe('cleanAnalysisData', () => {
             other: undefined,
           },
         },
-        undefined,
-        undefined,
+        {
+          family_member: 'MOTHER',
+          jhn: 'XXXX00001111',
+          affected: true,
+          clinical: {
+            comment: undefined,
+            signs: [
+              {
+                observed: true,
+              },
+              {
+                observed: false,
+              },
+            ],
+          },
+        },
+        {
+          family_member: 'FATHER',
+          jhn: 'XXXX00001111',
+          affected: true,
+          clinical: {
+            comment: undefined,
+            signs: [
+              {
+                observed: true,
+              },
+            ],
+          },
+        },
       ],
     };
 
-    expect(cleanAnalysisData(payload)).toEqual(expected);
+    expect(getAnalysisFromFormData(payload)).toEqual(expected);
   });
 });

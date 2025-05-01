@@ -24,7 +24,7 @@ describe('Submission', () => {
         analysisCodeMapping: {},
       },
       user: { user: { practitionerRoles: [] } },
-      prescription: { analysisData: { analysis: {} } },
+      prescription: { analysisFormData: { analysis: {} } },
     };
     const store = configureStore()(initialState);
     const component = renderer.create(
@@ -33,6 +33,7 @@ describe('Submission', () => {
       </Provider>,
     );
     let tree = component.toJSON();
+    expect(tree).toMatchObject({});
     expect(tree).toMatchSnapshot();
   });
 });

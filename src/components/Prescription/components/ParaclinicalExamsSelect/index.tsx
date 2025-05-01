@@ -3,14 +3,21 @@ import intl from 'react-intl-universal';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Form, Input, Radio, Select, Space, Tag } from 'antd';
-import { IListNameValueItem, IParaclinicalExamItemExtra } from 'api/form/models';
+import { IParaclinicalExamItemExtra } from 'api/form/models';
 import cx from 'classnames';
-import { isEmpty } from 'lodash';
 
 import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescription/utils/form';
+import { getNamePath, setInitialValues } from 'components/Prescription/utils/form';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
+
+import {
+  IParaclinicalExamItem,
+  IParaclinicalExamMultiSelectExtra,
+  IParaclinicalExamsDataType,
+  IParaclinicalExamSimpleInputExtra,
+  ParaclinicalExamStatus,
+} from './types';
 
 import styles from './index.module.css';
 
@@ -18,76 +25,26 @@ type OwnProps = IAnalysisFormPart & {
   initialData?: IParaclinicalExamsDataType;
 };
 
-interface IParaclinicalExamSimpleInputExtra {
-  name: number;
-  label?: string;
-}
-
-interface IParaclinicalExamMultiSelectExtra extends IParaclinicalExamSimpleInputExtra {
-  options: IListNameValueItem[];
-  required: boolean;
-}
-
-export enum PARACLINICAL_EXAMS_FI_KEY {
-  EXAMS = 'exams',
-  OTHER_EXAMS = 'comment',
-}
-
-export enum PARACLINICAL_EXAM_ITEM_KEY {
-  CODE = 'code',
-  INTERPRETATION = 'interpretation',
-  VALUES = 'values',
-  VALUE = 'value',
-}
-
-export enum ParaclinicalExamStatus {
-  NOT_DONE = 'not_done',
-  ABNORMAL = 'abnormal',
-  NORMAL = 'normal',
-}
-
-export interface IParaclinicalExamItem {
-  [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]: string;
-  [PARACLINICAL_EXAM_ITEM_KEY.CODE]: string;
-  value?: string;
-  values: string[];
-}
-
-export interface IParaclinicalExamsDataType {
-  [PARACLINICAL_EXAMS_FI_KEY.EXAMS]: IParaclinicalExamItem[];
-  [PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS]?: string;
-}
-
 const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
   useEffect(() => {
-    if (initialData && !isEmpty(initialData)) {
-      const values = (formConfig?.paraclinical_exams.default_list ?? []).map((exam) => {
-        const foundExam = initialData.exams.find((item) => item.code === exam.value);
+    setInitialValues(form, getName, {
+      exams: (formConfig?.paraclinical_exams.default_list ?? []).map((exam) => {
+        const foundExam = initialData?.exams.find((item) => item.code === exam.value);
         return {
-          [PARACLINICAL_EXAM_ITEM_KEY.CODE]: exam.value,
-          [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]:
-            foundExam?.interpretation?.toLowerCase() || ParaclinicalExamStatus.NOT_DONE,
-          [PARACLINICAL_EXAM_ITEM_KEY.VALUES]: foundExam?.values || [],
-          [PARACLINICAL_EXAM_ITEM_KEY.VALUE]:
+          code: exam.value,
+          interpretation: foundExam?.interpretation || ParaclinicalExamStatus.NOT_DONE,
+          values: foundExam?.values || [],
+          value:
             exam.extra?.type === 'multi_select'
               ? undefined
               : foundExam?.value || foundExam?.values?.[0],
-        };
-      });
-      setInitialValues(form, getName, { ...initialData, exams: values }, PARACLINICAL_EXAMS_FI_KEY);
-    } else {
-      setFieldValue(
-        form,
-        getName(PARACLINICAL_EXAMS_FI_KEY.EXAMS),
-        (formConfig?.paraclinical_exams.default_list ?? []).map((exam) => ({
-          [PARACLINICAL_EXAM_ITEM_KEY.CODE]: exam.value,
-          [PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]: ParaclinicalExamStatus.NOT_DONE,
-        })),
-      );
-    }
+        } as IParaclinicalExamItem;
+      }),
+      other: initialData?.other,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -107,7 +64,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
 
   return (
     <div className={styles.paraExamsSelect}>
-      <Form.List name={getName(PARACLINICAL_EXAMS_FI_KEY.EXAMS)}>
+      <Form.List name={getName('exams' satisfies keyof IParaclinicalExamsDataType)}>
         {(fields) =>
           fields.map(({ key, name, ...restField }) => {
             const exam = formConfig?.paraclinical_exams.default_list[name]!;
@@ -118,7 +75,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
                 <Space direction="vertical" className={styles.paraExamFormItemContent} size={5}>
                   <Form.Item
                     {...restField}
-                    name={[name, PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]}
+                    name={[name, 'interpretation' satisfies keyof IParaclinicalExamItem]}
                     label={title}
                     tooltip={tooltip ? { title: tooltip, icon: <InfoCircleOutlined /> } : null}
                   >
@@ -135,9 +92,9 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
                       {({ getFieldValue }) =>
                         getFieldValue(
                           getName(
-                            PARACLINICAL_EXAMS_FI_KEY.EXAMS,
+                            'exams' satisfies keyof IParaclinicalExamsDataType,
                             name,
-                            PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION,
+                            'interpretation' satisfies keyof IParaclinicalExamItem,
                           ),
                         ) === ParaclinicalExamStatus.ABNORMAL
                           ? extra(name)
@@ -153,7 +110,7 @@ const ParaclinicalExamsSelect = ({ form, parentKey, initialData }: OwnProps) => 
       </Form.List>
       <Form.Item
         label={intl.get('prescription.clinical_exam.other_examination')}
-        name={getName(PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS)}
+        name={getName('other' satisfies keyof IParaclinicalExamsDataType)}
         className={cx(styles.otherExamsTextarea, 'noMarginBtm')}
       >
         <Input.TextArea

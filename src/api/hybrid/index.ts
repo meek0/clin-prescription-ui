@@ -1,9 +1,9 @@
 import { sendRequestWithRpt } from 'api';
-import { IHybridFormPatient, IHybridFormPatients, ISupervisor } from 'api/form/models';
+import { ISupervisor } from 'api/form/models';
 
 import EnvironmentVariables from 'utils/EnvVariables';
 
-import { HybridPrescription } from './models';
+import { HybridAnalysis, IHybridPatientForm } from './models';
 
 export const HYBRID_API_URL = `${EnvironmentVariables.configFor('HYBRID_API_URL')}`;
 
@@ -12,7 +12,7 @@ const headers = {
 };
 
 async function getPrescription(prescriptionId: string) {
-  const { data, error } = await sendRequestWithRpt<HybridPrescription>({
+  const { data, error } = await sendRequestWithRpt<HybridAnalysis>({
     method: 'GET',
     url: `${HYBRID_API_URL}/analysis/${prescriptionId}`,
     headers,
@@ -21,7 +21,7 @@ async function getPrescription(prescriptionId: string) {
   return { data, error };
 }
 
-const createPrescription = (data: HybridPrescription, isDraft?: boolean) =>
+const createPrescription = (data: HybridAnalysis, isDraft?: boolean) =>
   sendRequestWithRpt<{
     analysis_id: string;
     patients: {
@@ -38,7 +38,7 @@ const createPrescription = (data: HybridPrescription, isDraft?: boolean) =>
     data,
   });
 
-const updatePrescription = (data: HybridPrescription, prescriptionId: string, isDraft?: boolean) =>
+const updatePrescription = (data: HybridAnalysis, prescriptionId: string, isDraft?: boolean) =>
   sendRequestWithRpt<{
     analysis_id: string;
     patients: {
@@ -64,7 +64,7 @@ const searchPatient = ({
   mrn?: string;
   jhn?: string;
 }) =>
-  sendRequestWithRpt<IHybridFormPatient>({
+  sendRequestWithRpt<IHybridPatientForm>({
     method: 'GET',
     url: `${HYBRID_API_URL}/search/patient`,
     params: {
@@ -76,7 +76,7 @@ const searchPatient = ({
   });
 
 const searchPatients = ({ mrn, jhn }: { mrn?: string; jhn?: string }) =>
-  sendRequestWithRpt<IHybridFormPatients>({
+  sendRequestWithRpt<{ patients: IHybridPatientForm[] }>({
     method: 'GET',
     url: `${HYBRID_API_URL}/search/patients`,
     params: {

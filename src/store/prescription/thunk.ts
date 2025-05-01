@@ -3,14 +3,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { PrescriptionFormApi } from 'api/form';
 import { TFormConfig } from 'api/form/models';
 import { HybridApi } from 'api/hybrid';
-import { HybridPrescription } from 'api/hybrid/models';
+import { HybridAnalysis } from 'api/hybrid/models';
 import { capitalize } from 'lodash';
 
 import { globalActions } from 'store/global';
 import { RootState } from 'store/types';
 
 import { prescriptionFormActions } from './slice';
-import { cleanAnalysisData } from './utils';
+import { getAnalysisFromFormData } from './utils';
 
 const fetchFormConfig = createAsyncThunk<TFormConfig, { code: string }>(
   'prescription/fetchFormConfig',
@@ -44,7 +44,7 @@ const createPrescription = createAsyncThunk<
   { state: RootState }
 >('prescription/createPrescription', async (_, thunkApi) => {
   const prescription = thunkApi.getState().prescription;
-  const prescriptionData: HybridPrescription = cleanAnalysisData(prescription.analysisData);
+  const prescriptionData: HybridAnalysis = getAnalysisFromFormData(prescription.analysisFormData);
 
   const { data, error } = prescription.prescriptionId
     ? await HybridApi.updatePrescription(
