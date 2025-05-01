@@ -1,7 +1,9 @@
 import { differenceInDays } from 'date-fns';
 
 export const calculateGestationalAgeFromDDM = (value: Date) =>
-  Math.round(differenceInDays(new Date(), value) / 7);
+  new Date() >= value ? Math.round(differenceInDays(new Date(), value) / 7) : undefined;
 
 export const calculateGestationalAgeFromDPA = (value: Date) =>
-  Math.round((40 * 7 - differenceInDays(value, new Date())) / 7);
+  value >= new Date() && differenceInDays(value, new Date()) <= 40 * 7
+    ? Math.round((40 * 7 - differenceInDays(value, new Date())) / 7)
+    : undefined;
