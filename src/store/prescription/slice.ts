@@ -223,9 +223,11 @@ const prescriptionFormSlice = createSlice({
             parental_link: history.parental_link_code,
           })),
         } as IHistoryAndDiagnosisDataType;
-        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding)
-          state.analysisData.history_and_diagnosis.inbreeding =
-            prescription.inbreeding?.toLowerCase() === 'true';
+        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding !== undefined) {
+          state.analysisData.history_and_diagnosis.inbreeding = prescription.inbreeding
+            ? true
+            : false;
+        }
       }
 
       function getPatientInfos(
