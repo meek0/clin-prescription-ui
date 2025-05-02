@@ -18,6 +18,7 @@ export enum StatusOptions {
   Active = 'active',
   Draft = 'draft',
   OnHold = 'on-hold',
+  OnHoldHybrid = 'onhold',
   Completed = 'completed',
   Unknown = 'unknown',
 }
@@ -45,6 +46,11 @@ export const StatusLabelElement: Record<
     </Tag>
   ),
   [StatusOptions.OnHold]: (d) => (
+    <Tag color="blue" icon={<SyncOutlined />}>
+      {d[StatusOptions.OnHold]}
+    </Tag>
+  ),
+  [StatusOptions.OnHoldHybrid]: (d) => (
     <Tag color="blue" icon={<SyncOutlined />}>
       {d[StatusOptions.OnHold]}
     </Tag>

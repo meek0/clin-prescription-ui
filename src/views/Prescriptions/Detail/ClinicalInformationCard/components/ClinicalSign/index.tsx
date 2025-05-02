@@ -1,155 +1,70 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Descriptions, Space } from 'antd';
-import { PhenotypeRequestEntity } from 'api/fhir/models';
+import { TFormConfig } from 'api/form/models';
 import { HpoApi } from 'api/hpo';
 import { IHpoNode } from 'api/hpo/models';
-import {
-  useGeneralObservationEntity,
-  useObservationPhenotypeEntity,
-  useValueSet,
-} from 'graphql/prescriptions/actions';
-import { filter, find, map } from 'lodash';
+import { HybridPatientClinical, HybridPatientSign } from 'api/hybrid/models';
+import { map } from 'lodash';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { useLang } from 'store/global';
 
 type ClinicalSignOwnProps = {
-  phenotypeIds: string[];
-  generalObervationIds: string[];
-  isPrenatal?: boolean;
-  isParent?: boolean;
+  clinical?: HybridPatientClinical;
+  prescriptionConfig?: TFormConfig;
 };
 
-type IDOwnProps = {
-  ids: string[];
-  isParent?: boolean;
-};
-
-const Observation = ({ ids, isParent }: IDOwnProps) => {
-  const { generalObervationValue } = useGeneralObservationEntity(ids);
-  let value = generalObervationValue?.valueString;
-  if (Array.isArray(generalObervationValue)) {
-    value = generalObervationValue?.find((v) => (isParent ? !v.focus : v.focus)).valueString;
-  }
-  return <>{value}</>;
-};
-
-const handleHpoSearchTerm = (
-  term: string,
+async function handleHpoSearchTerm(
+  term: string | undefined,
   setCurrentOptions: Dispatch<SetStateAction<IHpoNode[]>>,
-) => {
-  term
-    ? HpoApi.searchHpos(term.toLowerCase().trim()).then(({ data, error }) => {
-        if (!error) {
-          const results = map(data?.hits, '_source');
-          setCurrentOptions((prevList) => [...prevList, results[0] || {}]);
-        }
-      })
-    : null;
-};
+) {
+  if (!term) return;
+  const { data, error } = await HpoApi.searchHpos(term.toLowerCase().trim());
+  if (!error) setCurrentOptions((prevList) => [...prevList, map(data?.hits, '_source')[0] || {}]);
+}
 
 export const ClinicalSign = ({
-  phenotypeIds,
-  generalObervationIds,
-  isPrenatal,
-  isParent,
+  clinical = { signs: [], comment: '' },
+  prescriptionConfig,
 }: ClinicalSignOwnProps) => {
   const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
-  const [ageList, setAgeList] = useState<IHpoNode[]>([
-    {
-      hpo_id: 'unknown',
-      name: 'Unknown',
-      is_leaf: false,
-      parents: [],
-    },
-  ]);
-  const { phenotypeValue } = useObservationPhenotypeEntity(phenotypeIds);
-  const { valueSet } = useValueSet('age-at-onset');
-  const lang = useLang();
-  const getHpoValue = (element: PhenotypeRequestEntity) => {
-    handleHpoSearchTerm(element.valueCodeableConcept?.coding?.code, setHpoList);
-    element.extension ? handleHpoSearchTerm(element.extension.valueCoding?.code, setAgeList) : null;
-  };
 
   useEffect(() => {
-    if (phenotypeValue) {
-      if (Array.isArray(phenotypeValue)) {
-        phenotypeValue.forEach((element: PhenotypeRequestEntity) => {
-          getHpoValue(element);
-        });
-      } else {
-        getHpoValue(phenotypeValue);
-      }
-    }
-  }, [phenotypeValue]);
+    clinical.signs.forEach((sign) => {
+      if (!hpoList.find(({ hpo_id }) => hpo_id === sign.code))
+        handleHpoSearchTerm(sign.code, setHpoList);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clinical.signs]);
 
-  const filterPhenotype =
-    isPrenatal && Array.isArray(phenotypeValue)
-      ? phenotypeValue?.filter((p: PhenotypeRequestEntity) => (isParent ? !p.focus : p.focus))
-      : phenotypeValue;
+  const positive: HybridPatientSign[] = [];
+  const negative: HybridPatientSign[] = [];
+  clinical.signs.forEach((sign) => (sign.observed ? positive : negative).push(sign));
 
-  let positive = [];
-  let negative = [];
-  if (Array.isArray(filterPhenotype)) {
-    positive = filter(filterPhenotype, (o) => o?.interpretation?.coding?.code === 'POS');
+  const displayHpo = (code: string, ageCode: string = '') => {
+    const hpoInfo = hpoList.find(({ hpo_id }) => hpo_id === code);
+    const ageLabel =
+      prescriptionConfig?.clinical_signs.onset_age?.find(
+        (ageItem: any) => ageItem.value === ageCode,
+      )?.name || ageCode;
 
-    negative = filter(filterPhenotype, (o) => o?.interpretation?.coding?.code === 'NEG');
-  } else {
-    positive = [filterPhenotype];
-  }
-
-  const displayHpo = (hpo: string, age: string = '') => {
-    const hpoInfo = find(hpoList, (h: IHpoNode) => h.hpo_id === hpo);
-    const ageInfo = find(ageList, (h: IHpoNode) => h.hpo_id === age);
-    const ageValue = find(valueSet?.concept, (o) => o.code === ageInfo?.hpo_id);
-    const hpoValue = find(valueSet?.concept, (o) => o.code === hpoInfo?.hpo_id);
-    const ageDisplay = ageValue
-      ? ` - ${
-          find(ageValue?.designation, (o) => o.language === lang)
-            ? find(ageValue?.designation, (o) => o.language === lang)?.value
-            : ageValue.display
-        }`
-      : ` - ${ageInfo?.name}`;
-
-    const hpoDisplay = hpoValue
-      ? `${
-          find(hpoValue?.designation, (o) => o.language === lang)
-            ? find(hpoValue?.designation, (o) => o.language === lang)?.value
-            : hpoValue.display
-        }`
-      : `${hpoInfo?.name}`;
-
-    return `${hpoInfo ? hpoDisplay : ''} (${hpo})${ageInfo ? ageDisplay : ''}`;
+    return `${hpoInfo?.name || ''} (${code})${ageLabel ? ` - ${ageLabel}` : ''}`;
   };
 
   return (
     <Descriptions column={1} size="small" className="label-20">
       <Descriptions.Item label={intl.get('screen.prescription.entity.observed')}>
         <Space direction="vertical">
-          {negative.length > 0
-            ? positive.map((p: PhenotypeRequestEntity) =>
-                displayHpo(p?.valueCodeableConcept?.coding.code, p?.extension?.valueCoding.code),
-              )
-            : EMPTY_FIELD}
+          {positive.length ? positive.map((sign) => displayHpo(sign.code, sign.age_code)) : '--'}
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('screen.prescription.entity.not.observed')}>
-        {' '}
         <Space direction="vertical">
-          {negative.length > 0
-            ? negative.map((p: PhenotypeRequestEntity) =>
-                displayHpo(p?.valueCodeableConcept?.coding.code),
-              )
-            : EMPTY_FIELD}
+          {negative.length ? negative.map((sign) => displayHpo(sign.code, sign.age_code)) : '--'}
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('screen.prescription.entity.hpo.note')}>
-        {generalObervationIds.length > 0 ? (
-          <Observation ids={generalObervationIds} isParent={isParent} />
-        ) : (
-          EMPTY_FIELD
-        )}
+        {clinical.comment || EMPTY_FIELD}
       </Descriptions.Item>
     </Descriptions>
   );

@@ -55,6 +55,10 @@ export interface HybridPatientPresent extends HybridPatientInfo {
   foetus?: HybridPatientFoetus;
   clinical?: HybridPatientClinical;
   para_clinical?: HybridPatientParaClinical;
+  sequencings?: {
+    sequencing_id: string;
+    type: 'WXS' | 'WTS';
+  }[];
 }
 
 export interface HybridPatientNotPresent {
@@ -69,10 +73,15 @@ export interface HybridAnalysis {
   analysis_id?: string;
   type: string;
   analysis_code: string;
+  status?: string;
+  authored_on?: string;
+  requester?: string;
+  performer?: string;
   is_reflex: boolean;
   comment?: string;
   inbreeding?: boolean;
   resident_supervisor_id?: string;
+  priority?: string;
   history: {
     condition: string;
     parental_link_code: string;
@@ -90,4 +99,8 @@ export interface IHybridPatientForm {
   birth_date: string;
   jhn: string;
   mrn: string;
+}
+
+export function getProband(analysis?: HybridAnalysis) {
+  return analysis?.patients[0] as HybridPatientPresent;
 }

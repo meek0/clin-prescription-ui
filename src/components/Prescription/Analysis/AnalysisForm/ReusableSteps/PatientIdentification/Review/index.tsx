@@ -66,7 +66,7 @@ const PatientIdentificationReview = ({ stepId = STEPS_ID.PROBAND_IDENTIFICATION 
         <Descriptions.Item label={intl.get('name')}>{getName()}</Descriptions.Item>
         <Descriptions.Item label={intl.get('birthdate')}>{patient?.birth_date}</Descriptions.Item>
         <Descriptions.Item label={intl.get('sex')}>
-          {intl.get(`sex.${patient?.sex.toLowerCase()}`)}
+          {intl.get(`sex.${patient?.sex?.toLowerCase()}`)}
         </Descriptions.Item>
       </Descriptions>
       {foetusInfos?.is_prenatal_diagnosis && (
@@ -74,7 +74,7 @@ const PatientIdentificationReview = ({ stepId = STEPS_ID.PROBAND_IDENTIFICATION 
           <Divider style={{ margin: '12px 0' }} />
           <Descriptions className="label-20" column={1} size="small">
             <Descriptions.Item label={intl.get('prescription.patient.identification.sexe.foetus')}>
-              {intl.get(`sex.${foetusInfos?.sex.toLowerCase()}`)}
+              {intl.get(`sex.${foetusInfos?.sex?.toLowerCase()}`)}
             </Descriptions.Item>
             <Descriptions.Item
               label={intl.get('prescription.patient.identification.gestational.age')}

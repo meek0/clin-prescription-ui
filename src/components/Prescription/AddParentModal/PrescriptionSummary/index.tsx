@@ -26,7 +26,7 @@ const PrescriptionSummary = ({ className = '' }: OwnProps) => (
       <Descriptions.Item label={intl.get('prescription.add.parent.summary.cas.index')}>
         -
       </Descriptions.Item>
-      <Descriptions.Item label={intl.get('MTH')}>-</Descriptions.Item>
+      <Descriptions.Item label={intl.get('MOTHER')}>-</Descriptions.Item>
     </Descriptions>
   </div>
 );

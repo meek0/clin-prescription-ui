@@ -36,4 +36,5 @@ export const getPatientAffectedStatus = (extension: ServiceRequestEntityExtensio
   return AFFECTED_STATUS_CODE[get(item, 'interpretation.coding.code') as AffectedStatusCode];
 };
 
-export const formatName = (name: Name) => `${name.family.toUpperCase()} ${capitalize(name.given)} `;
+export const formatName = (name: Name) =>
+  `${name.family?.toUpperCase()} ${capitalize(name.given)} `;

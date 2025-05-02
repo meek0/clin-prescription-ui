@@ -1,5 +1,3 @@
-import { FhirDoc } from 'graphql/patients/models/Patient';
-
 export type ResourceType =
   | 'Practitioner'
   | 'Patient'
@@ -218,27 +216,6 @@ export interface AnalysisTaskWorkflow {
   name: string;
   version: string;
   genomeBuild: string;
-}
-
-export interface AnalysisTaskEntity {
-  id: string;
-  authoredOn: string;
-  code: {
-    code: string;
-    system: string;
-  };
-  patientReference: string;
-  serviceRequestReference: string;
-  ownerReference: string;
-  requester: {
-    alias: string;
-    email: string;
-    id: string;
-  };
-  experiment: AnalysisTaskExperiment;
-  sample: AnalysisTaskSample;
-  docs: FhirDoc[];
-  workflow: AnalysisTaskWorkflow;
 }
 
 // For Prescription Entity Page

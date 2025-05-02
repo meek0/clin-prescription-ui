@@ -1,14 +1,19 @@
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { useParams } from 'react-router-dom';
 import { MedicineBoxOutlined } from '@ant-design/icons';
 import { Card, Col, Row } from 'antd';
-import { useServiceRequestEntity } from 'graphql/prescriptions/actions';
+import { PrescriptionFormApi } from 'api/form';
+import { TFormConfig } from 'api/form/models';
+import { HybridApi } from 'api/hybrid';
+import { getProband, HybridAnalysis, HybridPatientNotPresent } from 'api/hybrid/models';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
 
 import ContentWithHeader from 'components/Layout/ContentWithHeader';
 import ScrollContentWithFooter from 'components/Layout/ScrollContentWithFooter';
 import Forbidden from 'components/Results/Forbidden';
+import { orderPatients } from 'store/prescription/utils';
 
 import DownloadButton from '../components/DownloadDocument';
 
@@ -23,13 +28,34 @@ import styles from './index.module.css';
 
 const PrescriptionDetail = () => {
   const { id: prescriptionId } = useParams<{ id: string }>();
-  const { prescription, loading } = useServiceRequestEntity(prescriptionId);
 
-  if (!loading && !prescription) {
+  const [hybridPrescription, setHybridPrescription] = useState<HybridAnalysis>();
+  const [prescriptionConfig, setPrescriptionConfig] = useState<TFormConfig>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    HybridApi.getPrescription(prescriptionId)
+      .then(({ data }) => {
+        setHybridPrescription(data);
+
+        if (!data) throw new Error('prescription data not found');
+
+        PrescriptionFormApi.fetchConfig(data.analysis_code)
+          .then(({ data, error }) => {
+            if (!error && data) setPrescriptionConfig(data.config);
+          })
+          .finally(() => setLoading(false));
+      })
+      .catch(() => setLoading(false));
+  }, [prescriptionId]);
+
+  if (!loading && !hybridPrescription) {
     return <Forbidden />;
   }
 
-  const isFoetusPrescription = prescription?.category?.[0]?.coding?.[0]?.code === 'Prenatal';
+  const proband = getProband(hybridPrescription);
+  const familyMembers = hybridPrescription?.patients.slice(1);
+  const isFoetusPrescription = proband?.foetus;
 
   return (
     <ContentWithHeader
@@ -44,49 +70,52 @@ const PrescriptionDetail = () => {
       <ScrollContentWithFooter className={styles.prescriptionEntityWrapper} container>
         <Row gutter={[24, 24]}>
           <Col span={12}>
-            <AnalysisCard prescription={prescription} loading={loading} />
+            <AnalysisCard prescription={hybridPrescription} loading={loading} />
           </Col>
           <Col span={12}>
-            <PatientCard prescription={prescription} loading={loading} />
+            <PatientCard
+              patient={proband}
+              loading={loading}
+              organizationId={proband?.organization_id}
+            />
           </Col>
-          {prescription?.note && (
+          {hybridPrescription?.comment && (
             <Col span={24}>
               <Card title={intl.get('screen.prescription.entity.comment.card.title')}>
-                {prescription?.note.text}
+                {hybridPrescription?.comment}
               </Card>
             </Col>
           )}
           <Col span={24}>
             {isFoetusPrescription ? (
               <FoetusClinicalInformation
-                prescription={prescription}
-                prescriptionId={prescriptionId}
+                hybridPrescription={hybridPrescription}
+                prescriptionConfig={prescriptionConfig}
                 loading={loading}
               />
             ) : (
-              <ClinicalInformationCard prescription={prescription} loading={loading} />
+              <ClinicalInformationCard
+                hybridPrescription={hybridPrescription}
+                prescriptionConfig={prescriptionConfig}
+                loading={loading}
+              />
             )}
           </Col>
-          {prescription?.extensions?.map((extension, index) => (
+          {familyMembers?.sort(orderPatients).map((patient, index) => (
             <Col key={index} span={24}>
-              <ParentCard prescription={prescription} loading={loading} extension={extension} />
+              {!(patient as HybridPatientNotPresent).reason ? (
+                <ParentCard
+                  patient={patient}
+                  prescriptionConfig={prescriptionConfig}
+                  loading={loading}
+                  organizationId={proband.organization_id}
+                  analysisType={hybridPrescription?.type}
+                />
+              ) : (
+                <AbsentParentCard patient={patient as HybridPatientNotPresent} loading={loading} />
+              )}
             </Col>
           ))}
-          {prescription?.observation.investigation.item
-            .filter(
-              (item) =>
-                item.resourceType === 'Observation' &&
-                ['MMTH', 'MFTH'].indexOf(item.coding.code) > -1,
-            )
-            .map((item, index) => (
-              <Col key={index} span={24}>
-                <AbsentParentCard
-                  observationId={item.id[0]}
-                  loading={loading}
-                  code={item.coding.code}
-                />
-              </Col>
-            ))}
         </Row>
       </ScrollContentWithFooter>
     </ContentWithHeader>

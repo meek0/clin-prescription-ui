@@ -1,48 +1,33 @@
-import { CodeListEntity, FamilyMemberHistoryEntity } from 'api/fhir/models';
-import { useCodeSystem, useFamilyHistoryEntity } from 'graphql/prescriptions/actions';
-import { find } from 'lodash';
+import { IListNameValueItem, TFormConfig } from 'api/form/models';
+import { HybridAnalysis } from 'api/hybrid/models';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { useLang } from 'store/global';
-import { LANG } from 'utils/constants';
 
 type IDOwnProps = {
-  ids: string[];
+  history: HybridAnalysis['history'];
+  prescriptionConfig?: TFormConfig;
 };
 
 const getFamilyHistoryInfo = (
-  fmh: FamilyMemberHistoryEntity,
-  codeList: CodeListEntity,
-  lang: LANG,
+  historyItem: HybridAnalysis['history'][0],
+  parentalLinkCodes: IListNameValueItem[],
 ) => {
-  const relationShipCode = find(
-    codeList?.concept,
-    (o) => o.code === fmh?.relationship?.coding[0]?.code,
-  );
-  const valueDisplay = find(relationShipCode?.designation, (o) => o.language === lang);
+  const fmhValue =
+    parentalLinkCodes?.find((code) => code.value === historyItem.parental_link_code)?.name ||
+    historyItem.parental_link_code;
 
-  const fmhValue = `${fmh.note.text} (${
-    valueDisplay ? valueDisplay.value : fmh?.relationship?.coding[0]?.code
-  })`;
-
-  return fmhValue;
+  return `${historyItem.condition} (${fmhValue})`;
 };
 
-export const FamilyHistory = ({ ids }: IDOwnProps) => {
-  const { codeInfo } = useCodeSystem('fmh-relationship-plus');
-  const { familyHistory } = useFamilyHistoryEntity(ids);
-  const lang = useLang();
+export const FamilyHistory = ({ history, prescriptionConfig }: IDOwnProps) => {
+  const parentalLinkCodes = prescriptionConfig?.history_and_diagnosis?.parental_links;
 
-  if (familyHistory) {
-    if (Array.isArray(familyHistory)) {
-      const fmhList: string[] = [];
-      familyHistory.forEach((f) => {
-        fmhList.push(getFamilyHistoryInfo(f, codeInfo, lang));
-      });
-      return <>{fmhList.join(', ')}</>;
-    } else {
-      return <>{getFamilyHistoryInfo(familyHistory, codeInfo, lang)}</>;
-    }
+  if (history?.length) {
+    const fmhList: string[] = [];
+    history.forEach((historyItem) => {
+      fmhList.push(getFamilyHistoryInfo(historyItem, parentalLinkCodes || []));
+    });
+    return <>{fmhList.join(', ')}</>;
   }
   return <>{EMPTY_FIELD}</>;
 };
