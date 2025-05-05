@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Form, FormInstance, Input, Radio } from 'antd';
-import { PrescriptionFormApi } from 'api/form';
-import { IFormPatient } from 'api/form/models';
+import { hybridToFormPatient, IFormPatient, IHybridFormPatient } from 'api/form/models';
+import { HybridApi } from 'api/hybrid';
 import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
 import { FieldData } from 'rc-field-form/lib/interface';
@@ -187,7 +187,7 @@ const PatientDataSearch = ({
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) =>
           getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)) ? (
-            <SearchOrNoneFormItem<IFormPatient>
+            <SearchOrNoneFormItem<IHybridFormPatient>
               disableReset={!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.FILE_NUMBER]}
               form={form}
               inputFormItemProps={{
@@ -250,19 +250,21 @@ const PatientDataSearch = ({
                 ]);
               }}
               onSearchDone={(value) => {
-                updateFormFromPatient(form, value);
+                updateFormFromPatient(form, hybridToFormPatient(value));
                 setFileSearchDone(true);
                 setIsNewFileNumber(isEmpty(value));
 
-                if (value && value.ramq) {
+                if (value && value.jhn) {
                   setRamqSearchDone(true);
-                } else if (value && Object.keys(value).length > 0 && !value.ramq) {
+                } else if (value && Object.keys(value).length > 0 && !value.jhn) {
                   setFieldValue(form, getName(PATIENT_DATA_FI_KEY.NO_RAMQ), 'true');
                 }
               }}
               apiPromise={(value) =>
-                PrescriptionFormApi.searchPatient({
-                  ep: getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)),
+                HybridApi.searchPatient({
+                  organisation_id: getFieldValue(
+                    getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
+                  ),
                   mrn: value,
                 })
               }
@@ -279,7 +281,7 @@ const PatientDataSearch = ({
         {({ getFieldValue }) =>
           getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) || fileSearchDone ? (
             <>
-              <SearchOrNoneFormItem<IFormPatient>
+              <SearchOrNoneFormItem<IHybridFormPatient>
                 disableReset={
                   !!prescriptionId &&
                   ((!isNewFileNumber && ramqSearchDone) ||
@@ -382,14 +384,13 @@ const PatientDataSearch = ({
                       intl.get('cant.have.two.file.number.same.patient'),
                     );
                   } else {
-                    updateFormFromPatient(form, value);
+                    updateFormFromPatient(form, hybridToFormPatient(value));
                     setRamqSearchDone(true);
                   }
                 }}
                 apiPromise={(value) =>
-                  PrescriptionFormApi.searchPatient({
-                    ep: getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)),
-                    ramq: value,
+                  HybridApi.searchPatient({
+                    jhn: value,
                   })
                 }
                 disabled={ramqSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))}
