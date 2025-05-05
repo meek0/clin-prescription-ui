@@ -16,7 +16,7 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(3).contains(/^(?!-).*$/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(4).contains('Soumise').should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(5).contains(/^\d{4}-\d{2}-\d{2}$/).should('exist');
-    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(6).contains(/(DYSM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/).should('exist');
+    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(6).contains(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(7).contains(/(CHUSJ|CHUS|CUSM)/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(8).contains(/.+/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(9).contains(/.+/).should('exist');
