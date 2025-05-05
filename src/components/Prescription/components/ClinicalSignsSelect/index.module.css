@@ -1,9 +1,5 @@
-:root {
-  --label-width: 350px;
-}
-
 .clinicalSignsSelect :global(.ant-form-item-label) {
-  width: var(--label-width);
+  width: 350px;
 }
 .clinicalSignsSelect .clinicalSignNotice {
   font-weight: 500;
