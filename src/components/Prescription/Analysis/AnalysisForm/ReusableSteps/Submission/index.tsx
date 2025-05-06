@@ -19,7 +19,7 @@ import {
   STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { SubmissionStepMapping } from 'components/Prescription/Analysis/stepMapping';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import { getNamePath, setInitialValues } from 'components/Prescription/utils/form';
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 import { useAppDispatch } from 'store';

@@ -7,11 +7,11 @@ import { isEmpty } from 'lodash';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
 import ClinicalSignsSelect from 'components/Prescription/components/ClinicalSignsSelect';
-import { IClinicalSignsDataType } from 'components/Prescription/components/ClinicalSignsSelect/types';
-import PatientDataSearch, {
+import PatientDataSearch from 'components/Prescription/components/PatientDataSearch';
+import {
   IPatientDataType,
   PATIENT_DATA_FI_KEY,
-} from 'components/Prescription/components/PatientDataSearch';
+} from 'components/Prescription/components/PatientDataSearch/types';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -24,36 +24,18 @@ import { SexValue } from 'utils/commonTypes';
 
 import { defaultCollapseProps, defaultFormItemsRules, STEPS_ID } from '../constant';
 
+import {
+  ClinicalStatusValue,
+  EnterInfoMomentValue,
+  PARENT_DATA_FI_KEY,
+  TParentDataType,
+} from './types';
+
 import styles from './index.module.css';
 
 type OwnProps = IAnalysisStepForm & {
   parent: 'mother' | 'father';
 };
-
-export enum PARENT_DATA_FI_KEY {
-  ENTER_INFO_MOMENT = 'parent_enter_moment',
-  NO_INFO_REASON = 'parent_no_info_reason',
-  CLINICAL_STATUS = 'parent_clinical_status',
-}
-
-export enum EnterInfoMomentValue {
-  NOW = 'now',
-  NEVER = 'never',
-  LATER = 'later',
-}
-
-export enum ClinicalStatusValue {
-  AFFECTED = 'affected',
-  NOT_AFFECTED = 'not_affected',
-  UNKNOWN = 'unknown',
-}
-
-export type TParentDataType = IPatientDataType &
-  IClinicalSignsDataType & {
-    [PARENT_DATA_FI_KEY.CLINICAL_STATUS]: ClinicalStatusValue;
-    [PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT]: EnterInfoMomentValue;
-    [PARENT_DATA_FI_KEY.NO_INFO_REASON]: string;
-  };
 
 const { Text } = Typography;
 

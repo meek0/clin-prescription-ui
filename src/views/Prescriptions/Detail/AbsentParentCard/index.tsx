@@ -4,7 +4,7 @@ import { Descriptions, Space, Typography } from 'antd';
 import { useObservationSocialHistoryEntity } from 'graphql/prescriptions/actions';
 
 import CollapsePanel from 'components/containers/collapse';
-import { EnterInfoMomentValue } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification';
+import { EnterInfoMomentValue } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
 import ParagraphLoader from 'components/uiKit/ParagraphLoader';
 
 interface OwnProps {

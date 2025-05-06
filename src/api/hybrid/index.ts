@@ -21,6 +21,40 @@ async function getPrescription(prescriptionId: string) {
   return { data, error };
 }
 
+const createPrescription = (data: HybridPrescription, isDraft?: boolean) =>
+  sendRequestWithRpt<{
+    analysis_id: string;
+    patients: {
+      id: string;
+      family_member: string;
+    }[];
+  }>({
+    method: 'POST',
+    url: `${HYBRID_API_URL}/analysis`,
+    params: {
+      draft: isDraft || null,
+    },
+    headers,
+    data,
+  });
+
+const updatePrescription = (data: HybridPrescription, prescriptionId: string, isDraft?: boolean) =>
+  sendRequestWithRpt<{
+    analysis_id: string;
+    patients: {
+      id: string;
+      family_member: string;
+    }[];
+  }>({
+    method: 'PUT',
+    url: `${HYBRID_API_URL}/analysis/${prescriptionId}`,
+    params: {
+      draft: isDraft || null,
+    },
+    headers,
+    data,
+  });
+
 const searchPatient = ({
   organisation_id,
   mrn,
@@ -56,6 +90,8 @@ const searchSupervisors = ({
 
 export const HybridApi = {
   getPrescription,
+  createPrescription,
+  updatePrescription,
   searchPatient,
   searchSupervisors,
 };

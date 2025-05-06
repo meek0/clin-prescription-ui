@@ -11,7 +11,7 @@ export interface HybridPatientExam {
 }
 
 export interface HybridPatientPresent {
-  patient_id: string;
+  patient_id?: string;
   first_name: string;
   last_name: string;
   jhn: string;
@@ -20,7 +20,8 @@ export interface HybridPatientPresent {
   birth_date: string;
   organization_id: string;
   family_member: string;
-  affected: boolean;
+  affected?: boolean;
+  status?: string;
   foetus?: {
     type: string;
     sex: string;
@@ -28,13 +29,13 @@ export interface HybridPatientPresent {
     gestational_date: string;
     mother_jhn: string;
   };
-  clinical: {
+  clinical?: {
     signs: HybridPatientSign[];
-    comment: string;
+    comment?: string;
   };
-  para_clinical: {
+  para_clinical?: {
     exams: HybridPatientExam[];
-    other: string;
+    other?: string;
   };
 }
 
@@ -47,17 +48,18 @@ export interface HybridPatientNotPresent {
 export type HybridPatient = HybridPatientPresent | HybridPatientNotPresent;
 
 export interface HybridPrescription {
-  analysis_id: string;
+  analysis_id?: string;
   type: string;
   analysis_code: string;
   is_reflex: boolean;
-  comment: string;
-  inbreeding: string;
+  comment?: string;
+  inbreeding?: boolean;
+  resident_supervisor_id?: string;
   history: {
     condition: string;
     parental_link_code: string;
   }[];
-  diagnosis_hypothesis: string;
-  ethnicity_code: string;
+  diagnosis_hypothesis?: string;
+  ethnicity_code?: string;
   patients: HybridPatient[];
 }

@@ -1,9 +1,5 @@
-:root {
-  --label-width: 225px;
-}
-
 .paraExamsSelect :global(.ant-form-item-label) {
-  width: var(--label-width);
+  width: 225px;
 }
 .paraExamsSelect .paraExamFormItem {
   margin-bottom: 12px;

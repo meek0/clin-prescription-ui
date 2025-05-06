@@ -2,13 +2,14 @@ import intl from 'react-intl-universal';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { PrescriptionFormApi } from 'api/form';
 import { TFormConfig } from 'api/form/models';
+import { HybridApi } from 'api/hybrid';
+import { HybridPrescription } from 'api/hybrid/models';
 import { capitalize } from 'lodash';
 
 import { globalActions } from 'store/global';
 import { RootState } from 'store/types';
 
 import { prescriptionFormActions } from './slice';
-import { TCompleteAnalysis } from './types';
 import { cleanAnalysisData } from './utils';
 
 const fetchFormConfig = createAsyncThunk<TFormConfig, { code: string }>(
@@ -43,15 +44,15 @@ const createPrescription = createAsyncThunk<
   { state: RootState }
 >('prescription/createPrescription', async (_, thunkApi) => {
   const prescription = thunkApi.getState().prescription;
-  const prescriptionData: TCompleteAnalysis = cleanAnalysisData(prescription.analysisData);
+  const prescriptionData: HybridPrescription = cleanAnalysisData(prescription.analysisData);
 
   const { data, error } = prescription.prescriptionId
-    ? await PrescriptionFormApi.updatePrescription(
+    ? await HybridApi.updatePrescription(
         prescriptionData,
         prescription.prescriptionId,
         prescription.isDraft,
       )
-    : await PrescriptionFormApi.createPrescription(prescriptionData, prescription.isDraft);
+    : await HybridApi.createPrescription(prescriptionData, prescription.isDraft);
 
   if (error) {
     thunkApi.dispatch(prescriptionFormActions.setSubmissionError(error));
@@ -59,7 +60,7 @@ const createPrescription = createAsyncThunk<
   }
 
   return {
-    prescriptionId: data?.id!,
+    prescriptionId: data?.analysis_id!,
     patients: data?.patients,
   };
 });

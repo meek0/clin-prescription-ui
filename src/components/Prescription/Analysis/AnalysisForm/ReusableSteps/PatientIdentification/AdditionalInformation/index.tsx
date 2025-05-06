@@ -10,7 +10,7 @@ import {
   dateNotEarlierThanTodayRule,
   dateNotLaterThanTodayRule,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -51,7 +51,7 @@ export enum ADD_INFO_FI_KEY {
 export const additionalInfoKey = 'additional_info';
 
 export interface IAddInfoDataType {
-  [additionalInfoKey]: IAddInfoDataContent;
+  [additionalInfoKey]?: IAddInfoDataContent;
 }
 
 export interface IAddInfoDataContent {

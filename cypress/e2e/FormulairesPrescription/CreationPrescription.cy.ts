@@ -54,7 +54,7 @@ describe('Formulaires de prescription - Création', () => {
     cy.wait(2000);
 
     // Soumission
-    cy.intercept('POST', '**/form').as('getPOSTform');
+    cy.intercept('POST', '**/api/v1/analysis').as('getPOSTform');
     cy.get('[data-cy="SubmitButton"]').clickAndWait({force: true});
     cy.wait('@getPOSTform');
     

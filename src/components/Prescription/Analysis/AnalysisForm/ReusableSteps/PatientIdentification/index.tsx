@@ -4,10 +4,7 @@ import { Form, Space } from 'antd';
 import { useState } from 'react';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
-import PatientDataSearch, {
-  IPatientDataType,
-  PATIENT_DATA_FI_KEY
-} from 'components/Prescription/components/PatientDataSearch';
+import PatientDataSearch from 'components/Prescription/components/PatientDataSearch';
 import { getNamePath } from 'components/Prescription/utils/form';
 import { IAnalysisStepForm } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
@@ -19,6 +16,7 @@ import AdditionalInformation, {
 } from './AdditionalInformation';
 
 import styles from './index.module.css';
+import { IPatientDataType, PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 
 export type TPatientFormDataType = IPatientDataType & IAddInfoDataType;
 
