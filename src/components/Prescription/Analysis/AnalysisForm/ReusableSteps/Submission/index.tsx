@@ -49,7 +49,22 @@ const Submission = () => {
 
   useEffect(() => {
     if (analysisData.analysis.resident_supervisor) {
-      onSearch('d');
+      HybridApi.searchSupervisors({
+        organizationId: getPrescribingOrg()!,
+        prefix: analysisData.analysis.resident_supervisor,
+      })
+        .then(({ data }) => {
+          form.setFieldValue(
+            getName(SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR),
+            data?.supervisors[0].name || analysisData.analysis.resident_supervisor,
+          );
+        })
+        .catch(() => {
+          form.setFieldValue(
+            getName(SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR),
+            analysisData.analysis.resident_supervisor,
+          );
+        });
     }
     setInitialValues(
       form,
@@ -57,7 +72,6 @@ const Submission = () => {
       {
         [SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT]:
           analysisData.submission?.general_comment || analysisData.analysis.comment,
-        [SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR]: analysisData.analysis.resident_supervisor,
       },
       SUBMISSION_REVIEW_FI_KEY,
     );
