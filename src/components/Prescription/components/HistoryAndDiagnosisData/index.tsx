@@ -90,8 +90,7 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
   const resetListError = () => {
     resetFieldError(form, getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS));
 
-    const formFieldValueItems = getFieldValue(
-      form,
+    const formFieldValueItems = form.getFieldValue(
       getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
     );
 
@@ -106,23 +105,22 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
     }
   };
 
-  const canRemoveHealthConditionFormItem = (formItemPosition: number) => {
-    const formFieldValueItems = getFieldValue(
-      form,
+  const canRemoveHealthConditionFormItem = (formItemPosition: number = 0) => {
+    const formFieldValueItems = form.getFieldValue(
       getName(HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS),
     );
 
     if (Array.isArray(formFieldValueItems) && formItemPosition === 0) {
       return (
-        formFieldValueItems[0][HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
-        formFieldValueItems[0][HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]
+        formFieldValueItems[0]?.[HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
+        formFieldValueItems[0]?.[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK]
       );
     } else {
-      const previousPosition = (formItemPosition || 0) - 1;
+      const previousPosition = formItemPosition - 1;
       return (
         previousPosition >= 0 &&
-        (formFieldValueItems[previousPosition][HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
-          formFieldValueItems[previousPosition][HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK])
+        (formFieldValueItems[previousPosition]?.[HEALTH_CONDITION_ITEM_KEY.CONDITION] ||
+          formFieldValueItems[previousPosition]?.[HEALTH_CONDITION_ITEM_KEY.PARENTAL_LINK])
       );
     }
   };
