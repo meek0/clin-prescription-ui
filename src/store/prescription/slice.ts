@@ -215,6 +215,7 @@ const prescriptionFormSlice = createSlice({
         is_reflex: prescription.is_reflex,
         panel_code: prescription.analysis_code,
         comment: prescription.comment,
+        resident_supervisor: prescription.resident_supervisor_id,
       };
 
       if (prescription.diagnosis_hypothesis) {
