@@ -228,7 +228,7 @@ const prescriptionFormSlice = createSlice({
             parental_link: history.parental_link_code,
           })),
         } as IHistoryAndDiagnosisDataType;
-        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding)
+        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding !== undefined)
           state.analysisData.history_and_diagnosis.inbreeding = prescription.inbreeding;
       }
 
