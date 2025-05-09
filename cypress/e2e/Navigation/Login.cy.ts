@@ -11,6 +11,9 @@ beforeEach(() => {
 
 describe('Affichage de la page Login', () => {
   it('Vérifier le texte affiché', () => {
+    cy.get('[id="social-CQGC"]').clickAndWait();
+    cy.waitWhileSpin(oneMinute);
+
     cy.contains('Courriel (.med@ssss.gouv.qc.ca)').should('exist');
     cy.contains('Mot de passe').should('exist');
     cy.contains('Mot de passe oublié ?').should('exist');
