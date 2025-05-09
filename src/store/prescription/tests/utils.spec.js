@@ -75,7 +75,7 @@ describe('cleanAnalysisData', () => {
       resident_supervisor_id: undefined,
       history: [],
       diagnosis_hypothesis: undefined,
-      ethnicity_code: undefined,
+      ethnicity_codes: undefined,
       patients: [
         {
           first_name: undefined,

@@ -157,7 +157,9 @@ export function cleanAnalysisData(analysis: TCompleteAnalysis): HybridPrescripti
       })) || [],
     diagnosis_hypothesis:
       analysisCopy.history_and_diagnosis?.[HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS],
-    ethnicity_code: analysisCopy.history_and_diagnosis?.[HISTORY_AND_DIAG_FI_KEY.ETHNICITY],
+    ethnicity_codes: analysisCopy.history_and_diagnosis?.[
+      HISTORY_AND_DIAG_FI_KEY.ETHNICITY
+    ]?.filter((eth) => !!eth),
     patients,
   };
 

@@ -493,7 +493,7 @@ export const ANALYSE_ETH_OBSERVATION = (id: string) => gql`
     Observation(id: $id) {
       id
       valueCodeableConcept{
-        coding @first{
+        coding {
           code
           display
           system
