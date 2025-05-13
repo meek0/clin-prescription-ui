@@ -60,6 +60,6 @@ export interface HybridPrescription {
     parental_link_code: string;
   }[];
   diagnosis_hypothesis?: string;
-  ethnicity_code?: string;
+  ethnicity_codes?: string[];
   patients: HybridPatient[];
 }

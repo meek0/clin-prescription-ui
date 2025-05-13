@@ -221,7 +221,7 @@ const prescriptionFormSlice = createSlice({
       if (prescription.diagnosis_hypothesis) {
         state.analysisData.history_and_diagnosis = {
           diagnostic_hypothesis: prescription.diagnosis_hypothesis,
-          ethnicity: prescription.ethnicity_code,
+          ethnicity: prescription.ethnicity_codes,
           report_health_conditions: !!prescription.history?.length,
           health_conditions: prescription.history?.map((history) => ({
             condition: history.condition,

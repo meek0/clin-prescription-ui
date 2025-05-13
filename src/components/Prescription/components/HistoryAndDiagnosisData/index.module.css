@@ -44,6 +44,10 @@
 .historyAndDiagnosisHypSelect .healthConditionListItem :global(.ant-form-item) {
   margin-bottom: 0;
 }
-.historyAndDiagnosisHypSelect .healthConditionListItem .removeIcon {
-  color: var(--blue-8);
+.historyAndDiagnosisHypSelect .ethnicities :global(.ant-select-selection-item){
+  background-color: var(--blue-8);
+  color: white;
+}
+.historyAndDiagnosisHypSelect .ethnicities :global(.anticon){
+  color: white;
 }

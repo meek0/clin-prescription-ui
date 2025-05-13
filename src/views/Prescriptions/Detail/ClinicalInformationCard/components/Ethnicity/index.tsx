@@ -1,5 +1,4 @@
 import { useCodeSystem, useObservationEthnicityEntity } from 'graphql/prescriptions/actions';
-import { find } from 'lodash';
 
 import { EMPTY_FIELD } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { useLang } from 'store/global';
@@ -13,14 +12,15 @@ export const Ethnicity = ({ id }: IDOwnProps) => {
   const { codeInfo } = useCodeSystem('qc-ethnicity');
   const lang = useLang();
 
-  const value = find(
-    codeInfo?.concept,
-    (o) => o.code === ethValue?.valueCodeableConcept?.coding.code,
-  );
-  if (value) {
-    const valueDisplay = find(value?.designation, (o) => o.language === lang);
+  const values =
+    codeInfo?.concept.reduce((ethnicities: string[], ethn: any) => {
+      ethValue?.valueCodeableConcept?.coding.forEach((coding: any) => {
+        const designation =
+          ethn.designation?.find((d: any) => d.language === lang)?.value || ethn.display;
+        if (coding.code === ethn.code) ethnicities.push(designation);
+      });
+      return ethnicities;
+    }, []) || [];
 
-    return <>{valueDisplay ? valueDisplay.value : value.display}</>;
-  }
-  return <>{EMPTY_FIELD}</>;
+  return <>{values.length ? values.join(' | ') : EMPTY_FIELD}</>;
 };

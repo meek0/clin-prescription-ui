@@ -45,7 +45,7 @@ export interface IHealthConditionItem {
 export interface IHistoryAndDiagnosisDataType {
   [HISTORY_AND_DIAG_FI_KEY.HEALTH_CONDITIONS]: IHealthConditionItem[];
   [HISTORY_AND_DIAG_FI_KEY.REPORT_HEALTH_CONDITIONS]: boolean;
-  [HISTORY_AND_DIAG_FI_KEY.ETHNICITY]: string;
+  [HISTORY_AND_DIAG_FI_KEY.ETHNICITY]: string[];
   [HISTORY_AND_DIAG_FI_KEY.HAS_INBREEDING]: boolean | undefined;
   [HISTORY_AND_DIAG_FI_KEY.DIAGNOSIS_HYPOTHESIS]: string;
 }
@@ -291,9 +291,13 @@ const HistoryAndDiagnosticData = ({ parentKey, form, initialData }: OwnProps) =>
       <Form.Item
         label={intl.get('prescription.history.diagnosis.review.label.ethnicity')}
         name={getName(HISTORY_AND_DIAG_FI_KEY.ETHNICITY)}
-        wrapperCol={{ lg: 8, xl: 8, xxl: 6 }}
+        className={styles.ethnicities}
       >
-        <Select placeholder={intl.get('prescription.add.parent.modal.select')}>
+        <Select
+          placeholder={intl.get('prescription.add.parent.modal.select')}
+          mode="multiple"
+          onChange={() => resetFieldError(form, getName(HISTORY_AND_DIAG_FI_KEY.ETHNICITY))}
+        >
           {formConfig?.history_and_diagnosis.ethnicities.map((eth) => (
             <Select.Option key={eth.value} value={eth.value} title={null}>
               {eth.name}
