@@ -36,7 +36,7 @@ const ParentIdentificationReview = ({ parent }: OwnProps) => {
 
     return (
       <>
-        {!isPrenatal && (
+        {(!isPrenatal || parent === 'father') && (
           <>
             <PatientIdentificationReview key={parent} stepId={getStepId()} />
             <Divider style={{ margin: '12px 0' }} />

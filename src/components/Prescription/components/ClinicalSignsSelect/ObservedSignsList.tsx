@@ -44,10 +44,7 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
   const defaultRules = [
     {
       validator: async (_: any, signs: IClinicalSignItem[]) => {
-        if (
-          !signs.some((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED] === true) &&
-          !isRemoveClicked
-        ) {
+        if (!signs.some((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]) && !isRemoveClicked) {
           return Promise.reject(new Error(intl.get('prescription.form.signs.observed.error')));
         }
         setIsRemoveClicked(false);
