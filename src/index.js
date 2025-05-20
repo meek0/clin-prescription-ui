@@ -18,6 +18,7 @@ const SentryDSN = EnvironmentVariables.configFor('SENTRY_API');
 
 Sentry.init({
   dsn: SentryDSN,
+  environment: process.env.REACT_APP_ENVIRONMENT,
   integrations: [
     Sentry.browserTracingIntegration({
       // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
