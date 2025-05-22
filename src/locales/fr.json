@@ -519,7 +519,7 @@
   "prescription.analysis.choici.modal.consult.algo.2": "l'algorithme clinique du RQDM",
   "prescription.analysis.choici.modal.consult.algo.3": "sur l'analyse sélectionnée avant de procéder au formulaire de prescription.",
   "prescription.analysis.choici.modal.approbation": "La prescription d’un test moléculaire est réservée à certaines catégories de prescripteurs, qui varient selon l’analyse demandée. Chaque prescription est sujette à l’approbation du laboratoire de diagnostic moléculaire avant le début du séquençage de l’échantillon.",
-  "enter.at.least.character": "Entrer au moins {count} caractères",
+  "enter.at.least.character": "Entrer au moins {count} caractère",
   "how.it.works": "Comment ça marche",
   "download.documents": "Télécharger",
   "create.new.prescription": "Créer une nouvelle prescription",
