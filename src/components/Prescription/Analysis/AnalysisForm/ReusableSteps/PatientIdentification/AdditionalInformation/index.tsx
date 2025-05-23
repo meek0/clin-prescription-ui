@@ -17,7 +17,7 @@ import {
   setFieldValue,
   setInitialValues,
 } from 'components/Prescription/utils/form';
-import { formatRamq, isRamqValid } from 'components/Prescription/utils/ramq';
+import { formatJhn, isJhnValid } from 'components/Prescription/utils/ramq';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
 import { calculateGestationalAgeFromDDM, calculateGestationalAgeFromDPA } from 'utils/age';
@@ -241,7 +241,7 @@ const FoetusInfos = ({ form, parentKey, showNewBornSection = false, initialData 
                       validator: (_, value) => {
                         if (!value) {
                           return Promise.reject(new Error(intl.get('this.field.is.required')));
-                        } else if (!isRamqValid(value)) {
+                        } else if (!isJhnValid(value)) {
                           return Promise.reject(new Error(intl.get('ramq.number.invalid')));
                         }
                         return Promise.resolve();
@@ -256,7 +256,7 @@ const FoetusInfos = ({ form, parentKey, showNewBornSection = false, initialData 
                       setFieldValue(
                         form,
                         getName('mother_jhn' satisfies keyof HybridPatientFoetus),
-                        formatRamq(e.currentTarget.value),
+                        formatJhn(e.currentTarget.value),
                       )
                     }
                   />

@@ -2,19 +2,19 @@ import { format, parse } from 'date-fns';
 
 import { SexValue } from 'utils/commonTypes';
 
-export const RAMQ_PATTERN = RegExp(
+export const JHN_PATTERN = RegExp(
   /^[a-zA-Z-]{4}\d{2}(?:(?:[05][1-9])|[16][012])(?:(?:0[1-9])|(?:[12][0-9])|(?:3[01]))\d{2}$/,
 );
-export const RAMQ_NUMBER_LENGTH = 12;
+export const JHN_NUMBER_LENGTH = 12;
 
-export const isRamqValid = (ramq: string) => RAMQ_PATTERN.test(ramq.replaceAll(' ', ''));
+export const isJhnValid = (jhn: string) => JHN_PATTERN.test(jhn.replaceAll(' ', ''));
 
-export const formatRamq = (value: string) =>
+export const formatJhn = (value: string) =>
   value
     .toUpperCase()
     .replace(/\s/g, '')
     .split('')
-    .splice(0, RAMQ_NUMBER_LENGTH)
+    .splice(0, JHN_NUMBER_LENGTH)
     .reduce(
       (acc, char, index) =>
         char !== ' ' && [3, 7].includes(index) ? `${acc}${char} ` : `${acc}${char}`,
@@ -22,9 +22,9 @@ export const formatRamq = (value: string) =>
     )
     .trimEnd();
 
-export const extractBirthDateAndSexFromRamq = (ramq: string, dateFormat: string) => {
+export const extractBirthDateAndSexFromJhn = (jhn: string, dateFormat: string) => {
   let sex = SexValue.MALE;
-  const dateString = ramq.substring(4, 10);
+  const dateString = jhn.substring(4, 10);
   const year = dateString.substring(0, 2);
   let month = parseInt(dateString.substring(2, 4));
   const day = dateString.substring(4, 6);

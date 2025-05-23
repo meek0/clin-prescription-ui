@@ -20,7 +20,7 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
   const FORM_NAME = STEPS_ID.PROBAND_IDENTIFICATION;
   const [form] = Form.useForm();
   const { analysisFormData } = usePrescriptionForm();
-  const [ramqSearchDone, setRamqSearchDone] = useState(false);
+  const [jhnSearchDone, setJhnSearchDone] = useState(false);
 
   const getName = (...key: string[]) => getNamePath(FORM_NAME, key);
   const initialData = analysisFormData ? analysisFormData[FORM_NAME] : undefined;
@@ -33,10 +33,10 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
             <PatientDataSearch
               form={form}
               parentKey={FORM_NAME}
-              onRamqSearchStateChange={setRamqSearchDone}
-              initialRamqSearchDone={ramqSearchDone}
+              onJhnSearchStateChange={setJhnSearchDone}
+              initialjhnSearchDone={jhnSearchDone}
               initialData={initialData}
-              onResetRamq={() => {
+              onResetJhn={() => {
                 form.resetFields([
                   getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS),
                   getName('sex' satisfies keyof HybridPatientFoetus),
@@ -49,7 +49,7 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
         </Collapse>
         <Form.Item noStyle shouldUpdate>
           {({ getFieldValue }) =>
-            getFieldValue(getName('no_jhn')) || ramqSearchDone ? (
+            getFieldValue(getName('no_jhn')) || jhnSearchDone ? (
               <Collapse {...defaultCollapseProps} defaultActiveKey={['additional_information']}>
                 <CollapsePanel key="additional_information" header="Informations supplémentaires">
                   <FoetusInfos

@@ -47,7 +47,7 @@ Cypress.Commands.add('logout', () => {
         if ($div.hasClass('App')) {
             cy.get('span[class="anticon anticon-down"]').clickAndWait({force: true});
             cy.get('[data-menu-id*="logout"]').clickAndWait({force: true});
-        };
+        }
     });
 
   cy.exec('npm cache clear --force');
@@ -163,8 +163,8 @@ Cypress.Commands.add('visitHomePage', () => {
 
 Cypress.Commands.add('visitPrescriptionEntityPage', (prescriptionId: string) => {
   cy.visitAndIntercept(`/prescription/entity/${prescriptionId}`,
-                       'POST',
-                       '**/$graphql*',
+                       'GET',
+                       `**/api/v1/analysis/${prescriptionId}`,
                        1);
 });
 

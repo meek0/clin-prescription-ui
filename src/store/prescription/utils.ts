@@ -47,8 +47,12 @@ export function getAnalysisFromFormData(analysis: TCompleteAnalysis): HybridAnal
     // Foetus
     if ((analysisCopy.proband?.foetus as HybridPatientFoetusForm)?.is_prenatal_diagnosis) {
       proband!.foetus!.type = FOETUS_TYPE.PRENATAL;
+      delete (proband.foetus as HybridPatientFoetusForm)!.is_prenatal_diagnosis;
     } else if ((analysisCopy.proband?.foetus as HybridPatientFoetusForm)?.is_new_born) {
       proband!.foetus!.type = FOETUS_TYPE.NEW_BORN;
+      delete (proband.foetus as HybridPatientFoetusForm)!.is_new_born;
+    } else {
+      delete proband.foetus;
     }
 
     patients.push(proband);
@@ -154,6 +158,15 @@ export function getFormDataFromAnalysis(analysis: HybridAnalysis): TCompleteAnal
     no_mrn: !proband.mrn,
     no_jhn: !proband.jhn,
   };
+
+  // Foetus
+  if (analysisFormData.proband.foetus) {
+    if (proband.foetus!.type === FOETUS_TYPE.PRENATAL) {
+      analysisFormData.proband.foetus.is_prenatal_diagnosis = true;
+    } else if (proband.foetus!.type === FOETUS_TYPE.NEW_BORN) {
+      analysisFormData.proband.foetus.is_new_born = true;
+    }
+  }
 
   if (proband.clinical) {
     analysisFormData.proband_clinical = getClinicalSignsFromAnalysis(proband);

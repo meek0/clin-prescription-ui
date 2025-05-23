@@ -40,7 +40,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
     parent === 'father' ? STEPS_ID.FATHER_IDENTIFICATION : STEPS_ID.MOTHER_IDENTIFICATION;
 
   const [form] = Form.useForm();
-  const [ramqSearchDone, setRamqSearchDone] = useState(false);
+  const [jhnSearchDone, setJhnSearchDone] = useState(false);
   const { analysisFormData, isAddingParent } = usePrescriptionForm();
 
   const hideParentIdentificationForm =
@@ -135,9 +135,9 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                           }
                         : undefined
                     }
-                    onRamqSearchStateChange={setRamqSearchDone}
-                    initialRamqSearchDone={ramqSearchDone}
-                    onResetRamq={() => {}}
+                    onJhnSearchStateChange={setJhnSearchDone}
+                    initialjhnSearchDone={jhnSearchDone}
+                    onResetJhn={() => {}}
                     populateFromJhn={
                       parent === 'mother' && analysisFormData?.proband?.foetus?.is_new_born
                         ? {
@@ -166,7 +166,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         {({ getFieldValue }) =>
           getFieldValue(getName('status' satisfies keyof TParentDataType)) ===
             EnterInfoMomentValue.NOW &&
-          (hideParentIdentificationForm || ramqSearchDone || getFieldValue(getName('no_jhn'))) ? (
+          (hideParentIdentificationForm || jhnSearchDone || getFieldValue(getName('no_jhn'))) ? (
             <Collapse {...defaultCollapseProps} defaultActiveKey={['clinical_information']}>
               <CollapsePanel
                 key="clinical_information"

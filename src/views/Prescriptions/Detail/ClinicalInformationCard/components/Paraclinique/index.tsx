@@ -33,11 +33,16 @@ export const Paraclinique = ({ paraClinical, prescriptionConfig }: OwnProps) => 
         (value) =>
           defaultList?.extra?.options?.find((entry: any) => entry.value === value)?.name || value,
       );
-    } else if (defaultList.extra?.type === 'string' && defaultList.extra?.unit) {
-      values = exam.values.map((value) => `${value} ${defaultList.extra?.unit}`);
+    } else if (defaultList.extra?.type === 'string') {
+      values = exam.values.map(
+        (value) => value + (defaultList.extra?.unit ? ` ${value} ${defaultList.extra?.unit}` : ''),
+      );
     }
 
-    return { name: defaultList.name || exam.code, values };
+    let name = defaultList.name || exam.code;
+    if (defaultList.tooltip) name += ` (${defaultList.tooltip})`;
+
+    return { name, values };
   }
 
   return (

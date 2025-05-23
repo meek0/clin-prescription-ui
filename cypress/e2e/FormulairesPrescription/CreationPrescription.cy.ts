@@ -66,7 +66,7 @@ describe('Formulaires de prescription - Création', () => {
     });
 
     // Confirmation de la soumission
-    cy.clickAndIntercept('[class*="SaveModal"] [href*="/prescription/entity/"]', 'POST', '**/$graphql*', 3);
+    cy.clickAndIntercept('[class*="SaveModal"] [href*="/prescription/entity/"]', 'GET', '**/api/v1/analysis/*', 1,);
 
     // Page de la prescription
     cy.get('[data-cy="PatientCard"]').contains(strMRN).should('exist');

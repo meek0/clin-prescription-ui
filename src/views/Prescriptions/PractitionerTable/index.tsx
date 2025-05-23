@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import intl from 'react-intl-universal';
+import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { tieBreaker } from '@ferlab/ui/core/components/ProTable/utils';
 import { BooleanOperators } from '@ferlab/ui/core/data/sqon/operators';
 import { ISyntheticSqon, TSyntheticSqonContent } from '@ferlab/ui/core/data/sqon/types';
@@ -30,7 +31,6 @@ import { getPractitionerInfoList } from './utils/export';
 
 import styles from './index.module.css';
 import homeStyles from 'views/Home/index.module.css';
-import ProLabel from '@ferlab/ui/core/components/ProLabel';
 
 const generateSearchFilter = (search: string) =>
   generateQuery({

@@ -28,6 +28,7 @@ describe('cleanAnalysisData', () => {
       proband: {
         jhn: 'XXXX 0000 1111',
         foetus: {
+          is_new_born: true,
           mother_jhn: 'XXXX 0000 1111',
         },
       },
@@ -69,6 +70,7 @@ describe('cleanAnalysisData', () => {
           family_member: 'PROBAND',
           foetus: {
             mother_jhn: 'XXXX00001111',
+            type: 'NEW_BORN',
           },
           clinical: {
             comment: undefined,
