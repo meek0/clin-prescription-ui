@@ -535,6 +535,13 @@ export const ANALYSE_PHENOTYPE_OBSERVATION = (ids: string[]) => gql`
           (id) => `
             Observation(id: "${id}") {
               id
+              focus @first {
+                reference
+                resource {
+                  id
+                  gender
+                }
+              }
               extension: extension(url: "http://fhir.cqgc.ferlab.bio/StructureDefinition/age-at-onset") @first {
                 valueCoding {
                   code

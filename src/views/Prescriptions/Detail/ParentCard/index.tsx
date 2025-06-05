@@ -28,7 +28,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
   const clinicalImpressions =
     extension?.extension?.[1].valueReference?.resource.clinicalImpressions;
   const phenotype: string[] = [];
-  let generalObservation = undefined;
+  const generalObservation: string[] = [];
   let affectedStatus = '';
 
   if (clinicalImpressions && clinicalImpressions.length > 0) {
@@ -45,7 +45,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
                 get(item, 'item.interpretation.coding.code', '') as AffectedStatusCode
               ];
           } else if (get(item, 'item.code.coding.code') === 'OBSG') {
-            generalObservation = item.reference;
+            generalObservation.push(item.reference);
           } else if (get(item, 'item.code.coding.code') === 'PHEN') {
             phenotype.push(item.reference);
           }
@@ -83,12 +83,13 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
                       {intl.get(affectedStatus)}
                     </Descriptions.Item>
                   </Descriptions>
-                  {(phenotype.length > 0 || generalObservation) && (
+                  {(phenotype.length > 0 || generalObservation.length > 1) && (
                     <>
                       <p style={{ marginBottom: '.5em' }} />
                       <ClinicalSign
+                        isProband={false}
                         phenotypeIds={phenotype}
-                        generalObervationId={generalObservation}
+                        generalObervationId={generalObservation[1]}
                       />
                     </>
                   )}

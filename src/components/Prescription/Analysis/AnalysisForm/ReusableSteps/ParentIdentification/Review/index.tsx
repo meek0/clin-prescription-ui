@@ -13,12 +13,17 @@ import PatientIdentificationReview from 'components/Prescription/Analysis/Analys
 import EmptySection from 'components/Prescription/components/EmptySection';
 import { usePrescriptionForm } from 'store/prescription';
 
+import { additionalInfoKey } from '../../PatientIdentification/AdditionalInformation';
+
 interface OwnProps {
   parent: 'mother' | 'father';
 }
 
 const ParentIdentificationReview = ({ parent }: OwnProps) => {
   const { analysisData } = usePrescriptionForm();
+
+  const isPrenatal =
+    analysisData[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.is_prenatal_diagnosis;
 
   const getStepId = () =>
     parent === 'father' ? STEPS_ID.FATHER_IDENTIFICATION : STEPS_ID.MOTHER_IDENTIFICATION;
@@ -31,8 +36,13 @@ const ParentIdentificationReview = ({ parent }: OwnProps) => {
 
     return (
       <>
-        <PatientIdentificationReview key={parent} stepId={getStepId()} />
-        <Divider style={{ margin: '12px 0' }} />
+        {(!isPrenatal || parent === 'father') && (
+          <>
+            <PatientIdentificationReview key={parent} stepId={getStepId()} />
+            <Divider style={{ margin: '12px 0' }} />
+          </>
+        )}
+
         <Descriptions className="label-20" column={1} size="small">
           <Descriptions.Item
             label={intl.get('status')}

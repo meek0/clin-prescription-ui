@@ -21,20 +21,22 @@ import {
 import styles from './index.module.css';
 
 type OwnProps = IAnalysisFormPart & {
+  hpoIsOptional?: boolean;
   initialData?: IClinicalSignsDataType;
 };
 
-const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
+const ClinicalSignsSelect = ({ form, parentKey, hpoIsOptional, initialData }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
-  const defaultHpo =
-    formConfig?.clinical_signs.default_list.map((term) => ({
-      [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: term.value,
-      [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: false,
-      [CLINICAL_SIGNS_ITEM_KEY.NAME]: term.name,
-      [CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]: 'unknown',
-    })) || [];
+  const defaultHpo = !hpoIsOptional
+    ? formConfig?.clinical_signs.default_list.map((term) => ({
+        [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: term.value,
+        [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: false,
+        [CLINICAL_SIGNS_ITEM_KEY.NAME]: term.name,
+        [CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]: 'unknown',
+      })) || []
+    : [];
 
   useEffect(() => {
     if (
@@ -88,7 +90,7 @@ const ClinicalSignsSelect = ({ form, parentKey, initialData }: OwnProps) => {
   return (
     <div className={styles.clinicalSignsSelect}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <ObservedSignsList form={form} getName={getName} />
+        <ObservedSignsList form={form} getName={getName} isOptional={hpoIsOptional} />
         <NotObservedSignsList form={form} getName={getName} />
         <ProLabel title="Commentaire clinique général" colon />
         <Form.Item name={getName(CLINICAL_SIGNS_FI_KEY.CLINIC_REMARK)} className="noMarginBtm">

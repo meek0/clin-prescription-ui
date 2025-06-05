@@ -17,6 +17,7 @@ import { useLang } from 'store/global';
 type ClinicalSignOwnProps = {
   phenotypeIds: string[];
   generalObervationId: string | undefined;
+  isProband: boolean;
 };
 
 type IDOwnProps = {
@@ -42,7 +43,11 @@ const handleHpoSearchTerm = (
     : null;
 };
 
-export const ClinicalSign = ({ phenotypeIds, generalObervationId }: ClinicalSignOwnProps) => {
+export const ClinicalSign = ({
+  phenotypeIds,
+  generalObervationId,
+  isProband,
+}: ClinicalSignOwnProps) => {
   const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
   const [ageList, setAgeList] = useState<IHpoNode[]>([
     {
@@ -76,9 +81,15 @@ export const ClinicalSign = ({ phenotypeIds, generalObervationId }: ClinicalSign
   let positive = [];
   let negative = [];
   if (Array.isArray(phenotypeValue)) {
-    positive = filter(phenotypeValue, (o) => o?.interpretation?.coding?.code === 'POS');
+    positive = filter(
+      phenotypeValue,
+      (o) => (isProband ? o?.focus : !o?.focus) && o?.interpretation?.coding?.code === 'POS',
+    );
 
-    negative = filter(phenotypeValue, (o) => o?.interpretation?.coding?.code === 'NEG');
+    negative = filter(
+      phenotypeValue,
+      (o) => (isProband ? o?.focus : !o?.focus) && o?.interpretation?.coding?.code === 'NEG',
+    );
   } else {
     positive = [phenotypeValue];
   }
