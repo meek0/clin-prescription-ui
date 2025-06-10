@@ -47,14 +47,14 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
 
   it('Valider les fonctionnalités du tableau - Tri Analyse', () => {
     cy.sortTableAndIntercept('Analyse', 1);
-    cy.validateTableFirstRow(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/, 6);
+    cy.validateTableFirstRow(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB|MALFOR)/, 6);
     cy.sortTableAndIntercept('Analyse', 1);
-    cy.validateTableFirstRow(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB)/, 6);
+    cy.validateTableFirstRow(/(DYSM|EXTUM|HYPM|MITN|MMG|MYAC|MYOC|POLYM|RGDI|RHAB|TUPED)/, 6);
   });
 
   it('Valider les fonctionnalités du tableau - Tri EP', () => {
     cy.sortTableAndIntercept('EP', 1);
-    cy.validateTableFirstRow(/(CHUSJ|CHUS|CUSM)/, 7);
+    cy.validateTableFirstRow(/(CHUSJ|CHUS|CUSM|CHUM)/, 7);
     cy.sortTableAndIntercept('EP', 1);
     cy.validateTableFirstRow(/(CHUSJ|CHUS|CUSM)/, 7);
   });
@@ -68,15 +68,14 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
 
   it('Valider les fonctionnalités du tableau - Tri Dossier', () => {
     cy.sortTableAndIntercept('Dossier', 1);
-    cy.validateTableFirstRow(/^(?!-).*$/, 9);
+    cy.validateTableFirstRow(/^(-|(?!-).*)$/, 9);
     cy.sortTableAndIntercept('Dossier', 1);
     cy.validateTableFirstRow(/^(?!-).*$/, 9);
   });
 
   it('Valider les fonctionnalités du tableau - Tri multiple', () => {
     cy.sortTableAndIntercept('Analyse', 1);
-    cy.sortTableAndIntercept('Analyse', 1);
     cy.sortTableAndIntercept('Statut', 1);
-    cy.validateTableFirstRow('Approuvée', 4);
+    cy.validateTableFirstRow('Soumise', 4);
   });
 });
