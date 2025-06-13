@@ -98,6 +98,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
                     isProband={true}
                     phenotypeIds={phenotype}
                     generalObervationIds={generalObservation}
+                    isPrenatal={prescription?.category?.[0]?.coding?.[0].code === 'Prenatal'}
                   />
                 }
               </Card.Grid>
