@@ -97,7 +97,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
                   <ClinicalSign
                     isProband={true}
                     phenotypeIds={phenotype}
-                    generalObervationId={generalObservation[0]}
+                    generalObervationIds={generalObservation}
                   />
                 }
               </Card.Grid>

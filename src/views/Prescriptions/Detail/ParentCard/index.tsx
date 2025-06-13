@@ -89,7 +89,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
                       <ClinicalSign
                         isProband={false}
                         phenotypeIds={phenotype}
-                        generalObervationId={generalObservation[1]}
+                        generalObervationIds={generalObservation}
                       />
                     </>
                   )}

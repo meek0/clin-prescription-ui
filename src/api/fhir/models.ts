@@ -356,6 +356,10 @@ export type PhenotypeRequestEntity = {
       code: string;
     };
   };
+  focus: {
+    resource: any;
+    reference: any;
+  };
 };
 
 export type ParaclinicEntity = {

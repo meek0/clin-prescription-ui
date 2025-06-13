@@ -563,12 +563,19 @@ export const ANALYSE_PHENOTYPE_OBSERVATION = (ids: string[]) => gql`
     }
 `;
 
-export const ANALYSE_GENERALOBS_INDICATION_OBSERVATION = (id: string) => gql`
-  query GetGeneralObservationObservation($id: String = "${id}") {
-    Observation(id: $id) {
-      id
-      valueString
-    }
+export const ANALYSE_GENERALOBS_INDICATION_OBSERVATION = (ids: string[]) => gql`
+  query GetGeneralObservationObservation {
+    ${ids.map(
+      (id) => `
+        Observation(id: "${id}") {
+          id
+          valueString
+          focus @first {
+            reference
+          }
+        }
+      `,
+    )}
   }
 `;
 
