@@ -142,12 +142,12 @@ export const useFamilyHistoryEntity = (ids: string[]) => {
   };
 };
 
-export const useGeneralObservationEntity = (id: string) => {
+export const useGeneralObservationEntity = (ids: string[]) => {
   const { data } = useLazyResultQueryOnLoadOnly<any>(
-    ANALYSE_GENERALOBS_INDICATION_OBSERVATION(id),
+    ANALYSE_GENERALOBS_INDICATION_OBSERVATION(ids),
     {
       variables: {
-        id: id,
+        ids: ids,
       },
     },
   );

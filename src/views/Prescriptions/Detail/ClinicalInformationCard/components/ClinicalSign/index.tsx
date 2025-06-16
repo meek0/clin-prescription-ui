@@ -16,16 +16,18 @@ import { useLang } from 'store/global';
 
 type ClinicalSignOwnProps = {
   phenotypeIds: string[];
-  generalObervationId: string | undefined;
+  generalObervationIds: string[];
   isProband: boolean;
+  isPrenatal?: boolean;
 };
 
 type IDOwnProps = {
-  id: string;
+  ids: string[];
+  isProband: boolean;
 };
 
-const Observation = ({ id }: IDOwnProps) => {
-  const { generalObervationValue } = useGeneralObservationEntity(id);
+const Observation = ({ ids }: IDOwnProps) => {
+  const { generalObervationValue } = useGeneralObservationEntity(ids);
   return <>{generalObervationValue?.valueString}</>;
 };
 
@@ -45,8 +47,9 @@ const handleHpoSearchTerm = (
 
 export const ClinicalSign = ({
   phenotypeIds,
-  generalObervationId,
+  generalObervationIds,
   isProband,
+  isPrenatal,
 }: ClinicalSignOwnProps) => {
   const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
   const [ageList, setAgeList] = useState<IHpoNode[]>([
@@ -66,6 +69,11 @@ export const ClinicalSign = ({
     element.extension ? handleHpoSearchTerm(element.extension.valueCoding?.code, setAgeList) : null;
   };
 
+  const workingPhenotypeValue =
+    isPrenatal && Array.isArray(phenotypeValue)
+      ? phenotypeValue?.filter((p: PhenotypeRequestEntity) => (isProband ? p.focus : !p.focus))
+      : phenotypeValue;
+
   useEffect(() => {
     if (phenotypeValue) {
       if (Array.isArray(phenotypeValue)) {
@@ -80,18 +88,11 @@ export const ClinicalSign = ({
 
   let positive = [];
   let negative = [];
-  if (Array.isArray(phenotypeValue)) {
-    positive = filter(
-      phenotypeValue,
-      (o) => (isProband ? o?.focus : !o?.focus) && o?.interpretation?.coding?.code === 'POS',
-    );
-
-    negative = filter(
-      phenotypeValue,
-      (o) => (isProband ? o?.focus : !o?.focus) && o?.interpretation?.coding?.code === 'NEG',
-    );
+  if (Array.isArray(workingPhenotypeValue)) {
+    positive = filter(workingPhenotypeValue, (o) => o?.interpretation?.coding?.code === 'POS');
+    negative = filter(workingPhenotypeValue, (o) => o?.interpretation?.coding?.code === 'NEG');
   } else {
-    positive = [phenotypeValue];
+    positive = [workingPhenotypeValue];
   }
 
   const displayHpo = (hpoValue: string, age: string = '') => {
@@ -129,7 +130,11 @@ export const ClinicalSign = ({
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('screen.prescription.entity.hpo.note')}>
-        {generalObervationId ? <Observation id={generalObervationId} /> : EMPTY_FIELD}
+        {generalObervationIds?.length > 0 ? (
+          <Observation ids={generalObervationIds} isProband={isProband} />
+        ) : (
+          EMPTY_FIELD
+        )}
       </Descriptions.Item>
     </Descriptions>
   );

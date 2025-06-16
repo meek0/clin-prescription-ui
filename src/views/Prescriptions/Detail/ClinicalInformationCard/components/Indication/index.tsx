@@ -5,6 +5,6 @@ type IDOwnProps = {
 };
 
 export const Indication = ({ id }: IDOwnProps) => {
-  const { generalObervationValue } = useGeneralObservationEntity(id);
+  const { generalObervationValue } = useGeneralObservationEntity([id]);
   return <>{generalObervationValue?.valueString}</>;
 };
