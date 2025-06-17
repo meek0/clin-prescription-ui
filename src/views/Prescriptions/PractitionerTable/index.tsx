@@ -30,6 +30,7 @@ import { getPractitionerInfoList } from './utils/export';
 
 import styles from './index.module.css';
 import homeStyles from 'views/Home/index.module.css';
+import ProLabel from '@ferlab/ui/core/components/ProLabel';
 
 const generateSearchFilter = (search: string) =>
   generateQuery({
@@ -144,10 +145,8 @@ const PractitionerTable = (): React.ReactElement => {
       content={
         <Row gutter={[48, 48]}>
           <div className={styles.patientContentContainer}>
-            <Input
-              placeholder={intl.get('my.prescriptions.search.placeholder')}
-              onChange={(t) => setSearch(t.target.value)}
-            />
+            <ProLabel title={intl.get('home.prescription.search.box.title')} colon />
+            <Input onChange={(t) => setSearch(t.target.value)} />
             <PrescriptionsTable
               results={prescriptions}
               queryConfig={prescriptionQueryConfig}
