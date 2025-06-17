@@ -191,7 +191,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                   <ClinicalSignsSelect
                     form={form}
                     parentKey={FORM_NAME}
-                    hpoIsOptional={hideParentIdentificationForm}
+                    hpoIsOptional={true}
                     initialData={getInitialData()}
                   />
                 )}
