@@ -511,6 +511,7 @@
   "prescription.form.signs.not.observed.label": "Add the UNOBSERVED clinical signs that you consider relevant to the analysis",
   "prescription.form.signs.not.observed.add": "Add another not observed clinical sign",
   "prescription.form.signs.observed.label": "Select at least one OBSERVED clinical sign",
+  "prescription.form.signs.observed.optional.label": "Add the OBSERVED clinical signs that you consider relevant to the analysis",
   "prescription.form.signs.observed.error": "Select or add at least one (1) observed clinical sign",
   "prescription.form.signs.observed.invalid.hpo": "Invalid clinical sign",
   "prescription.form.signs.observed.add": "Add another observed clinical sign",
@@ -573,7 +574,7 @@
     },
     "patient":{
       "reset": {
-        "disabledTooltip": "This field cannot be modified for an existing patient" 
+        "disabledTooltip": "This field cannot be modified for an existing patient"
       }
     },
     "continueEditionButton": "Continue editing",

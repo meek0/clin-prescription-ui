@@ -77,11 +77,18 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
 
   return (
     <Space direction="vertical">
-      <ProLabel
-        requiredMark={!isOptional}
-        title={intl.get('prescription.form.signs.observed.label')}
-        colon
-      />
+      <Space size={2}>
+        <ProLabel
+          requiredMark={!isOptional}
+          title={
+            isOptional
+              ? intl.get('prescription.form.signs.observed.optional.label')
+              : intl.get('prescription.form.signs.observed.label')
+          }
+        />
+        {isOptional ? <Text type="secondary">({intl.get('optional')})</Text> : null}
+        <ProLabel colon={true} title="" />
+      </Space>
       <Form.Item className="noMarginBtm">
         <Form.List
           name={getName(CLINICAL_SIGNS_FI_KEY.SIGNS)}
