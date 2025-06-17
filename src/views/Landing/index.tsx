@@ -41,20 +41,10 @@ const Landing = (): React.ReactElement => {
   };
 
   const handleSignup = async () => {
-    const locale = intl.getInitOptions().currentLocale;
-    const redirectUri = `${window.location.origin}/${
-      query.get(REDIRECT_URI_KEY) || STATIC_ROUTES.HOME
-    }`;
-    // create a login URL with idpHint for Microsoft
-    // and redirect to the registration page
-    const registerUrl = keycloak.createRegisterUrl({
-      redirectUri,
-      locale,
-    });
     const loginUrl = keycloak.createLoginUrl({
       idpHint: 'microsoft',
-      redirectUri: registerUrl,
-      locale,
+      redirectUri: `${window.location.origin}/${query.get(REDIRECT_URI_KEY) || STATIC_ROUTES.HOME}`,
+      locale: intl.getInitOptions().currentLocale,
     });
     window.location.assign(loginUrl);
   };
