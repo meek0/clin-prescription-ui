@@ -58,6 +58,8 @@ export enum MuscularAnalysisType {
 export enum OtherAnalysisType {
   GLOBAL_DEVELOPMENTAL_DELAY = 'RGDI', // RGDI
   NUCLEAR_MITOCHONDRIOPATHY = 'MITN', // MITN
+  POLYMALFORMATION = 'POLYM',
+  FETAL_ANOMALIES = 'FEAN',
 }
 
 export type AnalysisType = MuscularAnalysisType | OtherAnalysisType;

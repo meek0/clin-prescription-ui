@@ -67,7 +67,7 @@ Cypress.Commands.add('resetColumns', (eq: number) => {
     cy.wrap($button).clickAndWait({force: true});
     cy.waitWhileSpin(oneMinute);
   });
-  
+
   cy.get('button[class*="ProTablePopoverColumnResetBtn"]').eq(eq).should('be.disabled', {timeout: 20*1000});
   cy.get('svg[data-icon="setting"]').eq(eq).clickAndWait({force: true});
   cy.get('div[class*="Header_ProTableHeader"]').clickAndWait({force: true, multiple: true});

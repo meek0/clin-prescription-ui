@@ -77,11 +77,17 @@ const AnalysisChoiceModal = () => {
           className="noMarginBtm"
         >
           <Select placeholder="Sélectionner" data-cy="SelectAnalysis">
+            <Select.Option value={OtherAnalysisType.FETAL_ANOMALIES} title={null}>
+              {getAnalysisNameByCode(OtherAnalysisType.FETAL_ANOMALIES, false)}
+            </Select.Option>
             <Select.Option value={OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY} title={null}>
               {getAnalysisNameByCode(OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY, false)}
             </Select.Option>
             <Select.Option value={OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY} title={null}>
               {getAnalysisNameByCode(OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY, false)}
+            </Select.Option>
+            <Select.Option value={OtherAnalysisType.POLYMALFORMATION} title={null}>
+              {getAnalysisNameByCode(OtherAnalysisType.POLYMALFORMATION, false)}
             </Select.Option>
             <Select.OptGroup label="Maladies musculaires">
               <Select.Option
