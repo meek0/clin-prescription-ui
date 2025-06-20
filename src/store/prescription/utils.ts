@@ -90,11 +90,12 @@ export function cleanAnalysisData(analysis: TCompleteAnalysis): HybridPrescripti
   const proband: HybridPatient = getPatientData(analysisCopy.patient!, 'PROBAND');
   patients.push(proband);
 
-  // Add foetus
+  // Add foetus or newborn data to proband
   if (
     analysisCopy[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.[
       ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS
-    ]
+    ] ||
+    analysisCopy[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.[ADD_INFO_FI_KEY.NEW_BORN]
   ) {
     const foetusData = analysisCopy[STEPS_ID.PATIENT_IDENTIFICATION][additionalInfoKey];
     (proband as HybridPatientPresent).foetus = {
