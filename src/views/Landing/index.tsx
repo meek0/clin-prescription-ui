@@ -43,7 +43,7 @@ const Landing = (): React.ReactElement => {
   const handleSignup = async () => {
     const loginUrl = keycloak.createLoginUrl({
       idpHint: 'microsoft',
-      redirectUri: `${window.location.origin}/${query.get(REDIRECT_URI_KEY) || STATIC_ROUTES.HOME}`,
+      redirectUri: `${STATIC_ROUTES.HOME}`,
       locale: intl.getInitOptions().currentLocale,
     });
     window.location.assign(loginUrl);
