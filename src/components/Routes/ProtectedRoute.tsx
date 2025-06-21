@@ -5,6 +5,7 @@ import { useKeycloak } from '@react-keycloak/web';
 
 import { Roles } from 'components/Roles/Rules';
 import Spinner from 'components/uiKit/Spinner';
+import useQueryParams from 'hooks/useQueryParams';
 import { useUser } from 'store/user';
 import { REDIRECT_URI_KEY } from 'utils/constants';
 import { STATIC_ROUTES } from 'utils/routes';
@@ -21,6 +22,7 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
   const { keycloak, initialized } = useKeycloak();
   const keycloakIsReady = keycloak && initialized;
   const showLogin = keycloakIsReady && !keycloak.authenticated;
+  const query = useQueryParams();
   const { user } = useUser();
 
   const search = `${REDIRECT_URI_KEY}=${routeProps.location?.pathname}${routeProps.location?.search}`;
@@ -43,7 +45,7 @@ const ProtectedRoute = ({ roles, children, layout, ...routeProps }: OwnProps) =>
   if (!keycloak.tokenParsed?.fhir_practitioner_id) {
     const locale = intl.getInitOptions().currentLocale;
     keycloak.register({
-      redirectUri: `${STATIC_ROUTES.HOME}`,
+      redirectUri: `${window.location.origin}/${query.get(REDIRECT_URI_KEY) || STATIC_ROUTES.HOME}`,
       locale,
     });
     return <div></div>;
