@@ -177,7 +177,7 @@ const PatientDataSearch = ({
                       }
 
                       if (!fileSearchDone) {
-                        return Promise.reject(new Error('Cliquer sur rechercher'));
+                        return Promise.reject(new Error(intl.get('click.on.search')));
                       }
 
                       return Promise.resolve();
@@ -321,6 +321,9 @@ const PatientDataSearch = ({
                 }}
                 checkboxFormItemProps={{
                   name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
+                  className: getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE))
+                    ? styles.checkboxHidden
+                    : '',
                   title:
                     parentKey === 'patient' ? intl.get('no.ramq.or.new.born') : intl.get('no.ramq'),
                 }}

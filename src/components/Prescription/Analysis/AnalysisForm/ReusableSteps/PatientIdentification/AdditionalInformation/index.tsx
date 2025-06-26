@@ -128,7 +128,7 @@ const AdditionalInformation = ({
             form.getFieldValue(getName(ADD_INFO_FI_KEY.NEW_BORN)) || patientSexField == 'male'
           }
         >
-          Oui
+          {intl.get('yes')}
         </Checkbox>
       </Form.Item>
       <Form.Item
