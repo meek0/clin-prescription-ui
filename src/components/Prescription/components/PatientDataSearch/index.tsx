@@ -16,6 +16,7 @@ import {
   defaultFormItemsRules,
   minimumTwoNonEmptyCharacters,
   noSpecialCharactersRule,
+  STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import {
   getNamePath,
@@ -322,7 +323,9 @@ const PatientDataSearch = ({
                 checkboxFormItemProps={{
                   name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
                   title:
-                    parentKey === 'patient' ? intl.get('no.ramq.or.new.born') : intl.get('no.ramq'),
+                    parentKey === STEPS_ID.PATIENT_IDENTIFICATION
+                      ? intl.get('no.ramq.or.new.born')
+                      : intl.get('no.ramq'),
                 }}
                 onReset={() => {
                   onResetRamq && onResetRamq();
@@ -334,7 +337,8 @@ const PatientDataSearch = ({
                     getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
                     getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
                   ]);
-                  dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
+                  if (parentKey === STEPS_ID.PATIENT_IDENTIFICATION)
+                    dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                 }}
                 onSearchDone={(value, searchValue) => {
                   if (isEmpty(value) && searchValue) {
