@@ -54,6 +54,7 @@ const SearchOrNoneFormItem = <TSearchResult,>({
   const checkboxName = checkboxFormItemProps.name;
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(disabled);
+  const [showCheckboxTooltip, setShowCheckboxTooltip] = useState(false);
 
   useEffect(() => {
     if (disabled !== isDisabled) {
@@ -169,8 +170,18 @@ const SearchOrNoneFormItem = <TSearchResult,>({
                   handleReset();
                 }
               }}
+              onMouseEnter={() => setShowCheckboxTooltip(true)}
+              onMouseLeave={() => setShowCheckboxTooltip(false)}
             >
-              {checkboxFormItemProps.title}
+              <Tooltip
+                title={isDisabled ? intl.get('prescriptionForm.patient.reset.disabledTooltip') : ''}
+                open={showCheckboxTooltip}
+                align={{
+                  offset: [-40, 0],
+                }}
+              >
+                {checkboxFormItemProps.title}
+              </Tooltip>
             </Checkbox>
           </Form.Item>
         )}

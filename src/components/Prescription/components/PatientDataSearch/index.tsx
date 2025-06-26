@@ -368,7 +368,10 @@ const PatientDataSearch = ({
                     jhn: value,
                   })
                 }
-                disabled={ramqSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))}
+                disabled={
+                  (ramqSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ||
+                  (prescriptionId && getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)))
+                }
               />
             </>
           ) : null
