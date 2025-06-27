@@ -13,7 +13,7 @@ endif
 env_save:
 	cp -p .env env-${env}-custom
 
-install: 
+install:
 	make env=localstack env_load
 	make js_install
 
@@ -70,3 +70,6 @@ theme_clean_install:
 # Tests
 ferlease_test:
 	CYPRESS_BASE_URL=https://prescription-ui-${jira}.qa.cqgc.hsj.rtss.qc.ca/ ./node_modules/cypress/bin/cypress run --spec "${spec}"
+
+puppeteer_savedraft:
+	node puppeteer/scenarios/savedraft.mjs
