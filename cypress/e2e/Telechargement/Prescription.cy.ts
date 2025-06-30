@@ -24,7 +24,7 @@ describe('Télécharger la prescription', () => {
 
   it('Valider le contenu du fichier', () => {
     const replacements: Replacement[] = [
-      { placeholder: '{{stampDate}}', value: epCHUSJ_ldmCHUSJ.stampDate.substring(0, 7) },
+      { placeholder: '{{stampDate}}', value: epCHUSJ_ldmCHUSJ.stampDate.substring(0, 4) },
       { placeholder: '{{lastNameProb}}', value: epCHUSJ_ldmCHUSJ.lastNameProb },
       { placeholder: '{{firstNameProb}}', value: epCHUSJ_ldmCHUSJ.firstNameProb },
       { placeholder: '{{genderProb}}', value: epCHUSJ_ldmCHUSJ.genderProb },
