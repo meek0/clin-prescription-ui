@@ -95,7 +95,6 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
               <Card.Grid className={styles.cardGrid} hoverable={false}>
                 {
                   <ClinicalSign
-                    isProband={true}
                     phenotypeIds={phenotype}
                     generalObervationIds={generalObservation}
                     isPrenatal={prescription?.category?.[0]?.coding?.[0].code === 'Prenatal'}

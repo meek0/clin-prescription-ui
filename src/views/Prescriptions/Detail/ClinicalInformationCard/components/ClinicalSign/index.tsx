@@ -17,18 +17,22 @@ import { useLang } from 'store/global';
 type ClinicalSignOwnProps = {
   phenotypeIds: string[];
   generalObervationIds: string[];
-  isProband: boolean;
   isPrenatal?: boolean;
+  isParent?: boolean;
 };
 
 type IDOwnProps = {
   ids: string[];
-  isProband: boolean;
+  isParent?: boolean;
 };
 
-const Observation = ({ ids }: IDOwnProps) => {
+const Observation = ({ ids, isParent }: IDOwnProps) => {
   const { generalObervationValue } = useGeneralObservationEntity(ids);
-  return <>{generalObervationValue?.valueString}</>;
+  let value = generalObervationValue?.valueString;
+  if (Array.isArray(generalObervationValue)) {
+    value = generalObervationValue?.find((v) => (isParent ? !v.focus : v.focus)).valueString;
+  }
+  return <>{value}</>;
 };
 
 const handleHpoSearchTerm = (
@@ -48,8 +52,8 @@ const handleHpoSearchTerm = (
 export const ClinicalSign = ({
   phenotypeIds,
   generalObervationIds,
-  isProband,
   isPrenatal,
+  isParent,
 }: ClinicalSignOwnProps) => {
   const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
   const [ageList, setAgeList] = useState<IHpoNode[]>([
@@ -63,16 +67,10 @@ export const ClinicalSign = ({
   const { phenotypeValue } = useObservationPhenotypeEntity(phenotypeIds);
   const { valueSet } = useValueSet('age-at-onset');
   const lang = useLang();
-
   const getHpoValue = (element: PhenotypeRequestEntity) => {
     handleHpoSearchTerm(element.valueCodeableConcept?.coding?.code, setHpoList);
     element.extension ? handleHpoSearchTerm(element.extension.valueCoding?.code, setAgeList) : null;
   };
-
-  const workingPhenotypeValue =
-    isPrenatal && Array.isArray(phenotypeValue)
-      ? phenotypeValue?.filter((p: PhenotypeRequestEntity) => (isProband ? p.focus : !p.focus))
-      : phenotypeValue;
 
   useEffect(() => {
     if (phenotypeValue) {
@@ -86,19 +84,26 @@ export const ClinicalSign = ({
     }
   }, [phenotypeValue]);
 
+  const filterPhenotype =
+    isPrenatal && Array.isArray(phenotypeValue)
+      ? phenotypeValue?.filter((p: PhenotypeRequestEntity) => (isParent ? !p.focus : p.focus))
+      : phenotypeValue;
+
   let positive = [];
   let negative = [];
-  if (Array.isArray(workingPhenotypeValue)) {
-    positive = filter(workingPhenotypeValue, (o) => o?.interpretation?.coding?.code === 'POS');
-    negative = filter(workingPhenotypeValue, (o) => o?.interpretation?.coding?.code === 'NEG');
+  if (Array.isArray(filterPhenotype)) {
+    positive = filter(filterPhenotype, (o) => o?.interpretation?.coding?.code === 'POS');
+
+    negative = filter(filterPhenotype, (o) => o?.interpretation?.coding?.code === 'NEG');
   } else {
-    positive = [workingPhenotypeValue];
+    positive = [filterPhenotype];
   }
 
-  const displayHpo = (hpoValue: string, age: string = '') => {
-    const hpoInfo = find(hpoList, (h: IHpoNode) => h.hpo_id === hpoValue);
+  const displayHpo = (hpo: string, age: string = '') => {
+    const hpoInfo = find(hpoList, (h: IHpoNode) => h.hpo_id === hpo);
     const ageInfo = find(ageList, (h: IHpoNode) => h.hpo_id === age);
     const ageValue = find(valueSet?.concept, (o) => o.code === ageInfo?.hpo_id);
+    const hpoValue = find(valueSet?.concept, (o) => o.code === hpoInfo?.hpo_id);
     const ageDisplay = ageValue
       ? ` - ${
           find(ageValue?.designation, (o) => o.language === lang)
@@ -107,7 +112,15 @@ export const ClinicalSign = ({
         }`
       : ` - ${ageInfo?.name}`;
 
-    return `${hpoInfo ? hpoInfo.name : ''} (${hpoValue})${ageInfo ? ageDisplay : ''}`;
+    const hpoDisplay = hpoValue
+      ? `${
+          find(hpoValue?.designation, (o) => o.language === lang)
+            ? find(hpoValue?.designation, (o) => o.language === lang)?.value
+            : hpoValue.display
+        }`
+      : `${hpoInfo?.name}`;
+
+    return `${hpoInfo ? hpoDisplay : ''} (${hpo})${ageInfo ? ageDisplay : ''}`;
   };
 
   return (
@@ -130,8 +143,8 @@ export const ClinicalSign = ({
         </Space>
       </Descriptions.Item>
       <Descriptions.Item label={intl.get('screen.prescription.entity.hpo.note')}>
-        {generalObervationIds?.length > 0 ? (
-          <Observation ids={generalObervationIds} isProband={isProband} />
+        {generalObervationIds.length > 0 ? (
+          <Observation ids={generalObervationIds} isParent={isParent} />
         ) : (
           EMPTY_FIELD
         )}
