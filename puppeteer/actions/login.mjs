@@ -2,6 +2,7 @@ import { BASE_URL, PASSWORD, USERNAME } from '../Config.mjs';
 
 export default async function login(page) {
   await page.goto(`${BASE_URL}landing?redirect_path=/`);
+
   // Click the "Connexion" button
   await page.waitForSelector('button span');
   await page.evaluate(() => {
@@ -10,6 +11,11 @@ export default async function login(page) {
     if (btn) btn.click();
   });
   await page.waitForNavigation();
+
+  const cqgcButton = await page.$('#social-CQGC');
+  if (cqgcButton) {
+    await page.click('#social-CQGC');
+  }
 
   // Fill in username
   await page.waitForSelector('#username');

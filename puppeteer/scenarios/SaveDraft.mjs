@@ -1,13 +1,18 @@
 import process from 'process';
 import puppeteer from 'puppeteer';
 
-import { fillPatientIdentification } from '../actions/analysis/FillAnalysisSteps.mjs';
+import clickNext from '../actions/analysis/ClickNext.mjs';
+import {
+  fillClinicalSigns,
+  fillHistoryDiagnosis,
+  fillPatientIdentification,
+} from '../actions/analysis/FillAnalysisSteps.mjs';
 import { newAnalysis, selectAnalysis, startAnalysis } from '../actions/analysis/NewAnalysis.mjs';
 import saveDraft from '../actions/analysis/SaveDraft.mjs';
 import login from '../actions/Login.mjs';
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
+  const browser = await puppeteer.launch({ headless: false, slowMo: 20 });
   const page = await browser.newPage();
   page.setDefaultTimeout(5000);
 
@@ -18,6 +23,11 @@ import login from '../actions/Login.mjs';
   await selectAnalysis(page, 'Retard global de');
   await startAnalysis(page);
   await fillPatientIdentification(page);
+  await clickNext(page);
+  await fillClinicalSigns(page);
+  await clickNext(page);
+  await clickNext(page);
+  await fillHistoryDiagnosis(page);
   await saveDraft(page);
 })().catch((err) => {
   console.error(err);

@@ -22,3 +22,17 @@ export async function fillPatientIdentification(page) {
   await page.type('#patient_patient_birth_date', getRandomDateString('YYYYMMDD'));
   await page.click('::-p-text(Féminin)');
 }
+
+export async function fillClinicalSigns(page) {
+  await page.waitForSelector("[data-cy^='ObservedHP']");
+  const elements = await page.$$("[data-cy^='ObservedHP']");
+  if (elements.length > 0) {
+    await elements[0].click();
+  }
+  await page.type('#clinical_signs_clinical_signs_comment', getRandomString(10));
+}
+
+export async function fillHistoryDiagnosis(page) {
+  await page.waitForSelector("[data-cy='InputHypothesis']");
+  await page.type("[data-cy='InputHypothesis']", getRandomString(10));
+}
