@@ -56,11 +56,11 @@ const updatePrescription = (data: HybridPrescription, prescriptionId: string, is
   });
 
 const searchPatient = ({
-  organisation_id,
+  organization_id,
   mrn,
   jhn,
 }: {
-  organisation_id?: string;
+  organization_id?: string;
   mrn?: string;
   jhn?: string;
 }) =>
@@ -68,7 +68,7 @@ const searchPatient = ({
     method: 'GET',
     url: `${HYBRID_API_URL}/search/patient`,
     params: {
-      organisation_id,
+      organization_id,
       mrn,
       jhn,
     },
