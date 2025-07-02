@@ -45,7 +45,7 @@ export interface IHybridFormPatient {
   first_name: string;
   last_name: string;
   sex: string;
-  organisation_id: string;
+  organization_id: string;
   birth_date: string;
   jhn: string;
   mrn: string;
@@ -57,7 +57,7 @@ export function hybridToFormPatient(hybridPatient?: IHybridFormPatient): IFormPa
     first_name: hybridPatient.first_name,
     last_name: hybridPatient.last_name,
     gender: hybridPatient.sex,
-    ep: hybridPatient.organisation_id,
+    ep: hybridPatient.organization_id,
     birth_date: hybridPatient.birth_date,
     ramq: hybridPatient.jhn,
     mrn: hybridPatient.mrn,

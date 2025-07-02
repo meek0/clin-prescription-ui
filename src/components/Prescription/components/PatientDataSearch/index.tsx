@@ -238,7 +238,7 @@ const PatientDataSearch = ({
               }}
               apiPromise={(value) =>
                 HybridApi.searchPatient({
-                  organisation_id: getFieldValue(
+                  organization_id: getFieldValue(
                     getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
                   ),
                   mrn: value,
