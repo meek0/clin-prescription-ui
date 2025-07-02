@@ -71,5 +71,8 @@ theme_clean_install:
 ferlease_test:
 	CYPRESS_BASE_URL=https://prescription-ui-${jira}.qa.cqgc.hsj.rtss.qc.ca/ ./node_modules/cypress/bin/cypress run --spec "${spec}"
 
-puppeteer_savedraft:
-	node puppeteer/scenarios/savedraft.mjs
+puppeteer_savedraftproban:
+	node puppeteer/scenarios/SaveDraftProban.mjs
+
+puppeteer_savedraft_triopostnatal:
+	node puppeteer/scenarios/SaveDraftTrioPostnatal.mjs

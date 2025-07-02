@@ -3,16 +3,19 @@ import puppeteer from 'puppeteer';
 
 import clickNext from '../actions/analysis/ClickNext.mjs';
 import {
+  fillAddObservedClinicalSign,
   fillClinicalSigns,
   fillHistoryDiagnosis,
   fillPatientIdentification,
+  selectParentClinicalStatusAffected,
+  selectParentMomentNow,
 } from '../actions/analysis/FillAnalysisSteps.mjs';
 import { newAnalysis, selectAnalysis, startAnalysis } from '../actions/analysis/NewAnalysis.mjs';
 import saveDraft from '../actions/analysis/SaveDraft.mjs';
 import login from '../actions/Login.mjs';
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false, slowMo: 20 });
+  const browser = await puppeteer.launch({ headless: false, slowMo: 15 });
   const page = await browser.newPage();
   page.setDefaultTimeout(5000);
 
@@ -28,6 +31,16 @@ import login from '../actions/Login.mjs';
   await clickNext(page);
   await clickNext(page);
   await fillHistoryDiagnosis(page);
+  await clickNext(page);
+  await selectParentMomentNow(page, 'mother');
+  await fillPatientIdentification(page, 'mother');
+  await selectParentClinicalStatusAffected(page, 'mother');
+  await fillAddObservedClinicalSign(page, 'Head');
+  await clickNext(page);
+  await selectParentMomentNow(page, 'father');
+  await fillPatientIdentification(page, 'father');
+  await selectParentClinicalStatusAffected(page, 'father');
+  await fillAddObservedClinicalSign(page, 'Arm');
   await saveDraft(page);
 })().catch((err) => {
   console.error(err);
