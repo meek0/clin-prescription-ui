@@ -175,7 +175,7 @@ const SearchOrNoneFormItem = <TSearchResult,>({
             >
               <Tooltip
                 title={isDisabled ? intl.get('prescriptionForm.patient.reset.disabledTooltip') : ''}
-                open={showCheckboxTooltip}
+                open={isDisabled && showCheckboxTooltip}
                 align={{
                   offset: [-40, 0],
                 }}
