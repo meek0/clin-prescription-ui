@@ -1,5 +1,5 @@
 import { sendRequestWithRpt } from 'api';
-import { IHybridFormPatient, ISupervisor } from 'api/form/models';
+import { IHybridFormPatient, IHybridFormPatients, ISupervisor } from 'api/form/models';
 
 import EnvironmentVariables from 'utils/EnvVariables';
 
@@ -75,6 +75,17 @@ const searchPatient = ({
     headers,
   });
 
+const searchPatients = ({ mrn, jhn }: { mrn?: string; jhn?: string }) =>
+  sendRequestWithRpt<IHybridFormPatients>({
+    method: 'GET',
+    url: `${HYBRID_API_URL}/search/patients`,
+    params: {
+      mrn,
+      jhn,
+    },
+    headers: { ...headers, 'Cache-Control': 'no-cache' }, // Disable caching for patient search https://ferlab-crsj.atlassian.net/browse/CLIN-4679
+  });
+
 const searchSupervisors = ({
   organizationId,
   prefix,
@@ -93,5 +104,6 @@ export const HybridApi = {
   createPrescription,
   updatePrescription,
   searchPatient,
+  searchPatients,
   searchSupervisors,
 };

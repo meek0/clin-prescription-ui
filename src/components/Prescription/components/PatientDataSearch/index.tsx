@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Form, FormInstance, Input, Radio } from 'antd';
-import { hybridToFormPatient, IFormPatient, IHybridFormPatient } from 'api/form/models';
+import {
+  hybridToFormPatient,
+  IFormPatient,
+  IHybridFormPatient,
+  IHybridFormPatients,
+} from 'api/form/models';
 import { HybridApi } from 'api/hybrid';
 import { format } from 'date-fns';
 import { isEmpty } from 'lodash';
@@ -257,7 +262,7 @@ const PatientDataSearch = ({
         {({ getFieldValue }) =>
           getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) || fileSearchDone ? (
             <>
-              <SearchOrNoneFormItem<IHybridFormPatient>
+              <SearchOrNoneFormItem<IHybridFormPatients>
                 disableReset={
                   !!prescriptionId &&
                   ((!isNewFileNumber && ramqSearchDone) ||
@@ -343,35 +348,44 @@ const PatientDataSearch = ({
                   if (parentKey === STEPS_ID.PATIENT_IDENTIFICATION)
                     dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                 }}
-                onSearchDone={(value, searchValue) => {
-                  if (isEmpty(value) && searchValue) {
-                    const ramqData = extractBirthDateAndSexFromRamq(
-                      searchValue,
-                      INPUT_DATE_OUTPUT_FORMAT,
-                    );
-
-                    if (ramqData.birthDate) {
-                      setFieldValue(
-                        form,
-                        getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
-                        ramqData.birthDate,
+                onSearchDone={(values, searchValue) => {
+                  if (values?.patients && Array.isArray(values?.patients)) {
+                    if (values.patients.length === 0 && searchValue) {
+                      const ramqData = extractBirthDateAndSexFromRamq(
+                        searchValue,
+                        INPUT_DATE_OUTPUT_FORMAT,
                       );
-                      setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
+
+                      if (ramqData.birthDate) {
+                        setFieldValue(
+                          form,
+                          getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                          ramqData.birthDate,
+                        );
+                        setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
+                      }
                     }
-                  }
-                  if (isNewFileNumber && !!value?.mrn) {
-                    setFieldError(
-                      form,
-                      getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
-                      intl.get('cant.have.two.file.number.same.patient'),
-                    );
-                  } else {
-                    updateFormFromPatient(form, hybridToFormPatient(value));
-                    setRamqSearchDone(true);
+                    if (
+                      isNewFileNumber &&
+                      values.patients.filter(
+                        (v) =>
+                          v.organization_id ===
+                          getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)),
+                      ).length > 0
+                    ) {
+                      setFieldError(
+                        form,
+                        getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                        intl.get('cant.have.two.file.number.same.patient'),
+                      );
+                    } else {
+                      updateFormFromPatient(form, hybridToFormPatient(values.patients[0]));
+                      setRamqSearchDone(true);
+                    }
                   }
                 }}
                 apiPromise={(value) =>
-                  HybridApi.searchPatient({
+                  HybridApi.searchPatients({
                     jhn: value,
                   })
                 }

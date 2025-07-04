@@ -51,6 +51,10 @@ export interface IHybridFormPatient {
   mrn: string;
 }
 
+export interface IHybridFormPatients {
+  patients: IHybridFormPatient[];
+}
+
 export function hybridToFormPatient(hybridPatient?: IHybridFormPatient): IFormPatient | undefined {
   if (!hybridPatient) return undefined;
   return {
