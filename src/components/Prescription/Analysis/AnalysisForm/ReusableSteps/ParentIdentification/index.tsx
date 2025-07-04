@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
 import ClinicalSignsSelect from 'components/Prescription/components/ClinicalSignsSelect';
+import MotherDataSearch from 'components/Prescription/components/MotherDataSearch';
 import PatientDataSearch from 'components/Prescription/components/PatientDataSearch';
 import {
   IPatientDataType,
@@ -131,17 +132,37 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                   key={parent}
                   header={intl.get(`prescription.parent.info.title.${parent}`)}
                 >
-                  <PatientDataSearch
-                    form={form}
-                    parentKey={FORM_NAME}
-                    initialData={{
-                      ...initialData,
-                      [PATIENT_DATA_FI_KEY.SEX]: sex,
-                    }}
-                    onRamqSearchStateChange={setRamqSearchDone}
-                    initialRamqSearchDone={ramqSearchDone}
-                    onResetRamq={() => {}}
-                  />
+                  {analysisData?.patient?.[additionalInfoKey]?.is_new_born &&
+                  analysisData?.patient?.[additionalInfoKey]?.mother_ramq &&
+                  FORM_NAME === STEPS_ID.MOTHER_IDENTIFICATION ? (
+                    <MotherDataSearch
+                      form={form}
+                      parentKey={FORM_NAME}
+                      initialData={{
+                        ...initialData,
+                        [PATIENT_DATA_FI_KEY.SEX]: sex,
+                        [PATIENT_DATA_FI_KEY.RAMQ_NUMBER]:
+                          analysisData?.patient?.[additionalInfoKey]?.mother_ramq || '',
+                        [PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION]:
+                          analysisData?.patient?.ep || '',
+                      }}
+                      onRamqSearchStateChange={setRamqSearchDone}
+                      initialRamqSearchDone={ramqSearchDone}
+                      onResetRamq={() => {}}
+                    />
+                  ) : (
+                    <PatientDataSearch
+                      form={form}
+                      parentKey={FORM_NAME}
+                      initialData={{
+                        ...initialData,
+                        [PATIENT_DATA_FI_KEY.SEX]: sex,
+                      }}
+                      onRamqSearchStateChange={setRamqSearchDone}
+                      initialRamqSearchDone={ramqSearchDone}
+                      onResetRamq={() => {}}
+                    />
+                  )}
                 </CollapsePanel>
               </Collapse>
             </Space>

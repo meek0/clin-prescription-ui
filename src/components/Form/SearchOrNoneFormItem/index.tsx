@@ -37,6 +37,8 @@ export interface ISearchOrNoneFormItemProps<TSearchResult> {
   apiPromise: (value: string) => Promise<ApiResponse<TSearchResult>>;
   disabled?: boolean;
   disableReset?: boolean;
+  autoTriggerSearch?: string;
+  noReset?: boolean;
 }
 
 const SearchOrNoneFormItem = <TSearchResult,>({
@@ -50,6 +52,8 @@ const SearchOrNoneFormItem = <TSearchResult,>({
   apiPromise,
   disabled = false,
   disableReset = false,
+  autoTriggerSearch,
+  noReset,
 }: ISearchOrNoneFormItemProps<TSearchResult>) => {
   const checkboxName = checkboxFormItemProps.name;
   const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +83,12 @@ const SearchOrNoneFormItem = <TSearchResult,>({
         });
     }
   };
+
+  useEffect(() => {
+    if (autoTriggerSearch) {
+      onSearch(autoTriggerSearch);
+    }
+  }, [autoTriggerSearch]);
 
   const handleReset = () => {
     form.resetFields([inputFormItemProps.name, checkboxFormItemProps.name]);
@@ -125,7 +135,7 @@ const SearchOrNoneFormItem = <TSearchResult,>({
                     loading={isLoading}
                   />
                 </Form.Item>
-                {isDisabled && (
+                {isDisabled && !noReset && (
                   <Tooltip
                     title={
                       disableReset ? intl.get('prescriptionForm.patient.reset.disabledTooltip') : ''
