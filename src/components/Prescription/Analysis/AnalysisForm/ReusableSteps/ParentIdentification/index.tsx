@@ -7,12 +7,8 @@ import { isEmpty } from 'lodash';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
 import ClinicalSignsSelect from 'components/Prescription/components/ClinicalSignsSelect';
-import MotherDataSearch from 'components/Prescription/components/MotherDataSearch';
 import PatientDataSearch from 'components/Prescription/components/PatientDataSearch';
-import {
-  IPatientDataType,
-  PATIENT_DATA_FI_KEY,
-} from 'components/Prescription/components/PatientDataSearch/types';
+import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -55,17 +51,14 @@ const ParentIdentification = ({ parent }: OwnProps) => {
     analysisData[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.is_prenatal_diagnosis;
 
   const getName = (...key: IGetNamePathParams) => getNamePath(FORM_NAME, key);
-  const getInitialData = () =>
-    analysisData ? (analysisData[FORM_NAME] as TParentDataType) : undefined;
-
+  const initialData = analysisData?.[FORM_NAME] as TParentDataType;
   useEffect(() => {
-    const initialData = getInitialData();
-
     if (initialData && !isEmpty(initialData)) {
       setInitialValues(form, getName, initialData, PARENT_DATA_FI_KEY);
     } else if (isAddingParent) {
       setFieldValue(form, getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT), EnterInfoMomentValue.NOW);
     }
+
     // eslint-disable-next-line
   }, []);
 
@@ -120,10 +113,10 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         }
       >
         {({ getFieldValue }) => {
-          const initialData = getInitialData() as IPatientDataType;
           const sex =
             initialData?.[PATIENT_DATA_FI_KEY.SEX] ||
             (parent === 'father' ? SexValue.MALE : SexValue.FEMALE);
+
           return getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
             EnterInfoMomentValue.NOW && !hideParentIdentificationForm ? (
             <Space direction="vertical" className={styles.formContentWrapper}>
@@ -132,37 +125,25 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                   key={parent}
                   header={intl.get(`prescription.parent.info.title.${parent}`)}
                 >
-                  {analysisData?.patient?.[additionalInfoKey]?.is_new_born &&
-                  analysisData?.patient?.[additionalInfoKey]?.mother_ramq &&
-                  FORM_NAME === STEPS_ID.MOTHER_IDENTIFICATION ? (
-                    <MotherDataSearch
-                      form={form}
-                      parentKey={FORM_NAME}
-                      initialData={{
-                        ...initialData,
-                        [PATIENT_DATA_FI_KEY.SEX]: sex,
-                        [PATIENT_DATA_FI_KEY.RAMQ_NUMBER]:
-                          analysisData?.patient?.[additionalInfoKey]?.mother_ramq || '',
-                        [PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION]:
-                          analysisData?.patient?.ep || '',
-                      }}
-                      onRamqSearchStateChange={setRamqSearchDone}
-                      initialRamqSearchDone={ramqSearchDone}
-                      onResetRamq={() => {}}
-                    />
-                  ) : (
-                    <PatientDataSearch
-                      form={form}
-                      parentKey={FORM_NAME}
-                      initialData={{
-                        ...initialData,
-                        [PATIENT_DATA_FI_KEY.SEX]: sex,
-                      }}
-                      onRamqSearchStateChange={setRamqSearchDone}
-                      initialRamqSearchDone={ramqSearchDone}
-                      onResetRamq={() => {}}
-                    />
-                  )}
+                  <PatientDataSearch
+                    form={form}
+                    parentKey={FORM_NAME}
+                    initialData={{
+                      ...initialData,
+                      [PATIENT_DATA_FI_KEY.SEX]: sex,
+                    }}
+                    onRamqSearchStateChange={setRamqSearchDone}
+                    initialRamqSearchDone={ramqSearchDone}
+                    onResetRamq={() => {}}
+                    populateFromJhn={
+                      parent === 'mother' && analysisData?.patient?.[additionalInfoKey]?.is_new_born
+                        ? {
+                            jhn: analysisData?.patient?.[additionalInfoKey]?.mother_ramq,
+                            organization_id: analysisData?.patient?.ep,
+                          }
+                        : undefined
+                    }
+                  />
                 </CollapsePanel>
               </Collapse>
             </Space>
@@ -213,7 +194,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                     form={form}
                     parentKey={FORM_NAME}
                     hpoIsOptional={true}
-                    initialData={getInitialData()}
+                    initialData={initialData}
                   />
                 )}
               </CollapsePanel>
