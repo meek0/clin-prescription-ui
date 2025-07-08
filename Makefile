@@ -74,5 +74,8 @@ ferlease_test:
 puppeteer_savedraftproban:
 	node puppeteer/scenarios/SaveDraftProban.mjs
 
+puppeteer_savedraft_trioprenatal:
+	node puppeteer/scenarios/SaveDraftTrioPrenatal.mjs
+	
 puppeteer_savedraft_triopostnatal:
 	node puppeteer/scenarios/SaveDraftTrioPostnatal.mjs

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { getRandomDateString } from '../../utils/date.mjs';
+import { getRandomDateString, getRandomFutureDateString } from '../../utils/date.mjs';
 import { getRandomString } from '../../utils/string.mjs';
 
 export async function fillPatientIdentification(page, patientRelationship = 'patient') {
@@ -77,16 +77,19 @@ export async function fillAddObservedClinicalSign(page, signName = 'Head') {
   }
 }
 
-export async function fillClinicalSigns(page) {
-  await page.waitForSelector("[data-cy^='ObservedHP']");
-  const elements = await page.$$("[data-cy^='ObservedHP']");
-  if (elements.length > 0) {
-    await elements[0].click();
+export async function fillPrenatal(page) {
+  await page.waitForSelector('#patient_patient_additional_info_is_prenatal_diagnosis');
+  await page.click('#patient_patient_additional_info_is_prenatal_diagnosis');
+  const genderContainer = await page.$('#patient_patient_additional_info_foetus_gender');
+  if (genderContainer) {
+    const femininBtn = await genderContainer.$('::-p-text(Féminin)');
+    if (femininBtn) {
+      await femininBtn.click();
+    }
   }
-  await page.type('#clinical_signs_clinical_signs_comment', getRandomString(10));
-}
-
-export async function fillHistoryDiagnosis(page) {
-  await page.waitForSelector("[data-cy='InputHypothesis']");
-  await page.type("[data-cy='InputHypothesis']", getRandomString(10));
+  await page.click('#patient_patient_additional_info_gestational_age');
+  await page.type(
+    '#patient_patient_additional_info_gestational_date',
+    getRandomFutureDateString(90, 'YYYYMMDD'),
+  );
 }
