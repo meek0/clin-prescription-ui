@@ -246,10 +246,18 @@ const prescriptionFormSlice = createSlice({
             (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
           [PATIENT_DATA_FI_KEY.FIRST_NAME]: (patient as HybridPatientPresent).first_name,
           [PATIENT_DATA_FI_KEY.LAST_NAME]: (patient as HybridPatientPresent).last_name,
-          [PATIENT_DATA_FI_KEY.NO_FILE]: !(patient as HybridPatientPresent).mrn,
+          [PATIENT_DATA_FI_KEY.NO_FILE]:
+            (patient as HybridPatientNotPresent).status !== 'now' &&
+            (patient as HybridPatientNotPresent).family_member !== 'PROBAND'
+              ? false
+              : !(patient as HybridPatientPresent).mrn,
           [PATIENT_DATA_FI_KEY.FILE_NUMBER]: (patient as HybridPatientPresent).mrn,
           [PATIENT_DATA_FI_KEY.RAMQ_NUMBER]: (patient as HybridPatientPresent).jhn,
-          [PATIENT_DATA_FI_KEY.NO_RAMQ]: !(patient as HybridPatientPresent).jhn,
+          [PATIENT_DATA_FI_KEY.NO_RAMQ]:
+            (patient as HybridPatientNotPresent).status !== 'now' &&
+            (patient as HybridPatientNotPresent).family_member !== 'PROBAND'
+              ? false
+              : !(patient as HybridPatientPresent).jhn,
           [PATIENT_DATA_FI_KEY.BIRTH_DATE]: (patient as HybridPatientPresent).birth_date,
           [PATIENT_DATA_FI_KEY.SEX]: (
             patient as HybridPatientPresent
