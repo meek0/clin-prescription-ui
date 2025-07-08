@@ -402,7 +402,11 @@ const PatientDataSearch = ({
                 }
               }}
               onSearchDone={(value) => {
-                if (value && hybridToFormPatient(value)?.ramq !== populateFromJhn?.jhn) {
+                if (
+                  populateFromJhn &&
+                  value &&
+                  hybridToFormPatient(value)?.ramq !== populateFromJhn?.jhn
+                ) {
                   setFieldError(
                     form,
                     getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),

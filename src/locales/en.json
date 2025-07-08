@@ -19,6 +19,7 @@
   "submit": "Submit",
   "cant.have.two.file.number.same.patient": "Cannot have two different file numbers for the same patient",
   "ch.tooltip": "Compound Heterozygous",
+  "click.on.search": "Click on search",
   "close": "Close",
   "component.phenotypeTree.modal.cancelText": "Cancel",
   "component.phenotypeTree.modal.okText": "Add",
