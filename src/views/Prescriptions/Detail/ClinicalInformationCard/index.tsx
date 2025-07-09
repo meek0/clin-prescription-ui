@@ -91,7 +91,7 @@ const ClinicalInformation = ({ prescription, loading }: OwnProps) => {
       {prescription ? (
         <Space direction="vertical" size="middle">
           <div>
-            {(phenotype.length > 0 || generalObservation.length) && (
+            {(phenotype.length > 0 || generalObservation.length > 0) && (
               <Card.Grid className={styles.cardGrid} hoverable={false}>
                 {
                   <ClinicalSign
