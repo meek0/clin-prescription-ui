@@ -77,7 +77,6 @@ const PatientDataSearch = ({
   const [isNewFileNumber, setIsNewFileNumber] = useState(false);
   const [fileSearchDone, setFileSearchDone] = useState(initialFileSearchDone);
   const [ramqSearchDone, setRamqSearchDone] = useState(initialRamqSearchDone);
-  const [disbledEP, setDisabledEP] = useState(!!populateFromJhn);
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
   const updateFormFromPatient = (form: FormInstance, patient?: IFormPatient) => {
@@ -188,7 +187,6 @@ const PatientDataSearch = ({
           >
             <Radio.Group
               disabled={
-                disbledEP ||
                 getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) ||
                 getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) ||
                 fileSearchDone
@@ -283,7 +281,6 @@ const PatientDataSearch = ({
                   dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                 }}
                 onSearchDone={(values, searchValue) => {
-                  setDisabledEP(true);
                   if (values?.patients && Array.isArray(values?.patients)) {
                     if (values.patients.length === 0 && searchValue) {
                       const ramqData = extractBirthDateAndSexFromRamq(
@@ -384,7 +381,6 @@ const PatientDataSearch = ({
               }}
               onReset={() => {
                 if (populateFromJhn) {
-                  setDisabledEP(false);
                   setFileSearchDone(false);
                   form.resetFields([getName(PATIENT_DATA_FI_KEY.NO_FILE)]);
                 } else {
