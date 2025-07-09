@@ -52,6 +52,10 @@ type OwnProps = IAnalysisFormPart & {
   initialFileSearchDone?: boolean;
   initialRamqSearchDone?: boolean;
   initialData?: IPatientDataType;
+  populateFromJhn?: {
+    jhn: string;
+    organization_id: string;
+  };
 };
 
 const TIME = ' 00:00:00';
@@ -65,6 +69,7 @@ const PatientDataSearch = ({
   initialFileSearchDone = false,
   initialRamqSearchDone = false,
   initialData,
+  populateFromJhn = undefined,
 }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const { prescriptionId } = usePrescriptionForm();
@@ -82,6 +87,13 @@ const PatientDataSearch = ({
         fields.push({
           name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
           value: formatRamq(patient.ramq),
+        });
+      }
+      if (patient.mrn && populateFromJhn?.organization_id === patient.ep) {
+        setFileSearchDone(true);
+        fields.push({
+          name: getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+          value: formatRamq(patient.mrn),
         });
       }
 
@@ -113,7 +125,6 @@ const PatientDataSearch = ({
       form.setFields(fields);
     }
   };
-
   useEffect(() => setFileSearchDone(initialFileSearchDone), [initialFileSearchDone]);
 
   useEffect(() => setRamqSearchDone(initialRamqSearchDone), [initialRamqSearchDone]);
@@ -135,6 +146,32 @@ const PatientDataSearch = ({
       setFileSearchDone(!!(initialData.no_mrn || initialData.mrn));
       setRamqSearchDone(!!(initialData.no_ramq || initialData.ramq));
       setInitialValues(form, getName, initialData, PATIENT_DATA_FI_KEY);
+
+      // Populate from JHN if available
+      if (populateFromJhn) {
+        setFieldValue(
+          form,
+          getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
+          populateFromJhn.organization_id,
+        );
+        setFieldValue(form, getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER), populateFromJhn.jhn);
+        const ramqData = extractBirthDateAndSexFromRamq(
+          populateFromJhn.jhn.replace(/\s/g, ''),
+          INPUT_DATE_OUTPUT_FORMAT,
+        );
+        if (ramqData.birthDate) {
+          setFieldValue(form, getName(PATIENT_DATA_FI_KEY.BIRTH_DATE), ramqData.birthDate);
+          setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
+        }
+        HybridApi.searchPatients({ jhn: populateFromJhn.jhn.replace(/\s/g, '') }).then(
+          ({ data }) => {
+            const motherData = data?.patients?.[0];
+            setRamqSearchDone(true);
+            if (!motherData) return;
+            updateFormFromPatient(form, hybridToFormPatient(motherData));
+          },
+        );
+      }
     }
     // eslint-disable-next-line
   }, []);
@@ -152,8 +189,7 @@ const PatientDataSearch = ({
               disabled={
                 getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) ||
                 getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) ||
-                fileSearchDone ||
-                ramqSearchDone
+                fileSearchDone
               }
             >
               {formConfig?.prescribing_institutions.map((institution) => (
@@ -165,110 +201,14 @@ const PatientDataSearch = ({
           </Form.Item>
         )}
       </Form.Item>
-      <Form.Item noStyle shouldUpdate>
-        {({ getFieldValue }) =>
-          getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)) ? (
-            <SearchOrNoneFormItem<IHybridFormPatient>
-              disableReset={!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.FILE_NUMBER]}
-              form={form}
-              inputFormItemProps={{
-                name: getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
-                rules: [
-                  {
-                    required: true,
-                    validateTrigger: 'onSubmit',
-                    validator: (_, value) => {
-                      if (!value) {
-                        return Promise.reject(new Error(intl.get('this.field.is.required')));
-                      }
-
-                      if (!fileSearchDone) {
-                        return Promise.reject(new Error(intl.get('click.on.search')));
-                      }
-
-                      return Promise.resolve();
-                    },
-                  },
-                ],
-                required: true,
-                label: intl.get('folder'),
-              }}
-              inputProps={{
-                placeholder: '000000',
-                'data-cy': 'InputMRN',
-                onSearch: (value, search) => {
-                  const fixedFileNumber = value.replace(/\s/g, '');
-
-                  if (hasSpecialCharacters(fixedFileNumber)) {
-                    setFieldError(
-                      form,
-                      getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
-                      intl.get('must.not.contain.special.characters'),
-                    );
-                  } else {
-                    (search as Function)(fixedFileNumber);
-                  }
-                },
-              }}
-              checkboxFormItemProps={{
-                name: getName(PATIENT_DATA_FI_KEY.NO_FILE),
-                title: intl.get('no.folder.number'),
-              }}
-              checkboxProps={{
-                onChange: (e) => setFileSearchDone(e.target.checked),
-              }}
-              onReset={() => {
-                setFileSearchDone(false);
-                setRamqSearchDone(false);
-                form.resetFields([
-                  getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
-                  getName(PATIENT_DATA_FI_KEY.LAST_NAME),
-                  getName(PATIENT_DATA_FI_KEY.SEX),
-                  getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
-                  getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                  getName(PATIENT_DATA_FI_KEY.NO_FILE),
-                  getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
-                ]);
-              }}
-              onSearchDone={(value) => {
-                updateFormFromPatient(form, hybridToFormPatient(value));
-                setFileSearchDone(true);
-                setIsNewFileNumber(isEmpty(value));
-
-                if (value && value.jhn) {
-                  setRamqSearchDone(true);
-                } else if (value && Object.keys(value).length > 0 && !value.jhn) {
-                  setFieldValue(form, getName(PATIENT_DATA_FI_KEY.NO_RAMQ), 'true');
-                }
-              }}
-              apiPromise={(value) =>
-                HybridApi.searchPatient({
-                  organization_id: getFieldValue(
-                    getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
-                  ),
-                  mrn: value,
-                })
-              }
-              disabled={
-                ramqSearchDone ||
-                getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) ||
-                (fileSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)))
-              }
-            />
-          ) : null
-        }
-      </Form.Item>
-      <Form.Item noStyle shouldUpdate>
-        {({ getFieldValue }) =>
-          getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) || fileSearchDone ? (
+      {populateFromJhn && (
+        <Form.Item noStyle shouldUpdate>
+          {({ getFieldValue }) => (
             <>
               <SearchOrNoneFormItem<IHybridFormPatients>
-                disableReset={
-                  !!prescriptionId &&
-                  ((!isNewFileNumber && ramqSearchDone) ||
-                    !!initialData?.[PATIENT_DATA_FI_KEY.RAMQ_NUMBER])
-                }
+                disableReset
                 form={form}
+                noReset
                 inputFormItemProps={{
                   name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
                   rules: [
@@ -327,13 +267,8 @@ const PatientDataSearch = ({
                 }}
                 checkboxFormItemProps={{
                   name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                  className: getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE))
-                    ? styles.checkboxHidden
-                    : '',
                   title:
-                    parentKey === STEPS_ID.PATIENT_IDENTIFICATION
-                      ? intl.get('no.ramq.or.new.born')
-                      : intl.get('no.ramq'),
+                    parentKey === 'patient' ? intl.get('no.ramq.or.new.born') : intl.get('no.ramq'),
                 }}
                 onReset={() => {
                   onResetRamq && onResetRamq();
@@ -342,11 +277,8 @@ const PatientDataSearch = ({
                     getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
                     getName(PATIENT_DATA_FI_KEY.LAST_NAME),
                     getName(PATIENT_DATA_FI_KEY.SEX),
-                    getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
-                    getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
                   ]);
-                  if (parentKey === STEPS_ID.PATIENT_IDENTIFICATION)
-                    dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
+                  dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
                 }}
                 onSearchDone={(values, searchValue) => {
                   if (values?.patients && Array.isArray(values?.patients)) {
@@ -389,15 +321,267 @@ const PatientDataSearch = ({
                     jhn: value,
                   })
                 }
-                disabled={
-                  (ramqSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ||
-                  (prescriptionId && getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)))
-                }
+                disabled
               />
             </>
+          )}
+        </Form.Item>
+      )}
+      <Form.Item noStyle shouldUpdate>
+        {({ getFieldValue }) =>
+          getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)) ? (
+            <SearchOrNoneFormItem<IHybridFormPatient>
+              disableReset={!!prescriptionId && !!initialData?.[PATIENT_DATA_FI_KEY.FILE_NUMBER]}
+              form={form}
+              inputFormItemProps={{
+                name: getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                rules: [
+                  {
+                    required: true,
+                    validateTrigger: 'onSubmit',
+                    validator: (_, value) => {
+                      if (!value) {
+                        return Promise.reject(new Error(intl.get('this.field.is.required')));
+                      }
+
+                      if (!fileSearchDone) {
+                        return Promise.reject(new Error(intl.get('click.on.search')));
+                      }
+
+                      return Promise.resolve();
+                    },
+                  },
+                ],
+                required: true,
+                label: intl.get('folder'),
+              }}
+              inputProps={{
+                placeholder: '000000',
+                'data-cy': 'InputMRN',
+                onSearch: (value, search) => {
+                  const fixedFileNumber = value.replace(/\s/g, '');
+
+                  if (hasSpecialCharacters(fixedFileNumber)) {
+                    setFieldError(
+                      form,
+                      getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                      intl.get('must.not.contain.special.characters'),
+                    );
+                  } else {
+                    (search as Function)(fixedFileNumber);
+                  }
+                },
+              }}
+              checkboxFormItemProps={{
+                name: getName(PATIENT_DATA_FI_KEY.NO_FILE),
+                title: intl.get('no.folder.number'),
+              }}
+              checkboxProps={{
+                onChange: (e) => setFileSearchDone(e.target.checked),
+              }}
+              onReset={() => {
+                if (populateFromJhn) {
+                  setFileSearchDone(false);
+                  form.resetFields([getName(PATIENT_DATA_FI_KEY.NO_FILE)]);
+                } else {
+                  setFileSearchDone(false);
+                  setRamqSearchDone(false);
+                  form.resetFields([
+                    getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
+                    getName(PATIENT_DATA_FI_KEY.LAST_NAME),
+                    getName(PATIENT_DATA_FI_KEY.SEX),
+                    getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                    getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
+                    getName(PATIENT_DATA_FI_KEY.NO_FILE),
+                    getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                  ]);
+                }
+              }}
+              onSearchDone={(value) => {
+                if (
+                  populateFromJhn &&
+                  value &&
+                  hybridToFormPatient(value)?.ramq !== populateFromJhn?.jhn
+                ) {
+                  setFieldError(
+                    form,
+                    getName(PATIENT_DATA_FI_KEY.FILE_NUMBER),
+                    intl.get('cant.have.two.file.number.same.patient'),
+                  );
+                } else {
+                  updateFormFromPatient(form, hybridToFormPatient(value));
+                  setFileSearchDone(true);
+                  setIsNewFileNumber(isEmpty(value));
+
+                  if (value && value.jhn) {
+                    setRamqSearchDone(true);
+                  } else if (value && Object.keys(value).length > 0 && !value.jhn) {
+                    setFieldValue(form, getName(PATIENT_DATA_FI_KEY.NO_RAMQ), 'true');
+                  }
+                }
+              }}
+              apiPromise={(value) =>
+                HybridApi.searchPatient({
+                  organization_id: getFieldValue(
+                    getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION),
+                  ),
+                  mrn: value,
+                })
+              }
+              disabled={
+                populateFromJhn
+                  ? fileSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE))
+                  : ramqSearchDone ||
+                    getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) ||
+                    (fileSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)))
+              }
+            />
           ) : null
         }
       </Form.Item>
+      {!populateFromJhn && (
+        <Form.Item noStyle shouldUpdate>
+          {({ getFieldValue }) =>
+            getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE)) || fileSearchDone ? (
+              <>
+                <SearchOrNoneFormItem<IHybridFormPatients>
+                  disableReset={
+                    !!prescriptionId &&
+                    ((!isNewFileNumber && ramqSearchDone) ||
+                      !!initialData?.[PATIENT_DATA_FI_KEY.RAMQ_NUMBER])
+                  }
+                  form={form}
+                  inputFormItemProps={{
+                    name: getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                    rules: [
+                      {
+                        required: true,
+                        validateTrigger: 'onSubmit',
+                        validator: (_, value) => {
+                          if (!value) {
+                            return Promise.reject(new Error(intl.get('this.field.is.required')));
+                          } else if (!isRamqValid(value)) {
+                            return Promise.reject(new Error(intl.get('ramq.number.invalid')));
+                          } else if (!ramqSearchDone) {
+                            return Promise.reject(new Error(intl.get('click.on.search')));
+                          }
+
+                          return Promise.resolve();
+                        },
+                      },
+                    ],
+                    label: 'RAMQ',
+                    required: true,
+                  }}
+                  checkboxProps={{
+                    onChange: (e) => {
+                      const checked = e.target.checked;
+                      if (!checked) {
+                        onResetRamq && onResetRamq();
+                      }
+                    },
+                  }}
+                  inputProps={{
+                    placeholder: 'AAAA 0000 0000',
+                    onSearch: (value, search) => {
+                      const fixedRamq = value.replace(/\s/g, '');
+                      resetFieldError(form, getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER));
+                      if (
+                        extractBirthDateAndSexFromRamq(fixedRamq, INPUT_DATE_OUTPUT_FORMAT)
+                          .birthDate &&
+                        isRamqValid(fixedRamq)
+                      ) {
+                        (search as Function)(fixedRamq);
+                      } else {
+                        setFieldError(
+                          form,
+                          getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                          intl.get('ramq.number.invalid'),
+                        );
+                      }
+                    },
+                    onChange: (event) =>
+                      setFieldValue(
+                        form,
+                        getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                        formatRamq(event.currentTarget.value),
+                      ),
+                  }}
+                  checkboxFormItemProps={{
+                    name: getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
+                    className: getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_FILE))
+                      ? styles.checkboxHidden
+                      : '',
+                    title:
+                      parentKey === STEPS_ID.PATIENT_IDENTIFICATION
+                        ? intl.get('no.ramq.or.new.born')
+                        : intl.get('no.ramq'),
+                  }}
+                  onReset={() => {
+                    onResetRamq && onResetRamq();
+                    setRamqSearchDone(false);
+                    form.resetFields([
+                      getName(PATIENT_DATA_FI_KEY.FIRST_NAME),
+                      getName(PATIENT_DATA_FI_KEY.LAST_NAME),
+                      getName(PATIENT_DATA_FI_KEY.SEX),
+                      getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
+                      getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                    ]);
+                    if (parentKey === STEPS_ID.PATIENT_IDENTIFICATION)
+                      dispatch(prescriptionFormActions.saveStepData({ patient: { id: null } }));
+                  }}
+                  onSearchDone={(values, searchValue) => {
+                    if (values?.patients && Array.isArray(values?.patients)) {
+                      if (values.patients.length === 0 && searchValue) {
+                        const ramqData = extractBirthDateAndSexFromRamq(
+                          searchValue,
+                          INPUT_DATE_OUTPUT_FORMAT,
+                        );
+
+                        if (ramqData.birthDate) {
+                          setFieldValue(
+                            form,
+                            getName(PATIENT_DATA_FI_KEY.BIRTH_DATE),
+                            ramqData.birthDate,
+                          );
+                          setFieldValue(form, getName(PATIENT_DATA_FI_KEY.SEX), ramqData.sex);
+                        }
+                      }
+                      if (
+                        isNewFileNumber &&
+                        values.patients.filter(
+                          (v) =>
+                            v.organization_id ===
+                            getFieldValue(getName(PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION)),
+                        ).length > 0
+                      ) {
+                        setFieldError(
+                          form,
+                          getName(PATIENT_DATA_FI_KEY.RAMQ_NUMBER),
+                          intl.get('cant.have.two.file.number.same.patient'),
+                        );
+                      } else {
+                        updateFormFromPatient(form, hybridToFormPatient(values.patients[0]));
+                        setRamqSearchDone(true);
+                      }
+                    }
+                  }}
+                  apiPromise={(value) =>
+                    HybridApi.searchPatients({
+                      jhn: value,
+                    })
+                  }
+                  disabled={
+                    (ramqSearchDone && !getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ||
+                    (prescriptionId && getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)))
+                  }
+                />
+              </>
+            ) : null
+          }
+        </Form.Item>
+      )}
+
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) =>
           getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) || ramqSearchDone ? (
