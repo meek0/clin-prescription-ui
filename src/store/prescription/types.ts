@@ -60,6 +60,7 @@ export enum OtherAnalysisType {
   NUCLEAR_MITOCHONDRIOPATHY = 'MITN', // MITN
   POLYMALFORMATION = 'POLYM',
   FETAL_ANOMALIES = 'FEAN',
+  NORMAL_GENOME = 'GENOR', // GENOR
 }
 
 export type AnalysisType = MuscularAnalysisType | OtherAnalysisType;
