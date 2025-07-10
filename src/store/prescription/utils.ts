@@ -119,15 +119,20 @@ export function cleanAnalysisData(analysis: TCompleteAnalysis): HybridPrescripti
   }
 
   // Add para clinical signs to proband
-  if (analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.EXAMS].length) {
+  if (
+    analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.EXAMS].length ||
+    analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS]?.length
+  ) {
     (proband as HybridPatientPresent).para_clinical = {
-      exams: analysisCopy[STEPS_ID.PARACLINICAL_EXAMS][PARACLINICAL_EXAMS_FI_KEY.EXAMS].map(
-        (exam) => ({
-          code: exam[PARACLINICAL_EXAM_ITEM_KEY.CODE],
-          interpretation: exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]?.toUpperCase(),
-          values: exam[PARACLINICAL_EXAM_ITEM_KEY.VALUES],
-        }),
-      ),
+      exams: analysisCopy[STEPS_ID.PARACLINICAL_EXAMS]?.[PARACLINICAL_EXAMS_FI_KEY.EXAMS].length
+        ? analysisCopy[STEPS_ID.PARACLINICAL_EXAMS][PARACLINICAL_EXAMS_FI_KEY.EXAMS].map(
+            (exam) => ({
+              code: exam[PARACLINICAL_EXAM_ITEM_KEY.CODE],
+              interpretation: exam[PARACLINICAL_EXAM_ITEM_KEY.INTERPRETATION]?.toUpperCase(),
+              values: exam[PARACLINICAL_EXAM_ITEM_KEY.VALUES],
+            }),
+          )
+        : [],
       other: analysisCopy[STEPS_ID.PARACLINICAL_EXAMS][PARACLINICAL_EXAMS_FI_KEY.OTHER_EXAMS],
     };
   }
