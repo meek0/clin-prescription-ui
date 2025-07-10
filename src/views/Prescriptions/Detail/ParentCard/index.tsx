@@ -25,6 +25,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
   const validClinicalImpressions: string[] = get(prescription, 'supportingInfo', []).map((info) =>
     get(info, 'reference'),
   );
+  const patient = extension?.extension?.[1].valueReference?.resource;
   const clinicalImpressions =
     extension?.extension?.[1].valueReference?.resource.clinicalImpressions;
   const phenotype: string[] = [];
@@ -75,8 +76,8 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
               content={
                 <>
                   <PatientContent
-                    patient={extension?.extension[1].valueReference?.resource!}
-                    reference={prescription?.subject?.resource?.managingOrganization?.reference}
+                    patient={patient!}
+                    reference={patient?.managingOrganization?.reference}
                     labelClass="label-20"
                   />
                   <Divider />
