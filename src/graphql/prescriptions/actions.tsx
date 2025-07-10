@@ -121,6 +121,8 @@ export const useObservationConsanguinityEntity = (id: string) => {
 };
 
 export const useObservationPhenotypeEntity = (ids: string[]) => {
+  if (!ids?.length) return { phenotypeValue: [] };
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data } = useLazyResultQueryOnLoadOnly<any>(ANALYSE_PHENOTYPE_OBSERVATION(ids), {
     variables: {
       ids: ids,
