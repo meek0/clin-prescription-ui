@@ -16,7 +16,7 @@ const FoetusClinicalInformation = ({ prescription, prescriptionId, loading }: Ow
     prescription.subject.resource.requests = serviceRequests.filter(
       (serviceRequest) => serviceRequest.category?.[0]?.coding[0]?.code === 'Prenatal',
     );
-  return <ClinicalInformationCard prescription={prescription} loading={loading} />;
+  return <ClinicalInformationCard prescription={prescription} loading={loading} isFoetus />;
 };
 
 export default FoetusClinicalInformation;

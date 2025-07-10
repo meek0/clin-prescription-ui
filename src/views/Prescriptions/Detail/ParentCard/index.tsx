@@ -83,7 +83,7 @@ const ParentCard = ({ extension, loading, prescription }: OwnProps) => {
                       {intl.get(affectedStatus)}
                     </Descriptions.Item>
                   </Descriptions>
-                  {(phenotype.length > 0 || generalObservation.length > 1) && (
+                  {(phenotype.length > 0 || generalObservation.length) && (
                     <>
                       <p style={{ marginBottom: '.5em' }} />
                       <ClinicalSign

@@ -267,6 +267,7 @@ export interface ServiceRequestEntity {
       item: {
         id: string[];
         resourceType: string;
+        focus?: Reference;
         note: {
           text: string;
         };
