@@ -240,13 +240,13 @@ function getParent(parentData: TParentDataType, family_member: 'MOTHER' | 'FATHE
     case EnterInfoMomentValue.NEVER:
       parent = {
         family_member,
-        status: parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT].toUpperCase(),
+        status: parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT],
         reason: parentData[PARENT_DATA_FI_KEY.NO_INFO_REASON],
       };
       break;
     case EnterInfoMomentValue.NOW:
       parent = getPatientData(parentData as TPatientFormDataType, family_member);
-      parent.status = parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT].toUpperCase();
+      parent.status = parentData[PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT];
       switch (parentData[PARENT_DATA_FI_KEY.CLINICAL_STATUS]) {
         case ClinicalStatusValue.AFFECTED:
           (parent as HybridPatientPresent).clinical = getClinicalSigns(

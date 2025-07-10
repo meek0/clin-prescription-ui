@@ -8,9 +8,9 @@ export enum PARENT_DATA_FI_KEY {
 }
 
 export enum EnterInfoMomentValue {
-  NOW = 'now',
-  NEVER = 'never',
-  LATER = 'later',
+  NOW = 'NOW',
+  NEVER = 'NEVER',
+  LATER = 'LATER',
 }
 
 export enum ClinicalStatusValue {

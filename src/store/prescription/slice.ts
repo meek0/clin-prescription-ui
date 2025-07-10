@@ -238,8 +238,8 @@ const prescriptionFormSlice = createSlice({
       ): TPatientFormDataType {
         return {
           [PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT]: (!(patient as HybridPatientNotPresent).status
-            ? 'now'
-            : (patient as HybridPatientNotPresent).status?.toLowerCase()) as EnterInfoMomentValue,
+            ? EnterInfoMomentValue.NOW
+            : (patient as HybridPatientNotPresent).status) as EnterInfoMomentValue,
           [PARENT_DATA_FI_KEY.NO_INFO_REASON]: (patient as HybridPatientNotPresent).reason,
           [PATIENT_DATA_FI_KEY.PATIENT_ID]: (patient as HybridPatientPresent).patient_id,
           [PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION]:
@@ -247,14 +247,14 @@ const prescriptionFormSlice = createSlice({
           [PATIENT_DATA_FI_KEY.FIRST_NAME]: (patient as HybridPatientPresent).first_name,
           [PATIENT_DATA_FI_KEY.LAST_NAME]: (patient as HybridPatientPresent).last_name,
           [PATIENT_DATA_FI_KEY.NO_FILE]:
-            (patient as HybridPatientNotPresent).status !== 'now' &&
+            (patient as HybridPatientNotPresent).status !== EnterInfoMomentValue.NOW &&
             (patient as HybridPatientNotPresent).family_member !== 'PROBAND'
               ? false
               : !(patient as HybridPatientPresent).mrn,
           [PATIENT_DATA_FI_KEY.FILE_NUMBER]: (patient as HybridPatientPresent).mrn,
           [PATIENT_DATA_FI_KEY.RAMQ_NUMBER]: (patient as HybridPatientPresent).jhn,
           [PATIENT_DATA_FI_KEY.NO_RAMQ]:
-            (patient as HybridPatientNotPresent).status !== 'now' &&
+            (patient as HybridPatientNotPresent).status !== EnterInfoMomentValue.NOW &&
             (patient as HybridPatientNotPresent).family_member !== 'PROBAND'
               ? false
               : !(patient as HybridPatientPresent).jhn,
