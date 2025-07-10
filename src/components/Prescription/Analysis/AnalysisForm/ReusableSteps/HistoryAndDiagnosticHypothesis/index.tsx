@@ -2,22 +2,18 @@
 import { Form } from 'antd';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
-import HistoryAndDiagnosticData, {
-  IHistoryAndDiagnosisDataType,
-} from 'components/Prescription/components/HistoryAndDiagnosisData';
+import HistoryAndDiagnosticData from 'components/Prescription/components/HistoryAndDiagnosisData';
 import { IAnalysisStepForm } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
 
 import { STEPS_ID } from '../constant';
 
-export type THistoryAndDiagnosisDataType = IHistoryAndDiagnosisDataType;
-
 const HistoryAndDiagnosticHypothesis = ({}: IAnalysisStepForm) => {
   const FORM_NAME = STEPS_ID.HISTORY_AND_DIAGNOSIS;
   const [form] = Form.useForm();
-  const { analysisData } = usePrescriptionForm();
+  const { analysisFormData } = usePrescriptionForm();
 
-  const getInitialData = () => (analysisData ? analysisData[FORM_NAME] : undefined);
+  const getInitialData = () => (analysisFormData ? analysisFormData[FORM_NAME] : undefined);
 
   return (
     <AnalysisForm layout="horizontal" form={form} name={FORM_NAME}>

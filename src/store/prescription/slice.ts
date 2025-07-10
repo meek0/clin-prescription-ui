@@ -1,29 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  HybridPatient,
-  HybridPatientNotPresent,
-  HybridPatientPresent,
-  HybridPrescription,
-} from 'api/hybrid/models';
+import { HybridAnalysis, HybridPatientPresent } from 'api/hybrid/models';
 import { logout } from 'auth/keycloak';
 import { RptManager } from 'auth/rpt';
 import { isUndefined } from 'lodash';
 import _ from 'lodash';
 
-import {
-  EnterInfoMomentValue,
-  PARENT_DATA_FI_KEY,
-} from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
-import { TPatientFormDataType } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification';
 // eslint-disable-next-line max-len
-import { GestationalAgeValues } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/AdditionalInformation';
-import {
-  IClinicalSignItem,
-  IClinicalSignsDataType,
-} from 'components/Prescription/components/ClinicalSignsSelect/types';
-import { IHistoryAndDiagnosisDataType } from 'components/Prescription/components/HistoryAndDiagnosisData';
-import { IParaclinicalExamsDataType } from 'components/Prescription/components/ParaclinicalExamsSelect';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
 import { MuscularDiseaseConfig } from 'store/prescription/analysis/muscular';
 import { isMuscularAnalysis } from 'store/prescription/helper';
@@ -36,11 +18,12 @@ import {
   initialState,
   IStartAddingParent,
   ISubmissionStepDataReview,
+  TCompleteAnalysis,
 } from 'store/prescription/types';
-import { SexValue } from 'utils/commonTypes';
 
 import { getAddParentSteps } from './analysis/addParent';
 import { createPrescription, fetchFormConfig } from './thunk';
+import { getFormDataFromAnalysis } from './utils';
 
 export const PrescriptionState: initialState = {
   prescriptionVisible: false,
@@ -49,7 +32,7 @@ export const PrescriptionState: initialState = {
   currentStep: undefined,
   config: undefined,
   isCreatingPrescription: false,
-  analysisData: {
+  analysisFormData: {
     analysis: {
       panel_code: '',
       is_reflex: false,
@@ -89,13 +72,10 @@ const prescriptionFormSlice = createSlice({
   initialState: PrescriptionState,
   reducers: {
     saveStepData: (state, action: PayloadAction<any>) => {
-      // The mergeWith option is used to replace array if array is empty (https://github.com/lodash/lodash/issues/1313)
-      state.analysisData = _.mergeWith(state.analysisData, action.payload, (obj, src) =>
-        !_.isNil(src) ? src : obj,
-      );
+      updateanalysisFormDataFromForm(state, action.payload);
     },
     prescriptionChanged: (state, action: PayloadAction<any>) => {
-      state.analysisData.changed = action.payload;
+      state.analysisFormData.changed = action.payload;
     },
     setDraft: (state, action: PayloadAction<boolean>) => {
       state.isDraft = action.payload;
@@ -121,10 +101,7 @@ const prescriptionFormSlice = createSlice({
       }>,
     ) => {
       if (state.currentFormRefs?.getFieldsValue) {
-        state.analysisData = {
-          ...state.analysisData,
-          ...state.currentFormRefs.getFieldsValue(),
-        };
+        updateanalysisFormDataFromForm(state, state.currentFormRefs.getFieldsValue());
       }
       state.currentStep = state.config?.steps[action.payload.index];
       state.lastStepIsNext = action.payload.lastStepIsNext;
@@ -148,10 +125,7 @@ const prescriptionFormSlice = createSlice({
       }
 
       if (state.currentFormRefs?.getFieldsValue) {
-        state.analysisData = {
-          ...state.analysisData,
-          ...state.currentFormRefs.getFieldsValue(),
-        };
+        updateanalysisFormDataFromForm(state, state.currentFormRefs.getFieldsValue());
       }
 
       const previousStepIndex = state.currentStep?.previousStepIndex;
@@ -193,12 +167,12 @@ const prescriptionFormSlice = createSlice({
       state.analysisChoiceModalVisible = false;
       state.prescriptionVisible = true;
 
-      state.analysisData.analysis = {
+      state.analysisFormData.analysis = {
         panel_code: action.payload.type,
         is_reflex: action.payload.extraData.isReflex ?? false,
       };
     },
-    openFormForDraft: (state, action: PayloadAction<HybridPrescription>) => {
+    openFormFromDraft: (state, action: PayloadAction<HybridAnalysis>) => {
       const prescription = action.payload;
       const config = getAnalysisConfigMapping(prescription.analysis_code as AnalysisType)!;
       config.steps = enrichSteps(config.steps);
@@ -209,128 +183,8 @@ const prescriptionFormSlice = createSlice({
       state.prescriptionId = prescription.analysis_id;
       state.currentStep = config.steps[0];
 
-      // Prescription data in analysisData object
-
-      state.analysisData.analysis = {
-        is_reflex: prescription.is_reflex,
-        panel_code: prescription.analysis_code,
-        comment: prescription.comment,
-        resident_supervisor: prescription.resident_supervisor_id,
-      };
-
-      if (prescription.diagnosis_hypothesis) {
-        state.analysisData.history_and_diagnosis = {
-          diagnostic_hypothesis: prescription.diagnosis_hypothesis,
-          ethnicity: prescription.ethnicity_codes,
-          report_health_conditions: !!prescription.history?.length,
-          health_conditions: prescription.history?.map((history) => ({
-            condition: history.condition,
-            parental_link: history.parental_link_code,
-          })),
-        } as IHistoryAndDiagnosisDataType;
-        if (state.analysisData?.history_and_diagnosis && prescription.inbreeding !== undefined)
-          state.analysisData.history_and_diagnosis.inbreeding = prescription.inbreeding;
-      }
-
-      function getPatientInfos(
-        patient: HybridPatient,
-        proband?: HybridPatientPresent,
-      ): TPatientFormDataType {
-        return {
-          [PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT]: (!(patient as HybridPatientNotPresent).status
-            ? 'now'
-            : (patient as HybridPatientNotPresent).status?.toLowerCase()) as EnterInfoMomentValue,
-          [PARENT_DATA_FI_KEY.NO_INFO_REASON]: (patient as HybridPatientNotPresent).reason,
-          [PATIENT_DATA_FI_KEY.PATIENT_ID]: (patient as HybridPatientPresent).patient_id,
-          [PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION]:
-            (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
-          [PATIENT_DATA_FI_KEY.FIRST_NAME]: (patient as HybridPatientPresent).first_name,
-          [PATIENT_DATA_FI_KEY.LAST_NAME]: (patient as HybridPatientPresent).last_name,
-          [PATIENT_DATA_FI_KEY.NO_FILE]:
-            (patient as HybridPatientNotPresent).status !== 'now' &&
-            (patient as HybridPatientNotPresent).family_member !== 'PROBAND'
-              ? false
-              : !(patient as HybridPatientPresent).mrn,
-          [PATIENT_DATA_FI_KEY.FILE_NUMBER]: (patient as HybridPatientPresent).mrn,
-          [PATIENT_DATA_FI_KEY.RAMQ_NUMBER]: (patient as HybridPatientPresent).jhn,
-          [PATIENT_DATA_FI_KEY.NO_RAMQ]:
-            (patient as HybridPatientNotPresent).status !== 'now' &&
-            (patient as HybridPatientNotPresent).family_member !== 'PROBAND'
-              ? false
-              : !(patient as HybridPatientPresent).jhn,
-          [PATIENT_DATA_FI_KEY.BIRTH_DATE]: (patient as HybridPatientPresent).birth_date,
-          [PATIENT_DATA_FI_KEY.SEX]: (
-            patient as HybridPatientPresent
-          ).sex?.toLowerCase() as SexValue,
-        } as any;
-      }
-
-      function getClinical(patient: HybridPatientPresent): IClinicalSignsDataType {
-        const observedSigns: IClinicalSignItem[] = [];
-        const nonObservedSigns: IClinicalSignItem[] = [];
-        patient.clinical?.signs?.forEach((sign) =>
-          (sign.observed ? observedSigns : nonObservedSigns).push({
-            value: sign.code,
-            is_observed: sign.observed,
-            age_code: sign.age_code,
-            name: '',
-          }),
-        );
-        return {
-          signs: observedSigns,
-          not_observed_signs: nonObservedSigns,
-          comment: patient.clinical?.comment,
-        };
-      }
-
-      function getParaClinical(patient: HybridPatientPresent): IParaclinicalExamsDataType {
-        return {
-          exams: patient.para_clinical?.exams || [],
-          comment: patient.para_clinical?.other,
-        };
-      }
-
-      const proband = prescription.patients[0] as HybridPatientPresent;
-      state.analysisData.patient = getPatientInfos(proband);
-      state.analysisData.clinical_signs = getClinical(proband);
-      state.analysisData.paraclinical_exams = getParaClinical(proband);
-
-      if (proband.foetus) {
-        state.analysisData.patient.additional_info = {
-          foetus_gender: proband.foetus.sex?.toLowerCase() as SexValue,
-          gestational_age:
-            proband.foetus.gestational_method?.toLocaleLowerCase() as GestationalAgeValues,
-          gestational_date: proband.foetus.gestational_date,
-          is_new_born: proband.foetus.type === 'NEW_BORN',
-          is_prenatal_diagnosis: proband.foetus.type === 'PRENATAL',
-          mother_ramq: proband.foetus.mother_jhn,
-        };
-      }
-
-      for (let i = 1; i < prescription.patients.length; i++) {
-        const patient = prescription.patients[i];
-        const familyMember = {
-          ...getPatientInfos(patient, proband),
-          ...getParaClinical(patient as HybridPatientPresent),
-          ...getClinical(patient as HybridPatientPresent),
-        } as any;
-
-        if ((patient as HybridPatientPresent).affected !== undefined) {
-          if ((patient as HybridPatientPresent).affected == null) {
-            familyMember.parent_clinical_status = 'unknown';
-          } else {
-            familyMember.parent_clinical_status = (patient as HybridPatientPresent).affected
-              ? 'affected'
-              : 'not_affected';
-          }
-        }
-
-        if (patient.family_member === 'FATHER') {
-          state.analysisData.father = familyMember;
-        } else if (patient.family_member === 'MOTHER') {
-          state.analysisData.mother = familyMember;
-        }
-      }
+      // Prescription data in analysisFormData object
+      state.analysisFormData = getFormDataFromAnalysis(action.payload);
 
       state.config = config;
     },
@@ -339,28 +193,32 @@ const prescriptionFormSlice = createSlice({
     },
     saveSubmissionStepData: (state, action: PayloadAction<ISubmissionStepDataReview>) => {
       if (action.payload.comment) {
-        state.analysisData.analysis.comment = action.payload.comment;
+        state.analysisFormData.analysis.comment = action.payload.comment;
       }
 
-      if (action.payload.resident_supervisor) {
-        state.analysisData.analysis.resident_supervisor = action.payload.resident_supervisor;
+      if (action.payload.resident_supervisor_id) {
+        state.analysisFormData.analysis.resident_supervisor_id =
+          action.payload.resident_supervisor_id;
       }
     },
     saveCreatedPrescription: (state, action: PayloadAction<any>) => {
       state.prescriptionId = action.payload?.prescriptionId || undefined;
       state.isDraft = !!action.payload?.isDraft;
-      state.analysisData.changed = undefined;
+      state.analysisFormData.changed = undefined;
       if (action.payload?.patients) {
         for (const patient of action.payload.patients) {
           switch (patient.family_member) {
             case 'PROBAND':
-              if (state.analysisData.patient) state.analysisData.patient.id = patient.id;
+              if (state.analysisFormData.proband)
+                state.analysisFormData.proband.patient_id = patient.id;
               break;
             case 'FATHER':
-              if (state.analysisData.father) state.analysisData.father.id = patient.id;
+              if (state.analysisFormData.father)
+                (state.analysisFormData.father as HybridPatientPresent).patient_id = patient.id;
               break;
             case 'MOTHER':
-              if (state.analysisData.mother) state.analysisData.mother.id = patient.id;
+              if (state.analysisFormData.mother)
+                (state.analysisFormData.mother as HybridPatientPresent).patient_id = patient.id;
               break;
           }
         }
@@ -399,3 +257,10 @@ export const prescriptionFormActionTypes = Object.values(prescriptionFormActions
   (action) => action.type,
 );
 export default prescriptionFormSlice.reducer;
+
+function updateanalysisFormDataFromForm(state: initialState, formData: TCompleteAnalysis) {
+  // The mergeWith option is used to replace array if array is empty (https://github.com/lodash/lodash/issues/1313)
+  state.analysisFormData = _.mergeWith(state.analysisFormData, formData, (obj, src) =>
+    !_.isNil(src) ? src : obj,
+  );
+}

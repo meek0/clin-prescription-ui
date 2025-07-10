@@ -8,7 +8,7 @@ import cx from 'classnames';
 import PhenotypeSearch from 'components/PhenotypeSearch';
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 
-import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignItem } from './types';
+import { IClinicalSignItem, IClinicalSignsDataType } from './types';
 import { getExistingHpoIdList, hpoValidationRule } from '.';
 
 import styles from './index.module.css';
@@ -22,16 +22,23 @@ interface OwnProps {
 
 const NotObservedSignsList = ({ form, getName }: OwnProps) => {
   const getNode = (index: number): IClinicalSignItem =>
-    form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS))[index];
+    form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
   function updateNode(index: number, update: Partial<IClinicalSignItem>) {
-    const nodes = [...form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS))];
+    const nodes = [
+      ...form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType)),
+    ];
     nodes[index] = { ...nodes[index], ...update };
-    form.setFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS), nodes);
+    form.setFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType), nodes);
 
     // Re-set observed sign to trigger re-rendering and validation
-    const notObservedNodes = form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS));
-    form.setFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS), notObservedNodes);
+    const notObservedNodes = form.getFieldValue(
+      getName('observed_signs' satisfies keyof IClinicalSignsDataType),
+    );
+    form.setFieldValue(
+      getName('observed_signs' satisfies keyof IClinicalSignsDataType),
+      notObservedNodes,
+    );
   }
 
   return (
@@ -42,7 +49,7 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
         <ProLabel title={' :'} />
       </Space>
       <Form.Item wrapperCol={{ xxl: 14 }} className="noMarginBtm">
-        <Form.List name={getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS)}>
+        <Form.List name={getName('not_observed_signs' satisfies keyof IClinicalSignsDataType)}>
           {(fields, { add, remove }, { errors }) => (
             <>
               <div className={cx(errors.length ? styles.listErrorWrapper : '')}>
@@ -55,23 +62,19 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                         <Form.Item
                           {...restField}
                           className={styles['phenotype-search']}
-                          name={[name, CLINICAL_SIGNS_ITEM_KEY.NAME]}
+                          name={[name, 'name' satisfies keyof IClinicalSignItem]}
                           rules={hpoValidationRule(hpoNode)}
                           validateTrigger="onSelect"
                         >
                           <PhenotypeSearch
                             defaultOption={{
-                              id: hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-                              name: hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME],
+                              id: hpoNode.code,
+                              name: hpoNode.name,
                             }}
-                            ignoreHpoIds={getExistingHpoIdList(
-                              form,
-                              getName,
-                              CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS,
-                            )}
-                            onClear={() => updateNode(name, { value: '', name: '' })}
+                            ignoreHpoIds={getExistingHpoIdList(form, getName)}
+                            onClear={() => updateNode(name, { code: '', name: '' })}
                             onSelect={(hpo) => {
-                              updateNode(name, { value: hpo.id, name: hpo.name });
+                              updateNode(name, { code: hpo.id, name: hpo.name });
                             }}
                           />
                         </Form.Item>
@@ -90,9 +93,9 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                   className={styles.addClinicalSignBtn}
                   onClick={() =>
                     add({
-                      [CLINICAL_SIGNS_ITEM_KEY.NAME]: '',
-                      [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: '',
-                      [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: true,
+                      name: '',
+                      code: '',
+                      observed: false,
                     })
                   }
                   icon={<PlusOutlined />}

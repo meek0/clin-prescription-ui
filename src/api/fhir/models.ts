@@ -1,5 +1,3 @@
-import { FhirDoc } from 'graphql/patients/models/Patient';
-
 export type ResourceType =
   | 'Practitioner'
   | 'Patient'
@@ -165,6 +163,7 @@ export interface Investigation {
       code?: {
         coding: Coding;
       };
+      focus: Reference;
     };
     reference: string;
     resource: {
@@ -219,27 +218,6 @@ export interface AnalysisTaskWorkflow {
   genomeBuild: string;
 }
 
-export interface AnalysisTaskEntity {
-  id: string;
-  authoredOn: string;
-  code: {
-    code: string;
-    system: string;
-  };
-  patientReference: string;
-  serviceRequestReference: string;
-  ownerReference: string;
-  requester: {
-    alias: string;
-    email: string;
-    id: string;
-  };
-  experiment: AnalysisTaskExperiment;
-  sample: AnalysisTaskSample;
-  docs: FhirDoc[];
-  workflow: AnalysisTaskWorkflow;
-}
-
 // For Prescription Entity Page
 export interface ServiceRequestEntity {
   id: string;
@@ -267,6 +245,7 @@ export interface ServiceRequestEntity {
       item: {
         id: string[];
         resourceType: string;
+        focus?: Reference;
         note: {
           text: string;
         };

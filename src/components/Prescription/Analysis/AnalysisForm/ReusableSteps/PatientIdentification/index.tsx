@@ -11,23 +11,19 @@ import { usePrescriptionForm } from 'store/prescription';
 
 import { defaultCollapseProps, STEPS_ID } from '../constant';
 
-import AdditionalInformation, {
-  additionalInfoKey, ADD_INFO_FI_KEY, IAddInfoDataType
-} from './AdditionalInformation';
+import FoetusInfos, { ADD_INFO_FI_KEY } from './AdditionalInformation';
 
 import styles from './index.module.css';
-import { IPatientDataType, PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
-
-export type TPatientFormDataType = IPatientDataType & IAddInfoDataType;
+import { HybridPatientFoetus } from 'api/hybrid/models';
 
 const PatientIdentification = ({}: IAnalysisStepForm) => {
-  const FORM_NAME = STEPS_ID.PATIENT_IDENTIFICATION;
+  const FORM_NAME = STEPS_ID.PROBAND_IDENTIFICATION;
   const [form] = Form.useForm();
-  const { analysisData } = usePrescriptionForm();
-  const [ramqSearchDone, setRamqSearchDone] = useState(false);
+  const { analysisFormData } = usePrescriptionForm();
+  const [jhnSearchDone, setJhnSearchDone] = useState(false);
 
   const getName = (...key: string[]) => getNamePath(FORM_NAME, key);
-  const initialData = analysisData ? analysisData[FORM_NAME] : undefined;
+  const initialData = analysisFormData ? analysisFormData[FORM_NAME] : undefined;
 
   return (
     <AnalysisForm form={form} className={styles.patientIdentificationForm} name={FORM_NAME}>
@@ -37,14 +33,14 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
             <PatientDataSearch
               form={form}
               parentKey={FORM_NAME}
-              onRamqSearchStateChange={setRamqSearchDone}
-              initialRamqSearchDone={ramqSearchDone}
+              onJhnSearchStateChange={setJhnSearchDone}
+              initialjhnSearchDone={jhnSearchDone}
               initialData={initialData}
-              onResetRamq={() => {
+              onResetJhn={() => {
                 form.resetFields([
                   getName(ADD_INFO_FI_KEY.PRENATAL_DIAGNOSIS),
-                  getName(ADD_INFO_FI_KEY.FOETUS_SEX),
-                  getName(ADD_INFO_FI_KEY.GESTATIONAL_AGE),
+                  getName('sex' satisfies keyof HybridPatientFoetus),
+                  getName('gestational_method' satisfies keyof HybridPatientFoetus),
                   getName(ADD_INFO_FI_KEY.NEW_BORN),
                 ]);
               }}
@@ -53,14 +49,14 @@ const PatientIdentification = ({}: IAnalysisStepForm) => {
         </Collapse>
         <Form.Item noStyle shouldUpdate>
           {({ getFieldValue }) =>
-            getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ)) || ramqSearchDone ? (
+            getFieldValue(getName('no_jhn')) || jhnSearchDone ? (
               <Collapse {...defaultCollapseProps} defaultActiveKey={['additional_information']}>
                 <CollapsePanel key="additional_information" header="Informations supplémentaires">
-                  <AdditionalInformation
+                  <FoetusInfos
                     form={form}
                     parentKey={FORM_NAME}
-                    showNewBornSection={getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))}
-                    initialData={initialData?.[additionalInfoKey]}
+                    showNewBornSection={getFieldValue(getName('no_jhn'))}
+                    initialData={initialData?.foetus}
                   />
                 </CollapsePanel>
               </Collapse>

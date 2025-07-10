@@ -31,25 +31,11 @@ export interface ArrangerResultsTree<T extends ArrangerNodeData> {
   hits: ArrangerHits<T>;
 }
 
-export interface ArrangerHits<T extends ArrangerNodeData> {
+interface ArrangerHits<T extends ArrangerNodeData> {
   total?: number;
   edges: ArrangerEdge<T>[];
 }
 
-export type ArrangerEdge<T extends ArrangerNodeData> = {
+type ArrangerEdge<T extends ArrangerNodeData> = {
   node: T;
-};
-
-export type ExtendedMapping = {
-  active: boolean;
-  displayName: string;
-  isArray: boolean;
-  type: string;
-  field: string;
-  rangeStep?: number;
-};
-
-export type ExtendedMappingResults = {
-  loading: boolean;
-  data: ExtendedMapping[];
 };

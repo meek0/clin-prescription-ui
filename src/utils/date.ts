@@ -1,4 +1,5 @@
 export const formatDate = (date: string): string => {
+  if (!date) return '';
   // https://stackoverflow.com/questions/7556591/is-the-javascript-date-object-always-one-day-off
   const d = new Date(date.replace(/-/g, '/').replace(/T.+/, ''));
   const month = `${d.getMonth() + 1}`.padStart(2, '0');

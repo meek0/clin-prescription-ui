@@ -11,6 +11,7 @@ import {
   isPractitionerResident,
 } from 'api/fhir/practitionerHelper';
 import { HybridApi } from 'api/hybrid';
+import { HybridAnalysis } from 'api/hybrid/models';
 
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
 import {
@@ -19,7 +20,6 @@ import {
   STEPS_ID,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { SubmissionStepMapping } from 'components/Prescription/Analysis/stepMapping';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import { getNamePath, setInitialValues } from 'components/Prescription/utils/form';
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 import { useAppDispatch } from 'store';
@@ -30,67 +30,55 @@ import { useUser } from 'store/user';
 
 import styles from './index.module.css';
 
-export enum SUBMISSION_REVIEW_FI_KEY {
-  RESPONSIBLE_DOCTOR = 'supervisor',
-  GENERAL_COMMENT = 'general_comment',
-}
-
 const Submission = () => {
   const FORM_NAME = STEPS_ID.SUBMISSION;
   const { user } = useUser();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
   const { getAnalysisNameByCode } = useGlobals();
-  const { analysisData, config, currentStep, analysisType } = usePrescriptionForm();
+  const { analysisFormData, config, currentStep, analysisType } = usePrescriptionForm();
   const [supervisors, setSupervisors] = useState<DefaultOptionType[]>([]);
   const [autoCompleteDropdownIsOpen, setAutoCompleteDropdownIsOpen] = useState(false);
 
   const getName = (...key: IGetNamePathParams) => getNamePath(FORM_NAME, key);
 
   useEffect(() => {
-    if (analysisData.analysis.resident_supervisor) {
+    if (analysisFormData.analysis.resident_supervisor_id) {
       HybridApi.searchSupervisors({
-        organizationId: getPrescribingOrg()!,
-        prefix: analysisData.analysis.resident_supervisor,
+        organizationId: analysisFormData.proband?.organization_id!,
+        prefix: analysisFormData.analysis.resident_supervisor_id,
       })
         .then(({ data }) => {
           form.setFieldValue(
-            getName(SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR),
-            data?.supervisors[0].name || analysisData.analysis.resident_supervisor,
+            getName('resident_supervisor_id' satisfies keyof HybridAnalysis),
+            data?.supervisors[0].name || analysisFormData.analysis.resident_supervisor_id,
           );
         })
         .catch(() => {
           form.setFieldValue(
-            getName(SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR),
-            analysisData.analysis.resident_supervisor,
+            getName('resident_supervisor_id' satisfies keyof HybridAnalysis),
+            analysisFormData.analysis.resident_supervisor_id,
           );
         });
     }
-    setInitialValues(
-      form,
-      getName,
-      {
-        [SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT]:
-          analysisData.submission?.general_comment || analysisData.analysis.comment,
-      },
-      SUBMISSION_REVIEW_FI_KEY,
-    );
+    setInitialValues(form, getName, {
+      comment: analysisFormData.submission?.comment || analysisFormData.analysis.comment,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const needToSelectSupervisor = () => {
-    const org = getPrescribingOrg()!;
-    const role = findPractitionerRoleByOrganization(user.practitionerRoles, org);
+    const role = findPractitionerRoleByOrganization(
+      user.practitionerRoles,
+      analysisFormData.proband?.organization_id!,
+    );
     return isPractitionerResident(role!);
   };
-
-  const getPrescribingOrg = () =>
-    analysisData[STEPS_ID.PATIENT_IDENTIFICATION]?.[PATIENT_DATA_FI_KEY.PRESCRIBING_INSTITUTION];
 
   const onSearch = (searchText: string) => {
     if (searchText) {
       HybridApi.searchSupervisors({
-        organizationId: getPrescribingOrg()!,
+        organizationId: analysisFormData.proband?.organization_id!,
         prefix: searchText,
       }).then(({ data }) => {
         setSupervisors(
@@ -123,7 +111,7 @@ const Submission = () => {
         <div className={styles.supervisorCommentWrapper}>
           {needToSelectSupervisor() && (
             <Form.Item
-              name={getName(SUBMISSION_REVIEW_FI_KEY.RESPONSIBLE_DOCTOR)}
+              name={getName('resident_supervisor_id' satisfies keyof HybridAnalysis)}
               label={
                 <ProLabel
                   title={intl.get('prescription.submission.responsable.doctor.label')}
@@ -140,7 +128,7 @@ const Submission = () => {
                 onSelect={(value: string) => {
                   dispatch(
                     prescriptionFormActions.saveSubmissionStepData({
-                      resident_supervisor: value,
+                      resident_supervisor_id: value,
                     }),
                   );
                 }}
@@ -153,7 +141,7 @@ const Submission = () => {
             </Form.Item>
           )}
           <Form.Item
-            name={getName(SUBMISSION_REVIEW_FI_KEY.GENERAL_COMMENT)}
+            name={getName('comment' satisfies keyof HybridAnalysis)}
             label={<ProLabel title={intl.get('prescription.submission.general.comment')} colon />}
           >
             <Input.TextArea rows={3} />
@@ -175,12 +163,12 @@ const Submission = () => {
               <Tag color="geekblue">{getAnalysisNameByCode(analysisType!, true)}</Tag>
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('prescription.submission.item.prescribing.org')}>
-              {getPrescribingOrg()}
+              {analysisFormData.proband?.organization_id}
             </Descriptions.Item>
           </Descriptions>
         </CollapsePanel>
         {config?.steps
-          .filter(({ title }) => title !== currentStep?.title)
+          .filter(({ id }) => id !== currentStep?.id)
           .map((step) => (
             <CollapsePanel
               key={step.title}

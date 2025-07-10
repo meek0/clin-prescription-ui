@@ -125,11 +125,11 @@ const AddParentModal = () => {
                     placeholder={intl.get('prescription.add.parent.modal.select')}
                     options={[
                       {
-                        label: intl.get('FTH'),
+                        label: intl.get('FATHER'),
                         value: STEPS_ID.FATHER_IDENTIFICATION,
                       },
                       {
-                        label: intl.get('MTH'),
+                        label: intl.get('MOTHER'),
                         value: STEPS_ID.MOTHER_IDENTIFICATION,
                       },
                     ]}

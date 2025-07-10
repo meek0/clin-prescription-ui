@@ -1,7 +1,7 @@
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Tag } from 'antd';
 import { extractOrganizationId, extractServiceRequestId } from 'api/fhir/helper';
-import { RequesterType, ServiceRequestEntity } from 'api/fhir/models';
+import { getProband, HybridAnalysis } from 'api/hybrid/models';
 import PriorityTag from 'views/Prescriptions/components/PriorityTag';
 import StatusTag from 'views/Prescriptions/components/StatusTag';
 import { getPrescriptionStatusDictionnary } from 'views/Prescriptions/utils/constant';
@@ -12,20 +12,13 @@ import { useGlobals } from 'store/global';
 import { formatDate } from 'utils/date';
 
 interface OwnProps {
-  prescription?: ServiceRequestEntity;
+  prescription?: HybridAnalysis;
   loading: boolean;
 }
 
-const getPractionnerName = (requester: RequesterType) => {
-  const practitionerName = `${requester.practitioner?.name.family.toLocaleUpperCase()}
-  ${requester.practitioner?.name?.given?.join(' ')}`;
-
-  const practitionerIdentifier = requester.practitioner?.identifier?.value;
-  return `${practitionerName} ${practitionerIdentifier ? `- ${practitionerIdentifier}` : ''}`;
-};
-
 const AnalysisCard = ({ prescription, loading }: OwnProps) => {
   const { getAnalysisNameByCode } = useGlobals();
+  const proband = getProband(prescription);
 
   return (
     <Card title={intl.get(`screen.prescription.entity.analyse.card.title`)} data-cy="AnalysisCard">
@@ -33,11 +26,11 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
         {prescription && (
           <Descriptions column={1} size="small" className="label-35">
             <Descriptions.Item label={intl.get('screen.prescription.entity.identifier')}>
-              {extractServiceRequestId(prescription?.id)}
+              {extractServiceRequestId(prescription?.analysis_id!)}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.prescription.entity.request.priority')}>
               {prescription?.priority ? (
-                <PriorityTag priority={prescription?.priority} />
+                <PriorityTag priority={prescription?.priority?.toLowerCase()} />
               ) : (
                 EMPTY_FIELD
               )}
@@ -45,36 +38,32 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
             <Descriptions.Item label={intl.get('status')}>
               <StatusTag
                 dictionary={getPrescriptionStatusDictionnary()}
-                status={prescription?.status}
+                status={prescription?.status?.toLowerCase() || 'unknown'}
               />
             </Descriptions.Item>
             <Descriptions.Item
               label={intl.get('screen.prescription.entity.analysisCard.askedAnalysis')}
             >
-              <Tag color="geekblue">{getAnalysisNameByCode(prescription.code)}</Tag>
+              <Tag color="geekblue">{getAnalysisNameByCode(prescription.analysis_code)}</Tag>
             </Descriptions.Item>
             <Descriptions.Item
               label={intl.get('screen.prescription.entity.analysisCard.reflexpanel')}
             >
-              {prescription.orderDetail ? prescription.orderDetail.text.split(':')[1] : '--'}
+              {prescription.is_reflex ? 'Global Muscular diseases' : '--'}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.patientsearch.table.createdOn')}>
-              {formatDate(prescription?.authoredOn)}
+              {formatDate(prescription?.authored_on || '')}
             </Descriptions.Item>
             <Descriptions.Item
               label={intl.get('screen.prescription.entity.patient.card.requester')}
             >
-              {prescription?.requester ? getPractionnerName(prescription.requester) : EMPTY_FIELD}
+              {prescription?.requester || EMPTY_FIELD}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('prescribing.institution')}>
-              {extractOrganizationId(
-                prescription?.subject.resource?.managingOrganization?.reference
-                  ? prescription.subject.resource.managingOrganization.reference
-                  : EMPTY_FIELD,
-              )}
+              {extractOrganizationId(proband?.organization_id)}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.patientsearch.table.ldm')}>
-              {extractOrganizationId(prescription?.performer?.resource.alias || EMPTY_FIELD)}
+              {prescription?.performer || EMPTY_FIELD}
             </Descriptions.Item>
           </Descriptions>
         )}

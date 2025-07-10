@@ -1,23 +1,13 @@
-import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Descriptions } from 'antd';
-import { CodeListEntity, ParaclinicEntity } from 'api/fhir/models';
-import { HpoApi } from 'api/hpo';
-import { IHpoNode } from 'api/hpo/models';
-import {
-  useCodeSystem,
-  useObservationComplexParacliniqueEntity,
-  useObservationParacliniqueEntity,
-  useValueSet,
-} from 'graphql/prescriptions/actions';
-import { concat, find, map, some } from 'lodash';
-
-import { useLang } from 'store/global';
-import { usePrescriptionFormConfig } from 'store/prescription';
+import { ParaclinicEntity } from 'api/fhir/models';
+import { TFormConfig } from 'api/form/models';
+import { HybridPatientExam, HybridPatientParaClinical } from 'api/hybrid/models';
+import { find } from 'lodash';
 
 type OwnProps = {
-  ids: string[] | null;
-  complexIds: string[] | null;
+  paraClinical: HybridPatientParaClinical;
+  prescriptionConfig?: TFormConfig;
 };
 
 export const moveOtherParaclinique = (paracliniqueList: ParaclinicEntity[]) => {
@@ -27,180 +17,53 @@ export const moveOtherParaclinique = (paracliniqueList: ParaclinicEntity[]) => {
   return newList;
 };
 
-const displayComplexParaclinique = (
-  value: ParaclinicEntity,
-  codeInfo: CodeListEntity,
-  lang: string,
-  hpoList: IHpoNode[],
-) => {
-  const codeSystemInfo = find(codeInfo?.concept, (c) => c.code === value?.code);
-  const label = find(codeSystemInfo?.designation, (o) => o.language === lang);
-  const valueList: string[] = [];
-  value.valueCodeableConcept.coding.forEach((v) => {
-    const hpo = find(hpoList, (o) => o.hpo_id === v.code);
-    hpo ? valueList.push(hpo.name) : null;
-  });
-  return (
-    <Descriptions.Item
-      key={value?.id.split('/')[1]}
-      label={label ? label.value : codeSystemInfo?.display}
-    >
-      {`${
-        value?.interpretation
-          ? intl.get(`screen.prescription.entity.paraclinique.${value.interpretation.coding?.code}`)
-          : ''
-      }  ${valueList.length > 0 ? `: ${valueList.join(', ')}` : ''}`}
-    </Descriptions.Item>
-  );
-};
+export const Paraclinique = ({ paraClinical, prescriptionConfig }: OwnProps) => {
+  function getExamValues(exam: HybridPatientExam) {
+    const defaultList = prescriptionConfig?.paraclinical_exams?.default_list?.find(
+      (entry: any) => entry.value === exam.code,
+    );
 
-const displayCgh = (
-  value: ParaclinicEntity,
-  codeInfo: CodeListEntity,
-  cghValueSet: CodeListEntity,
-  lang: string,
-) => {
-  const codeSystemInfo = find(codeInfo?.concept, (c) => c.code === value?.code);
-  const label =
-    value?.category === 'exam'
-      ? intl.get('prescription.clinical_exam.other_examination')
-      : find(codeSystemInfo?.designation, (o) => o.language === lang)?.value;
+    if (!defaultList) return { name: exam.code, values: exam.values };
 
-  let displayValue = null;
+    let values: string[] = [];
 
-  if (value?.interpretation?.coding?.code === 'A') {
-    displayValue = `${intl.get(
-      `screen.prescription.entity.paraclinique.A`,
-    )} : ${value?.valueCodeableConcept?.coding
-      .map(
-        (v) =>
-          cghValueSet?.concept
-            .find((concept) => concept.code === v.code)
-            ?.designation.find((d) => d.language === lang)?.value,
-      )
-      .join(', ')}`;
-  } else if (value?.interpretation?.coding?.code === 'N') {
-    displayValue = intl.get(`screen.prescription.entity.paraclinique.N`);
-  } else {
-    displayValue = value?.valueString ? value?.valueString : '';
-  }
-
-  return (
-    <Descriptions.Item
-      key={value?.id?.split('/')[1]}
-      label={label ? label : codeSystemInfo?.display}
-    >
-      {displayValue}
-    </Descriptions.Item>
-  );
-};
-
-const displayParaclinique = (
-  value: ParaclinicEntity,
-  codeInfo: CodeListEntity,
-  lang: string,
-  unit: string,
-) => {
-  const codeSystemInfo = find(codeInfo?.concept, (c) => c.code === value?.code);
-  const label =
-    value?.category === 'exam'
-      ? intl.get('prescription.clinical_exam.other_examination')
-      : find(codeSystemInfo?.designation, (o) => o.language === lang)?.value;
-
-  let displayValue = null;
-
-  if (value?.interpretation?.coding?.code === 'A') {
-    if (value?.valueString) {
-      displayValue = `${intl.get(`screen.prescription.entity.paraclinique.A`)} : ${
-        value?.valueString
-      }  ${unit}`;
-    } else {
-      displayValue = intl.get(`screen.prescription.entity.paraclinique.A`);
-    }
-  } else if (value?.interpretation?.coding?.code === 'N') {
-    displayValue = intl.get(`screen.prescription.entity.paraclinique.N`);
-  } else {
-    displayValue = value?.valueString ? value?.valueString : '';
-  }
-  return (
-    <Descriptions.Item
-      key={value?.id?.split('/')[1]}
-      label={label ? label : codeSystemInfo?.display}
-    >
-      {displayValue}
-    </Descriptions.Item>
-  );
-};
-
-const hasHPO = (element: ParaclinicEntity) =>
-  ['BMUS', 'EMG'].includes(element?.code) && element?.interpretation?.coding?.code === 'A';
-
-export const Paraclinique = ({ ids, complexIds }: OwnProps) => {
-  const formConfig = usePrescriptionFormConfig();
-
-  const { paracliniqueValue } = useObservationParacliniqueEntity(ids);
-  const { complexParacliniqueValue } = useObservationComplexParacliniqueEntity(complexIds);
-  const { codeInfo } = useCodeSystem('observation-code');
-  const [allParacliniqueValue, setAllParacliniqueValue] = useState<any>();
-  const [currentHPOOptions, setCurrentHPOOptions] = useState<IHpoNode>();
-  const [hpoList, setHpoList] = useState<IHpoNode[]>([]);
-  const cghAnomaliesValueSet = useValueSet('cgh-abnormalities');
-
-  const lang = useLang();
-  const handleHpoSearchTermChanged = (term: string) => {
-    HpoApi.searchHpos(term.toLowerCase().trim()).then(({ data, error }) => {
-      if (!error) {
-        const results = map(data?.hits, '_source');
-        setCurrentHPOOptions(results[0]);
-      }
-    });
-  };
-
-  useEffect(() => {
-    if (paracliniqueValue || complexParacliniqueValue) {
-      setAllParacliniqueValue(
-        moveOtherParaclinique(concat(paracliniqueValue, complexParacliniqueValue)),
+    // multi_select
+    if (defaultList.extra?.type === 'multi_select') {
+      values = exam.values.map(
+        (value) =>
+          defaultList?.extra?.options?.find((entry: any) => entry.value === value)?.name || value,
+      );
+    } else if (defaultList.extra?.type === 'string') {
+      values = exam.values.map(
+        (value) => value + (defaultList.extra?.unit ? ` ${value} ${defaultList.extra?.unit}` : ''),
       );
     }
-  }, [paracliniqueValue, complexParacliniqueValue]);
 
-  useEffect(() => {
-    if (allParacliniqueValue) {
-      allParacliniqueValue.forEach((element: any) => {
-        if (hasHPO(element)) {
-          element.valueCodeableConcept.coding.forEach((c: any) => {
-            handleHpoSearchTermChanged(c.code);
-          });
-        }
-      });
-    }
-  }, [allParacliniqueValue]);
+    let name = defaultList.name || exam.code;
+    if (defaultList.tooltip) name += ` (${defaultList.tooltip})`;
 
-  useEffect(() => {
-    if (currentHPOOptions) {
-      const isExisting = some(hpoList, currentHPOOptions);
-      if (!isExisting) {
-        const tempo = [...hpoList, currentHPOOptions];
-        setHpoList(tempo);
-      }
-    }
-  }, [currentHPOOptions, hpoList]);
+    return { name, values };
+  }
 
   return (
     <Descriptions column={1} size="small" className="label-20">
-      {allParacliniqueValue?.map((element: ParaclinicEntity) => {
-        if (hasHPO(element)) {
-          return displayComplexParaclinique(element, codeInfo, lang, hpoList);
-        } else if (element?.code === 'CGH') {
-          return displayCgh(element, codeInfo, cghAnomaliesValueSet.valueSet, lang);
-        }
-
-        const associatedConfig = formConfig?.paraclinical_exams.default_list.find(
-          (d) => d.value === element?.code,
+      {paraClinical?.exams?.map((exam) => {
+        const { name, values } = getExamValues(exam);
+        return (
+          <Descriptions.Item key={exam.code} label={name}>
+            {intl.get(`screen.prescription.entity.paraclinique.${exam?.interpretation}`) +
+              (exam.values.length ? ` : ${values.join(', ')}` : '')}
+          </Descriptions.Item>
         );
-
-        return displayParaclinique(element, codeInfo, lang, associatedConfig?.extra?.unit || '');
       })}
+      {paraClinical.other && (
+        <Descriptions.Item
+          key={'paraclinique-other'}
+          label={intl.get('prescription.clinical_exam.other_examination')}
+        >
+          {paraClinical.other}
+        </Descriptions.Item>
+      )}
     </Descriptions>
   );
 };

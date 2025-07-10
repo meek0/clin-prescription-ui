@@ -7,38 +7,31 @@ import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/Reusable
 import {
   ClinicalStatusValue,
   EnterInfoMomentValue,
-  PARENT_DATA_FI_KEY,
+  TParentDataType,
 } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/ParentIdentification/types';
 import PatientIdentificationReview from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/PatientIdentification/Review';
 import EmptySection from 'components/Prescription/components/EmptySection';
 import { usePrescriptionForm } from 'store/prescription';
 
-import { additionalInfoKey } from '../../PatientIdentification/AdditionalInformation';
-
 interface OwnProps {
-  parent: 'mother' | 'father';
+  parentType: STEPS_ID.MOTHER_IDENTIFICATION | STEPS_ID.FATHER_IDENTIFICATION;
 }
 
-const ParentIdentificationReview = ({ parent }: OwnProps) => {
-  const { analysisData } = usePrescriptionForm();
+const ParentIdentificationReview = ({ parentType }: OwnProps) => {
+  const { analysisFormData } = usePrescriptionForm();
 
-  const isPrenatal =
-    analysisData[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.is_prenatal_diagnosis;
+  const parent = analysisFormData[parentType];
+  const isPrenatal = analysisFormData.proband?.foetus?.is_prenatal_diagnosis;
 
-  const getStepId = () =>
-    parent === 'father' ? STEPS_ID.FATHER_IDENTIFICATION : STEPS_ID.MOTHER_IDENTIFICATION;
-
-  const getData = (key: PARENT_DATA_FI_KEY) => analysisData[getStepId()]?.[key];
-
-  if (getData(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT) === EnterInfoMomentValue.NOW) {
-    const status = getData(PARENT_DATA_FI_KEY.CLINICAL_STATUS);
-    const isAffected = status === ClinicalStatusValue.AFFECTED;
+  if (parent?.status === EnterInfoMomentValue.NOW) {
+    const isAffected =
+      (parent as TParentDataType).parent_clinical_status === ClinicalStatusValue.AFFECTED;
 
     return (
       <>
-        {(!isPrenatal || parent === 'father') && (
+        {(!isPrenatal || parentType === 'father') && (
           <>
-            <PatientIdentificationReview key={parent} stepId={getStepId()} />
+            <PatientIdentificationReview key={parentType} stepId={parentType} />
             <Divider style={{ margin: '12px 0' }} />
           </>
         )}
@@ -48,25 +41,25 @@ const ParentIdentificationReview = ({ parent }: OwnProps) => {
             label={intl.get('status')}
             style={isAffected ? { paddingBottom: '8px' } : undefined}
           >
-            {intl.get(status ?? '')}
+            {intl.get(parent.parent_clinical_status.toLowerCase() ?? '')}
           </Descriptions.Item>
         </Descriptions>
-        {isAffected && <ClinicalSignsReview key={parent} stepId={getStepId()} />}
+        {isAffected && <ClinicalSignsReview key={parentType} />}
       </>
     );
   }
 
-  if (getData(PARENT_DATA_FI_KEY.NO_INFO_REASON)) {
+  if (parent?.reason) {
     return (
       <Descriptions className="label-20">
         <Descriptions.Item
           label={
-            getData(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT) === EnterInfoMomentValue.NEVER
+            parent?.status === EnterInfoMomentValue.NEVER
               ? intl.get('prescription.parent.identification.review.permanent.absence')
               : intl.get('prescription.parent.identification.review.temporary.absence')
           }
         >
-          {getData(PARENT_DATA_FI_KEY.NO_INFO_REASON)}
+          {parent?.reason}
         </Descriptions.Item>
       </Descriptions>
     );

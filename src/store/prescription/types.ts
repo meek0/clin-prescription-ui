@@ -2,7 +2,7 @@ import { TFormConfig } from 'api/form/models';
 import { ValidateFields } from 'rc-field-form/lib/interface';
 
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
-import { IAnalysisDataType } from 'components/Prescription/Analysis/stepMapping';
+import { IAnalysisFormDataType } from 'components/Prescription/Analysis/stepMapping';
 
 export type initialState = {
   analysisChoiceModalVisible: boolean;
@@ -12,7 +12,7 @@ export type initialState = {
   currentStep?: IAnalysisStep;
   analysisType?: AnalysisType;
   config?: IAnalysisConfig;
-  analysisData: TCompleteAnalysis;
+  analysisFormData: TCompleteAnalysis;
   lastStepIsNext?: boolean;
   isAddingParent?: boolean;
   isCreatingPrescription: boolean;
@@ -26,14 +26,14 @@ export type initialState = {
   submissionError?: any;
 };
 
-export type TCompleteAnalysis = IAnalysisDataType & {
+export type TCompleteAnalysis = IAnalysisFormDataType & {
   analysis: {
     panel_code: string;
     is_reflex: boolean;
     observation?: string;
     investigation?: string;
     indication?: string;
-    resident_supervisor?: string;
+    resident_supervisor_id?: string;
     comment?: string;
   };
   changed?: any;
@@ -73,7 +73,7 @@ export interface ICompleteAnalysisChoice {
 }
 
 export interface ISubmissionStepDataReview {
-  resident_supervisor?: string;
+  resident_supervisor_id?: string;
   comment?: string;
 }
 

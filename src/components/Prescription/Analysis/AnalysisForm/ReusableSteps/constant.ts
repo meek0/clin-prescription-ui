@@ -5,10 +5,10 @@ import { Rule } from 'antd/lib/form';
 import { hasSpecialCharacters } from 'utils/helper';
 
 export enum STEPS_ID {
-  PATIENT_IDENTIFICATION = 'patient',
-  CLINICAL_SIGNS = 'clinical_signs',
+  PROBAND_IDENTIFICATION = 'proband',
+  PROBAND_CLINICAL = 'proband_clinical',
   HISTORY_AND_DIAGNOSIS = 'history_and_diagnosis',
-  PARACLINICAL_EXAMS = 'paraclinical_exams',
+  PROBAND_PARACLINICAL = 'proband_paraclinical',
   SUBMISSION = 'submission',
   MOTHER_IDENTIFICATION = 'mother',
   FATHER_IDENTIFICATION = 'father',

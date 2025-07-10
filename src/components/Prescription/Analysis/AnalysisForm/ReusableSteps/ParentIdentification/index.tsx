@@ -8,7 +8,6 @@ import { isEmpty } from 'lodash';
 import AnalysisForm from 'components/Prescription/Analysis/AnalysisForm';
 import ClinicalSignsSelect from 'components/Prescription/components/ClinicalSignsSelect';
 import PatientDataSearch from 'components/Prescription/components/PatientDataSearch';
-import { PATIENT_DATA_FI_KEY } from 'components/Prescription/components/PatientDataSearch/types';
 import {
   checkShouldUpdate,
   getNamePath,
@@ -20,7 +19,6 @@ import { usePrescriptionForm } from 'store/prescription';
 import { SexValue } from 'utils/commonTypes';
 
 import { defaultCollapseProps, defaultFormItemsRules, STEPS_ID } from '../constant';
-import { additionalInfoKey } from '../PatientIdentification/AdditionalInformation';
 
 import {
   ClinicalStatusValue,
@@ -42,21 +40,24 @@ const ParentIdentification = ({ parent }: OwnProps) => {
     parent === 'father' ? STEPS_ID.FATHER_IDENTIFICATION : STEPS_ID.MOTHER_IDENTIFICATION;
 
   const [form] = Form.useForm();
-  const [ramqSearchDone, setRamqSearchDone] = useState(false);
-  const { analysisData, isAddingParent } = usePrescriptionForm();
+  const [jhnSearchDone, setJhnSearchDone] = useState(false);
+  const { analysisFormData, isAddingParent } = usePrescriptionForm();
 
   const hideParentIdentificationForm =
-    parent === 'mother' &&
-    analysisData &&
-    analysisData[STEPS_ID.PATIENT_IDENTIFICATION]?.[additionalInfoKey]?.is_prenatal_diagnosis;
+    parent === 'mother' && analysisFormData?.proband?.foetus?.is_prenatal_diagnosis;
 
   const getName = (...key: IGetNamePathParams) => getNamePath(FORM_NAME, key);
-  const initialData = analysisData?.[FORM_NAME] as TParentDataType;
+  const initialData = analysisFormData[FORM_NAME];
+
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
-      setInitialValues(form, getName, initialData, PARENT_DATA_FI_KEY);
+      setInitialValues(form, getName, initialData);
     } else if (isAddingParent) {
-      setFieldValue(form, getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT), EnterInfoMomentValue.NOW);
+      setFieldValue(
+        form,
+        getName('status' satisfies keyof TParentDataType),
+        EnterInfoMomentValue.NOW,
+      );
     }
 
     // eslint-disable-next-line
@@ -71,7 +72,7 @@ const ParentIdentification = ({ parent }: OwnProps) => {
           <Text>{intl.get('prescription.parent.info.notice')}</Text>
         </Form.Item>
         <Form.Item
-          name={getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)}
+          name={getName('status' satisfies keyof TParentDataType)}
           label={intl.get(`prescription.parent.info.moment.${parent}`)}
           rules={defaultFormItemsRules}
         >
@@ -89,11 +90,11 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         </Form.Item>
         <Form.Item noStyle shouldUpdate>
           {({ getFieldValue }) => {
-            const value = getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT));
+            const value = getFieldValue(getName('status' satisfies keyof TParentDataType));
             return value && value !== EnterInfoMomentValue.NOW ? (
               <Form.Item
                 label={intl.get('prescription.parent.info.moment.justify')}
-                name={getName(PARENT_DATA_FI_KEY.NO_INFO_REASON)}
+                name={getName('reason' satisfies keyof TParentDataType)}
                 rules={defaultFormItemsRules}
                 className="noMarginBtm"
               >
@@ -109,15 +110,11 @@ const ParentIdentification = ({ parent }: OwnProps) => {
       <Form.Item
         noStyle
         shouldUpdate={(prev, next) =>
-          checkShouldUpdate(prev, next, [getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)])
+          checkShouldUpdate(prev, next, [getName('status' satisfies keyof TParentDataType)])
         }
       >
-        {({ getFieldValue }) => {
-          const sex =
-            initialData?.[PATIENT_DATA_FI_KEY.SEX] ||
-            (parent === 'father' ? SexValue.MALE : SexValue.FEMALE);
-
-          return getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
+        {({ getFieldValue }) =>
+          getFieldValue(getName('status' satisfies keyof TParentDataType)) ===
             EnterInfoMomentValue.NOW && !hideParentIdentificationForm ? (
             <Space direction="vertical" className={styles.formContentWrapper}>
               <Collapse {...defaultCollapseProps} defaultActiveKey={[parent]}>
@@ -128,18 +125,24 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                   <PatientDataSearch
                     form={form}
                     parentKey={FORM_NAME}
-                    initialData={{
-                      ...initialData,
-                      [PATIENT_DATA_FI_KEY.SEX]: sex,
-                    }}
-                    onRamqSearchStateChange={setRamqSearchDone}
-                    initialRamqSearchDone={ramqSearchDone}
-                    onResetRamq={() => {}}
-                    populateFromJhn={
-                      parent === 'mother' && analysisData?.patient?.[additionalInfoKey]?.is_new_born
+                    initialData={
+                      initialData
                         ? {
-                            jhn: analysisData?.patient?.[additionalInfoKey]?.mother_ramq,
-                            organization_id: analysisData?.patient?.ep,
+                            ...initialData,
+                            sex:
+                              initialData.sex ||
+                              (parent === 'father' ? SexValue.MALE : SexValue.FEMALE),
+                          }
+                        : undefined
+                    }
+                    onJhnSearchStateChange={setJhnSearchDone}
+                    initialjhnSearchDone={jhnSearchDone}
+                    onResetJhn={() => {}}
+                    populateFromJhn={
+                      parent === 'mother' && analysisFormData?.proband?.foetus?.is_new_born
+                        ? {
+                            jhn: analysisFormData?.proband?.foetus?.mother_jhn,
+                            organization_id: analysisFormData?.proband?.organization_id,
                           }
                         : undefined
                     }
@@ -147,25 +150,23 @@ const ParentIdentification = ({ parent }: OwnProps) => {
                 </CollapsePanel>
               </Collapse>
             </Space>
-          ) : null;
-        }}
+          ) : null
+        }
       </Form.Item>
       <Form.Item
         noStyle
         shouldUpdate={(prev, next) =>
           checkShouldUpdate(prev, next, [
-            getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT),
+            getName('status' satisfies keyof TParentDataType),
             getName(PARENT_DATA_FI_KEY.CLINICAL_STATUS),
-            getName(PATIENT_DATA_FI_KEY.NO_RAMQ),
+            getName('no_jhn'),
           ])
         }
       >
         {({ getFieldValue }) =>
-          getFieldValue(getName(PARENT_DATA_FI_KEY.ENTER_INFO_MOMENT)) ===
+          getFieldValue(getName('status' satisfies keyof TParentDataType)) ===
             EnterInfoMomentValue.NOW &&
-          (hideParentIdentificationForm ||
-            ramqSearchDone ||
-            getFieldValue(getName(PATIENT_DATA_FI_KEY.NO_RAMQ))) ? (
+          (hideParentIdentificationForm || jhnSearchDone || getFieldValue(getName('no_jhn'))) ? (
             <Collapse {...defaultCollapseProps} defaultActiveKey={['clinical_information']}>
               <CollapsePanel
                 key="clinical_information"

@@ -12,7 +12,7 @@ import { checkShouldUpdate, resetFieldError } from 'components/Prescription/util
 import { IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 
-import { CLINICAL_SIGNS_FI_KEY, CLINICAL_SIGNS_ITEM_KEY, IClinicalSignItem } from './types';
+import { IClinicalSignItem, IClinicalSignsDataType } from './types';
 import { getExistingHpoIdList, hpoValidationRule } from '.';
 
 import styles from './index.module.css';
@@ -29,7 +29,7 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const [notObservedSigns, setNotObservedSigns] = useState<string[]>([]);
   const notObservedSignsField = Form.useWatch(
-    getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS),
+    getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
     form,
   );
 
@@ -39,41 +39,38 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
   const isAlreadyNotObserved = (hpoValue: string) => notObservedSigns.indexOf(hpoValue) > -1;
 
   const getNode = (index: number): IClinicalSignItem =>
-    form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS))[index];
-
-  const defaultRules = [
-    {
-      validator: async (_: any, signs: IClinicalSignItem[]) => {
-        if (!signs.some((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]) && !isRemoveClicked) {
-          throw new Error(intl.get('prescription.form.signs.observed.error'));
-        }
-        setIsRemoveClicked(false);
-      },
-    },
-  ];
+    form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
   function updateNode(index: number, update: Partial<IClinicalSignItem>) {
-    const nodes = [...form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS))];
+    const nodes = [
+      ...form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType)),
+    ];
     nodes[index] = { ...nodes[index], ...update };
-    form.setFieldValue(getName(CLINICAL_SIGNS_FI_KEY.SIGNS), nodes);
+    form.setFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType), nodes);
 
     // Re-set not observed sign to trigger re-rendering and validation
-    const notObservedNodes = form.getFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS));
-    form.setFieldValue(getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS), notObservedNodes);
+    const notObservedNodes = form.getFieldValue(
+      getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
+    );
+    form.setFieldValue(
+      getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
+      notObservedNodes,
+    );
   }
 
   useEffect(() => {
     const notObserved =
       (form.getFieldValue(
-        getName(CLINICAL_SIGNS_FI_KEY.NOT_OBSERVED_SIGNS),
+        getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
       ) as IClinicalSignItem[]) || [];
-    setNotObservedSigns(notObserved.map((sign) => sign[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]));
+    setNotObservedSigns(notObserved.map((sign) => sign.code));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notObservedSignsField]);
 
   const [isRemoveClicked, setIsRemoveClicked] = useState(false);
 
-  const resetSignsFieldErrors = () => resetFieldError(form, getName(CLINICAL_SIGNS_FI_KEY.SIGNS));
+  const resetSignsFieldErrors = () =>
+    resetFieldError(form, getName('observed_signs' satisfies keyof IClinicalSignsDataType));
 
   return (
     <Space direction="vertical">
@@ -91,20 +88,29 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
       </Space>
       <Form.Item className="noMarginBtm">
         <Form.List
-          name={getName(CLINICAL_SIGNS_FI_KEY.SIGNS)}
-          rules={isOptional ? undefined : defaultRules}
+          name={getName('observed_signs' satisfies keyof IClinicalSignsDataType)}
+          rules={
+            isOptional
+              ? undefined
+              : [
+                  {
+                    validator: async (_: any, signs: IClinicalSignItem[]) => {
+                      if (!signs.some((sign) => sign.observed) && !isRemoveClicked) {
+                        throw new Error(intl.get('prescription.form.signs.observed.error'));
+                      }
+                      setIsRemoveClicked(false);
+                    },
+                  },
+                ]
+          }
         >
           {(fields, { add, remove }, { errors }) => (
             <>
               <div className={cx(errors.length ? styles.listErrorWrapper : '')}>
                 {fields.map(({ key, name, ...restField }) => {
                   const hpoNode = getNode(name);
-                  const isDefaultHpoTerm = isDefaultHpo(
-                    hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-                  );
-                  const checkBoxShouldBeDisabled = isAlreadyNotObserved(
-                    hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-                  );
+                  const isDefaultHpoTerm = isDefaultHpo(hpoNode.code);
+                  const checkBoxShouldBeDisabled = isAlreadyNotObserved(hpoNode.code);
 
                   const removeElement = () => {
                     setIsRemoveClicked(true);
@@ -117,20 +123,18 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
                         {isDefaultHpoTerm ? (
                           <Form.Item
                             {...restField}
-                            name={[name, CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]}
+                            name={[name, 'observed' satisfies keyof IClinicalSignItem]}
                             valuePropName="checked"
                           >
                             <Checkbox
                               disabled={checkBoxShouldBeDisabled}
                               onClick={() => resetSignsFieldErrors()}
                               value={true}
-                              data-cy={`Observed${hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]}`}
+                              data-cy={`Observed${hpoNode.code}`}
                             >
                               <Text>
-                                {capitalize(hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME])}{' '}
-                                <Text type="secondary">
-                                  ({hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]})
-                                </Text>
+                                {capitalize(hpoNode.name)}{' '}
+                                <Text type="secondary">({hpoNode.code})</Text>
                               </Text>
                             </Checkbox>
                           </Form.Item>
@@ -138,24 +142,18 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
                           <Form.Item
                             {...restField}
                             className={styles['phenotype-search']}
-                            name={[name, CLINICAL_SIGNS_ITEM_KEY.NAME]}
+                            name={[name, 'name' satisfies keyof IClinicalSignItem]}
                             rules={hpoValidationRule(hpoNode)}
                             validateTrigger="onSelect"
                           >
                             <PhenotypeSearch
                               defaultOption={{
-                                id: hpoNode[CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE],
-                                name: hpoNode[CLINICAL_SIGNS_ITEM_KEY.NAME],
+                                id: hpoNode.code,
+                                name: hpoNode.name,
                               }}
-                              ignoreHpoIds={getExistingHpoIdList(
-                                form,
-                                getName,
-                                CLINICAL_SIGNS_FI_KEY.SIGNS,
-                              )}
-                              onClear={() => updateNode(name, { value: '', name: '' })}
-                              onSelect={(hpo) =>
-                                updateNode(name, { value: hpo.id, name: hpo.name })
-                              }
+                              ignoreHpoIds={getExistingHpoIdList(form, getName)}
+                              onClear={() => updateNode(name, { code: '', name: '' })}
+                              onSelect={(hpo) => updateNode(name, { code: hpo.id, name: hpo.name })}
                             />
                           </Form.Item>
                         )}
@@ -164,9 +162,9 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
                           shouldUpdate={(prev, next) =>
                             checkShouldUpdate(prev, next, [
                               getName(
-                                CLINICAL_SIGNS_FI_KEY.SIGNS,
+                                'observed_signs' satisfies keyof IClinicalSignsDataType,
                                 name,
-                                CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED,
+                                'observed' satisfies keyof IClinicalSignItem,
                               ),
                             ])
                           }
@@ -174,14 +172,14 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
                           {({ getFieldValue }) =>
                             getFieldValue(
                               getName(
-                                CLINICAL_SIGNS_FI_KEY.SIGNS,
+                                'observed_signs' satisfies keyof IClinicalSignsDataType,
                                 name,
-                                CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED,
+                                'observed' satisfies keyof IClinicalSignItem,
                               ),
                             ) && (
                               <Form.Item
                                 colon={false}
-                                name={[name, CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]}
+                                name={[name, 'age_code' satisfies keyof IClinicalSignItem]}
                                 required={false}
                               >
                                 <Select
@@ -189,7 +187,6 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
                                   placeholder="Âge d'apparition"
                                   className={styles.ageSelectInput}
                                   data-cy="SelectAge"
-                                  defaultValue={'unknown'}
                                 >
                                   {formConfig?.clinical_signs.onset_age.map((age) => (
                                     <Select.Option
@@ -226,10 +223,10 @@ const ObservedSignsList = ({ form, getName, isOptional }: OwnProps) => {
                   className={styles.addClinicalSignBtn}
                   onClick={async () =>
                     add({
-                      [CLINICAL_SIGNS_ITEM_KEY.NAME]: '',
-                      [CLINICAL_SIGNS_ITEM_KEY.TERM_VALUE]: '',
-                      [CLINICAL_SIGNS_ITEM_KEY.IS_OBSERVED]: true,
-                      [CLINICAL_SIGNS_ITEM_KEY.AGE_CODE]: 'unknown',
+                      name: '',
+                      code: '',
+                      observed: true,
+                      age_code: 'unknown',
                     })
                   }
                   icon={<PlusOutlined />}
