@@ -139,6 +139,9 @@ const ANALYSIS_PATIENT_FRAGMENT = (requestId: string) => gql`
           item: resource(type: Observation) {
             id
             resourceType
+            focus {
+              reference
+            }
             code {
               coding @first {
                 code

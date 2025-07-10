@@ -165,6 +165,7 @@ export interface Investigation {
       code?: {
         coding: Coding;
       };
+      focus: Reference;
     };
     reference: string;
     resource: {
