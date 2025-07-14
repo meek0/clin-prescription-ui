@@ -29,7 +29,7 @@ const PatientContent = ({ patient, organizationId, labelClass = 'label-35' }: Ow
           {extractPatientId((patient as HybridPatientPresent).patient_id!)}
         </Descriptions.Item>
         <Descriptions.Item label={intl.get('screen.prescription.entity.patientContent.folder')}>
-          {folderInfos.length ? folderInfos.join(' \xa0 ') : EMPTY_FIELD}
+          {folderInfos.length ? folderInfos.join(' \u2014 ') : EMPTY_FIELD}
         </Descriptions.Item>
         <Descriptions.Item label="RAMQ">
           {formatJhn((patient as HybridPatientPresent).jhn) ?? EMPTY_FIELD}

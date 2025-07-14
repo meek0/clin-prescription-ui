@@ -6,7 +6,12 @@ import { Card, Col, Row } from 'antd';
 import { PrescriptionFormApi } from 'api/form';
 import { TFormConfig } from 'api/form/models';
 import { HybridApi } from 'api/hybrid';
-import { getProband, HybridAnalysis, HybridPatientNotPresent } from 'api/hybrid/models';
+import {
+  getProband,
+  HybridAnalysis,
+  HybridPatientNotPresent,
+  HybridPatientPresent,
+} from 'api/hybrid/models';
 import { GraphqlBackend } from 'providers';
 import ApolloProvider from 'providers/ApolloProvider';
 
@@ -108,7 +113,7 @@ const PrescriptionDetail = () => {
                   patient={patient}
                   prescriptionConfig={prescriptionConfig}
                   loading={loading}
-                  organizationId={proband.organization_id}
+                  organizationId={(patient as HybridPatientPresent).organization_id}
                   analysisType={hybridPrescription?.type}
                 />
               ) : (
