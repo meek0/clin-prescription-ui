@@ -61,18 +61,17 @@ export function getAnalysisFromFormData(analysis: TCompleteAnalysis): HybridAnal
   // Parents
   for (const familyMember of [STEPS_ID.MOTHER_IDENTIFICATION, STEPS_ID.FATHER_IDENTIFICATION]) {
     const patientData: TParentDataType = analysisCopy[familyMember as keyof TCompleteAnalysis];
-    if (!patientData?.parent_clinical_status) continue;
+    if (!patientData) continue;
 
     const affected =
+      patientData.status !== `NOW` ||
       patientData.parent_clinical_status === ClinicalStatusValue.UNKNOWN
         ? undefined
         : patientData.parent_clinical_status === ClinicalStatusValue.AFFECTED;
 
-    const clinical = affected ? getFormsClinicalSigns(patientData) : undefined;
-
     patients.push({
       ...(cleanPatientFormData(patientData) as TParentDataType),
-      clinical,
+      clinical: affected ? getFormsClinicalSigns(patientData) : undefined,
       affected,
       family_member: familyMember.toUpperCase(),
     });
@@ -181,12 +180,13 @@ export function getFormDataFromAnalysis(analysis: HybridAnalysis): TCompleteAnal
     const patient = analysis.patients[i];
     const parent_clinical_status = getClinicalStatus(patient as HybridPatientPresent);
     const patientClinical = getClinicalSignsFromAnalysis(patient as HybridPatientPresent);
+    const parentLater = (patient as HybridPatientNotPresent).status !== 'NOW';
     const patientData = {
       ...(patient as HybridPatientNotPresent),
       organization_id:
         (patient as HybridPatientPresent).organization_id || proband?.organization_id || '',
-      no_mrn: !(patient as HybridPatientPresent).mrn,
-      no_jhn: !(patient as HybridPatientPresent).jhn,
+      no_mrn: !parentLater && !(patient as HybridPatientPresent).mrn,
+      no_jhn: !parentLater && !(patient as HybridPatientPresent).jhn,
       status: (patient as HybridPatientNotPresent).status || 'NOW',
       parent_clinical_status,
       ...patientClinical,

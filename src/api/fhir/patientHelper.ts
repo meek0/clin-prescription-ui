@@ -1,6 +1,6 @@
-import { capitalize, get } from 'lodash';
+import { capitalize } from 'lodash';
 
-import { Name, ServiceRequestEntityExtension } from './models';
+import { Name } from './models';
 
 export const JHN_NUMBER_LENGTH = 12;
 
@@ -26,15 +26,6 @@ export const formatJhn = (value: string) =>
         )
         .trimEnd()
     : value;
-
-export const getPatientAffectedStatus = (extension: ServiceRequestEntityExtension) => {
-  const item = get(
-    extension,
-    'extension[1].valueReference.resource.clinicalImpressions[0].investigation[0].item[0].item',
-    [],
-  );
-  return AFFECTED_STATUS_CODE[get(item, 'interpretation.coding.code') as AffectedStatusCode];
-};
 
 export const formatName = (name: Name) =>
   `${name.family?.toUpperCase()} ${capitalize(name.given)} `;
