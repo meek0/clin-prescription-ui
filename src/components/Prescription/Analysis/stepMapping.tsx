@@ -31,14 +31,14 @@ export const StepsMapping = {
 
 export const SubmissionStepMapping = {
   [STEPS_ID.PROBAND_IDENTIFICATION]: <PatientIdentificationReview />,
-  [STEPS_ID.PROBAND_CLINICAL]: <ClinicalSignsReview />,
+  [STEPS_ID.PROBAND_CLINICAL]: <ClinicalSignsReview patientKey={STEPS_ID.PROBAND_IDENTIFICATION} />,
   [STEPS_ID.PROBAND_PARACLINICAL]: <ParaclinicalExamsReview />,
   [STEPS_ID.HISTORY_AND_DIAGNOSIS]: <HistoryAndDiagnosisReview />,
   [STEPS_ID.MOTHER_IDENTIFICATION]: (
-    <ParentIdentificationReview key="mother-review" parentType={STEPS_ID.MOTHER_IDENTIFICATION} />
+    <ParentIdentificationReview parentKey={STEPS_ID.MOTHER_IDENTIFICATION} />
   ),
   [STEPS_ID.FATHER_IDENTIFICATION]: (
-    <ParentIdentificationReview key="father-review" parentType={STEPS_ID.FATHER_IDENTIFICATION} />
+    <ParentIdentificationReview parentKey={STEPS_ID.FATHER_IDENTIFICATION} />
   ),
   [STEPS_ID.SUBMISSION]: <></>,
   [STEPS_ID.ADD_PARENT_SUBMISSION]: <></>,

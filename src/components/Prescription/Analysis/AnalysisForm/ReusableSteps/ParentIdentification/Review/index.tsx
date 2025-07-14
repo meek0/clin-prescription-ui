@@ -14,13 +14,13 @@ import EmptySection from 'components/Prescription/components/EmptySection';
 import { usePrescriptionForm } from 'store/prescription';
 
 interface OwnProps {
-  parentType: STEPS_ID.MOTHER_IDENTIFICATION | STEPS_ID.FATHER_IDENTIFICATION;
+  parentKey: STEPS_ID.MOTHER_IDENTIFICATION | STEPS_ID.FATHER_IDENTIFICATION;
 }
 
-const ParentIdentificationReview = ({ parentType }: OwnProps) => {
+const ParentIdentificationReview = ({ parentKey }: OwnProps) => {
   const { analysisFormData } = usePrescriptionForm();
 
-  const parent = analysisFormData[parentType];
+  const parent = analysisFormData[parentKey];
   const isPrenatal = analysisFormData.proband?.foetus?.is_prenatal_diagnosis;
 
   if (parent?.status === EnterInfoMomentValue.NOW) {
@@ -29,9 +29,9 @@ const ParentIdentificationReview = ({ parentType }: OwnProps) => {
 
     return (
       <>
-        {(!isPrenatal || parentType === 'father') && (
+        {(!isPrenatal || parentKey === STEPS_ID.FATHER_IDENTIFICATION) && (
           <>
-            <PatientIdentificationReview key={parentType} stepId={parentType} />
+            <PatientIdentificationReview key={parentKey} stepId={parentKey} />
             <Divider style={{ margin: '12px 0' }} />
           </>
         )}
@@ -44,14 +44,14 @@ const ParentIdentificationReview = ({ parentType }: OwnProps) => {
             {intl.get(parent.parent_clinical_status.toLowerCase() ?? '')}
           </Descriptions.Item>
         </Descriptions>
-        {isAffected && <ClinicalSignsReview key={parentType} />}
+        {isAffected && <ClinicalSignsReview patientKey={parentKey} />}
       </>
     );
   }
 
   if (parent?.reason) {
     return (
-      <Descriptions className="label-20">
+      <Descriptions className="label-20" key={parentKey}>
         <Descriptions.Item
           label={
             parent?.status === EnterInfoMomentValue.NEVER
