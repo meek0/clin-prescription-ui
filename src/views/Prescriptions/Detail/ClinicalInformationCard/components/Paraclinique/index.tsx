@@ -26,7 +26,7 @@ export const Paraclinique = ({ paraClinical, prescriptionConfig }: OwnProps) => 
       );
     } else if (defaultList.extra?.type === 'string') {
       values = exam.values.map(
-        (value) => value + (defaultList.extra?.unit ? ` ${value} ${defaultList.extra?.unit}` : ''),
+        (value) => value + (defaultList.extra?.unit ? ` ${defaultList.extra?.unit}` : ''),
       );
     }
 
