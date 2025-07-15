@@ -1,20 +1,11 @@
 import intl from 'react-intl-universal';
 import { Descriptions } from 'antd';
-import { ParaclinicEntity } from 'api/fhir/models';
 import { TFormConfig } from 'api/form/models';
 import { HybridPatientExam, HybridPatientParaClinical } from 'api/hybrid/models';
-import { find } from 'lodash';
 
 type OwnProps = {
   paraClinical: HybridPatientParaClinical;
   prescriptionConfig?: TFormConfig;
-};
-
-export const moveOtherParaclinique = (paracliniqueList: ParaclinicEntity[]) => {
-  const newList = [...paracliniqueList];
-  const otherParaclinique = find(newList, (p) => p?.category === 'exam');
-  otherParaclinique ? newList.push(newList.splice(newList.indexOf(otherParaclinique), 1)[0]) : null;
-  return newList;
 };
 
 export const Paraclinique = ({ paraClinical, prescriptionConfig }: OwnProps) => {

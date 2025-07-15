@@ -35,6 +35,7 @@ describe('cleanAnalysisData', () => {
       mother: {
         jhn: 'XXXX 0000 1111',
         parent_clinical_status: 'affected',
+        status: 'NOW',
         observed_signs: [
           {
             observed: true,
@@ -49,6 +50,7 @@ describe('cleanAnalysisData', () => {
       father: {
         jhn: 'XXXX 0000 1111',
         parent_clinical_status: 'affected',
+        status: 'NOW',
         observed_signs: [
           {
             observed: true,
@@ -97,6 +99,7 @@ describe('cleanAnalysisData', () => {
         {
           family_member: 'MOTHER',
           jhn: 'XXXX00001111',
+          status: 'NOW',
           affected: true,
           clinical: {
             comment: undefined,
@@ -113,6 +116,7 @@ describe('cleanAnalysisData', () => {
         {
           family_member: 'FATHER',
           jhn: 'XXXX00001111',
+          status: 'NOW',
           affected: true,
           clinical: {
             comment: undefined,
