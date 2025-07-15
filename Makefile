@@ -79,6 +79,7 @@ puppeteer_savedraftproban:
 
 puppeteer_savedraft_trioprenatal:
 	node puppeteer/scenarios/SaveDraftTrioPrenatal.mjs
-	
 puppeteer_savedraft_triopostnatal:
 	node puppeteer/scenarios/SaveDraftTrioPostnatal.mjs
+puppeteer_savedraft_trionewborn:
+	node puppeteer/scenarios/SaveDraftTrioNewborn.mjs
