@@ -69,7 +69,13 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         className={cx(styles.parentInfoChoiceWrapper, isAddingParent ? styles.hideMomentField : '')}
       >
         <Form.Item>
-          <Text>{intl.get('prescription.parent.info.notice')}</Text>
+          <Text>
+            {intl.get(
+              analysisFormData.analysis.panel_code === 'GENOR'
+                ? 'prescription.parent.info.notice.genome'
+                : 'prescription.parent.info.notice',
+            )}
+          </Text>
         </Form.Item>
         <Form.Item
           name={getName('status' satisfies keyof TParentDataType)}
