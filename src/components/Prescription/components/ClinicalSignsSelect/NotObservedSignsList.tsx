@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
@@ -28,6 +28,29 @@ const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
       getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
       initialSigns,
     );
+
+    // Filter initialSigns to keep only those that are still present in the form (respecting user deletions).
+    const currentSigns: IClinicalSignItem[] =
+      form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType)) ||
+      [];
+
+    // If the form is empty, initialize with initialSigns.
+    if (currentSigns.length === 0) {
+      form.setFieldValue(
+        getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
+        initialSigns,
+      );
+      return;
+    }
+
+    const currentSignCodes = new Set(currentSigns.map((s) => s.code));
+    const updatedSigns = initialSigns.filter((s) => currentSignCodes.has(s.code));
+
+    form.setFieldValue(
+      getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
+      updatedSigns,
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialSigns]);
 

@@ -35,9 +35,27 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
   );
 
   useEffect(() => {
+    // Filter initialSigns to keep only those that are still present in the form (respecting user deletions).
+    const currentSigns: IClinicalSignItem[] =
+      form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType)) || [];
+
+    // If the form is empty, initialize with initialSigns.
+    if (currentSigns.length === 0) {
+      form.setFieldValue(
+        getName('observed_signs' satisfies keyof IClinicalSignsDataType),
+        initialSigns,
+      );
+      return;
+    }
+
+    const currentSignCodes = new Set(currentSigns.map((s) => s.code));
+    const updatedSigns = initialSigns.filter(
+      (s) => currentSignCodes.has(s.code) || isDefaultHpo(s.code),
+    );
+
     form.setFieldValue(
       getName('observed_signs' satisfies keyof IClinicalSignsDataType),
-      initialSigns,
+      updatedSigns,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialSigns]);
