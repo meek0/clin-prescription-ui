@@ -23,23 +23,18 @@ interface OwnProps {
 }
 
 const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
-  const [isAddingRemovingNotObservedSign, setIsAddingRemovingNotObservedSign] = useState(false);
   useEffect(() => {
-    if (isAddingRemovingNotObservedSign) {
-      setIsAddingRemovingNotObservedSign(false);
-      return;
-    }
     form.setFieldValue(
       getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
       initialSigns,
     );
-  }, [form, getName, initialSigns]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSigns]);
 
   const getNode = (index: number): IClinicalSignItem =>
     form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
   function updateNode(index: number, update: Partial<IClinicalSignItem>) {
-    setIsAddingRemovingNotObservedSign(true);
     const nodes = [
       ...form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType)),
     ];
@@ -96,7 +91,6 @@ const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
                         <CloseOutlined
                           className={styles.removeIcon}
                           onClick={() => {
-                            setIsAddingRemovingNotObservedSign(true);
                             remove(name);
                           }}
                         />
@@ -113,7 +107,6 @@ const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
                   type="link"
                   className={styles.addClinicalSignBtn}
                   onClick={() => {
-                    setIsAddingRemovingNotObservedSign(true);
                     add({
                       name: '',
                       code: '',

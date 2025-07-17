@@ -29,22 +29,18 @@ interface OwnProps {
 const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const [notObservedSigns, setNotObservedSigns] = useState<string[]>([]);
-  const [isAddingRemovingObservedSign, setIsAddingRemovingObservedSign] = useState(false);
   const notObservedSignsField = Form.useWatch(
     getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
     form,
   );
 
   useEffect(() => {
-    if (isAddingRemovingObservedSign) {
-      setIsAddingRemovingObservedSign(false);
-      return;
-    }
     form.setFieldValue(
       getName('observed_signs' satisfies keyof IClinicalSignsDataType),
       initialSigns,
     );
-  }, [form, getName, initialSigns]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSigns]);
 
   const isDefaultHpo = (hpoValue: string) =>
     !!formConfig?.clinical_signs.default_list.find(({ value }) => value === hpoValue);
@@ -55,7 +51,6 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
     form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
   function updateNode(index: number, update: Partial<IClinicalSignItem>) {
-    setIsAddingRemovingObservedSign(true);
     const nodes = [
       ...form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType)),
     ];
@@ -221,7 +216,6 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                           <CloseOutlined
                             className={styles.removeIcon}
                             onClick={() => {
-                              setIsAddingRemovingObservedSign(true);
                               removeElement();
                             }}
                           />
@@ -239,7 +233,6 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                   type="link"
                   className={styles.addClinicalSignBtn}
                   onClick={async () => {
-                    setIsAddingRemovingObservedSign(true);
                     add({
                       name: '',
                       code: '',
