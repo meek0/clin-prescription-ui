@@ -55,6 +55,7 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
     form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
   function updateNode(index: number, update: Partial<IClinicalSignItem>) {
+    setIsAddingRemovingObservedSign(true);
     const nodes = [
       ...form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType)),
     ];
