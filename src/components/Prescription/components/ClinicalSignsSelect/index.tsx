@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
 import { Form, Input, Space } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { HpoApi } from 'api/hpo';
 
-import { getNamePath, setFieldValue, setInitialValues } from 'components/Prescription/utils/form';
+import { getNamePath, setInitialValues } from 'components/Prescription/utils/form';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionFormConfig } from 'store/prescription';
 
@@ -23,6 +23,8 @@ type OwnProps = IAnalysisFormPart & {
 const ClinicalSignsSelect = ({ form, parentKey, hpoIsOptional, initialData }: OwnProps) => {
   const formConfig = usePrescriptionFormConfig();
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
+  const [observedSigns, setObservedSigns] = useState<IClinicalSignItem[]>([]);
+  const [notObservedSigns, setNotObservedSigns] = useState<IClinicalSignItem[]>([]);
 
   const defaultObservedSigns =
     !hpoIsOptional && formConfig
@@ -50,33 +52,34 @@ const ClinicalSignsSelect = ({ form, parentKey, hpoIsOptional, initialData }: Ow
 
       getSignsNames([...nonDefaultObservedSigns, ...(initialData?.not_observed_signs || [])]).then(
         (signs) => {
-          const observed_signs: IClinicalSignItem[] = [...defaultObservedSigns];
-          const not_observed_signs: IClinicalSignItem[] = [];
-          signs.forEach((sign) => (sign.observed ? observed_signs : not_observed_signs).push(sign));
+          const observed: IClinicalSignItem[] = [...defaultObservedSigns];
+          const not_observed: IClinicalSignItem[] = [];
+          signs.forEach((sign) => (sign.observed ? observed : not_observed).push(sign));
 
-          setInitialValues(form, getName, {
-            comment: initialData.comment,
-            observed_signs,
-            not_observed_signs,
-          } as IClinicalSignsDataType);
+          setObservedSigns(observed);
+          setNotObservedSigns(not_observed);
         },
       );
+
+      setInitialValues(form, getName, {
+        comment: initialData.comment,
+      });
     } else {
-      // Set default list
-      setFieldValue(
-        form,
-        getName('observed_signs' satisfies keyof IClinicalSignsDataType),
-        defaultObservedSigns,
-      );
+      setObservedSigns(defaultObservedSigns);
     }
     // eslint-disable-next-line
-  }, []);
+  }, [initialData]);
 
   return (
     <div className={styles.clinicalSignsSelect}>
       <Space direction="vertical" style={{ width: '100%' }}>
-        <ObservedSignsList form={form} getName={getName} isOptional={hpoIsOptional} />
-        <NotObservedSignsList form={form} getName={getName} />
+        <ObservedSignsList
+          form={form}
+          getName={getName}
+          isOptional={hpoIsOptional}
+          initialSigns={observedSigns}
+        />
+        <NotObservedSignsList form={form} getName={getName} initialSigns={notObservedSigns} />
         <ProLabel title="Commentaire clinique général" colon />
         <Form.Item
           name={getName('comment' satisfies keyof IClinicalSignsDataType)}

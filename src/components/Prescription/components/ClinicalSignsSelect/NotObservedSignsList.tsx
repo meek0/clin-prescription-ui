@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
@@ -18,9 +19,22 @@ const { Text } = Typography;
 interface OwnProps {
   form: FormInstance<any>;
   getName(...key: IGetNamePathParams): NamePath;
+  initialSigns: IClinicalSignItem[];
 }
 
-const NotObservedSignsList = ({ form, getName }: OwnProps) => {
+const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
+  const [isAddingRemovingNotObservedSign, setIsAddingRemovingNotObservedSign] = useState(false);
+  useEffect(() => {
+    if (isAddingRemovingNotObservedSign) {
+      setIsAddingRemovingNotObservedSign(false);
+      return;
+    }
+    form.setFieldValue(
+      getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
+      initialSigns,
+    );
+  }, [form, getName, initialSigns]);
+
   const getNode = (index: number): IClinicalSignItem =>
     form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
@@ -78,7 +92,13 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                             }}
                           />
                         </Form.Item>
-                        <CloseOutlined className={styles.removeIcon} onClick={() => remove(name)} />
+                        <CloseOutlined
+                          className={styles.removeIcon}
+                          onClick={() => {
+                            setIsAddingRemovingNotObservedSign(true);
+                            remove(name);
+                          }}
+                        />
                       </Space>
                     </div>
                   );
@@ -91,13 +111,14 @@ const NotObservedSignsList = ({ form, getName }: OwnProps) => {
                 <Button
                   type="link"
                   className={styles.addClinicalSignBtn}
-                  onClick={() =>
+                  onClick={() => {
+                    setIsAddingRemovingNotObservedSign(true);
                     add({
                       name: '',
                       code: '',
                       observed: false,
-                    })
-                  }
+                    });
+                  }}
                   icon={<PlusOutlined />}
                 >
                   {intl.get('prescription.form.signs.not.observed.add')}
