@@ -58,14 +58,17 @@ const PatientContent = ({ patient, organizationId, labelClass = 'label-35' }: Ow
               label={intl.get('prescription.patient.identification.gestational.age')}
             >
               <Typography.Text>
-                {intl.get('prescription.patient.identification.simple.calculated.gestational.age', {
-                  value:
-                    foetus.gestational_method === 'DECEASED'
-                      ? intl.get('prescription.patient.identification.foetus.dead')
-                      : foetus.gestational_method === 'DDM'
-                      ? calculateGestationalAgeFromDDM(new Date(foetus.gestational_date))
-                      : calculateGestationalAgeFromDPA(new Date(foetus.gestational_date)),
-                })}
+                {foetus.gestational_method === 'DECEASED'
+                  ? intl.get('prescription.patient.identification.foetus.dead')
+                  : intl.get(
+                      'prescription.patient.identification.simple.calculated.gestational.age',
+                      {
+                        value:
+                          foetus.gestational_method === 'DDM'
+                            ? calculateGestationalAgeFromDDM(new Date(foetus.gestational_date))
+                            : calculateGestationalAgeFromDPA(new Date(foetus.gestational_date)),
+                      },
+                    )}
               </Typography.Text>
             </Descriptions.Item>
           </Descriptions>
