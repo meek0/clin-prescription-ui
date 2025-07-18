@@ -1,6 +1,5 @@
 import intl from 'react-intl-universal';
 import { Descriptions, Space } from 'antd';
-import { isEmpty } from 'lodash';
 
 import {
   EMPTY_FIELD,
@@ -28,23 +27,23 @@ const ClinicalSignsReview = ({ patientKey }: OwnProps) => {
       ? analysisFormData.proband_clinical!
       : analysisFormData[patientKey]!;
 
-  const formatSigns = (list: IClinicalSignItem[], isObserved: boolean = false) =>
-    isEmpty(list)
-      ? EMPTY_FIELD
-      : list.reduce((signs, sign, index) => {
-          if (!isObserved || sign.observed) {
-            signs.push(
-              <span key={index}>{`${sign.name} (${sign.code}) ${
-                sign.observed && sign.age_code
-                  ? ' - ' +
-                    formConfig?.clinical_signs.onset_age.find((age) => age.value === sign.age_code)
-                      ?.name
-                  : ''
-              }`}</span>,
-            );
-          }
-          return signs;
-        }, [] as JSX.Element[]);
+  const formatSigns = (list: IClinicalSignItem[], isObserved: boolean = false) => {
+    const signs = list?.reduce((signs, sign, index) => {
+      if (!isObserved || sign.observed) {
+        signs.push(
+          <span key={index}>{`${sign.name} (${sign.code}) ${
+            sign.observed && sign.age_code
+              ? ' - ' +
+                formConfig?.clinical_signs.onset_age.find((age) => age.value === sign.age_code)
+                  ?.name
+              : ''
+          }`}</span>,
+        );
+      }
+      return signs;
+    }, [] as JSX.Element[]);
+    return signs?.length ? signs : EMPTY_FIELD;
+  };
 
   return (
     <Descriptions className="label-20" column={1} size="small" key={`${patientKey}-review`}>
