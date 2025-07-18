@@ -43,12 +43,18 @@ export const ClinicalSign = ({
 
   const displayHpo = (code: string, ageCode: string = '') => {
     const hpoInfo = hpoList.find(({ hpo_id }) => hpo_id === code);
+
+    const infoLabel =
+      prescriptionConfig?.clinical_signs.default_list?.find(
+        (hpoItem: any) => hpoItem.value === code,
+      )?.name || hpoInfo?.name;
+
     const ageLabel =
       prescriptionConfig?.clinical_signs.onset_age?.find(
         (ageItem: any) => ageItem.value === ageCode,
       )?.name || ageCode;
 
-    return `${hpoInfo?.name || ''} (${code})${ageLabel ? ` - ${ageLabel}` : ''}`;
+    return `${infoLabel || ''} (${code})${ageLabel ? ` - ${ageLabel}` : ''}`;
   };
 
   return (
