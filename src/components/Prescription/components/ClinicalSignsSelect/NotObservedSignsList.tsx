@@ -19,38 +19,16 @@ const { Text } = Typography;
 interface OwnProps {
   form: FormInstance<any>;
   getName(...key: IGetNamePathParams): NamePath;
-  initialSigns: IClinicalSignItem[];
+  initialSigns?: IClinicalSignItem[];
 }
 
 const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
   useEffect(() => {
+    if (!initialSigns) return;
     form.setFieldValue(
       getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
       initialSigns,
     );
-
-    // Filter initialSigns to keep only those that are still present in the form (respecting user deletions).
-    const currentSigns: IClinicalSignItem[] =
-      form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType)) ||
-      [];
-
-    // If the form is empty, initialize with initialSigns.
-    if (currentSigns.length === 0) {
-      form.setFieldValue(
-        getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
-        initialSigns,
-      );
-      return;
-    }
-
-    const currentSignCodes = new Set(currentSigns.map((s) => s.code));
-    const updatedSigns = initialSigns.filter((s) => currentSignCodes.has(s.code));
-
-    form.setFieldValue(
-      getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
-      updatedSigns,
-    );
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialSigns]);
 
@@ -111,12 +89,7 @@ const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
                             }}
                           />
                         </Form.Item>
-                        <CloseOutlined
-                          className={styles.removeIcon}
-                          onClick={() => {
-                            remove(name);
-                          }}
-                        />
+                        <CloseOutlined className={styles.removeIcon} onClick={() => remove(name)} />
                       </Space>
                     </div>
                   );
@@ -129,13 +102,13 @@ const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
                 <Button
                   type="link"
                   className={styles.addClinicalSignBtn}
-                  onClick={() => {
+                  onClick={() =>
                     add({
                       name: '',
                       code: '',
                       observed: false,
-                    });
-                  }}
+                    })
+                  }
                   icon={<PlusOutlined />}
                 >
                   {intl.get('prescription.form.signs.not.observed.add')}

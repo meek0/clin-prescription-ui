@@ -24,7 +24,7 @@ const ClinicalSignsSelect = ({ form, parentKey, hpoIsOptional, initialData }: Ow
   const formConfig = usePrescriptionFormConfig();
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
   const [observedSigns, setObservedSigns] = useState<IClinicalSignItem[]>([]);
-  const [notObservedSigns, setNotObservedSigns] = useState<IClinicalSignItem[]>([]);
+  const [notObservedSigns, setNotObservedSigns] = useState<IClinicalSignItem[]>();
 
   const defaultObservedSigns =
     !hpoIsOptional && formConfig

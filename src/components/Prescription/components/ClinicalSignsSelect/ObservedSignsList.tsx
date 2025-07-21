@@ -23,7 +23,7 @@ interface OwnProps {
   form: FormInstance<any>;
   getName(...key: IGetNamePathParams): NamePath;
   isOptional?: boolean;
-  initialSigns: IClinicalSignItem[];
+  initialSigns?: IClinicalSignItem[];
 }
 
 const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps) => {
@@ -35,27 +35,10 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
   );
 
   useEffect(() => {
-    // Filter initialSigns to keep only those that are still present in the form (respecting user deletions).
-    const currentSigns: IClinicalSignItem[] =
-      form.getFieldValue(getName('observed_signs' satisfies keyof IClinicalSignsDataType)) || [];
-
-    // If the form is empty, initialize with initialSigns.
-    if (currentSigns.length === 0) {
-      form.setFieldValue(
-        getName('observed_signs' satisfies keyof IClinicalSignsDataType),
-        initialSigns,
-      );
-      return;
-    }
-
-    const currentSignCodes = new Set(currentSigns.map((s) => s.code));
-    const updatedSigns = initialSigns.filter(
-      (s) => currentSignCodes.has(s.code) || isDefaultHpo(s.code),
-    );
-
+    if (!initialSigns) return;
     form.setFieldValue(
       getName('observed_signs' satisfies keyof IClinicalSignsDataType),
-      updatedSigns,
+      initialSigns,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialSigns]);
@@ -138,11 +121,6 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                   const hpoNode = getNode(name);
                   const isDefaultHpoTerm = isDefaultHpo(hpoNode.code);
                   const checkBoxShouldBeDisabled = isAlreadyNotObserved(hpoNode.code);
-
-                  const removeElement = () => {
-                    setIsRemoveClicked(true);
-                    remove(name);
-                  };
 
                   return (
                     <div key={key} className={styles.hpoFormItem}>
@@ -234,7 +212,8 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                           <CloseOutlined
                             className={styles.removeIcon}
                             onClick={() => {
-                              removeElement();
+                              setIsRemoveClicked(true);
+                              remove(name);
                             }}
                           />
                         )}
@@ -250,14 +229,14 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                 <Button
                   type="link"
                   className={styles.addClinicalSignBtn}
-                  onClick={async () => {
+                  onClick={() =>
                     add({
                       name: '',
                       code: '',
                       observed: true,
                       age_code: 'unknown',
-                    });
-                  }}
+                    })
+                  }
                   icon={<PlusOutlined />}
                 >
                   {intl.get('prescription.form.signs.observed.add')}
