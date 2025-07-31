@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import intl from 'react-intl-universal';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import ProLabel from '@ferlab/ui/core/components/ProLabel';
@@ -18,9 +19,19 @@ const { Text } = Typography;
 interface OwnProps {
   form: FormInstance<any>;
   getName(...key: IGetNamePathParams): NamePath;
+  initialSigns?: IClinicalSignItem[];
 }
 
-const NotObservedSignsList = ({ form, getName }: OwnProps) => {
+const NotObservedSignsList = ({ form, getName, initialSigns }: OwnProps) => {
+  useEffect(() => {
+    if (!initialSigns) return;
+    form.setFieldValue(
+      getName('not_observed_signs' satisfies keyof IClinicalSignsDataType),
+      initialSigns,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSigns]);
+
   const getNode = (index: number): IClinicalSignItem =>
     form.getFieldValue(getName('not_observed_signs' satisfies keyof IClinicalSignsDataType))[index];
 
