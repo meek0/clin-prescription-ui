@@ -6,9 +6,9 @@ import { isUndefined } from 'lodash';
 import _ from 'lodash';
 
 // eslint-disable-next-line max-len
-import { DevelopmentDelayConfig } from 'store/prescription/analysis/developmentDelay';
-import { MuscularDiseaseConfig } from 'store/prescription/analysis/muscular';
-import { isMuscularAnalysis } from 'store/prescription/helper';
+import { TrioAnalysisConfig } from 'store/prescription/analysis/developmentDelay';
+import { SoloAnalysisConfig } from 'store/prescription/analysis/muscular';
+import { isMuscularAnalysis, isSoloAnalysis } from 'store/prescription/helper';
 import {
   AnalysisType,
   IAnalysisConfig,
@@ -46,14 +46,14 @@ export const PrescriptionState: initialState = {
 };
 
 export const getAnalysisConfigMapping = (type: AnalysisType) => {
-  if (isMuscularAnalysis(type)) {
+  if (isMuscularAnalysis(type) || isSoloAnalysis(type)) {
     return {
-      ...MuscularDiseaseConfig,
+      ...SoloAnalysisConfig,
       analysisTitle: type,
     };
   } else {
     return {
-      ...DevelopmentDelayConfig,
+      ...TrioAnalysisConfig,
       analysisTitle: type,
     };
   }

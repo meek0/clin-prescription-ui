@@ -55,15 +55,18 @@ export enum MuscularAnalysisType {
   MUSCULAR_DISEASE_RHABDOMYOLYSIS = 'RHAB', // RHAB
 }
 
-export enum OtherAnalysisType {
+export enum SoloAnalysisType {
+  NUCLEAR_MITOCHONDRIOPATHY = 'MITN',
+}
+
+export enum TrioAnalysisType {
   GLOBAL_DEVELOPMENTAL_DELAY = 'RGDI', // RGDI
-  NUCLEAR_MITOCHONDRIOPATHY = 'MITN', // MITN
   POLYMALFORMATION = 'POLYM',
   FETAL_ANOMALIES = 'FEAN',
   NORMAL_GENOME = 'GENOR', // GENOR
 }
 
-export type AnalysisType = MuscularAnalysisType | OtherAnalysisType;
+export type AnalysisType = MuscularAnalysisType | TrioAnalysisType | SoloAnalysisType;
 
 export interface ICompleteAnalysisChoice {
   type: AnalysisType;

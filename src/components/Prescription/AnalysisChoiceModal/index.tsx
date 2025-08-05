@@ -9,7 +9,7 @@ import { usePrescriptionForm } from 'store/prescription';
 import { isMuscularAnalysisAndNotGlobal } from 'store/prescription/helper';
 import { prescriptionFormActions } from 'store/prescription/slice';
 import { fetchFormConfig } from 'store/prescription/thunk';
-import { MuscularAnalysisType, OtherAnalysisType } from 'store/prescription/types';
+import { MuscularAnalysisType, SoloAnalysisType, TrioAnalysisType } from 'store/prescription/types';
 
 import { defaultFormItemsRules } from '../Analysis/AnalysisForm/ReusableSteps/constant';
 
@@ -77,20 +77,20 @@ const AnalysisChoiceModal = () => {
           className="noMarginBtm"
         >
           <Select placeholder="Sélectionner" data-cy="SelectAnalysis">
-            <Select.Option value={OtherAnalysisType.FETAL_ANOMALIES} title={null}>
-              {getAnalysisNameByCode(OtherAnalysisType.FETAL_ANOMALIES, false)}
+            <Select.Option value={TrioAnalysisType.FETAL_ANOMALIES} title={null}>
+              {getAnalysisNameByCode(TrioAnalysisType.FETAL_ANOMALIES, false)}
             </Select.Option>
-            <Select.Option value={OtherAnalysisType.NORMAL_GENOME} title={null}>
-              {getAnalysisNameByCode(OtherAnalysisType.NORMAL_GENOME, false)}
+            <Select.Option value={TrioAnalysisType.NORMAL_GENOME} title={null}>
+              {getAnalysisNameByCode(TrioAnalysisType.NORMAL_GENOME, false)}
             </Select.Option>
-            <Select.Option value={OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY} title={null}>
-              {getAnalysisNameByCode(OtherAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY, false)}
+            <Select.Option value={TrioAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY} title={null}>
+              {getAnalysisNameByCode(TrioAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY, false)}
             </Select.Option>
-            <Select.Option value={OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY} title={null}>
-              {getAnalysisNameByCode(OtherAnalysisType.NUCLEAR_MITOCHONDRIOPATHY, false)}
+            <Select.Option value={SoloAnalysisType.NUCLEAR_MITOCHONDRIOPATHY} title={null}>
+              {getAnalysisNameByCode(SoloAnalysisType.NUCLEAR_MITOCHONDRIOPATHY, false)}
             </Select.Option>
-            <Select.Option value={OtherAnalysisType.POLYMALFORMATION} title={null}>
-              {getAnalysisNameByCode(OtherAnalysisType.POLYMALFORMATION, false)}
+            <Select.Option value={TrioAnalysisType.POLYMALFORMATION} title={null}>
+              {getAnalysisNameByCode(TrioAnalysisType.POLYMALFORMATION, false)}
             </Select.Option>
             <Select.OptGroup label="Maladies musculaires">
               <Select.Option

@@ -1,8 +1,8 @@
 import { STEPS_ID } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
 import { IAnalysisConfig } from 'store/prescription/types';
 
-export const DevelopmentDelayConfig: IAnalysisConfig = {
-  analysisTitle: 'Retard global de développement / Déficience intellectuelle',
+export const TrioAnalysisConfig: IAnalysisConfig = {
+  analysisTitle: '',
   steps: [
     {
       id: STEPS_ID.PROBAND_IDENTIFICATION,
