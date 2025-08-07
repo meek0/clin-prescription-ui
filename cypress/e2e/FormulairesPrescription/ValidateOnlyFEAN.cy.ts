@@ -19,21 +19,25 @@ describe('Formulaires de prescription', () => {
     cy.get('[data-cy="CreateNewPrescription"]').should('exist');
   });
 
-  it('Valider une prescription RGDI', () => {
+  it('Valider une prescription FEAN', () => {
     // Choix de l'analyse
     Step0.actions.createNewPrescription();
-    Step0.actions.selectAnalysis('RGDI');
+    Step0.actions.selectAnalysis('FEAN');
     Step0.actions.clickStart();
 
     // Identification du patient
-    const randomMrn = generateRandomMrn();
+    const randomMrnMother = generateRandomMrn();
     Step1.actions.selectEp('CHUSJ');
-    Step1.actions.enterMrn(randomMrn);
+    Step1.actions.enterMrn(randomMrnMother);
     Step1.actions.clickSearchMrn();
-    Step1.actions.enterJhn(generateRandomJhn());
+    Step1.actions.enterJhn(generateRandomJhn(true/*isFemale*/));
     Step1.actions.clickSearchJhn();
-    Step1.actions.enterLastName('RGDI');
+    Step1.actions.enterLastName('FEAN');
     Step1.actions.enterFirstName('ValidateOnly');
+    Step1.actions.checkPrenatalDiagnosis();
+    Step1.actions.checkFetusSex('male');
+    Step1.actions.checkGestationalAge('ddm');
+    Step1.actions.enterGestationalDate('20250101');
     Step1.actions.clickNext();
 
     // Signes cliniques
@@ -50,7 +54,7 @@ describe('Formulaires de prescription', () => {
     // Examens paracliniques
     Step3.actions.checkParaclinicalExam(0, 'normal');
     Step3.actions.checkParaclinicalExam(1, 'abnormal');
-    Step3.actions.selectFirstExplanation();
+    Step3.actions.typeExplanation(1, 'Explanation');
     Step3.actions.enterOtherExams('Other exams');
     Step3.actions.clickNext();
 
@@ -64,15 +68,7 @@ describe('Formulaires de prescription', () => {
     Step4.actions.clickNext();
 
     // Informations de la mère
-    const randomMrnMother = generateRandomMrn();
     Step5.actions.checkStatus('now');
-    Step5.actions.checkEp('CHUSJ');
-    Step5.actions.enterMrn(randomMrnMother);
-    Step5.actions.clickSearchMrn();
-    Step5.actions.enterJhn(generateRandomJhn(true/*isFemale*/));
-    Step5.actions.clickSearchJhn();
-    Step5.actions.enterLastName('RGDI');
-    Step5.actions.enterFirstName('ValidateOnly Mother');
     Step5.actions.checkAffected('affected');
     Step5.actions.clickAddObservedSign();
     Step5.actions.typeAndSelectClinicalSign('222', 0);
@@ -90,7 +86,7 @@ describe('Formulaires de prescription', () => {
     Step6.actions.clickSearchMrn();
     Step6.actions.enterJhn(generateRandomJhn());
     Step6.actions.clickSearchJhn();
-    Step6.actions.enterLastName('RGDI');
+    Step6.actions.enterLastName('FEAN');
     Step6.actions.enterFirstName('ValidateOnly Father');
     Step6.actions.checkAffected('affected');
     Step6.actions.clickAddObservedSign();

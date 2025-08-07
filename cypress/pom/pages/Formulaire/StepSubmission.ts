@@ -1,17 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { clickSave, clickSaveWithValidateOnly } from "../../shared/actions";
 
 const selectors = {
-  boutonSoumettre: '[data-cy="SubmitButton"]',
+  buttonSubmit: '[data-cy="SubmitButton"]',
 };
 
-export const EtapeSoumission = {
+export const StepSubmission = {
   actions: {
-    clickSoumettreWithValidateOnly() {
+    clickSave() {
+      clickSave();
+    },
+    clickSaveWithValidateOnly() {
+      clickSaveWithValidateOnly();
+    },
+    clickSubmit() {
+      cy.intercept('POST', '**/api/v1/analysis').as('analysisRequest');
+      cy.get(selectors.buttonSubmit).clickAndWait({force: true});
+      cy.wait('@analysisRequest');
+    },
+    clickSubmitWithValidateOnly() {
       cy.intercept('POST', '**/api/v1/analysis', (req) => {
         req.destroy();
       }).as('analysisRequest');
 
-      cy.get(selectors.boutonSoumettre).click();
+      cy.get(selectors.buttonSubmit).click();
 
       cy.wait('@analysisRequest').then((interception) => {
         const { body, headers } = interception.request;

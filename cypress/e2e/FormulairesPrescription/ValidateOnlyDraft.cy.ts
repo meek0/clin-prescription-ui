@@ -1,4 +1,5 @@
 /* eslint-disable no-loss-of-precision */
+import { ErrorModal } from '../../pom/pages/Formulaire/ErrorModal';
 import { Step0 } from '../../pom/pages/Formulaire/Step0';
 import { Step1 } from '../../pom/pages/Formulaire/Step1';
 import { Step2 } from '../../pom/pages/Formulaire/Step2';
@@ -19,7 +20,7 @@ describe('Formulaires de prescription', () => {
     cy.get('[data-cy="CreateNewPrescription"]').should('exist');
   });
 
-  it('Valider une prescription RGDI', () => {
+  it('Valider une prescription brouillon', () => {
     // Choix de l'analyse
     Step0.actions.createNewPrescription();
     Step0.actions.selectAnalysis('RGDI');
@@ -34,6 +35,8 @@ describe('Formulaires de prescription', () => {
     Step1.actions.clickSearchJhn();
     Step1.actions.enterLastName('RGDI');
     Step1.actions.enterFirstName('ValidateOnly');
+    Step1.actions.clickSaveWithValidateOnly();
+    ErrorModal.actions.clickClose(); // req.destroy() provoque la modal d'erreur
     Step1.actions.clickNext();
 
     // Signes cliniques
@@ -45,6 +48,8 @@ describe('Formulaires de prescription', () => {
     Step2.actions.clickAddUnobservedSign();
     Step2.actions.typeAndSelectClinicalSign('111', 1);
     Step2.actions.enterClinicalComment('Comment for proband');
+    Step2.actions.clickSaveWithValidateOnly();
+    ErrorModal.actions.clickClose(); // req.destroy() provoque la modal d'erreur
     Step2.actions.clickNext();
 
     // Examens paracliniques
@@ -52,6 +57,8 @@ describe('Formulaires de prescription', () => {
     Step3.actions.checkParaclinicalExam(1, 'abnormal');
     Step3.actions.selectFirstExplanation();
     Step3.actions.enterOtherExams('Other exams');
+    Step3.actions.clickSaveWithValidateOnly();
+    ErrorModal.actions.clickClose(); // req.destroy() provoque la modal d'erreur
     Step3.actions.clickNext();
 
     // Histoire et hypothèse diagnostique
@@ -61,6 +68,8 @@ describe('Formulaires de prescription', () => {
     Step4.actions.checkConsanguinity('no');
     Step4.actions.selectEthnicities();
     Step4.actions.enterDiagnosticHypothesis('Hypothesis');
+    Step4.actions.clickSaveWithValidateOnly();
+    ErrorModal.actions.clickClose(); // req.destroy() provoque la modal d'erreur
     Step4.actions.clickNext();
 
     // Informations de la mère
@@ -80,6 +89,8 @@ describe('Formulaires de prescription', () => {
     Step5.actions.clickAddUnobservedSign();
     Step5.actions.typeAndSelectClinicalSign('222', 1);
     Step5.actions.enterClinicalComment('Comment for mother');
+    Step5.actions.clickSaveWithValidateOnly();
+    ErrorModal.actions.clickClose(); // req.destroy() provoque la modal d'erreur
     Step5.actions.clickNext();
 
     // Informations du père
@@ -99,9 +110,11 @@ describe('Formulaires de prescription', () => {
     Step6.actions.clickAddUnobservedSign();
     Step6.actions.typeAndSelectClinicalSign('333', 1);
     Step6.actions.enterClinicalComment('Comment for father');
+    Step6.actions.clickSaveWithValidateOnly();
+    ErrorModal.actions.clickClose(); // req.destroy() provoque la modal d'erreur
     Step6.actions.clickNext();
 
     // Soumission
-    StepSubmission.actions.clickSubmitWithValidateOnly();
+    StepSubmission.actions.clickSaveWithValidateOnly();
   });
 });

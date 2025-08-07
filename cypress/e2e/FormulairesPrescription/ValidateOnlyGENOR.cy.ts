@@ -19,10 +19,10 @@ describe('Formulaires de prescription', () => {
     cy.get('[data-cy="CreateNewPrescription"]').should('exist');
   });
 
-  it('Valider une prescription RGDI', () => {
+  it('Valider une prescription GENOR', () => {
     // Choix de l'analyse
     Step0.actions.createNewPrescription();
-    Step0.actions.selectAnalysis('RGDI');
+    Step0.actions.selectAnalysis('GENOR');
     Step0.actions.clickStart();
 
     // Identification du patient
@@ -32,7 +32,7 @@ describe('Formulaires de prescription', () => {
     Step1.actions.clickSearchMrn();
     Step1.actions.enterJhn(generateRandomJhn());
     Step1.actions.clickSearchJhn();
-    Step1.actions.enterLastName('RGDI');
+    Step1.actions.enterLastName('GENOR');
     Step1.actions.enterFirstName('ValidateOnly');
     Step1.actions.clickNext();
 
@@ -48,9 +48,6 @@ describe('Formulaires de prescription', () => {
     Step2.actions.clickNext();
 
     // Examens paracliniques
-    Step3.actions.checkParaclinicalExam(0, 'normal');
-    Step3.actions.checkParaclinicalExam(1, 'abnormal');
-    Step3.actions.selectFirstExplanation();
     Step3.actions.enterOtherExams('Other exams');
     Step3.actions.clickNext();
 
@@ -71,7 +68,7 @@ describe('Formulaires de prescription', () => {
     Step5.actions.clickSearchMrn();
     Step5.actions.enterJhn(generateRandomJhn(true/*isFemale*/));
     Step5.actions.clickSearchJhn();
-    Step5.actions.enterLastName('RGDI');
+    Step5.actions.enterLastName('GENOR');
     Step5.actions.enterFirstName('ValidateOnly Mother');
     Step5.actions.checkAffected('affected');
     Step5.actions.clickAddObservedSign();
@@ -90,7 +87,7 @@ describe('Formulaires de prescription', () => {
     Step6.actions.clickSearchMrn();
     Step6.actions.enterJhn(generateRandomJhn());
     Step6.actions.clickSearchJhn();
-    Step6.actions.enterLastName('RGDI');
+    Step6.actions.enterLastName('GENOR');
     Step6.actions.enterFirstName('ValidateOnly Father');
     Step6.actions.checkAffected('affected');
     Step6.actions.clickAddObservedSign();

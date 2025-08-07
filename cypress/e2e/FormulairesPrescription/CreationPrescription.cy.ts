@@ -1,4 +1,10 @@
 /// <reference types="cypress"/>
+import { Step0 } from '../../pom/pages/Formulaire/Step0';
+import { Step1 } from '../../pom/pages/Formulaire/Step1';
+import { Step2 } from '../../pom/pages/Formulaire/Step2';
+import { Step3 } from '../../pom/pages/Formulaire/Step3';
+import { Step4 } from '../../pom/pages/Formulaire/Step4';
+import { StepSubmission } from '../../pom/pages/Formulaire/StepSubmission';
 import '../../support/commands';
 import { oneMinute } from '../../support/utils';
 
@@ -23,40 +29,31 @@ describe('Formulaires de prescription - Création', () => {
   it('MMG - Solo', () => {
     const strMRN = mrnValues[Math.floor(Math.random() * mrnValues.length)];
 
-    cy.get('[data-cy="CreateNewPrescription"] [data-cy="ActionButton"]').clickAndWait({force: true});
+    Step0.actions.createNewPrescription();
 
     // Choix de l'analyse
-    cy.get('[data-cy="SelectAnalysis"]').clickAndWait();
-    cy.get('[data-cy="SelectOptionMMG"]').clickAndWait({force: true});
-    cy.get('[data-cy="SelectAnalysis"] input').should('have.attr', 'aria-expanded', 'false');
-    cy.get('[data-cy="AnalysisModal"] button[class*="ant-btn-primary"]').clickAndWait({force: true});
+    Step0.actions.selectAnalysis('MMG');
+    Step0.actions.clickStart();
 
     // Identification du patient
-    cy.get('input[type="radio"][value="CHUS"]').clickAndWait({force: true});
-    cy.get('[data-cy="InputMRN"]').type(strMRN, {force: true});
-    cy.intercept('GET', `**${strMRN}`).as('getMRN');
-    cy.get('[data-cy="InputMRN"]').parent().find('[type="button"]').clickAndWait({force: true});
-    cy.wait('@getMRN');
-    cy.get('[data-cy="NextButton"]').clickAndWait({force: true});
+    Step1.actions.selectEp('CHUS');
+    Step1.actions.enterMrn(strMRN);
+    Step1.actions.clickSearchMrn();
+    Step1.actions.clickNext();
 
     // Signes cliniques
-    cy.get('[data-cy="ObservedHP:0001638"]').check({force: true});
-    cy.get('[data-cy="SelectAge"]').clickAndWait();
-    cy.get('[data-cy="SelectOptionHP:0003577"]').clickAndWait({force: true});
-    cy.get('[data-cy="NextButton"]').clickAndWait({force: true});
+    Step2.actions.checkFirstClinicalSign();
+    Step2.actions.clickNext();
 
     // Examens paracliniques
-    cy.get('[data-cy="NextButton"]').clickAndWait({force: true});
+    Step3.actions.clickNext();
 
     // Histoire et hypothèse diagnostique
-    cy.get('[data-cy="InputHypothesis"]').type('Cypress', {force: true});
-    cy.get('[data-cy="NextButton"]').clickAndWait({force: true});
-    cy.wait(2000);
+    Step4.actions.enterDiagnosticHypothesis('Cypress');
+    Step4.actions.clickNext();
 
     // Soumission
-    cy.intercept('POST', '**/api/v1/analysis').as('getPOSTform');
-    cy.get('[data-cy="SubmitButton"]').clickAndWait({force: true});
-    cy.wait('@getPOSTform');
+    StepSubmission.actions.clickSubmit();
 
     // Afficher les erreurs s'il y en a
     cy.get('[class*="SaveModal"]').invoke('text').then((invokeText) => {

@@ -19,7 +19,7 @@ describe('Formulaires de prescription', () => {
     cy.get('[data-cy="CreateNewPrescription"]').should('exist');
   });
 
-  it('Valider une prescription RGDI', () => {
+  it('Valider une prescription RGDI (newborn)', () => {
     // Choix de l'analyse
     Step0.actions.createNewPrescription();
     Step0.actions.selectAnalysis('RGDI');
@@ -30,10 +30,13 @@ describe('Formulaires de prescription', () => {
     Step1.actions.selectEp('CHUSJ');
     Step1.actions.enterMrn(randomMrn);
     Step1.actions.clickSearchMrn();
-    Step1.actions.enterJhn(generateRandomJhn());
-    Step1.actions.clickSearchJhn();
+    Step1.actions.checkNoJhn();
     Step1.actions.enterLastName('RGDI');
     Step1.actions.enterFirstName('ValidateOnly');
+    Step1.actions.enterBirthDate('20250101');
+    Step1.actions.checkSex('male');
+    Step1.actions.checkNewborn();
+    Step1.actions.enterMotherJhn(generateRandomJhn(true/*isFemale*/));
     Step1.actions.clickNext();
 
     // Signes cliniques
@@ -66,11 +69,8 @@ describe('Formulaires de prescription', () => {
     // Informations de la mère
     const randomMrnMother = generateRandomMrn();
     Step5.actions.checkStatus('now');
-    Step5.actions.checkEp('CHUSJ');
     Step5.actions.enterMrn(randomMrnMother);
     Step5.actions.clickSearchMrn();
-    Step5.actions.enterJhn(generateRandomJhn(true/*isFemale*/));
-    Step5.actions.clickSearchJhn();
     Step5.actions.enterLastName('RGDI');
     Step5.actions.enterFirstName('ValidateOnly Mother');
     Step5.actions.checkAffected('affected');
