@@ -3,7 +3,7 @@
 const analysisLabel = (analysis: string) => {
     const mapping: Record<string, string> = {
       RGDI: 'Retard global de développement / Déficience intellectuelle',
-      GENOR: 'Génome normal',
+      GENOR: 'Séquençage du génome entier',
       FEAN: 'Anomalies fœtales',
       MMG: 'Maladies musculaires globales',
     };
