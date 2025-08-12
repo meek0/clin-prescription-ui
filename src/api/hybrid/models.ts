@@ -89,6 +89,7 @@ export interface HybridAnalysis {
   diagnosis_hypothesis?: string;
   ethnicity_codes?: string[];
   patients: HybridPatient[];
+  project?: string;
 }
 
 export interface IHybridPatientForm {

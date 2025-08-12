@@ -46,10 +46,13 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
             >
               <Tag color="geekblue">{getAnalysisNameByCode(prescription.analysis_code)}</Tag>
             </Descriptions.Item>
+            <Descriptions.Item label={intl.get('screen.prescription.entity.analysisCard.project')}>
+              {prescription.project || EMPTY_FIELD}
+            </Descriptions.Item>
             <Descriptions.Item
               label={intl.get('screen.prescription.entity.analysisCard.reflexpanel')}
             >
-              {prescription.is_reflex ? 'Global Muscular diseases' : '--'}
+              {prescription.is_reflex ? 'Global Muscular diseases' : EMPTY_FIELD}
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.patientsearch.table.createdOn')}>
               {formatDate(prescription?.authored_on || '')}
