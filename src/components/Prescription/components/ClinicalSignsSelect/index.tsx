@@ -97,11 +97,17 @@ export default ClinicalSignsSelect;
 export function getExistingHpoIdList(
   form: FormInstance<any>,
   getName: (...key: IGetNamePathParams) => any,
+  excludeDefaultNotSelected: boolean = false,
 ) {
-  const observedSignFields =
+  let observedSignFields =
     form.getFieldValue(
       getName('observed_signs' satisfies keyof IClinicalSignsDataType) as IClinicalSignItem[],
     ) || [];
+  if (excludeDefaultNotSelected) {
+    observedSignFields = observedSignFields.filter(
+      (field: IClinicalSignItem) => field.observed === true,
+    );
+  }
   const nonObservedSignFields =
     form.getFieldValue(
       getName('not_observed_signs' satisfies keyof IClinicalSignsDataType) as IClinicalSignItem[],

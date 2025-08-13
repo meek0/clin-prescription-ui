@@ -156,7 +156,7 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                                 id: hpoNode.code,
                                 name: hpoNode.name,
                               }}
-                              ignoreHpoIds={getExistingHpoIdList(form, getName)}
+                              ignoreHpoIds={getExistingHpoIdList(form, getName) || []}
                               onClear={() => updateNode(name, { code: '', name: '' })}
                               onSelect={(hpo) => updateNode(name, { code: hpo.id, name: hpo.name })}
                             />
