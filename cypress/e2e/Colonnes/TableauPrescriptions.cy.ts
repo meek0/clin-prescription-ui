@@ -68,5 +68,11 @@ describe('Page des prescriptions - Colonnes du tableau des prescriptions', () =>
     cy.get('div[class="ant-popover-inner"]')
       .find('div[class="ant-space-item"]').eq(11)
       .contains('Patient ID').should('exist');
+
+    cy.get('thead[class="ant-table-thead"]').eq(0)
+      .contains('Projet').should('not.exist');
+    cy.get('div[class="ant-popover-inner"]')
+      .find('div[class="ant-space-item"]').eq(12)
+      .contains('Projet').should('exist');
   });
 });

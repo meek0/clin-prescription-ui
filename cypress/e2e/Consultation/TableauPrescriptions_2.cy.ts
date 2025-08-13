@@ -7,6 +7,7 @@ beforeEach(() => {
   cy.visitHomePage();
   cy.resetColumns(0);
   cy.showColumn('Patient ID', 0);
+  cy.showColumn('Projet', 0);
 });
 
 describe('Page des prescriptions - Consultation du tableau des prescriptions', () => {
@@ -71,6 +72,20 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
     cy.validateTableFirstRow(/^(-|(?!-).*)$/, 9);
     cy.sortTableAndIntercept('Dossier', 1);
     cy.validateTableFirstRow(/^(?!-).*$/, 9);
+  });
+
+  it('Valider les fonctionnalités du tableau - Tri Patient ID', () => {
+    cy.sortTableAndIntercept('Patient ID', 1);
+    cy.validateTableFirstRow(/\d{7}/, 10);
+    cy.sortTableAndIntercept('Patient ID', 1);
+    cy.validateTableFirstRow(/\d{7}/, 10);
+  });
+
+  it('Valider les fonctionnalités du tableau - Tri Projet', () => {
+    cy.sortTableAndIntercept('Projet', 1);
+    cy.validateTableFirstRow(/^(-|(?!-).*)$/, 11);
+    cy.sortTableAndIntercept('Projet', 1);
+    cy.validateTableFirstRow(/^(?!-).*$/, 11);
   });
 
   it('Valider les fonctionnalités du tableau - Tri multiple', () => {

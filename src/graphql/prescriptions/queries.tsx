@@ -64,6 +64,7 @@ export const PRESCRIPTIONS_SEARCH_QUERY = gql`
               last_name
               ramq
             }
+            project_code
           }
         }
         total

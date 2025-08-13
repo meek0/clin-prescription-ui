@@ -336,6 +336,8 @@
   "screen.patientsearch.table.sharing": "Sharing",
   "screen.patientsearch.table.sharing.tooltip": "Prescription sharing",
   "screen.patientsearch.table.priority": "Priority",
+  "screen.patientsearch.table.project_code": "Project",
+  "screen.patientsearch.table.project_code.tooltip": "Research project",
   "screen.patientsearch.table.requester": "Requester",
   "screen.patientsearch.table.requester.tooltip": "Requesting Doctor",
   "screen.patientsearch.table.status": "Status",

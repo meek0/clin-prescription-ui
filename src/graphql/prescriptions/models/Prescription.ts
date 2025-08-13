@@ -38,6 +38,7 @@ export interface AnalysisResult extends ArrangerNodeData {
     last_name: string;
     ramq: string;
   };
+  project_code?: string;
   sequencing_requests: ArrangerResultsTree<AnalysisSequencingRequest>;
 }
 

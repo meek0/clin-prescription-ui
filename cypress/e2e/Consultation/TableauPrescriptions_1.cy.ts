@@ -7,6 +7,7 @@ beforeEach(() => {
   cy.visitHomePage();
   cy.resetColumns(0);
   cy.showColumn('Patient ID', 0);
+  cy.showColumn('Projet', 0);
 });
 
 describe('Page des prescriptions - Consultation du tableau des prescriptions', () => {
@@ -21,7 +22,8 @@ describe('Page des prescriptions - Consultation du tableau des prescriptions', (
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(8).contains(/.+/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(9).contains(/.+/).should('exist');
     cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(10).contains(/\d{7}/).should('exist');
-    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(11).find('[class*="anticon-download"]').should('exist');
+    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(11).contains('-').should('exist');
+    cy.get('tr[class*="ant-table-row"]').eq(0).find('[class*="ant-table-cell"]').eq(12).find('[class*="anticon-download"]').should('exist');
   });
 
   it('Valider les liens disponibles Lien Prescription', () => {

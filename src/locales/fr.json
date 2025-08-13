@@ -336,6 +336,8 @@
   "screen.patientsearch.table.sharing": "Partage",
   "screen.patientsearch.table.sharing.tooltip": "Partage de prescription",
   "screen.patientsearch.table.priority": "Priorité",
+  "screen.patientsearch.table.project_code": "Projet",
+  "screen.patientsearch.table.project_code.tooltip": "Projet de recherche",
   "screen.patientsearch.table.requester": "Requérant",
   "screen.patientsearch.table.requester.tooltip": "Médecin prescripteur",
   "screen.patientsearch.table.status": "Statut",
