@@ -24,11 +24,17 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
     render: (sequencing_id) => sequencing_id,
   },
   {
-    key: 'type',
-    dataIndex: 'type',
+    key: 'code',
+    dataIndex: 'code',
+    title: intl.get('screen.prescription.entity.request.name'),
+    render: (code: string) =>
+      code ? intl.get(`screen.prescription.entity.request.code.${code}`) : TABLE_EMPTY_PLACE_HOLDER,
+  },
+  {
+    key: 'code',
+    dataIndex: 'code',
     title: intl.get('screen.prescription.entity.request.code'),
-    render: (type, record) =>
-      type === 'WTS' ? '65240' : record.analysisType === 'GERMLINE' ? '75020' : '65241',
+    render: (code: string) => (code ? code : TABLE_EMPTY_PLACE_HOLDER),
   },
   {
     key: 'status',

@@ -57,6 +57,7 @@ export interface HybridPatientPresent extends HybridPatientInfo {
   para_clinical?: HybridPatientParaClinical;
   sequencings?: {
     sequencing_id: string;
+    code: string;
     type: 'WXS' | 'WTS';
   }[];
 }
