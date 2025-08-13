@@ -125,7 +125,7 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                   return (
                     <div key={key} className={styles.hpoFormItem}>
                       <Space className={styles.hpoFormItemContent}>
-                        {isDefaultHpoTerm ? (
+                        {isDefaultHpoTerm && !isOptional ? (
                           <Form.Item
                             {...restField}
                             name={[name, 'observed' satisfies keyof IClinicalSignItem]}
