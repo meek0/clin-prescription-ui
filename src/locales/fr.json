@@ -88,7 +88,7 @@
   "notification.error.file.download": "Une erreur s'est produite lors du téléchargement de votre fichier",
   "notification.error.prescription.form.config": "Une erreur s'est produite lors de l'initialisation du formulaire de prescription",
   "notification.error.prescription.form.create": "Une erreur s'est produite lors de la création de la prescription",
-  "notification.error.prescription.form.loadDraft" : "Une erreur s'est produite lors du chargement de la prescription",
+  "notification.error.prescription.form.loadDraft": "Une erreur s'est produite lors du chargement de la prescription",
   "notification.success": "Succès",
   "notification.success.file.download": "Fichier téléchargé avec succès",
   "occurrence.patient": "Occurrence chez ce patient",
@@ -383,6 +383,7 @@
   "screen.patientsnv.results.table.variants": "Variants",
   "screen.patientsnv.results.table.zygosity": "Zygosité",
   "screen.prescription.entity.analysisCard.askedAnalysis": "Analyse demandée",
+  "screen.prescription.entity.analysisCard.project": "Projet de recherche",
   "screen.prescription.entity.analysisCard.reflexpanel": "Panel en réflexe",
   "screen.prescription.entity.clinicalInformation": "Information clinique Cas-index",
   "screen.prescription.entity.comment.card.title": "Commentaire",
@@ -573,7 +574,7 @@
       "creation": "Prescription d'analyse",
       "edition": "Prescription ID : {prescriptionId}"
     },
-    "patient":{
+    "patient": {
       "reset": {
         "disabledTooltip": "Ce champ ne peut être modifié pour un patient existant"
       }
@@ -620,24 +621,24 @@
   },
   "sharing": {
     "tooltip": "Partager cette prescription",
-    "dropdown":{
-      "actions":{
-        "clear":"Aucun partage"
+    "dropdown": {
+      "actions": {
+        "clear": "Aucun partage"
       },
-      "select":{
-        "searchPlaceholder":"Rechercher"
+      "select": {
+        "searchPlaceholder": "Rechercher"
       }
     },
-    "filter":{
-      "actions":{
-        "reset":"Réinitialiser",
-        "ok":"OK"
+    "filter": {
+      "actions": {
+        "reset": "Réinitialiser",
+        "ok": "OK"
       }
     },
-    "popOver":{
-      "copy":{
-        "tooltip":"Copier l’adresse",
-        "copied":"Copié"
+    "popOver": {
+      "copy": {
+        "tooltip": "Copier l’adresse",
+        "copied": "Copié"
       }
     }
   },

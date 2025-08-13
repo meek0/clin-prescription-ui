@@ -16,10 +16,11 @@ describe('Page d\'une prescription - Vérifier les informations affichées', () 
     cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(2).contains('Approuvée').should('exist');
     cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(3).contains('Retard global de développement / Déficience intellectuelle (Trio) (RGDI)').should('exist');
     cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(4).contains('--').should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(5).contains(epCHUSJ_ldmCHUSJ.stampDate.substring(0, 4)).should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(6).contains(/(--|ALLARD René)/).should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(7).contains('CHUSJ').should('exist');
-    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(8).contains('LDM-CHUSJ').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(5).contains('--').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(6).contains(epCHUSJ_ldmCHUSJ.stampDate.substring(0, 4)).should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(7).contains(/(--|ALLARD René)/).should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(8).contains('CHUSJ').should('exist');
+    cy.get('[data-cy="AnalysisCard"] [class="ant-descriptions-item-content"]').eq(9).contains('LDM-CHUSJ').should('exist');
   });
   
   it('Panneau Patient', () => {
