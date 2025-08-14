@@ -52,7 +52,7 @@ const AnalysisCard = ({ prescription, loading }: OwnProps) => {
             <Descriptions.Item
               label={intl.get('screen.prescription.entity.analysisCard.reflexpanel')}
             >
-              {prescription.is_reflex ? 'Global Muscular diseases' : EMPTY_FIELD}
+              {prescription.is_reflex ? 'Global Muscular diseases (MMG)' : EMPTY_FIELD }
             </Descriptions.Item>
             <Descriptions.Item label={intl.get('screen.patientsearch.table.createdOn')}>
               {formatDate(prescription?.authored_on || '')}
