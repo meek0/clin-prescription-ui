@@ -27,6 +27,32 @@ const AnalysisChoiceModal = () => {
   const { getAnalysisNameByCode } = useGlobals();
   const [form] = Form.useForm();
   const { analysisChoiceModalVisible, formState } = usePrescriptionForm();
+  const topLevelAnalyses = [
+    TrioAnalysisType.FETAL_ANOMALIES,
+    TrioAnalysisType.NORMAL_GENOME,
+    TrioAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY,
+    SoloAnalysisType.NUCLEAR_MITOCHONDRIOPATHY,
+    TrioAnalysisType.POLYMALFORMATION,
+  ]
+    .map((value) => ({
+      value,
+      label: getAnalysisNameByCode(value, false),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const muscularAnalyses = [
+    MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL,
+    MuscularAnalysisType.MUSCULAR_DISEASE_DYSTROPHIES,
+    MuscularAnalysisType.MUSCULAR_DISEASE_MALIGNANT_HYPERTHERMIA,
+    MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYASTHENIA,
+    MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYOPATHIES,
+    MuscularAnalysisType.MUSCULAR_DISEASE_RHABDOMYOLYSIS,
+  ]
+    .map((value) => ({
+      value,
+      label: getAnalysisNameByCode(value, false),
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   return (
     <Modal
@@ -77,65 +103,17 @@ const AnalysisChoiceModal = () => {
           className="noMarginBtm"
         >
           <Select placeholder="Sélectionner" data-cy="SelectAnalysis">
-            <Select.Option value={TrioAnalysisType.FETAL_ANOMALIES} title={null}>
-              {getAnalysisNameByCode(TrioAnalysisType.FETAL_ANOMALIES, false)}
-            </Select.Option>
-            <Select.Option value={TrioAnalysisType.NORMAL_GENOME} title={null}>
-              {getAnalysisNameByCode(TrioAnalysisType.NORMAL_GENOME, false)}
-            </Select.Option>
-            <Select.Option value={TrioAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY} title={null}>
-              {getAnalysisNameByCode(TrioAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY, false)}
-            </Select.Option>
-            <Select.Option value={SoloAnalysisType.NUCLEAR_MITOCHONDRIOPATHY} title={null}>
-              {getAnalysisNameByCode(SoloAnalysisType.NUCLEAR_MITOCHONDRIOPATHY, false)}
-            </Select.Option>
-            <Select.Option value={TrioAnalysisType.POLYMALFORMATION} title={null}>
-              {getAnalysisNameByCode(TrioAnalysisType.POLYMALFORMATION, false)}
-            </Select.Option>
+            {topLevelAnalyses.map(({ value, label }) => (
+              <Select.Option key={value} value={value} title={null}>
+                {label}
+              </Select.Option>
+            ))}
             <Select.OptGroup label="Maladies musculaires">
-              <Select.Option
-                value={MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL}
-                data-cy={`SelectOption${MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL}`}
-                title={null}
-              >
-                {getAnalysisNameByCode(MuscularAnalysisType.MUSCULAR_DISEASE_GLOBAL, false)}
-              </Select.Option>
-              <Select.Option value={MuscularAnalysisType.MUSCULAR_DISEASE_DYSTROPHIES} title={null}>
-                {getAnalysisNameByCode(MuscularAnalysisType.MUSCULAR_DISEASE_DYSTROPHIES, false)}
-              </Select.Option>
-              <Select.Option
-                value={MuscularAnalysisType.MUSCULAR_DISEASE_MALIGNANT_HYPERTHERMIA}
-                title={null}
-              >
-                {getAnalysisNameByCode(
-                  MuscularAnalysisType.MUSCULAR_DISEASE_MALIGNANT_HYPERTHERMIA,
-                  false,
-                )}
-              </Select.Option>
-              <Select.Option
-                value={MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYASTHENIA}
-                title={null}
-              >
-                {getAnalysisNameByCode(
-                  MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYASTHENIA,
-                  false,
-                )}
-              </Select.Option>
-              <Select.Option
-                value={MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYOPATHIES}
-                title={null}
-              >
-                {getAnalysisNameByCode(
-                  MuscularAnalysisType.MUSCULAR_DISEASE_CONGENITAL_MYOPATHIES,
-                  false,
-                )}
-              </Select.Option>
-              <Select.Option
-                value={MuscularAnalysisType.MUSCULAR_DISEASE_RHABDOMYOLYSIS}
-                title={null}
-              >
-                {getAnalysisNameByCode(MuscularAnalysisType.MUSCULAR_DISEASE_RHABDOMYOLYSIS, false)}
-              </Select.Option>
+              {muscularAnalyses.map(({ value, label }) => (
+                <Select.Option key={value} value={value} title={null}>
+                  {label}
+                </Select.Option>
+              ))}
             </Select.OptGroup>
           </Select>
         </Form.Item>
