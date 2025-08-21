@@ -29,6 +29,10 @@ export const TrioAnalysisConfig: IAnalysisConfig = {
       title: 'Informations du père',
     },
     {
+      id: STEPS_ID.PROJECT,
+      title: 'Projet de recherche',
+    },
+    {
       id: STEPS_ID.SUBMISSION,
       title: 'Soumission',
     },

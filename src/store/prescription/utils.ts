@@ -85,6 +85,7 @@ export function getAnalysisFromFormData(analysis: TCompleteAnalysis): HybridAnal
     resident_supervisor_id: analysisCopy.analysis?.resident_supervisor_id,
     history: [],
     ...analysisCopy.history_and_diagnosis,
+    ...analysisCopy.project,
     patients,
   };
 }
@@ -146,6 +147,9 @@ export function getFormDataFromAnalysis(analysis: HybridAnalysis): TCompleteAnal
     proband_clinical: {
       observed_signs: [],
       not_observed_signs: [],
+    },
+    project: {
+      project: analysis.project || undefined,
     },
   };
 

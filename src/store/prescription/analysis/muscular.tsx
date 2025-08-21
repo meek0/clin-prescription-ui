@@ -21,6 +21,10 @@ export const SoloAnalysisConfig: IAnalysisConfig = {
       title: 'Histoire et hypothèse diagnostique',
     },
     {
+      id: STEPS_ID.PROJECT,
+      title: 'Projet de recherche',
+    },
+    {
       id: STEPS_ID.SUBMISSION,
       title: 'Soumission',
     },

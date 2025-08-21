@@ -1,6 +1,7 @@
 import { IClinicalSignsDataType } from '../components/ClinicalSignsSelect/types';
 import { IHistoryAndDiagnosisDataType } from '../components/HistoryAndDiagnosisData/types';
 import { IParaclinicalExamsDataType } from '../components/ParaclinicalExamsSelect/types';
+import { IProjectDataType } from '../components/Project/types';
 
 import AddParentSubmission from './AnalysisForm/ReusableSteps/AddParentSubmission';
 import ClinicalSigns from './AnalysisForm/ReusableSteps/ClinicalSigns';
@@ -16,6 +17,8 @@ import { TParentDataType } from './AnalysisForm/ReusableSteps/ParentIdentificati
 import PatientIdentification from './AnalysisForm/ReusableSteps/PatientIdentification';
 import PatientIdentificationReview from './AnalysisForm/ReusableSteps/PatientIdentification/Review';
 import { TProbandDataType } from './AnalysisForm/ReusableSteps/PatientIdentification/types';
+import Project from './AnalysisForm/ReusableSteps/Project';
+import ProjectReview from './AnalysisForm/ReusableSteps/Project/Review';
 import Submission from './AnalysisForm/ReusableSteps/Submission';
 
 export const StepsMapping = {
@@ -25,6 +28,7 @@ export const StepsMapping = {
   [STEPS_ID.HISTORY_AND_DIAGNOSIS]: <HistoryAndDiagnosticHypothesis />,
   [STEPS_ID.MOTHER_IDENTIFICATION]: <ParentIdentification key="mother" parent="mother" />,
   [STEPS_ID.FATHER_IDENTIFICATION]: <ParentIdentification key="father" parent="father" />,
+  [STEPS_ID.PROJECT]: <Project />,
   [STEPS_ID.SUBMISSION]: <Submission />,
   [STEPS_ID.ADD_PARENT_SUBMISSION]: <AddParentSubmission />,
 };
@@ -40,6 +44,7 @@ export const SubmissionStepMapping = {
   [STEPS_ID.FATHER_IDENTIFICATION]: (
     <ParentIdentificationReview parentKey={STEPS_ID.FATHER_IDENTIFICATION} />
   ),
+  [STEPS_ID.PROJECT]: <ProjectReview />,
   [STEPS_ID.SUBMISSION]: <></>,
   [STEPS_ID.ADD_PARENT_SUBMISSION]: <></>,
 };
@@ -51,10 +56,12 @@ export interface IAnalysisFormDataType {
   [STEPS_ID.HISTORY_AND_DIAGNOSIS]?: IHistoryAndDiagnosisDataType;
   [STEPS_ID.MOTHER_IDENTIFICATION]?: TParentDataType;
   [STEPS_ID.FATHER_IDENTIFICATION]?: TParentDataType;
+  [STEPS_ID.PROJECT]?: IProjectDataType;
   [STEPS_ID.SUBMISSION]?: any;
 }
 
 export type IAnalysisStepDataType =
   | IClinicalSignsDataType
   | IParaclinicalExamsDataType
-  | IHistoryAndDiagnosisDataType;
+  | IHistoryAndDiagnosisDataType
+  | IProjectDataType;
