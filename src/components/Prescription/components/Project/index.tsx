@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Checkbox, Form, Select, Typography } from 'antd';
+import { HybridApi } from 'api/hybrid';
 import { isEmpty } from 'lodash';
 
 import { defaultFormItemsRules } from 'components/Prescription/Analysis/AnalysisForm/ReusableSteps/constant';
@@ -17,14 +18,11 @@ type OwnProps = IAnalysisFormPart & {
 };
 
 const ResearchProjectData = ({ parentKey, form, initialData }: OwnProps) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getName = (...key: IGetNamePathParams) => getNamePath(parentKey, key);
 
-  const getResearchProjectOptions = () => [
-    {
-      label: 'Care4Rare-Expand',
-      value: 'Care4Rare-Expand',
-    },
-  ];
+  const [selectOption, setSelectOption] = useState<Array<{ label: string; value: string }>>([]);
+
   useEffect(() => {
     if (initialData && !isEmpty(initialData)) {
       setInitialValues(form, getName, initialData);
@@ -32,6 +30,18 @@ const ResearchProjectData = ({ parentKey, form, initialData }: OwnProps) => {
         form.setFieldValue(getName('consent' satisfies keyof IProjectDataType), true);
       }
     }
+  }, [form, getName, initialData]);
+
+  useEffect(() => {
+    HybridApi.getProjectList().then(({ data }) => {
+      if (data && data.codes) {
+        const formattedOptions = data.codes?.map((project: any) => ({
+          label: project.description,
+          value: project.code,
+        }));
+        setSelectOption(formattedOptions);
+      }
+    });
   }, []);
 
   return (
@@ -53,7 +63,7 @@ const ResearchProjectData = ({ parentKey, form, initialData }: OwnProps) => {
             >
               <Select
                 placeholder={intl.get('prescription.add.parent.modal.select')}
-                options={getResearchProjectOptions()}
+                options={selectOption}
               />
             </Form.Item>
           ) : null

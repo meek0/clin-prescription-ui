@@ -149,7 +149,7 @@ export function getFormDataFromAnalysis(analysis: HybridAnalysis): TCompleteAnal
       not_observed_signs: [],
     },
     project: {
-      project: analysis.project || undefined,
+      project: analysis.project,
     },
   };
 
