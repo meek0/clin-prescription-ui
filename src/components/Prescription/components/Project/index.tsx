@@ -8,7 +8,7 @@ import { defaultFormItemsRules } from 'components/Prescription/Analysis/Analysis
 import { getNamePath, setInitialValues } from 'components/Prescription/utils/form';
 import { IAnalysisFormPart, IGetNamePathParams } from 'components/Prescription/utils/type';
 
-import { IProjectDataType } from './types';
+import { IHybridProjectList, IProjectDataType } from './types';
 
 import styles from './index.module.css';
 const { Text } = Typography;
@@ -34,8 +34,8 @@ const ResearchProjectData = ({ parentKey, form, initialData }: OwnProps) => {
 
   useEffect(() => {
     HybridApi.getProjectList().then(({ data }) => {
-      if (data && data.codes) {
-        const formattedOptions = data.codes?.map((project: any) => ({
+      if (data?.codes) {
+        const formattedOptions = data.codes?.map((project: IHybridProjectList) => ({
           label: project.description,
           value: project.code,
         }));

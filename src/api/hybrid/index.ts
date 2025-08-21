@@ -1,6 +1,7 @@
 import { sendRequestWithRpt } from 'api';
 import { ISupervisor } from 'api/form/models';
 
+import { IHybridProjectList } from 'components/Prescription/components/Project/types';
 import EnvironmentVariables from 'utils/EnvVariables';
 
 import { HybridAnalysis, IHybridPatientForm } from './models';
@@ -87,12 +88,7 @@ const searchPatients = ({ mrn, jhn }: { mrn?: string; jhn?: string }) =>
   });
 
 const getProjectList = () =>
-  sendRequestWithRpt<{
-    codes: {
-      code: string;
-      description: string;
-    }[];
-  }>({
+  sendRequestWithRpt<{ codes: IHybridProjectList[] }>({
     method: 'GET',
     url: `${HYBRID_API_URL}/list/codes/project?lang=en`,
   });
