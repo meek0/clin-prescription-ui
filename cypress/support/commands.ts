@@ -45,7 +45,7 @@ Cypress.Commands.add('logout', () => {
 
     cy.get('div').then(($div) => {
         if ($div.hasClass('App')) {
-            cy.get('span[class="anticon anticon-down"]').clickAndWait({force: true});
+            cy.get('[class*="Header_userMenuTrigger"] [class*="anticon-down"]').clickAndWait({force: true});
             cy.get('[data-menu-id*="logout"]').clickAndWait({force: true});
         }
     });
