@@ -26,15 +26,14 @@ const getRequestColumns = (): TableColumnType<Record<string, any>>[] => [
   {
     key: 'code',
     dataIndex: 'code',
-    title: intl.get('screen.prescription.entity.request.name'),
-    render: (code: string) =>
-      code ? intl.get(`screen.prescription.entity.request.code.${code}`) : TABLE_EMPTY_PLACE_HOLDER,
-  },
-  {
-    key: 'code',
-    dataIndex: 'code',
-    title: intl.get('screen.prescription.entity.request.code'),
-    render: (code: string) => (code ? code : TABLE_EMPTY_PLACE_HOLDER),
+    title: intl.get('screen.prescription.entity.request.type'),
+    width: 400,
+    render: (code: string) => {
+      if (code) {
+        return `${code} - ${intl.get(`screen.prescription.entity.request.code.${code}`)}`;
+      }
+      return TABLE_EMPTY_PLACE_HOLDER;
+    },
   },
   {
     key: 'status',

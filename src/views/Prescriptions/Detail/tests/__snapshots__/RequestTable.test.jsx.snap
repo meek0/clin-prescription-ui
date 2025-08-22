@@ -28,7 +28,22 @@ exports[`RequestTable should be as the snapshot 1`] = `
                 }
               }
             >
-              <colgroup />
+              <colgroup>
+                <col
+                  style={
+                    {
+                      "width": undefined,
+                    }
+                  }
+                />
+                <col
+                  style={
+                    {
+                      "width": 400,
+                    }
+                  }
+                />
+              </colgroup>
               <thead
                 className="ant-table-thead"
               >
@@ -51,17 +66,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                     rowSpan={null}
                     style={{}}
                   >
-                    Type nom
-                  </th>
-                  <th
-                    className="ant-table-cell"
-                    colSpan={null}
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    rowSpan={null}
-                    style={{}}
-                  >
-                    Type code
+                    Type
                   </th>
                   <th
                     className="ant-table-cell"
@@ -118,7 +123,7 @@ exports[`RequestTable should be as the snapshot 1`] = `
                 >
                   <td
                     className="ant-table-cell"
-                    colSpan={7}
+                    colSpan={6}
                     onMouseEnter={[Function]}
                     onMouseLeave={[Function]}
                     rowSpan={null}
