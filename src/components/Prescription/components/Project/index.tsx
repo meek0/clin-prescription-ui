@@ -30,7 +30,7 @@ const ResearchProjectData = ({ parentKey, form, initialData }: OwnProps) => {
         form.setFieldValue(getName('consent' satisfies keyof IProjectDataType), true);
       }
     }
-  }, [form, getName, initialData]);
+  }, []);
 
   useEffect(() => {
     HybridApi.getProjectList().then(({ data }) => {

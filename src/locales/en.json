@@ -145,6 +145,7 @@
   "prescription.project.info": "Some RQDM patients have consented to participate in research projects. Please indicate whether such consent has been given and specify the name of the project involved.",
   "prescription.project.consent": "This patient (or their parents) has consented to participate in a research project.",
   "prescription.project.select.label": "Research project",
+  "prescription.project.noProject": "No project",
   "prescription.patient.identification.foetus.dead": "Fœtus dead",
   "prescription.patient.identification.gestational.age": "Gestational age",
   "prescription.patient.identification.last.ddm.date": "Date of last menstrual period (LMP)",
