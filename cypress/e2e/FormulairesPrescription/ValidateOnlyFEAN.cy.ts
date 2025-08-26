@@ -6,6 +6,7 @@ import { Step3 } from '../../pom/pages/Formulaire/Step3';
 import { Step4 } from '../../pom/pages/Formulaire/Step4';
 import { Step5 } from '../../pom/pages/Formulaire/Step5';
 import { Step6 } from '../../pom/pages/Formulaire/Step6';
+import { StepProject } from '../../pom/pages/Formulaire/StepProject';
 import { StepSubmission } from '../../pom/pages/Formulaire/StepSubmission';
 import { oneMinute } from '../../support/utils';
 import { generateRandomJhn, generateRandomMrn } from '../../utils/random';
@@ -96,6 +97,9 @@ describe('Formulaires de prescription', () => {
     Step6.actions.typeAndSelectClinicalSign('333', 1);
     Step6.actions.enterClinicalComment('Comment for father');
     Step6.actions.clickNext();
+    
+    // Projet de recherche
+    StepProject.actions.clickNext();
 
     // Soumission
     StepSubmission.actions.clickSubmitWithValidateOnly();
