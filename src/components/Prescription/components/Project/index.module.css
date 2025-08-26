@@ -1,0 +1,6 @@
+.projectSelect div[class$=-row]{
+  display: block;
+}
+.projectSelect :global(.ant-select) {
+  width: 296px;
+}

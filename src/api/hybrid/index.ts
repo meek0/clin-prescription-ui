@@ -1,6 +1,7 @@
 import { sendRequestWithRpt } from 'api';
 import { ISupervisor } from 'api/form/models';
 
+import { IHybridProjectList } from 'components/Prescription/components/Project/types';
 import EnvironmentVariables from 'utils/EnvVariables';
 
 import { HybridAnalysis, IHybridPatientForm } from './models';
@@ -86,6 +87,12 @@ const searchPatients = ({ mrn, jhn }: { mrn?: string; jhn?: string }) =>
     headers: { ...headers, 'Cache-Control': 'no-cache' }, // Disable caching for patient search https://ferlab-crsj.atlassian.net/browse/CLIN-4679
   });
 
+const getProjectList = () =>
+  sendRequestWithRpt<{ codes: IHybridProjectList[] }>({
+    method: 'GET',
+    url: `${HYBRID_API_URL}/list/codes/project?lang=en`,
+  });
+
 const searchSupervisors = ({
   organizationId,
   prefix,
@@ -106,4 +113,5 @@ export const HybridApi = {
   searchPatient,
   searchPatients,
   searchSupervisors,
+  getProjectList,
 };

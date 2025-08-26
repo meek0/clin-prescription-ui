@@ -13,6 +13,7 @@ export enum STEPS_ID {
   MOTHER_IDENTIFICATION = 'mother',
   FATHER_IDENTIFICATION = 'father',
   ADD_PARENT_SUBMISSION = 'add_parent_submission',
+  PROJECT = 'project',
 }
 
 export const EMPTY_FIELD = '--';

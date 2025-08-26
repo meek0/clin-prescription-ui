@@ -4,6 +4,7 @@ import { Step1 } from '../../pom/pages/Formulaire/Step1';
 import { Step2 } from '../../pom/pages/Formulaire/Step2';
 import { Step3 } from '../../pom/pages/Formulaire/Step3';
 import { Step4 } from '../../pom/pages/Formulaire/Step4';
+import { StepProject } from '../../pom/pages/Formulaire/StepProject';
 import { StepSubmission } from '../../pom/pages/Formulaire/StepSubmission';
 import '../../support/commands';
 import { oneMinute } from '../../support/utils';
@@ -51,6 +52,9 @@ describe('Formulaires de prescription - Création', () => {
     // Histoire et hypothèse diagnostique
     Step4.actions.enterDiagnosticHypothesis('Cypress');
     Step4.actions.clickNext();
+
+    // Projet de recherche
+    StepProject.actions.clickNext();
 
     // Soumission
     StepSubmission.actions.clickSubmit();
