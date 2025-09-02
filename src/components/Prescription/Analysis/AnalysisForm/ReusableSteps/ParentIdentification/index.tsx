@@ -16,6 +16,7 @@ import {
 } from 'components/Prescription/utils/form';
 import { IAnalysisStepForm, IGetNamePathParams } from 'components/Prescription/utils/type';
 import { usePrescriptionForm } from 'store/prescription';
+import { GenomeAnalysisType } from 'store/prescription/types';
 import { SexValue } from 'utils/commonTypes';
 
 import { defaultCollapseProps, defaultFormItemsRules, STEPS_ID } from '../constant';
@@ -71,7 +72,9 @@ const ParentIdentification = ({ parent }: OwnProps) => {
         <Form.Item>
           <Text>
             {intl.get(
-              analysisFormData.analysis.panel_code === 'GENOR'
+              Object.values(GenomeAnalysisType).includes(
+                analysisFormData.analysis.panel_code as GenomeAnalysisType,
+              )
                 ? 'prescription.parent.info.notice.genome'
                 : 'prescription.parent.info.notice',
             )}

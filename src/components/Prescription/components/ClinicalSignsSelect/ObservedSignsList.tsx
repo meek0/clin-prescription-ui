@@ -138,7 +138,9 @@ const ObservedSignsList = ({ form, getName, isOptional, initialSigns }: OwnProps
                               data-cy={`Observed${hpoNode.code}`}
                             >
                               <Text>
-                                {capitalize(hpoNode.name)}{' '}
+                                {hpoNode.name && /^[A-Z]/.test(hpoNode.name)
+                                  ? hpoNode.name
+                                  : capitalize(hpoNode.name)}{' '}
                                 <Text type="secondary">({hpoNode.code})</Text>
                               </Text>
                             </Checkbox>

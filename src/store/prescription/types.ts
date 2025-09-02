@@ -63,7 +63,13 @@ export enum TrioAnalysisType {
   GLOBAL_DEVELOPMENTAL_DELAY = 'RGDI', // RGDI
   POLYMALFORMATION = 'POLYM',
   FETAL_ANOMALIES = 'FEAN',
-  NORMAL_GENOME = 'GENOR', // GENOR
+  NORMAL_GENOME = 'GENOR',
+  INBORN_ERRORS_OF_IMMUNITY = 'EIDI',
+}
+
+export enum GenomeAnalysisType {
+  NORMAL_GENOME = 'GENOR',
+  INBORN_ERRORS_OF_IMMUNITY = 'EIDI',
 }
 
 export type AnalysisType = MuscularAnalysisType | TrioAnalysisType | SoloAnalysisType;

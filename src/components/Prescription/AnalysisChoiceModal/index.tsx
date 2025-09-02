@@ -33,6 +33,7 @@ const AnalysisChoiceModal = () => {
     TrioAnalysisType.GLOBAL_DEVELOPMENTAL_DELAY,
     SoloAnalysisType.NUCLEAR_MITOCHONDRIOPATHY,
     TrioAnalysisType.POLYMALFORMATION,
+    TrioAnalysisType.INBORN_ERRORS_OF_IMMUNITY,
   ]
     .map((value) => ({
       value,
